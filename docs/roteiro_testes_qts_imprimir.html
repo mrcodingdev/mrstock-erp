@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Roteiro de Testes de Software — MrStock ERP v2.0</title>
+<style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 40px; color: #1e293b; background: #fff; line-height: 1.5; font-size: 13px; }
+    h1 { font-size: 20px; color: #284936; border-bottom: 2px solid #284936; padding-bottom: 8px; margin-top: 30px; }
+    h2 { font-size: 16px; color: #1e293b; margin-top: 25px; margin-bottom: 10px; }
+    h3 { font-size: 14px; color: #334155; margin-top: 15px; margin-bottom: 5px; }
+    .header-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 15px; margin-bottom: 25px; }
+    .uc-box { background: #f1f5f9; border-left: 4px solid #284936; padding: 12px 16px; margin-bottom: 15px; border-radius: 0 6px 6px 0; }
+    .cn-header { background: #e2e8f0; font-weight: bold; padding: 8px 12px; border-radius: 6px 6px 0 0; border: 1px solid #cbd5e1; border-bottom: none; margin-top: 15px; }
+    .cn-meta { background: #f8fafc; padding: 6px 12px; border: 1px solid #cbd5e1; border-top: none; font-size: 12px; color: #475569; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px; }
+    th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; color: #334155; font-weight: 600; width: 12%; }
+    th.passos { width: 48%; }
+    th.resultado { width: 30%; }
+    th.execucao { width: 10%; text-align: center; }
+    td.execucao { text-align: center; font-weight: bold; color: #15803d; }
+    .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; background: #dcfce7; color: #166534; }
+    @media print {
+        body { margin: 15mm 10mm; font-size: 11px; }
+        .page-break { page-break-before: always; }
+        h1, h2 { page-break-after: avoid; }
+        table, .uc-box { page-break-inside: avoid; }
+    }
+</style>
+</head>
+<body>
+
+<div class="header-box">
+    <h2 style="margin-top:0; color:#284936;">ETEC Fernando Prestes — Centro Paula Souza</h2>
+    <p style="margin:2px 0;"><b>Componente Curricular:</b> Qualidade e Teste de Software (QTS) / TCC</p>
+    <p style="margin:2px 0;"><b>Projeto:</b> MrStock ERP v2.0 (SalesOps Edition) — Papelaria Real</p>
+    <p style="margin:2px 0;"><b>Equipe Mr. Coding:</b> Douglas, Cesar, Eduardo, Enzo e Nikolas | <b>Orientadores:</b> Prof. Luiz Flávio & Prof. Vinicius</p>
+</div>
+
+<h1>Roteiro Oficial de Testes de Software (18 Telas Mapeadas)</h1>
+
+<!-- UC001 / RT.001 -->
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC001 — Entrar no Sistema (Login & Autenticação)</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Permite aos operadores autenticarem-se com segurança no sistema via Bcrypt e RBAC.</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Administrador, Operador de Caixa | <b>Caminho:</b> Página Inicial > Login (<code>/login.php</code>)</p>
+</div>
+
+<h2>RT.001 — Entrar no Sistema</h2>
+
+<div class="cn-header">CN001 — Entrar com sucesso (Admin e Caixa)</div>
+<div class="cn-meta"><b>Localização:</b> <code>/login.php</code> | <b>Pré-condições:</b> Usuários cadastrados no banco de dados.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Preencher Usuário: <code>admin</code> e Senha: <code>admin</code>.<br>2. Clicar no botão 'Entrar'.</td><td>1. O sistema autentica o usuário e redireciona para a tela do Dashboard.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+    <tr><td><b>CT102</b></td><td>1. Preencher Usuário: <code>caixa</code> e Senha: <code>caixa</code>.<br>2. Clicar no botão 'Entrar'.</td><td>1. O sistema autentica o operador e redireciona diretamente para o PDV.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<div class="cn-header">CN002 — Entrar com dados inválidos ou em branco</div>
+<div class="cn-meta"><b>Localização:</b> <code>/login.php</code> | <b>Pré-condições:</b> Nenhuma.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT201</b></td><td>1. Deixar os campos de usuário e senha em branco.<br>2. Clicar no botão 'Entrar'.</td><td>1. O sistema bloqueia a submissão e exige o preenchimento obrigatório.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+    <tr><td><b>CT202</b></td><td>1. Preencher Usuário: <code>admin</code> e Senha: <code>9999</code> (incorreta).<br>2. Clicar no botão 'Entrar'.</td><td>1. O sistema exibe mensagem de erro: <i>"Usuário ou senha incorretos."</i></td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<div class="cn-header">CN003 — Encerramento de sessão (Logout)</div>
+<div class="cn-meta"><b>Localização:</b> Topbar > Botão 'Sair' (<code>/logout.php</code>) | <b>Pré-condições:</b> Usuário autenticado.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT301</b></td><td>1. Clicar no botão 'Sair'.<br>2. Tentar acessar página protegida pela URL.</td><td>1. A sessão é destruída e o usuário é redirecionado para a tela de login.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<!-- UC002 / RT.002 -->
+<div class="page-break"></div>
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC002 — Dashboard Executivo & Venda Rápida</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Apresenta indicadores de faturamento, alertas de estoque mínimo e widget de venda rápida.</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Administrador | <b>Caminho:</b> Menu Principal > Dashboard (<code>/dashboard.php</code>)</p>
+</div>
+
+<h2>RT.002 — Dashboard</h2>
+<div class="cn-header">CN001 — Visualização de KPIs e Venda Rápida</div>
+<div class="cn-meta"><b>Localização:</b> <code>/dashboard.php</code> | <b>Pré-condições:</b> Logado como administrador.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Acessar o Dashboard.<br>2. Inspecionar os 4 cards de KPI e alertas.</td><td>1. Exibe faturamento hoje, vendas do mês, alertas de estoque e SKUs ativos.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+    <tr><td><b>CT102</b></td><td>1. No card de Venda Rápida, selecionar produto e forma de pagamento.<br>2. Clicar em 'Lançar Venda'.</td><td>1. Venda gravada com sucesso, estoque baixado e KPIs recalculados.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<!-- UC003 / RT.003 -->
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC003 — Catálogo & Gestão de Produtos</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Permite cadastrar, editar e buscar produtos em tempo real com Live Search e controle de markup.</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Administrador | <b>Caminho:</b> Menu > Produtos (<code>/produtos/index.php</code>)</p>
+</div>
+
+<h2>RT.003 — Produtos</h2>
+<div class="cn-header">CN001 — Cadastro e Busca de Produtos</div>
+<div class="cn-meta"><b>Localização:</b> <code>/produtos/index.php</code> | <b>Pré-condições:</b> Logado como administrador.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Clicar em 'Adicionar Produto'.<br>2. Preencher Custo (10.00) e Venda (25.00).<br>3. Salvar.</td><td>1. Produto gravado com sucesso e margem calculada automaticamente (150%).</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+    <tr><td><b>CT102</b></td><td>1. Digitar nome do item no Live Search.</td><td>1. A tabela filtra instantaneamente sem recarregar a página.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<!-- UC004 / RT.004 -->
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC004 — Gerador & Impressão de Etiquetas SVG</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Emite lotes de etiquetas com código de barras Code-128/EAN-13 em SVG vetorial puro.</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Administrador | <b>Caminho:</b> Menu > Produtos > Etiquetas (<code>/produtos/etiquetas.php</code>)</p>
+</div>
+
+<h2>RT.004 — Gerador de Etiquetas</h2>
+<div class="cn-header">CN001 — Geração de Etiquetas Térmicas e A4</div>
+<div class="cn-meta"><b>Localização:</b> <code>/produtos/etiquetas.php</code> | <b>Pré-condições:</b> Itens cadastrados com código de barras.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Selecionar categoria e definir cópias.<br>2. Clicar em 'Visualizar Impressão'.</td><td>1. Exibe grade com códigos de barras vetoriais SVG nítidos e preços formatados.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+    <tr><td><b>CT102</b></td><td>1. Pressionar Ctrl + P ou clicar em 'Imprimir'.</td><td>1. Dispara impressão limpa das etiquetas sem menus (@media print).</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<!-- UC005 / RT.005 -->
+<div class="page-break"></div>
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC005 — Movimentações de Estoque (Livro-Razão)</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Rastreia o histórico auditável de entradas, saídas, perdas e devoluções.</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Administrador | <b>Caminho:</b> Menu > Estoque > Movimentações (<code>/produtos/movimentacoes.php</code>)</p>
+</div>
+
+<h2>RT.005 — Movimentações</h2>
+<div class="cn-header">CN001 — Auditoria de Histórico de Estoque</div>
+<div class="cn-meta"><b>Localização:</b> <code>/produtos/movimentacoes.php</code> | <b>Pré-condições:</b> Logado como administrador.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Acessar a tela de movimentações.<br>2. Inspecionar a listagem.</td><td>1. Exibe histórico cronológico com tipo de fluxo, quantidade e operador.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<!-- UC006 / RT.006 -->
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC006 — Categorias de Produtos</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Gerencia a taxonomia mercadológica da papelaria.</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Administrador | <b>Caminho:</b> Menu > Categorias (<code>/categorias/index.php</code>)</p>
+</div>
+
+<h2>RT.006 — Categorias</h2>
+<div class="cn-header">CN001 — Cadastro de Categoria</div>
+<div class="cn-meta"><b>Localização:</b> <code>/categorias/index.php</code> | <b>Pré-condições:</b> Logado como administrador.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Clicar em 'Nova Categoria'.<br>2. Preencher Nome: <code>Informática</code>.<br>3. Salvar.</td><td>1. Categoria registrada e disponibilizada no cadastro de produtos.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<!-- UC007 / RT.007 -->
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC007 — Gestão de Clientes & WhatsApp</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Cadastro de clientes com CPF/CNPJ e link direto para WhatsApp API.</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Administrador | <b>Caminho:</b> Menu > Clientes (<code>/clientes/index.php</code>)</p>
+</div>
+
+<h2>RT.007 — Clientes</h2>
+<div class="cn-header">CN001 — Cadastro e Contato via WhatsApp</div>
+<div class="cn-meta"><b>Localização:</b> <code>/clientes/index.php</code> | <b>Pré-condições:</b> Logado como administrador.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Cadastrar cliente com telefone formatado.<br>2. Salvar.</td><td>1. Cliente cadastrado com status ativo.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+    <tr><td><b>CT102</b></td><td>1. Clicar no botão verde do WhatsApp na linha do cliente.</td><td>1. Abre o link <code>https://wa.me/55...</code> pronto para envio de mensagem.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<!-- UC008 / RT.008 -->
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC008 — Gestão de Fornecedores & Distribuidores</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Gerencia indústrias e parceiros comerciais com integridade referencial.</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Administrador | <b>Caminho:</b> Menu > Fornecedores (<code>/fornecedores/index.php</code>)</p>
+</div>
+
+<h2>RT.008 — Fornecedores</h2>
+<div class="cn-header">CN001 — Cadastro e Proteção de Integridade</div>
+<div class="cn-meta"><b>Localização:</b> <code>/fornecedores/index.php</code> | <b>Pré-condições:</b> Logado como administrador.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Cadastrar fornecedor com CNPJ válido.<br>2. Salvar.</td><td>1. Fornecedor gravado e vinculado aos produtos da papelaria.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<!-- UC009 a UC011 -->
+<div class="page-break"></div>
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC009, UC010 e UC011 — Módulo de Compras & Abastecimento</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Listagem de compras (<code>/compras/index.php</code>), nova ordem de entrada (<code>/compras/nova.php</code>) e visualização detalhada Master-Detail (<code>/compras/visualizar.php</code>).</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Administrador | <b>Caminho:</b> Menu > Compras</p>
+</div>
+
+<h2>RT.009, RT.010 e RT.011 — Compras</h2>
+<div class="cn-header">CN001 — Lançamento e Visualização de Compra</div>
+<div class="cn-meta"><b>Localização:</b> Módulo de Compras | <b>Pré-condições:</b> Fornecedores cadastrados.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Em <code>compras/nova.php</code>, lançar 10 cadernos.<br>2. Finalizar compra.</td><td>1. Compra gravada e estoque incrementado em +10 unidades no banco.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+    <tr><td><b>CT102</b></td><td>1. Na listagem, clicar em 'Visualizar Detalhes'.</td><td>1. Abre <code>compras/visualizar.php</code> sem erro 404, listando itens e custos.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<!-- UC012 a UC015 -->
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC012 a UC015 — PDV, Histórico, Cupom Térmico e NFC-e</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Frente de caixa de alta velocidade com atalhos F2-F9, som de 880Hz, troco dinâmico, bloqueio pessimista, histórico e emissão de cupom térmico.</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Operador de Caixa, Administrador | <b>Caminho:</b> Menu > Vendas</p>
+</div>
+
+<h2>RT.012 a RT.015 — PDV & Vendas</h2>
+<div class="cn-header">CN001 — Venda com Atalhos, Som, Troco e Cupom</div>
+<div class="cn-meta"><b>Localização:</b> <code>/vendas/pdv.php</code> | <b>Pré-condições:</b> Produtos em estoque.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Pressionar F2 e digitar código de barras.<br>2. Pressionar Enter.</td><td>1. Leitor emite bip senoidal (880Hz) e adiciona item ao carrinho.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+    <tr><td><b>CT102</b></td><td>1. Pressionar F8.<br>2. Clicar na cédula de R$ 50,00.<br>3. Confirmar venda.</td><td>1. Calcula troco em destaque verde, comita transação e exibe cupom térmico.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+    <tr><td><b>CT103</b></td><td>1. Acessar <code>vendas/historico.php</code> e aplicar filtro por data.</td><td>1. Filtra vendas e atualiza cards de faturamento e ticket médio.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<!-- UC016 a UC018 -->
+<div class="uc-box">
+    <h3 style="margin-top:0; color:#284936;">UC016 a UC018 — Relatórios, Centro de Inteligência (BI) e PDF</h3>
+    <p style="margin:2px 0;"><b>Descrição:</b> Central de relatórios (<code>/relatorios/index.php</code>), exportação Excel em 9 colunas, gráficos estatísticos (<code>/relatorios/analise.php</code>) e impressão A4 (<code>/relatorios/pdf.php</code>).</p>
+    <p style="margin:2px 0;"><b>Perfil:</b> Administrador | <b>Caminho:</b> Menu > Relatórios</p>
+</div>
+
+<h2>RT.016 a RT.018 — Relatórios & BI</h2>
+<div class="cn-header">CN001 — Exportação Excel e Análise Gráfica</div>
+<div class="cn-meta"><b>Localização:</b> Módulo de Relatórios | <b>Pré-condições:</b> Vendas registradas.</div>
+<table>
+    <tr><th>ID</th><th class="passos">Passos</th><th class="resultado">Resultado esperado</th><th class="execucao">Execução</th></tr>
+    <tr><td><b>CT101</b></td><td>1. Clicar em 'Exportar para Excel'.</td><td>1. Baixa planilha formatada em exatamente 9 colunas reais (A-I).</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+    <tr><td><b>CT102</b></td><td>1. Em <code>relatorios/analise.php</code>, alternar entre 7 Dias, Mês e Ano.</td><td>1. Gráficos Chart.js e indicadores de margem bruta atualizam de forma reativa.</td><td class="execucao"><span class="badge">Aprovado</span></td></tr>
+</table>
+
+<hr style="margin-top:30px;">
+<p style="text-align:center; font-size:12px; color:#64748b;">MrStock ERP v2.0 — Sistema Homologado com 100% de Conformidade nos 18 Roteiros de Teste de Software.</p>
+
+</body>
+</html>

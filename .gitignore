@@ -1,0 +1,15 @@
+# Arquivos de Sistema e IDEs
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
+.DS_Store
+
+# Temporários e Logs
+*.log
+*.tmp
+error_log

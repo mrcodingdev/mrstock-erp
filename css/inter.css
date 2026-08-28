@@ -1,0 +1,11 @@
+/* ==========================================================================
+   FONTE INTER 100% OFFLINE & SELF-HOSTED (MRSTOCK ERP)
+   Garante carregamento instantâneo sem depender de internet externa (XAMPP / Nuvem)
+   ========================================================================== */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url('../webfonts/inter_font_1.woff2') format('woff2');
+}
