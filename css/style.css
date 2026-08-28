@@ -411,7 +411,7 @@ body.sidebar-collapsed .main-panel {
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #cbd5e1;
   background: #ffffff;
   position: sticky;
   top: 0;
@@ -428,7 +428,7 @@ body.sidebar-collapsed .main-panel {
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #cbd5e1;
   background: transparent;
   padding: 0.25rem 0.75rem 0.25rem 0.35rem;
   border-radius: 999px;
@@ -627,10 +627,10 @@ body.sidebar-collapsed .main-panel {
 .info-box {
   display: flex;
   background: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
   border-radius: var(--mr-radius);
   margin-bottom: 20px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #cbd5e1;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -821,7 +821,7 @@ body.sidebar-collapsed .main-panel {
   display: inline-flex;
   align-items: center;
   background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #cbd5e1;
   border-radius: 6px;
   overflow: hidden;
 }
@@ -907,7 +907,7 @@ body.sidebar-collapsed .main-panel {
   padding: 6px 14px;
   border-radius: 999px;
   background: #f8fafc;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #cbd5e1;
   color: #475569;
   font-size: 0.8rem;
   font-weight: 600;
@@ -922,7 +922,7 @@ body.sidebar-collapsed .main-panel {
 .category-chip:hover {
   background: #e2e8f0;
   color: #0f172a;
-  border-color: #cbd5e1;
+  border-color: #94a3b8;
 }
 .category-chip.active {
   background: var(--mr-bg-primary);
@@ -949,7 +949,7 @@ body.sidebar-collapsed .main-panel {
 }
 .quick-prod-card {
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid #cbd5e1;
   border-radius: 8px;
   padding: 8px 10px;
   cursor: pointer;
@@ -1030,22 +1030,22 @@ body.sidebar-collapsed .main-panel {
 /* ===== Componentes Modulares SalesOps Design System ===== */
 .so-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #cbd5e1;
   border-radius: var(--mr-radius);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.04);
   margin-bottom: 1.5rem;
   overflow: visible;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .so-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .so-card-header {
   padding: 1rem 1.25rem;
   background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #cbd5e1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1106,13 +1106,13 @@ body.sidebar-collapsed .main-panel {
 
 .so-table thead th {
   background: #f8fafc;
-  color: #475569;
+  color: #334155;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   padding: 0.85rem 1rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 2px solid #cbd5e1;
   border-top: 0;
   white-space: nowrap;
 }
@@ -1120,7 +1120,7 @@ body.sidebar-collapsed .main-panel {
 .so-table tbody td {
   padding: 0.85rem 1rem;
   vertical-align: middle;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
   color: #334155;
   font-size: 0.875rem;
   transition: background 0.15s ease;
@@ -1206,9 +1206,9 @@ canvas,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #cbd5e1;
   background: #ffffff;
-  color: #64748b;
+  color: #475569;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -1216,7 +1216,7 @@ canvas,
 .so-actions-btn:hover {
   background: #f1f5f9;
   color: #0f172a;
-  border-color: #cbd5e1;
+  border-color: #94a3b8;
 }
 
 .so-actions-btn:focus,
@@ -1755,8 +1755,8 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 
 .dropdown-menu {
   border-radius: 8px !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.06) !important;
   padding: 0.35rem !important;
   font-size: 0.875rem !important;
   min-width: 190px;
@@ -1899,3 +1899,59 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 /* Tipografia Utilitária */
 .text-xs  { font-size: 0.75rem !important; }
 .text-2xs { font-size: 0.6875rem !important; }
+
+/* ==========================================================================
+   PADRONIZAÇÃO GLOBAL DE CONTORNOS E BORDAS NÍTIDAS (MRSTOCK DESIGN SYSTEM)
+   Melhora o contraste e a sinalização visual de cards, tabelas, modais e inputs.
+   ========================================================================== */
+
+.card,
+.card-header,
+.card-footer,
+.modal-content,
+.modal-header,
+.modal-footer {
+  border-color: #cbd5e1 !important;
+}
+
+.table thead th,
+.table-light th,
+.so-table thead th {
+  border-bottom-color: #cbd5e1 !important;
+}
+
+.table tbody td,
+.so-table tbody td {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.border,
+.border-top,
+.border-bottom,
+.border-start,
+.border-end {
+  border-color: #cbd5e1 !important;
+}
+
+.form-control,
+.form-select {
+  border-color: #cbd5e1;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--mr-bg-primary);
+  box-shadow: 0 0 0 3px rgba(40, 73, 54, 0.15);
+}
+
+.page-link {
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.page-link:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
