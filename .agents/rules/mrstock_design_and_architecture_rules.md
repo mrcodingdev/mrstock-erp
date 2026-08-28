@@ -75,4 +75,15 @@ Sempre que o usuário digitar comandos com barra no chat, o assistente deve exec
 - **Consulta Mental e Ativação Proativa:** Em TODA interação, o assistente DEVE analisar proativamente se existem skills, subagentes ou diretrizes do projeto aplicáveis à solicitação do usuário e acioná-los/citá-los proativamente sem depender de lembretes manuais.
 - **Proibição de Respostas Superficiais:** O usuário possui assinatura Gemini Pro com ampla folga de quota semanal. O assistente NUNCA deve economizar tokens ou resumir explicações essenciais; deve sempre priorizar respostas completas, aprofundadas, didáticas, com exemplos de código, tabelas comparativas e fundamentação técnica rigorosa.
 
+## 13. Protocolo Mandatório de Git Commits Atômicos & Semânticos (Conventional Commits)
+- **Commit Imediato ao Final de Toda Alteração:** Ao concluir qualquer alteração de código, refinamento visual, correção de bug, ajuste em documentação ou nova funcionalidade (e validar sua integridade/sintaxe), o assistente DEVE executar IMEDIATAMENTE um `git commit` semântico no repositório ativo (`C:\xampp\htdocs\MrStock\` e manter sincronizado com `G:\Meu Drive\TCC_MrStock\`).
+- **Padrão Semântico Obrigatório (Conventional Commits):**
+  - `feat(<escopo>): <descrição>` -> Novos recursos ou páginas (ex: `feat(pdv): ...`).
+  - `fix(<escopo>): <descrição>` -> Correções de bugs, travas e lógica (ex: `fix(estoque): ...`).
+  - `style(<escopo>): <descrição>` -> Ajustes de design, CSS, espaçamentos e UI (ex: `style(css): ...`).
+  - `refactor(<escopo>): <descrição>` -> Melhorias e limpeza de código sem alterar comportamento (ex: `refactor(auth): ...`).
+  - `docs(<escopo>): <descrição>` -> Atualizações de documentação, manuais, PRDs e notas técnicas (ex: `docs(readme): ...`).
+  - `test(<escopo>): <descrição>` -> Baterias de testes de prova real e auditorias (ex: `test(qa): ...`).
+- **Árvore de Trabalho Sempre Limpa:** O assistente deve garantir que `git status` permaneça limpo (`working tree clean`) após cada ciclo de entrega para que o repositório esteja sempre pronto para `git push`.
+
 
