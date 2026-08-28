@@ -1034,7 +1034,7 @@ body.sidebar-collapsed .main-panel {
   border-radius: var(--mr-radius);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
   margin-bottom: 1.5rem;
-  overflow: hidden;
+  overflow: visible;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
@@ -1133,19 +1133,38 @@ body.sidebar-collapsed .main-panel {
 /* ===== ANIMAÇÃO ESCALONADA EM LINHAS DE TABELAS E GRÁFICOS ===== */
 .so-table tbody tr,
 .table:not(.table-sheet) tbody tr {
-  animation: salesOpsSlideInLeft 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: salesOpsSlideInLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.so-table tbody tr:nth-child(1), .table tbody tr:nth-child(1)   { animation-delay: 0.04s; }
-.so-table tbody tr:nth-child(2), .table tbody tr:nth-child(2)   { animation-delay: 0.08s; }
-.so-table tbody tr:nth-child(3), .table tbody tr:nth-child(3)   { animation-delay: 0.12s; }
-.so-table tbody tr:nth-child(4), .table tbody tr:nth-child(4)   { animation-delay: 0.16s; }
-.so-table tbody tr:nth-child(5), .table tbody tr:nth-child(5)   { animation-delay: 0.20s; }
-.so-table tbody tr:nth-child(6), .table tbody tr:nth-child(6)   { animation-delay: 0.24s; }
-.so-table tbody tr:nth-child(7), .table tbody tr:nth-child(7)   { animation-delay: 0.28s; }
-.so-table tbody tr:nth-child(8), .table tbody tr:nth-child(8)   { animation-delay: 0.32s; }
-.so-table tbody tr:nth-child(9), .table tbody tr:nth-child(9)   { animation-delay: 0.36s; }
-.so-table tbody tr:nth-child(10), .table tbody tr:nth-child(10) { animation-delay: 0.40s; }
+.so-table tbody tr:nth-child(1), .table tbody tr:nth-child(1)   { animation-delay: 0.03s; }
+.so-table tbody tr:nth-child(2), .table tbody tr:nth-child(2)   { animation-delay: 0.06s; }
+.so-table tbody tr:nth-child(3), .table tbody tr:nth-child(3)   { animation-delay: 0.09s; }
+.so-table tbody tr:nth-child(4), .table tbody tr:nth-child(4)   { animation-delay: 0.12s; }
+.so-table tbody tr:nth-child(5), .table tbody tr:nth-child(5)   { animation-delay: 0.15s; }
+.so-table tbody tr:nth-child(6), .table tbody tr:nth-child(6)   { animation-delay: 0.18s; }
+.so-table tbody tr:nth-child(7), .table tbody tr:nth-child(7)   { animation-delay: 0.21s; }
+.so-table tbody tr:nth-child(8), .table tbody tr:nth-child(8)   { animation-delay: 0.24s; }
+.so-table tbody tr:nth-child(9), .table tbody tr:nth-child(9)   { animation-delay: 0.27s; }
+.so-table tbody tr:nth-child(10), .table tbody tr:nth-child(10) { animation-delay: 0.30s; }
+.so-table tbody tr:nth-child(n+11), .table tbody tr:nth-child(n+11) { animation-delay: 0.30s; }
+
+/* Prevenção Absoluta de Corte de Dropdowns e Scroll Vertical Indesejado em Tabelas */
+.so-card-body .table-responsive,
+.card-body .table-responsive {
+  min-height: 240px;
+}
+
+@media (min-width: 992px) {
+  .so-card-body .table-responsive,
+  .card-body .table-responsive,
+  .so-card .table-responsive {
+    overflow: visible;
+  }
+}
+
+.table-responsive.dropdown-active {
+  overflow: visible !important;
+}
 
 /* Correção Soberana de Stacking Context para Dropdowns de Ações em Tabelas */
 .so-table tbody tr,

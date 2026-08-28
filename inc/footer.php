@@ -96,12 +96,20 @@
             }
         });
 
-        // 4. Correção Soberana de Z-Index para Dropdowns em Linhas de Tabelas
+        // 4. Correção Soberana de Z-Index e Overflow para Dropdowns em Linhas de Tabelas
         document.addEventListener('show.bs.dropdown', function(e) {
             const tr = e.target.closest('tr');
             if (tr) {
                 tr.style.zIndex = '1050';
                 tr.style.position = 'relative';
+            }
+            const tableResp = e.target.closest('.table-responsive');
+            if (tableResp) {
+                tableResp.classList.add('dropdown-active');
+            }
+            const card = e.target.closest('.so-card, .card');
+            if (card) {
+                card.style.overflow = 'visible';
             }
         });
         document.addEventListener('hidden.bs.dropdown', function(e) {
@@ -109,6 +117,10 @@
             if (tr) {
                 tr.style.zIndex = '';
                 tr.style.position = '';
+            }
+            const tableResp = e.target.closest('.table-responsive');
+            if (tableResp) {
+                tableResp.classList.remove('dropdown-active');
             }
         });
     });
