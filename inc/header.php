@@ -123,10 +123,10 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
     })();
     </script>
 
-    <link href="<?= BASE_URL ?>/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/css/inter.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.css">
+    <link href="<?= BASE_URL ?>/css/bootstrap.min.css?v=2.2.0" rel="stylesheet">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css?v=2.2.0">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/inter.css?v=2.2.0">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.css?v=2.2.0">
     <link rel="icon" href="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" type="image/x-icon">
     <?php if (!empty($extraHead)) echo $extraHead; ?>
 </head>
