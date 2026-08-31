@@ -13,3 +13,13 @@ Thumbs.db
 *.log
 *.tmp
 error_log
+
+# Configurações de IA, Agentes e Scripts Locais
+.agents/
+.gemini/
+GEMINI.md
+GLOBAL_BRAIN_MANIFEST.md
+*.bak
+*backup*.php
+scripts/deploy_ftp.py
+.env
