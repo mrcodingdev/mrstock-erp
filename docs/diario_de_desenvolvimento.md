@@ -1,4 +1,4 @@
-﻿# Diário de Desenvolvimento & Histórico de Versões — MrStock ERP
+# Diário de Desenvolvimento & Histórico de Versões — MrStock ERP
 
 Este documento registra a linha do tempo, sprints de engenharia e a evolução arquitetural do **MrStock ERP** desde a concepção inicial até a homologação da **Versão 2.0 (SalesOps Edition)**.
 
@@ -23,7 +23,7 @@ timeline
                                      : Web Audio API (880Hz) e Atalhos de Teclado no PDV
                                      : Modal de Troco Dinâmico e Cédulas Rápidas
                                      : Módulo Vetorial Autônomo de Etiquetas SVG
-                                     : Suíte de 4 Subagentes de Testes Automatizados
+                                     : Bateria de Testes Automatizados de Qualidade
 ```
 
 ---
@@ -50,4 +50,4 @@ timeline
 - **Troco Dinâmico:** Teclado numérico e botões de cédula de R$ 10 a R$ 200.
 - **Etiquetas Vetoriais:** Geração autônoma de SVG Code-128 e EAN-13 em `inc/barcode_helper.php`.
 - **Design System SalesOps:** Sidebar com script Anti-FOUC no `<head>`, popover com `z-index: 99999` e paginação institucional verde.
-- **Auditoria de QA:** Suíte automatizada com 38 asserções em 4 subagentes.
+- **Auditoria de QA:** Bateria de testes de conformidade cobrindo Segurança (RBAC/CSRF), Integridade ACID, UI/UX e Compatibilidade PHP 8.2.

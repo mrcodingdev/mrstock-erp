@@ -1,4 +1,4 @@
-﻿# Estrutura Física do Projeto — MrStock ERP v2.0
+# Estrutura Física do Projeto — MrStock ERP v2.0
 
 Este documento apresenta a árvore de diretórios, a finalidade de cada arquivo e o mapa modular da arquitetura do **MrStock ERP**.
 
@@ -79,16 +79,6 @@ MrStock/
 │
 ├── database/                       # Scripts e Dumps do Banco de Dados
 │   └── mrstock_db.sql              # Dump DDL e DML oficial do banco de dados (12 tabelas InnoDB + seed Papelaria Real)
-│
-├── scripts/                        # Suíte de Testes Automatizados e Auditoria de Subagentes
-│   ├── test_full_system_audit.php  # Teste global de integridade (38 asserções: AppSec, ACID, Concorrência, UI, PHP 8.2)
-│   ├── test_nightly_pipeline.php   # Teste transacional do fluxo completo de compras, vendas e etiquetas
-│   ├── test_pdv_ergonomia.php      # Teste de conformidade de atalhos de teclado e Web Audio API
-│   ├── test_rbac_popover_pagination.php # Teste de isolamento de rotas, z-index do popover e paginação
-│   ├── audit_mrstock.php           # Scanner estático de código PHP contra vulnerabilidades e más práticas
-│   ├── db_diagnostic.php           # Script CLI de diagnóstico de conexão, contagem de registros e margens
-│   ├── export_utf8_sql.php         # Utilitário para exportação do schema do banco em UTF-8 puro
-│   └── seed_realistic_data.php     # Injetor do catálogo realista dos 15 produtos da Papelaria Real
 │
 └── docs/                           # Documentação Técnica Oficial do TCC
     ├── visao_geral.md              # Visão geral, objetivos e ficha técnica
