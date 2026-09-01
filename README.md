@@ -50,14 +50,14 @@
 O **MrStock ERP** é uma plataforma de gestão empresarial e frente de caixa voltada para o varejo de pequeno e médio porte. O projeto foi concebido e modelado com base nas necessidades operacionais da **Papelaria Real**, um estabelecimento comercial com alto volume de itens cadastrados, fracionamento de mercadorias e demanda sazonal concentrada.
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                                   PAPELARIA REAL                                       │
-├────────────────────────────────────────────────────────────────────────────────────────┤
-│  • Mais de 1.000 SKUs ativos divididos em 10 Famílias Funcionais de Produtos           │
-│  • Picos sazonais de atendimento (Volta às Aulas) exigindo PDV com resposta instantânea│
+┌──────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   PAPELARIA REAL                                         │
+├──────────────────────────────────────────────────────────────────────────────────────────┤
+│  • Mais de 1.000 SKUs ativos divididos em 10 Famílias Funcionais de Produtos             │
+│  • Picos sazonais de atendimento (Volta às Aulas) exigindo PDV com resposta instantânea  │
 │  • Risco de perdas financeiras em itens perecíveis (colas, tintas, corretores, borrachas)│
-│  • Necessidade de emissão ágil de NFC-e e impressão térmica padronizada               │
-└────────────────────────────────────────────────────────────────────────────────────────┘
+│  • Necessidade de emissão ágil de NFC-e e impressão térmica padronizada                  │
+└──────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Principais Dores Solucionadas
