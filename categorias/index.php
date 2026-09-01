@@ -1,5 +1,5 @@
-﻿<?php
-$pageTitle  = 'MrStock ERP - Gestão de Categorias';
+<?php
+$pageTitle  = 'Categorias';
 $activePage = 'categorias';
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
@@ -12,15 +12,24 @@ if ($userPerfil !== 'admin') {
     exit;
 }
 
-$stmt = $pdo->query("SELECT c.*, (SELECT COUNT(*) FROM produtos p WHERE p.categoria_id = c.id) as qtd_produtos FROM categorias c ORDER BY c.nome ASC");
-$categorias = $stmt->fetchAll();
+// Consulta de Categorias com contagem de produtos vinculados
+$stmt = $pdo->query("SELECT c.*, (SELECT COUNT(*) FROM produtos p WHERE p.categoria_id = c.id AND p.status = 'ativo') as qtd_produtos FROM categorias c ORDER BY c.nome ASC");
+$categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalCategorias = count($categorias);
 
+// Cálculo dos KPIs de Mix para os Stat Cards
+$totalProdutosVinculados = 0;
+foreach ($categorias as $c) {
+    $totalProdutosVinculados += (int)$c['qtd_produtos'];
+}
+$mediaProdutosPorCategoria = $totalCategorias > 0 ? round($totalProdutosVinculados / $totalCategorias, 1) : 0;
+
+// Edição de Categoria via Modal
 $editCategoria = null;
 if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
     $stmtEdit = $pdo->prepare("SELECT * FROM categorias WHERE id = ?");
     $stmtEdit->execute([$_GET['edit']]);
-    $editCategoria = $stmtEdit->fetch();
+    $editCategoria = $stmtEdit->fetch(PDO::FETCH_ASSOC);
 }
 
 require_once __DIR__ . '/../inc/header.php';
@@ -28,7 +37,7 @@ require_once __DIR__ . '/../inc/header.php';
 
 <div class="content-header d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <div>
-        <h2 class="fw-bold text-dark m-0"><i class="fas fa-tags text-primary me-2"></i>Gestão de Categorias</h2>
+        <h2 class="fw-bold text-dark m-0"><i class="fas fa-tags text-primary me-2"></i>Categorias</h2>
         <p class="text-muted m-0">Cadastre e organize as categorias do catálogo de produtos.</p>
     </div>
     <button class="btn btn-primary fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalCategoria" onclick="clearForm()">
@@ -38,83 +47,135 @@ require_once __DIR__ . '/../inc/header.php';
 
 <div class="content-body">
     <?php if (isset($_GET['msg'])): ?>
-        <?php if ($_GET['msg'] == 'sucesso'): ?>
-        <div class="alert alert-success alert-dismissible fade show shadow-sm border-0">
-            <strong>Sucesso!</strong> Registro de categoria salvo no banco de dados. 
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <?php if ($_GET['msg'] === 'sucesso'): ?>
+        <div class="alert alert-success alert-dismissible fade show shadow-sm border border-success mb-3" role="alert">
+            <i class="fas fa-check-circle me-2"></i> <strong>Sucesso!</strong> Registro de categoria salvo no banco de dados. 
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
         </div>
-        <?php elseif ($_GET['msg'] == 'erro'): ?>
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0">
-            <strong>Erro!</strong> Não foi possível salvar a categoria. 
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <?php elseif ($_GET['msg'] === 'erro'): ?>
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm border border-danger mb-3" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i> <strong>Erro!</strong> Não foi possível processar a categoria. 
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
         </div>
         <?php endif; ?>
     <?php endif; ?>
 
-    <!-- ══ BARRA DE LIVE SEARCH ═════════════════════════════════════════════ -->
-    <div class="so-card mb-3">
-        <div class="so-card-body p-3">
-            <div class="so-search-box w-100" style="max-width:100%;">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="liveSearchCategorias" class="form-control" placeholder="Filtrar categorias ao vivo por nome ou descrição..." onkeyup="filtrarCategorias(this)">
+    <!-- ══ CARDS DE RESUMO (BENTO GRID SALESOPS) ═════════════════════════════ -->
+    <div class="row g-3 mb-4">
+        <!-- Card 1: Total de Categorias -->
+        <div class="col-12 col-md-4">
+            <div class="so-card p-3 mb-0 h-100">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Total de Categorias</span>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalCategorias ?></h3>
+                        <small class="text-muted"><?= $totalCategorias === 1 ? '1 categoria cadastrada' : "$totalCategorias categorias cadastradas" ?></small>
+                    </div>
+                    <div class="kpi-icon-box kpi-icon-box--primary">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Produtos Vinculados -->
+        <div class="col-12 col-md-4">
+            <div class="so-card p-3 mb-0 h-100">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Produtos Vinculados</span>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalProdutosVinculados ?></h3>
+                        <small class="text-muted"><?= $totalProdutosVinculados === 1 ? '1 item associado' : "$totalProdutosVinculados itens associados" ?></small>
+                    </div>
+                    <div class="kpi-icon-box kpi-icon-box--success">
+                        <i class="fas fa-boxes-stacked"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Média de Mix -->
+        <div class="col-12 col-md-4">
+            <div class="so-card p-3 mb-0 h-100">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Média de Mix</span>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($mediaProdutosPorCategoria, 1, ',', '.') ?></h3>
+                        <small class="text-muted">Produtos por categoria</small>
+                    </div>
+                    <div class="kpi-icon-box kpi-icon-box--warning">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ══ TABELA MODULAR DE CATEGORIAS ═════════════════════════════════════ -->
+    <!-- ══ BARRA DE LIVE SEARCH (WCAG 2.1 AA) ════════════════════════════════ -->
+    <div class="so-card mb-3">
+        <div class="so-card-body p-3">
+            <label for="liveSearchCategorias" class="form-label fw-bold text-dark text-xs mb-1">Buscar Categorias</label>
+            <div class="so-search-box w-100" style="max-width: 480px;">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="liveSearchCategorias" class="form-control" placeholder="Filtrar categorias ao vivo por nome ou descrição..." onkeyup="filtrarCategorias(this)" aria-label="Buscar Categorias">
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ TABELA MODULAR DE CATEGORIAS (ANTI-SLOP) ══════════════════════════ -->
     <div class="so-card">
         <div class="so-card-header">
             <h5 class="so-card-title"><i class="fas fa-folder-tree text-primary"></i> Categorias Cadastradas</h5>
-            <span class="so-badge so-badge-primary"><?= $totalCategorias ?> categorias</span>
+            <span class="so-badge so-badge-primary tabular-nums"><?= $totalCategorias === 1 ? '1 categoria' : "$totalCategorias categorias" ?></span>
         </div>
         <div class="so-card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0 so-table align-middle" id="tabelaCategorias">
                     <thead>
                         <tr>
-                            <th width="8%">ID</th>
-                            <th width="35%">Nome da Categoria</th>
-                            <th width="35%">Descrição</th>
-                            <th width="16%" class="text-center">Mix Produtos</th>
-                            <th width="6%" class="text-center">Ações</th>
+                            <th scope="col" width="10%">ID</th>
+                            <th scope="col" width="35%">Nome da Categoria</th>
+                            <th scope="col" width="35%">Descrição</th>
+                            <th scope="col" width="14%" class="text-center">Mix de Produtos</th>
+                            <th scope="col" width="6%" class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if ($totalCategorias > 0): ?>
                             <?php foreach ($categorias as $c): ?>
                             <tr class="linha-categoria">
-                                <td class="fw-bold text-muted font-monospace">#<?= str_pad((string)$c['id'], 3, '0', STR_PAD_LEFT) ?></td>
+                                <td class="fw-bold text-muted font-monospace tabular-nums">#<?= str_pad((string)$c['id'], 3, '0', STR_PAD_LEFT) ?></td>
                                 <td>
-                                    <strong class="text-dark d-block"><?= htmlspecialchars($c['nome']) ?></strong>
+                                    <strong class="text-dark d-block"><?= htmlspecialchars($c['nome'], ENT_QUOTES, 'UTF-8') ?></strong>
                                 </td>
                                 <td>
-                                    <span class="text-muted small"><?= htmlspecialchars($c['descricao'] ?: 'Sem descrição informada') ?></span>
+                                    <span class="text-muted small"><?= htmlspecialchars($c['descricao'] ?: 'Sem descrição informada', ENT_QUOTES, 'UTF-8') ?></span>
                                 </td>
                                 <td class="text-center">
-                                    <span class="badge bg-light text-dark border"><?= (int)$c['qtd_produtos'] ?> itens</span>
+                                    <span class="text-dark fw-bold tabular-nums"><?= (int)$c['qtd_produtos'] === 1 ? '1 produto' : (int)$c['qtd_produtos'] . ' produtos' ?></span>
                                 </td>
                                 <td class="text-center">
                                     <div class="dropdown">
-                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações para categoria <?= htmlspecialchars($c['nome'], ENT_QUOTES, 'UTF-8') ?>" title="Ações">
                                             <i class="fas fa-ellipsis-vertical"></i>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2" style="font-size:0.85rem;">
+                                        <ul class="dropdown-menu dropdown-menu-end shadow border py-2" style="border-color: #cbd5e1 !important; font-size:0.85rem;">
                                             <li>
-                                                <a class="dropdown-item py-1" href="<?= BASE_URL ?>/categorias/index.php?edit=<?= $c['id'] ?>">
+                                                <a class="dropdown-item py-1" href="<?= BASE_URL ?>/categorias/index.php?edit=<?= (int)$c['id'] ?>">
                                                     <i class="fas fa-edit text-primary me-2"></i> Editar Categoria
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item py-1" href="<?= BASE_URL ?>/produtos/index.php?categoria_id=<?= $c['id'] ?>">
+                                                <a class="dropdown-item py-1" href="<?= BASE_URL ?>/produtos/index.php?categoria_id=<?= (int)$c['id'] ?>">
                                                     <i class="fas fa-boxes-stacked text-info me-2"></i> Ver Produtos Vinculados
                                                 </a>
                                             </li>
-                                            <li><hr class="dropdown-divider my-1"></li>
+                                            <li><hr class="dropdown-divider my-1" style="border-color: #cbd5e1;"></li>
                                             <li>
                                                 <form action="<?= BASE_URL ?>/categorias/functions.php?tipo=categoria" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta categoria? Os produtos vinculados não serão apagados, apenas perderão o vínculo.')" class="m-0">
                                                     <?= csrf_input() ?>
                                                     <input type="hidden" name="acao" value="deletar">
-                                                    <input type="hidden" name="id"   value="<?= $c['id'] ?>">
+                                                    <input type="hidden" name="id"   value="<?= (int)$c['id'] ?>">
                                                     <button type="submit" class="dropdown-item text-danger py-1">
                                                         <i class="fas fa-trash-alt me-2"></i> Excluir Categoria
                                                     </button>
@@ -125,6 +186,12 @@ require_once __DIR__ . '/../inc/header.php';
                                 </td>
                             </tr>
                             <?php endforeach; ?>
+                            <tr id="noResultsRow" style="display: none;">
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    <i class="fas fa-search fs-3 d-block mb-2 opacity-50"></i>
+                                    Nenhuma categoria encontrada para o termo pesquisado.
+                                </td>
+                            </tr>
                         <?php else: ?>
                             <tr>
                                 <td colspan="5" class="text-center py-5 text-muted">
@@ -141,30 +208,34 @@ require_once __DIR__ . '/../inc/header.php';
 </div>
 
 <!-- Modal Categoria -->
-<div class="modal fade" id="modalCategoria" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: var(--mr-radius);">
-            <div class="modal-header bg-dark text-white border-0 py-3">
-                <h5 class="modal-title fw-bold" id="modalCategoriaLabel"><i class="fas fa-tag text-primary me-2"></i> <?= $editCategoria ? 'Editar Categoria' : 'Nova Categoria' ?></h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="window.location='<?= BASE_URL ?>/categorias/index.php'"></button>
+<div class="modal fade" id="modalCategoria" tabindex="-1" aria-labelledby="modalCategoriaLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border" style="border-radius: var(--mr-radius); border-color: #cbd5e1 !important;">
+            <div class="modal-header bg-dark text-white border-bottom py-3" style="border-color: #cbd5e1 !important;">
+                <h5 class="modal-title fw-bold text-white" id="modalCategoriaLabel">
+                    <i class="fas fa-tags text-primary me-2"></i> <?= $editCategoria ? 'Editar Categoria' : 'Nova Categoria' ?>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar" onclick="window.location='<?= BASE_URL ?>/categorias/index.php'"></button>
             </div>
             <form action="<?= BASE_URL ?>/categorias/functions.php?tipo=categoria" method="POST">
                 <?= csrf_input() ?>
                 <div class="modal-body bg-light p-4">
                     <input type="hidden" name="acao" value="salvar">
-                    <input type="hidden" name="id"   id="cat_id" value="<?= $editCategoria ? $editCategoria['id'] : '' ?>">
+                    <input type="hidden" name="id"   id="cat_id" value="<?= $editCategoria ? (int)$editCategoria['id'] : '' ?>">
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Nome da Categoria <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="nome" id="cat_nome" value="<?= $editCategoria ? htmlspecialchars($editCategoria['nome']) : '' ?>" required placeholder="Ex: Papéis & Cadernos">
+                        <label for="cat_nome" class="form-label fw-bold text-dark">Nome da Categoria <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="nome" id="cat_nome" value="<?= $editCategoria ? htmlspecialchars($editCategoria['nome'], ENT_QUOTES, 'UTF-8') : '' ?>" required placeholder="Ex: Cadernos & Blocos, Canetas & Marcadores">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Descrição (Opcional)</label>
-                        <textarea class="form-control" name="descricao" id="cat_descricao" rows="3" placeholder="Breve resumo dos tipos de produtos inclusos nesta categoria..."><?= $editCategoria ? htmlspecialchars($editCategoria['descricao'] ?? '') : '' ?></textarea>
+                        <label for="cat_descricao" class="form-label fw-bold text-dark">Descrição (Opcional)</label>
+                        <textarea class="form-control" name="descricao" id="cat_descricao" rows="3" placeholder="Ex: Cadernos universitários, blocos adesivos, notas autoadesivas e refis..."><?= $editCategoria ? htmlspecialchars($editCategoria['descricao'] ?? '', ENT_QUOTES, 'UTF-8') : '' ?></textarea>
                     </div>
                 </div>
-                <div class="modal-footer border-0 bg-white p-3">
-                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal" onclick="window.location='<?= BASE_URL ?>/categorias/index.php'">Cancelar</button>
-                    <button type="submit" class="btn btn-success px-4 fw-bold shadow-sm"><i class="fas fa-save me-1"></i> <?= $editCategoria ? 'Atualizar' : 'Cadastrar' ?></button>
+                <div class="modal-footer bg-white border-top p-3" style="border-color: #cbd5e1 !important;">
+                    <button type="button" class="btn btn-secondary px-4 fw-semibold" data-bs-dismiss="modal" onclick="window.location='<?= BASE_URL ?>/categorias/index.php'">Cancelar</button>
+                    <button type="submit" class="btn btn-primary px-4 fw-bold shadow-sm">
+                        <i class="fas fa-save me-1"></i> <?= $editCategoria ? 'Atualizar Categoria' : 'Salvar Categoria' ?>
+                    </button>
                 </div>
             </form>
         </div>
@@ -175,17 +246,24 @@ require_once __DIR__ . '/../inc/header.php';
 function filtrarCategorias(input) {
     const termo = input.value.toLowerCase().trim();
     const linhas = document.querySelectorAll('#tabelaCategorias tbody .linha-categoria');
+    let visiveis = 0;
     linhas.forEach(linha => {
         const texto = linha.textContent.toLowerCase();
-        linha.style.display = texto.includes(termo) ? '' : 'none';
+        const match = texto.includes(termo);
+        linha.style.display = match ? '' : 'none';
+        if (match) visiveis++;
     });
+    const emptyRow = document.getElementById('noResultsRow');
+    if (emptyRow) {
+        emptyRow.style.display = (visiveis === 0 && linhas.length > 0) ? '' : 'none';
+    }
 }
 
 function clearForm() {
     document.getElementById('cat_id').value = '';
     document.getElementById('cat_nome').value = '';
     document.getElementById('cat_descricao').value = '';
-    document.getElementById('modalCategoriaLabel').innerHTML = '<i class="fas fa-tag text-primary me-2"></i> Nova Categoria';
+    document.getElementById('modalCategoriaLabel').innerHTML = '<i class="fas fa-tags text-primary me-2"></i> Nova Categoria';
 }
 
 <?php if ($editCategoria): ?>
