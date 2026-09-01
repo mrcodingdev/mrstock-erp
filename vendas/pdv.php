@@ -748,14 +748,18 @@ function recalcularTotal() {
         custoTotal += (parseFloat(item.preco_compra || 0) * item.quantidade);
     });
 
+    subtotal = Math.round(subtotal * 100) / 100;
+    custoTotal = Math.round(custoTotal * 100) / 100;
+
     let descInput = parseFloat(document.getElementById('desconto_input')?.value) || 0.0;
+    descInput = Math.round(descInput * 100) / 100;
     if (descInput < 0) descInput = 0;
     if (descInput > subtotal) descInput = subtotal;
 
     // Validação de Desconto Máximo Configurado
     const maxDescPercent = parseFloat(MRSTOCK_CONFIG.pdvDescMax) || 0;
     if (maxDescPercent > 0 && subtotal > 0) {
-        const maxDescValor = (subtotal * maxDescPercent) / 100.0;
+        const maxDescValor = Math.round((subtotal * maxDescPercent) / 100.0 * 100) / 100;
         if (descInput > maxDescValor) {
             descInput = maxDescValor;
             const inputDesc = document.getElementById('desconto_input');
@@ -765,7 +769,7 @@ function recalcularTotal() {
         }
     }
 
-    totalVendaAtual = Math.max(0, subtotal - descInput);
+    totalVendaAtual = Math.round(Math.max(0, subtotal - descInput) * 100) / 100;
 
     // Validação de Margem de Lucro / Custo de Compra
     const btnPagar = document.getElementById('btnPagarModal');
@@ -909,14 +913,15 @@ function definirValorExato() {
 }
 
 function calcularTroco() {
-    const valRecebido = parseFloat(document.getElementById('modal_valor_recebido').value) || 0.0;
-    const troco = valRecebido - totalVendaAtual;
+    const valRecebido = Math.round((parseFloat(document.getElementById('modal_valor_recebido').value) || 0.0) * 100) / 100;
+    const totalRef = Math.round(totalVendaAtual * 100) / 100;
+    const troco = Math.round((valRecebido - totalRef) * 100) / 100;
     const trocoDisplay = document.getElementById('trocoValorDisplay');
     const trocoBox = document.getElementById('trocoBox');
     const alertaInsuf = document.getElementById('trocoAlertaInsuficiente');
     const btnConfirmar = document.getElementById('btnConfirmarVendaModal');
 
-    if (valRecebido < totalVendaAtual) {
+    if (valRecebido < totalRef) {
         trocoBox.className = 'troco-box troco-insuficiente text-center';
         trocoDisplay.className = 'fw-bold mb-0 text-danger tabular-nums';
         trocoDisplay.textContent = `Faltam R$ ${formatarMoeda(Math.abs(troco))}`;
@@ -925,7 +930,7 @@ function calcularTroco() {
     } else {
         trocoBox.className = 'troco-box troco-valido text-center';
         trocoDisplay.className = 'fw-bold mb-0 text-success tabular-nums';
-        trocoDisplay.textContent = `R$ ${formatarMoeda(troco)}`;
+        trocoDisplay.textContent = `R$ ${formatarMoeda(Math.max(0, troco))}`;
         alertaInsuf.classList.add('d-none');
         btnConfirmar.disabled = false;
     }
