@@ -1852,6 +1852,38 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 .so-stat-card--danger  { border-left: 4px solid #ef4444 !important; }
 .so-stat-card--info    { border-left: 4px solid #0ea5e9 !important; }
 
+/* KPI Icon Boxes Padronizados */
+.kpi-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+}
+.kpi-icon-box--primary {
+  background-color: rgba(40, 73, 54, 0.12);
+  color: var(--mr-bg-primary);
+}
+.kpi-icon-box--success {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+.kpi-icon-box--info {
+  background-color: rgba(14, 165, 233, 0.12);
+  color: #0ea5e9;
+}
+.kpi-icon-box--warning {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+.kpi-icon-box--danger {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
 /* Bento Cards na Central de Ajuda */
 .so-bento-card--primary { border-top: 3px solid var(--mr-bg-primary) !important; }
 .so-bento-card--info    { border-top: 3px solid #0284c7 !important; }
@@ -1897,8 +1929,13 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 }
 
 /* Tipografia Utilitária */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
 .text-xs  { font-size: 0.75rem !important; }
 .text-2xs { font-size: 0.6875rem !important; }
+.text-sm  { font-size: 0.875rem !important; }
 
 /* ==========================================================================
    PADRONIZAÇÃO GLOBAL DE CONTORNOS E BORDAS NÍTIDAS (MRSTOCK DESIGN SYSTEM)
