@@ -36,17 +36,19 @@ $produtosEstoqueBaixo = $stmtEstoqueBaixo->fetchAll();
 $stmtTotalBaixo    = $pdo->query("SELECT COUNT(*) AS total FROM produtos WHERE quantidade <= estoque_minimo AND status = 'ativo'");
 $totalEstoqueBaixo = (int)($stmtTotalBaixo->fetchColumn() ?: 0);
 
-// ── 4. Produtos Próximos ao Vencimento (Janela de 30 Dias) ───────────────────
+// ── 4. Produtos Próximos ao Vencimento ───────────────────────────────────────
+$diasAlertaVenc = (int)get_app_config($pdo, 'alerta_vencimento_dias', '30');
+
 $stmtVencimento = $pdo->query("
     SELECT id, nome, quantidade, validade 
     FROM produtos 
-    WHERE validade IS NOT NULL AND validade <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) AND status = 'ativo' 
+    WHERE validade IS NOT NULL AND validade <= DATE_ADD(CURDATE(), INTERVAL {$diasAlertaVenc} DAY) AND status = 'ativo' 
     ORDER BY validade ASC, nome ASC 
     LIMIT 5
 ");
 $produtosVencimento = $stmtVencimento->fetchAll();
 
-$stmtTotalVenc   = $pdo->query("SELECT COUNT(*) AS total FROM produtos WHERE validade IS NOT NULL AND validade <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) AND status = 'ativo'");
+$stmtTotalVenc   = $pdo->query("SELECT COUNT(*) AS total FROM produtos WHERE validade IS NOT NULL AND validade <= DATE_ADD(CURDATE(), INTERVAL {$diasAlertaVenc} DAY) AND status = 'ativo'");
 $totalVencimento = (int)($stmtTotalVenc->fetchColumn() ?: 0);
 
 // ── 5. Últimas Vendas Realizadas ─────────────────────────────────────────────
@@ -161,12 +163,12 @@ require_once __DIR__ . '/inc/header.php';
             </div>
         </div>
 
-        <!-- Card 4: Vencimentos (30d) -->
+        <!-- Card 4: Vencimentos (<?= $diasAlertaVenc ?>d) -->
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vencimentos (30d)</span>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vencimentos (<?= $diasAlertaVenc ?>d)</span>
                         <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalVencimento ?></h3>
                         <small class="text-muted">Validade próxima</small>
                     </div>

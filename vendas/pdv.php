@@ -4,6 +4,12 @@ $activePage = 'pdv';
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
 
+// Ingestão das configurações operacionais do PDV
+$cfgSomPdv         = get_app_config($pdo, 'som_pdv', '1') === '1';
+$cfgPdvDescMax     = (float)get_app_config($pdo, 'pdv_desconto_maximo', '15.0');
+$cfgPdvTravaMargem = get_app_config($pdo, 'pdv_trava_margem', 'aviso');
+$cfgPdvImpressora  = get_app_config($pdo, 'pdv_impressora', '80mm');
+
 // Consulta de produtos ativos com saldo em estoque
 $stmt = $pdo->query("SELECT p.id, p.nome, p.preco_venda as preco, p.preco_compra, p.quantidade, p.codigo_de_barra, p.categoria_id, c.nome as categoria 
                      FROM produtos p 
@@ -130,7 +136,7 @@ require_once __DIR__ . '/../inc/header.php';
                                 <span class="fw-bold text-dark tabular-nums" id="display_subtotal">R$ 0,00</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <label for="desconto_input" class="text-muted small fw-bold mb-0">DESCONTO (R$):</label>
+                                <label for="desconto_input" class="text-muted small fw-bold mb-0">DESCONTO (R$) <kbd class="bg-light text-secondary border px-1 py-0 text-2xs fw-bold ms-1" title="Atalho F7">F7</kbd>:</label>
                                 <div class="w-desconto-input">
                                     <input type="number" step="0.01" min="0" id="desconto_input" class="form-control form-control-sm text-end fw-bold shadow-none tabular-nums" value="0.00" oninput="recalcularTotal()" aria-label="Valor de desconto em reais">
                                 </div>
@@ -270,6 +276,10 @@ require_once __DIR__ . '/../inc/header.php';
                             <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">F4</kbd>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center py-2">
+                            <span><strong class="text-dark">F7</strong> — Focar e Aplicar Desconto (R$)</span>
+                            <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">F7</kbd>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                             <span><strong class="text-dark">F8</strong> — Alternar Forma de Pagamento</span>
                             <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">F8</kbd>
                         </div>
@@ -379,6 +389,13 @@ require_once __DIR__ . '/../inc/header.php';
     </div>
 
 <script>
+// ══ CONFIGURAÇÕES OPERACIONAIS DINÂMICAS (INJETADAS DO BACKEND) ═══════════════
+const MRSTOCK_CONFIG = {
+    somPdv:         <?= json_encode($cfgSomPdv) ?>,
+    pdvDescMax:     <?= json_encode($cfgPdvDescMax) ?>,
+    pdvTravaMargem: <?= json_encode($cfgPdvTravaMargem) ?>,
+    pdvImpressora:  <?= json_encode($cfgPdvImpressora) ?>
+};
 // ══ CATÁLOGO CLIENT-SIDE E ESTADO DO PDV ═════════════════════════════════════
 const catalogoProdutos = <?= json_encode($produtos, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
 let carrinho = [];
@@ -403,6 +420,7 @@ function getAudioContext() {
 }
 
 function playBeep(type = 'success') {
+    if (!MRSTOCK_CONFIG.somPdv) return;
     try {
         const ctx = getAudioContext();
         if (!ctx) return;
@@ -558,7 +576,7 @@ function filtrarProdutosPorCategoria(catId) {
 }
 
 // ══ ADIÇÃO E MANIPULAÇÃO DO CARRINHO ═════════════════════════════════════════
-function processarAdicao(id, nome, preco, qtdMax, qtd) {
+function processarAdicao(id, nome, preco, qtdMax, qtd, precoCompra = 0) {
     if (isNaN(qtd) || qtd <= 0) {
         mostrarAlertaEstoque('Quantidade inválida', 'Informe uma quantidade maior que zero.');
         return false;
@@ -589,6 +607,7 @@ function processarAdicao(id, nome, preco, qtdMax, qtd) {
             id: id,
             nome: nome,
             preco: preco,
+            preco_compra: precoCompra,
             quantidade: qtd,
             subtotal: qtd * preco,
             max: qtdMax
@@ -606,7 +625,7 @@ function processarAdicao(id, nome, preco, qtdMax, qtd) {
 function adicionarItemDireto(id) {
     const p = catalogoProdutos.find(item => parseInt(item.id) === parseInt(id));
     if (!p) return;
-    processarAdicao(parseInt(p.id), p.nome, parseFloat(p.preco), parseInt(p.quantidade), 1);
+    processarAdicao(parseInt(p.id), p.nome, parseFloat(p.preco), parseInt(p.quantidade), 1, parseFloat(p.preco_compra || 0));
 }
 
 function alterarQuantidadeItem(id, delta) {
@@ -723,13 +742,51 @@ function renderizarCarrinho() {
 
 function recalcularTotal() {
     let subtotal = 0.0;
-    carrinho.forEach(item => { subtotal += item.subtotal; });
+    let custoTotal = 0.0;
+    carrinho.forEach(item => { 
+        subtotal += item.subtotal; 
+        custoTotal += (parseFloat(item.preco_compra || 0) * item.quantidade);
+    });
 
     let descInput = parseFloat(document.getElementById('desconto_input')?.value) || 0.0;
     if (descInput < 0) descInput = 0;
     if (descInput > subtotal) descInput = subtotal;
 
+    // Validação de Desconto Máximo Configurado
+    const maxDescPercent = parseFloat(MRSTOCK_CONFIG.pdvDescMax) || 0;
+    if (maxDescPercent > 0 && subtotal > 0) {
+        const maxDescValor = (subtotal * maxDescPercent) / 100.0;
+        if (descInput > maxDescValor) {
+            descInput = maxDescValor;
+            const inputDesc = document.getElementById('desconto_input');
+            if (inputDesc) inputDesc.value = descInput.toFixed(2);
+            showToast(`Desconto limitado a ${maxDescPercent}% (R$ ${formatarMoeda(maxDescValor)}).`, 'danger', 'Desconto Limitado');
+            playBeep('error');
+        }
+    }
+
     totalVendaAtual = Math.max(0, subtotal - descInput);
+
+    // Validação de Margem de Lucro / Custo de Compra
+    const btnPagar = document.getElementById('btnPagarModal');
+    if (carrinho.length > 0 && custoTotal > 0 && totalVendaAtual < custoTotal) {
+        if (MRSTOCK_CONFIG.pdvTravaMargem === 'bloquear') {
+            if (btnPagar) {
+                btnPagar.disabled = true;
+                btnPagar.title = 'Venda bloqueada: Total abaixo do custo de compra.';
+            }
+        } else {
+            if (btnPagar) {
+                btnPagar.disabled = false;
+                btnPagar.title = '';
+            }
+        }
+    } else {
+        if (btnPagar) {
+            btnPagar.disabled = false;
+            btnPagar.title = '';
+        }
+    }
 
     document.getElementById('display_subtotal').textContent = `R$ ${formatarMoeda(subtotal)}`;
     document.getElementById('display_total').textContent    = `R$ ${formatarMoeda(totalVendaAtual)}`;
@@ -778,6 +835,19 @@ function abrirModalPagamento() {
         showToast('Adicione ao menos um produto antes de finalizar a venda.', 'danger', 'Carrinho Vazio');
         document.getElementById('barcode_input').focus();
         return;
+    }
+
+    let custoTotal = 0.0;
+    carrinho.forEach(item => { custoTotal += (parseFloat(item.preco_compra || 0) * item.quantidade); });
+
+    if (custoTotal > 0 && totalVendaAtual < custoTotal) {
+        if (MRSTOCK_CONFIG.pdvTravaMargem === 'bloquear') {
+            playBeep('error');
+            mostrarAlertaEstoque('Margem Negativa Bloqueada!', `O valor total da venda (R$ ${formatarMoeda(totalVendaAtual)}) é inferior ao custo dos produtos (R$ ${formatarMoeda(custoTotal)}). Reduza o desconto para prosseguir.`);
+            return;
+        } else if (MRSTOCK_CONFIG.pdvTravaMargem === 'aviso') {
+            showToast(`Atenção: Total abaixo do custo dos produtos (R$ ${formatarMoeda(custoTotal)}). Venda autorizada sob margem negativa.`, 'danger', 'Aviso de Margem');
+        }
     }
 
     recalcularTotal();
@@ -894,6 +964,15 @@ window.addEventListener('keydown', function(e) {
     else if (e.key === 'F4') {
         e.preventDefault();
         abrirModalPagamento();
+    }
+    // F7: Focar e Selecionar Campo de Desconto (previne Caret Browsing nativo)
+    else if (e.key === 'F7') {
+        e.preventDefault();
+        const d = document.getElementById('desconto_input');
+        if (d) {
+            d.focus();
+            d.select();
+        }
     }
     // F8: Alternar Forma de Pagamento
     else if (e.key === 'F8') {

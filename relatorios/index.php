@@ -42,12 +42,14 @@ $stmtBaixo = $pdo->query("
 ");
 $produtosEstoqueBaixo = (int)($stmtBaixo->fetchColumn() ?: 0);
 
-// ── 4. Alertas de Shelf-Life & Vencimentos (Janela de 30 Dias) ─────────────────
+// ── 4. Alertas de Shelf-Life & Vencimentos ────────────────────────────────────
+$diasAlertaVenc = (int)get_app_config($pdo, 'alerta_vencimento_dias', '30');
+
 $stmtValidade = $pdo->query("
     SELECT COUNT(*) 
     FROM produtos 
     WHERE validade IS NOT NULL 
-      AND validade <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) 
+      AND validade <= DATE_ADD(CURDATE(), INTERVAL {$diasAlertaVenc} DAY) 
       AND status = 'ativo'
 ");
 $produtosVencendo = (int)($stmtValidade->fetchColumn() ?: 0);
@@ -139,7 +141,7 @@ require_once __DIR__ . '/../inc/header.php';
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Atenção de Validade</span>
                         <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($produtosVencendo, 0, ',', '.') ?> <span class="fs-6 fw-normal text-muted"><?= $produtosVencendo === 1 ? 'lote' : 'lotes' ?></span></h3>
-                        <small class="text-warning fw-semibold">Vencidos ou em 30 dias</small>
+                        <small class="text-warning fw-semibold">Vencidos ou em <?= $diasAlertaVenc ?> dias</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--warning">
                         <i class="fa-solid fa-calendar-xmark"></i>
@@ -248,12 +250,12 @@ require_once __DIR__ . '/../inc/header.php';
                     <h5 class="so-card-title text-dark m-0">
                         <i class="fa-solid fa-calendar-xmark text-warning me-2"></i> Validades & Vencimentos (Shelf-Life)
                     </h5>
-                    <span class="badge bg-warning text-dark">Janela de 30 Dias</span>
+                    <span class="badge bg-warning text-dark">Janela de <?= $diasAlertaVenc ?> Dias</span>
                 </div>
                 <div class="so-card-body d-flex flex-column flex-grow-1 justify-content-between">
                     <div>
                         <p class="text-muted fs-sm mb-3">
-                            Mapeamento preventivo de itens perecíveis e materiais de papelaria técnica com prazo de validade expirado ou com expiração nos próximos 30 dias. Permite planejar queimas de estoque ou baixa contábil de perdas.
+                            Mapeamento preventivo de itens perecíveis e materiais de papelaria técnica com prazo de validade expirado ou com expiração nos próximos <?= $diasAlertaVenc ?> dias. Permite planejar queimas de estoque ou baixa contábil de perdas.
                         </p>
 
                         <!-- Painel de Resumo Operacional em Tempo Real -->
@@ -263,7 +265,7 @@ require_once __DIR__ . '/../inc/header.php';
                                     <i class="fa-solid fa-hourglass-half text-warning fs-5"></i>
                                     <div>
                                         <strong class="text-dark d-block">Monitoramento de Perecibilidade</strong>
-                                        <small class="text-muted">Lotes com vencimento expirado ou nos próximos 30 dias</small>
+                                        <small class="text-muted">Lotes com vencimento expirado ou nos próximos <?= $diasAlertaVenc ?> dias</small>
                                     </div>
                                 </div>
                                 <span class="badge bg-warning text-dark fs-6 px-3 py-2 tabular-nums fw-bold"><?= $produtosVencendo ?> <?= $produtosVencendo === 1 ? 'produto' : 'produtos' ?></span>

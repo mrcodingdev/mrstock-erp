@@ -41,6 +41,10 @@ $lojaRazao    = $configMap['empresa_razao']    ?? 'Papelaria Real (Sueli & Osnir
 $lojaCnpj     = $configMap['empresa_cnpj']     ?? '50.334.808/0001-38';
 $lojaEndereco = $configMap['empresa_endereco'] ?? 'Rua da Papelaria, 123 - Centro - Sorocaba/SP';
 $lojaTelefone = $configMap['empresa_telefone'] ?? '(15) 3232-0000';
+$formatoImpressora = $configMap['pdv_impressora'] ?? '80mm';
+
+$larguraTela  = ($formatoImpressora === '58mm') ? '280px' : (($formatoImpressora === 'A4') ? '700px' : '360px');
+$larguraPrint = ($formatoImpressora === '58mm') ? '58mm'  : (($formatoImpressora === 'A4') ? '210mm' : '80mm');
 
 // Busca chave fiscal real gravada no banco
 $stmtCupom = $pdo->prepare("SELECT chave_acesso, data_emissao FROM cupons_fiscais WHERE venda_id = ?");
@@ -94,6 +98,8 @@ $protocoloAut   = '13526' . str_pad((string)$venda['id'], 10, '0', STR_PAD_LEFT)
             --mr-secondary: #475569;
             --mr-secondary-hover: #334155;
             --mr-focus-ring: #2563eb;
+            --receipt-max-width: <?= $larguraTela ?>;
+            --receipt-print-width: <?= $larguraPrint ?>;
         }
 
         *, *::before, *::after {
@@ -117,7 +123,7 @@ $protocoloAut   = '13526' . str_pad((string)$venda['id'], 10, '0', STR_PAD_LEFT)
         /* ── Barra de Ações Fixa/Centralizada (Tela) ────────────────────────── */
         .toolbar-container {
             width: 100%;
-            max-width: 360px;
+            max-width: var(--receipt-max-width, 360px);
             margin-bottom: 20px;
         }
 
@@ -198,7 +204,7 @@ $protocoloAut   = '13526' . str_pad((string)$venda['id'], 10, '0', STR_PAD_LEFT)
         /* ── Papel Térmico Comercial (80mm) ─────────────────────────────────── */
         .thermal-receipt {
             width: 100%;
-            max-width: 360px;
+            max-width: var(--receipt-max-width, 360px);
             background-color: #ffffff;
             color: #000000;
             padding: 24px 20px;
@@ -415,7 +421,7 @@ $protocoloAut   = '13526' . str_pad((string)$venda['id'], 10, '0', STR_PAD_LEFT)
 
             .thermal-receipt {
                 width: 100% !important;
-                max-width: 80mm !important;
+                max-width: var(--receipt-print-width, 80mm) !important;
                 margin: 0 auto !important;
                 padding: 4mm 2mm !important;
                 box-shadow: none !important;
