@@ -8,6 +8,15 @@
 // 1. Caminho absoluto da raiz do projeto no filesystem
 define('ROOT_PATH', realpath(__DIR__));
 
+// ====================================================================
+// 2. IDENTIFICAÇÃO E VERSIONAMENTO DO PROJETO (SEMANTIC VERSIONING)
+// ====================================================================
+if (!defined('MRSTOCK_VERSION')) {
+    define('MRSTOCK_VERSION', 'v2.1.0');
+    define('MRSTOCK_EDITION', 'SalesOps Core Enterprise');
+    define('MRSTOCK_BUILD_DATE', '01/09/2026');
+}
+
 // 2. Carregador Nativo de Variáveis de Ambiente (.env)
 if (file_exists(ROOT_PATH . '/.env')) {
     $lines = file(ROOT_PATH . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
