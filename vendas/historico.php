@@ -209,22 +209,24 @@ require_once __DIR__ . '/../inc/header.php';
         </div>
     </div>
 
-    <!-- ══ BARRA DE FILTROS UNIFICADA (1 LINHA COMPACTA BENTO GRID) ═══════════ -->
+    <!-- ══ BARRA DE FILTROS UNIFICADA (BENTO GRID COM LABELS ACESSÍVEIS) ═════ -->
     <div class="so-card p-3 mb-3">
-        <form method="GET" action="<?= BASE_URL ?>/vendas/historico.php" class="row g-2 align-items-center">
+        <form method="GET" action="<?= BASE_URL ?>/vendas/historico.php" class="row g-2 align-items-end">
             
             <!-- 1. Busca por Texto (Venda, NFC-e ou Cliente) -->
             <div class="col-12 col-md-4 col-lg-3">
+                <label for="filtro_busca" class="form-label fw-bold text-dark text-xs mb-1">Buscar Venda / Cliente</label>
                 <div class="position-relative">
-                    <input type="text" id="filtro_busca" name="busca" class="form-control ps-4 shadow-none" placeholder="Buscar Nº venda, cliente..." value="<?= htmlspecialchars($busca) ?>" aria-label="Buscar Nº da venda, NFC-e ou cliente">
+                    <input type="text" id="filtro_busca" name="busca" class="form-control ps-4 shadow-none" placeholder="Nº da venda ou cliente..." value="<?= htmlspecialchars($busca) ?>" aria-label="Buscar Nº da venda, NFC-e ou cliente">
                     <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
                 </div>
             </div>
 
             <!-- 2. Cliente -->
             <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                <select id="filtro_cliente_id" name="cliente_id" class="form-select shadow-none" onchange="this.form.submit()" aria-label="Filtrar por Cliente">
-                    <option value="">Todos os Clientes</option>
+                <label for="filtro_cliente_id" class="form-label fw-bold text-dark text-xs mb-1">Cliente</label>
+                <select id="filtro_cliente_id" name="cliente_id" class="form-select shadow-none" aria-label="Filtrar por Cliente">
+                    <option value="">-- Todos os Clientes --</option>
                     <?php foreach ($clientesLista as $cli): ?>
                         <option value="<?= $cli['id'] ?>" <?= ($cliente_id == $cli['id']) ? 'selected' : '' ?>>
                             <?= htmlspecialchars($cli['nome']) ?>
@@ -235,35 +237,32 @@ require_once __DIR__ . '/../inc/header.php';
 
             <!-- 3. Data Inicial -->
             <div class="col-6 col-sm-3 col-md-2 col-lg-2">
-                <div class="input-group">
-                    <span class="input-group-text bg-light text-muted small px-2" title="Data Inicial"><i class="fas fa-calendar-day"></i></span>
-                    <input type="date" id="filtro_data_inicio" name="data_inicio" class="form-control tabular-nums shadow-none px-2" value="<?= htmlspecialchars($data_inicio) ?>" aria-label="Data Inicial" title="Data Inicial">
-                </div>
+                <label for="filtro_data_inicio" class="form-label fw-bold text-dark text-xs mb-1">Data Inicial</label>
+                <input type="date" id="filtro_data_inicio" name="data_inicio" class="form-control tabular-nums shadow-none px-2" value="<?= htmlspecialchars($data_inicio) ?>" aria-label="Data Inicial">
             </div>
 
             <!-- 4. Data Final -->
             <div class="col-6 col-sm-3 col-md-2 col-lg-2">
-                <div class="input-group">
-                    <span class="input-group-text bg-light text-muted small px-2" title="Data Final"><i class="fas fa-calendar-check"></i></span>
-                    <input type="date" id="filtro_data_fim" name="data_fim" class="form-control tabular-nums shadow-none px-2" value="<?= htmlspecialchars($data_fim) ?>" aria-label="Data Final" title="Data Final">
-                </div>
+                <label for="filtro_data_fim" class="form-label fw-bold text-dark text-xs mb-1">Data Final</label>
+                <input type="date" id="filtro_data_fim" name="data_fim" class="form-control tabular-nums shadow-none px-2" value="<?= htmlspecialchars($data_fim) ?>" aria-label="Data Final">
             </div>
 
             <!-- 5. Forma de Pagamento -->
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                <select id="filtro_forma_pagamento" name="forma_pagamento" class="form-select shadow-none" onchange="this.form.submit()" aria-label="Filtrar por Forma de Pagamento">
-                    <option value="">Todas as Formas</option>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-1">
+                <label for="filtro_forma_pagamento" class="form-label fw-bold text-dark text-xs mb-1">Pagamento</label>
+                <select id="filtro_forma_pagamento" name="forma_pagamento" class="form-select shadow-none" aria-label="Filtrar por Forma de Pagamento">
+                    <option value="">-- Todas --</option>
                     <option value="DINHEIRO" <?= ($forma_pagamento === 'DINHEIRO') ? 'selected' : '' ?>>Dinheiro</option>
                     <option value="PIX" <?= ($forma_pagamento === 'PIX') ? 'selected' : '' ?>>PIX</option>
-                    <option value="CARTÃO DE CRÉDITO" <?= ($forma_pagamento === 'CARTÃO DE CRÉDITO') ? 'selected' : '' ?>>Cartão de Crédito</option>
-                    <option value="CARTÃO DE DÉBITO" <?= ($forma_pagamento === 'CARTÃO DE DÉBITO') ? 'selected' : '' ?>>Cartão de Débito</option>
+                    <option value="CARTÃO DE CRÉDITO" <?= ($forma_pagamento === 'CARTÃO DE CRÉDITO') ? 'selected' : '' ?>>Cartão Crédito</option>
+                    <option value="CARTÃO DE DÉBITO" <?= ($forma_pagamento === 'CARTÃO DE DÉBITO') ? 'selected' : '' ?>>Cartão Débito</option>
                 </select>
             </div>
 
             <!-- 6. Botões de Ação -->
-            <div class="col-12 col-sm-6 col-md-4 col-lg-1 d-flex gap-1 justify-content-lg-end">
-                <button type="submit" class="btn btn-primary fw-bold w-100 shadow-sm" title="Filtrar" aria-label="Aplicar Filtros">
-                    <i class="fas fa-filter"></i>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2 d-flex gap-2 justify-content-lg-end">
+                <button type="submit" class="btn btn-primary fw-bold flex-fill shadow-sm" title="Aplicar Filtros" aria-label="Aplicar Filtros">
+                    <i class="fas fa-filter me-1"></i> Filtrar
                 </button>
                 <?php if ($hasActiveFilters): ?>
                 <a href="<?= BASE_URL ?>/vendas/historico.php" class="btn btn-secondary px-3 shadow-sm" title="Limpar Filtros" aria-label="Limpar Filtros">
