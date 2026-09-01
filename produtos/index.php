@@ -1,7 +1,7 @@
 <?php
 /**
- * MrStock ERP - Gestão de Estoque & Produtos com Sistema Avançado de Filtros,
- * Chips Rápidos de Status, Paginação Parametrizada e Design System SalesOps
+ * MrStock ERP - Gestão de Estoque & Produtos com Filtros Diretos em 1 Linha,
+ * Paginação Parametrizada e Design System SalesOps
  */
 $pageTitle  = 'MrStock ERP - Estoque & Produtos';
 $activePage = 'produtos';
@@ -12,45 +12,15 @@ require_once __DIR__ . '/../inc/auth.php';
 $statusFiltro     = trim($_GET['status'] ?? '');
 $buscaFiltro      = trim($_GET['busca'] ?? '');
 $categoriaFiltro  = filter_var($_GET['categoria_id'] ?? '', FILTER_VALIDATE_INT);
+if ($categoriaFiltro !== false && $categoriaFiltro <= 0) $categoriaFiltro = null;
+
 $fornecedorFiltro = filter_var($_GET['fornecedor_id'] ?? '', FILTER_VALIDATE_INT);
-$precoMinRaw      = trim($_GET['preco_min'] ?? '');
-$precoMaxRaw      = trim($_GET['preco_max'] ?? '');
-$ordemFiltro      = trim($_GET['ordem'] ?? 'recentes');
-$limitFiltro      = filter_var($_GET['itens_por_pagina'] ?? 10, FILTER_VALIDATE_INT);
+if ($fornecedorFiltro !== false && $fornecedorFiltro <= 0) $fornecedorFiltro = null;
 
-// Sanitização de Preços
-$precoMin = ($precoMinRaw !== '' && is_numeric(str_replace(',', '.', $precoMinRaw))) ? (float)str_replace(',', '.', $precoMinRaw) : null;
-$precoMax = ($precoMaxRaw !== '' && is_numeric(str_replace(',', '.', $precoMaxRaw))) ? (float)str_replace(',', '.', $precoMaxRaw) : null;
-
-// Validação de Itens por Página
-$validLimits = [10, 25, 50, 100];
-$limit = in_array($limitFiltro, $validLimits, true) ? $limitFiltro : 10;
+$limit = 10;
 $page  = max(1, (int)($_GET['pagina'] ?? 1));
 
-// ── 2. Quick Summary Counts (Totais Rápidos em Query Única Otimizada) ─────────
-$stmtQuick = $pdo->query("
-    SELECT
-        COUNT(*) AS todos,
-        SUM(CASE WHEN status = 'ativo' AND quantidade > 0 THEN 1 ELSE 0 END) AS em_estoque,
-        SUM(CASE WHEN status = 'ativo' AND quantidade <= estoque_minimo AND quantidade > 0 THEN 1 ELSE 0 END) AS baixo_estoque,
-        SUM(CASE WHEN status = 'ativo' AND quantidade = 0 THEN 1 ELSE 0 END) AS sem_estoque,
-        SUM(CASE WHEN status = 'ativo' AND validade IS NOT NULL AND validade >= CURDATE() AND validade <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) THEN 1 ELSE 0 END) AS vencendo_30,
-        SUM(CASE WHEN status = 'ativo' AND validade IS NOT NULL AND validade < CURDATE() THEN 1 ELSE 0 END) AS vencido,
-        SUM(CASE WHEN status = 'inativo' THEN 1 ELSE 0 END) AS inativo
-    FROM produtos
-");
-$quickCountsRow = $stmtQuick ? ($stmtQuick->fetch(PDO::FETCH_ASSOC) ?: []) : [];
-$quickCounts = [
-    'todos'         => (int)($quickCountsRow['todos'] ?? 0),
-    'em_estoque'    => (int)($quickCountsRow['em_estoque'] ?? 0),
-    'baixo_estoque' => (int)($quickCountsRow['baixo_estoque'] ?? 0),
-    'sem_estoque'   => (int)($quickCountsRow['sem_estoque'] ?? 0),
-    'vencendo_30'   => (int)($quickCountsRow['vencendo_30'] ?? 0),
-    'vencido'       => (int)($quickCountsRow['vencido'] ?? 0),
-    'inativo'       => (int)($quickCountsRow['inativo'] ?? 0),
-];
-
-// ── 3. Construção Dinâmica da Query SQL com PDO ──────────────────────────────
+// ── 2. Construção Dinâmica da Query SQL com PDO ──────────────────────────────
 $where = ["1=1"];
 $params = [];
 
@@ -87,16 +57,6 @@ if ($fornecedorFiltro) {
     $params[':forn_id'] = $fornecedorFiltro;
 }
 
-// Filtro de Faixa de Preço
-if ($precoMin !== null) {
-    $where[] = "p.preco_venda >= :preco_min";
-    $params[':preco_min'] = $precoMin;
-}
-if ($precoMax !== null) {
-    $where[] = "p.preco_venda <= :preco_max";
-    $params[':preco_max'] = $precoMax;
-}
-
 // Filtro de Busca Textual
 if (!empty($buscaFiltro)) {
     $where[] = "(p.nome LIKE :busca OR p.categoria LIKE :busca OR f.nome LIKE :busca OR p.codigo_de_barra LIKE :busca OR CAST(p.id AS CHAR) LIKE :busca)";
@@ -105,21 +65,7 @@ if (!empty($buscaFiltro)) {
 
 $whereSql = implode(' AND ', $where);
 
-// Mapeamento Seguro de Ordenação
-$orderMap = [
-    'recentes'       => 'p.id DESC',
-    'antigos'        => 'p.id ASC',
-    'nome_az'        => 'p.nome ASC',
-    'nome_za'        => 'p.nome DESC',
-    'menor_estoque'  => 'p.quantidade ASC, p.id DESC',
-    'maior_estoque'  => 'p.quantidade DESC, p.id DESC',
-    'menor_preco'    => 'p.preco_venda ASC',
-    'maior_preco'    => 'p.preco_venda DESC',
-    'validade_prox'  => 'CASE WHEN p.validade IS NULL THEN 1 ELSE 0 END, p.validade ASC, p.id DESC'
-];
-$orderBy = $orderMap[$ordemFiltro] ?? 'p.id DESC';
-
-// ── 4. Paginação e Contagem Total ───────────────────────────────────────────
+// ── 3. Paginação e Contagem Total ───────────────────────────────────────────
 $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM produtos p LEFT JOIN fornecedores f ON p.fornecedor_id = f.id WHERE $whereSql");
 $stmtCount->execute($params);
 $totalRows  = (int)$stmtCount->fetchColumn();
@@ -134,7 +80,7 @@ $stmt = $pdo->prepare("
     LEFT JOIN fornecedores f ON p.fornecedor_id = f.id 
     LEFT JOIN categorias c ON p.categoria_id = c.id
     WHERE $whereSql 
-    ORDER BY $orderBy 
+    ORDER BY p.id DESC 
     LIMIT :limit OFFSET :offset
 ");
 foreach ($params as $k => $v) {
@@ -145,7 +91,7 @@ $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $produtos = $stmt->fetchAll();
 
-// ── 5. Listas Auxiliares para Modais e Selects ──────────────────────────────
+// ── 4. Listas Auxiliares para Modais e Selects ──────────────────────────────
 $stmtForn = $pdo->query("SELECT id, nome FROM fornecedores WHERE status = 'ativo' ORDER BY nome ASC");
 $fornecedoresLista = $stmtForn ? $stmtForn->fetchAll() : [];
 
@@ -161,22 +107,11 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
 }
 
 // Verificação de Filtros Ativos
-$hasActiveFilters = !empty($statusFiltro) || !empty($buscaFiltro) || !empty($categoriaFiltro) || !empty($fornecedorFiltro) || $precoMin !== null || $precoMax !== null || ($ordemFiltro !== 'recentes' && !empty($ordemFiltro)) || ($limit !== 10);
+$hasActiveFilters = !empty($statusFiltro) || !empty($buscaFiltro) || !empty($categoriaFiltro) || !empty($fornecedorFiltro);
 
-// Parâmetros Base para Paginação e Chips (sem parâmetro 'pagina')
+// Parâmetros Base para Paginação (sem parâmetro 'pagina')
 $queryParamsBase = $_GET;
 unset($queryParamsBase['pagina']);
-
-// Função auxiliar para gerar URLs dos Chips preservando outros filtros
-$makeChipUrl = function(?string $targetStatus) use ($queryParamsBase): string {
-    $params = $queryParamsBase;
-    if ($targetStatus === null || $targetStatus === '') {
-        unset($params['status']);
-    } else {
-        $params['status'] = $targetStatus;
-    }
-    return 'index.php?' . http_build_query($params);
-};
 
 require_once __DIR__ . '/../inc/header.php';
 ?>
@@ -219,74 +154,28 @@ require_once __DIR__ . '/../inc/header.php';
     </div>
     <?php endif; ?>
 
-    <!-- ══ 1. BARRA DE CHIPS RÁPIDOS DE STATUS (QUICK SUMMARY FILTER CHIPS) ════ -->
-    <div class="category-chips-nav-wrapper mb-3">
-        <div class="category-chips-bar" role="toolbar" aria-label="Filtros rápidos de status do estoque">
-            <?php
-            $chipsConfig = [
-                ['key' => 'todos',         'label' => 'Todos',          'icon' => 'fas fa-layer-group',          'count' => $quickCounts['todos']],
-                ['key' => 'em_estoque',    'label' => 'Em Estoque',     'icon' => 'fas fa-circle-check',         'count' => $quickCounts['em_estoque']],
-                ['key' => 'baixo_estoque', 'label' => 'Estoque Baixo',  'icon' => 'fas fa-triangle-exclamation', 'count' => $quickCounts['baixo_estoque']],
-                ['key' => 'sem_estoque',   'label' => 'Sem Estoque',    'icon' => 'fas fa-circle-xmark',         'count' => $quickCounts['sem_estoque']],
-                ['key' => 'vencendo_30',   'label' => 'Vencendo (<30d)','icon' => 'fas fa-clock',                'count' => $quickCounts['vencendo_30']],
-                ['key' => 'vencido',       'label' => 'Vencidos',       'icon' => 'fas fa-calendar-xmark',       'count' => $quickCounts['vencido']],
-                ['key' => 'inativo',       'label' => 'Inativos',       'icon' => 'fas fa-ban',                  'count' => $quickCounts['inativo']],
-            ];
-
-            foreach ($chipsConfig as $chip):
-                $isActive = ($statusFiltro === $chip['key']) || ($chip['key'] === 'todos' && $statusFiltro === 'todos') || ($chip['key'] === 'em_estoque' && $statusFiltro === 'ativo');
-            ?>
-                <a href="<?= $makeChipUrl($chip['key'] === 'todos' ? 'todos' : $chip['key']) ?>"
-                   class="category-chip <?= $isActive ? 'active' : '' ?>"
-                   aria-current="<?= $isActive ? 'true' : 'false' ?>"
-                   title="Filtrar por: <?= htmlspecialchars($chip['label']) ?>">
-                    <i class="<?= $chip['icon'] ?>"></i>
-                    <span><?= htmlspecialchars($chip['label']) ?></span>
-                    <span class="badge <?= $isActive ? 'bg-white text-dark' : 'bg-secondary text-white' ?> rounded-pill tabular-nums ms-1" style="font-size:0.7rem; padding: 2px 6px;">
-                        <?= number_format($chip['count'], 0, ',', '.') ?>
-                    </span>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    </div>
-
-    <!-- ══ 2. CARD DE FILTROS AVANÇADOS (GRID BENTO 2 LINHAS) ═══════════════ -->
+    <!-- ══ BARRA DE FILTROS UNIFICADA EM 1 LINHA ═══════════════════════════ -->
     <div class="so-card mb-3">
-        <div class="so-card-header py-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <h6 class="so-card-title m-0 text-sm">
-                <i class="fas fa-filter text-primary"></i> Filtros de Pesquisa &amp; Catálogo
-            </h6>
-            <?php if ($hasActiveFilters): ?>
-                <span class="badge bg-light text-primary border font-monospace text-xs">
-                    <i class="fas fa-circle-dot me-1 text-success"></i>Filtros Ativos
-                </span>
-            <?php endif; ?>
-        </div>
         <div class="so-card-body p-3">
-            <form method="GET" action="<?= BASE_URL ?>/produtos/index.php" id="formFiltrosProdutos" class="row g-3">
-                <!-- LINHA 1: Busca Textual + Categoria + Fornecedor + Status -->
+            <form method="GET" action="<?= BASE_URL ?>/produtos/index.php" id="formFiltrosProdutos" class="row g-2 align-items-center">
+                <!-- 1. Busca Textual -->
                 <div class="col-12 col-lg-4">
-                    <label for="liveSearchProdutos" class="form-label fw-bold text-muted small mb-1">
-                        <i class="fas fa-search me-1"></i> Busca Textual
-                    </label>
-                    <div class="position-relative">
+                    <div class="so-search-box w-100" style="max-width:100%;">
+                        <i class="fas fa-search search-icon"></i>
                         <input type="text" 
                                name="busca" 
                                id="liveSearchProdutos" 
-                               class="form-control form-control-sm ps-4" 
+                               class="form-control shadow-none" 
                                placeholder="Buscar por nome, código, fornecedor, SKU..." 
                                value="<?= htmlspecialchars($buscaFiltro) ?>" 
                                onkeyup="filtrarAoVivo(this)" 
                                aria-label="Buscar produtos por nome, código de barras, SKU ou fornecedor">
-                        <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small pointer-events-none"></i>
                     </div>
                 </div>
 
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                    <label for="filtro_categoria_id" class="form-label fw-bold text-muted small mb-1">
-                        <i class="fas fa-tag me-1"></i> Categoria
-                    </label>
-                    <select name="categoria_id" id="filtro_categoria_id" class="form-select form-select-sm" aria-label="Filtrar por Categoria">
+                <!-- 2. Categoria -->
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <select name="categoria_id" id="filtro_categoria_id" class="form-select shadow-none" onchange="this.form.submit()" aria-label="Filtrar por Categoria">
                         <option value="">Todas as Categorias</option>
                         <?php foreach ($categoriasLista as $c): ?>
                             <option value="<?= $c['id'] ?>" <?= ($categoriaFiltro === (int)$c['id']) ? 'selected' : '' ?>>
@@ -296,11 +185,9 @@ require_once __DIR__ . '/../inc/header.php';
                     </select>
                 </div>
 
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                    <label for="filtro_fornecedor_id" class="form-label fw-bold text-muted small mb-1">
-                        <i class="fas fa-truck me-1"></i> Fornecedor
-                    </label>
-                    <select name="fornecedor_id" id="filtro_fornecedor_id" class="form-select form-select-sm" aria-label="Filtrar por Fornecedor">
+                <!-- 3. Fornecedor -->
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <select name="fornecedor_id" id="filtro_fornecedor_id" class="form-select shadow-none" onchange="this.form.submit()" aria-label="Filtrar por Fornecedor">
                         <option value="">Todos os Fornecedores</option>
                         <?php foreach ($fornecedoresLista as $f): ?>
                             <option value="<?= $f['id'] ?>" <?= ($fornecedorFiltro === (int)$f['id']) ? 'selected' : '' ?>>
@@ -310,12 +197,10 @@ require_once __DIR__ . '/../inc/header.php';
                     </select>
                 </div>
 
-                <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                    <label for="filtro_status" class="form-label fw-bold text-muted small mb-1">
-                        <i class="fas fa-sliders me-1"></i> Status / Estoque
-                    </label>
-                    <select name="status" id="filtro_status" class="form-select form-select-sm" aria-label="Filtrar por Status do Estoque e Validade">
-                        <option value="" <?= ($statusFiltro === '') ? 'selected' : '' ?>>Ativos (Padrão)</option>
+                <!-- 4. Status do Estoque -->
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <select name="status" id="filtro_status" class="form-select shadow-none" onchange="this.form.submit()" aria-label="Filtrar por Status do Estoque e Validade">
+                        <option value="" <?= ($statusFiltro === '') ? 'selected' : '' ?>>Status: Ativos</option>
                         <option value="em_estoque" <?= ($statusFiltro === 'em_estoque' || $statusFiltro === 'ativo') ? 'selected' : '' ?>>Em Estoque (&gt;0)</option>
                         <option value="baixo_estoque" <?= ($statusFiltro === 'baixo_estoque') ? 'selected' : '' ?>>Estoque Baixo</option>
                         <option value="sem_estoque" <?= ($statusFiltro === 'sem_estoque') ? 'selected' : '' ?>>Sem Estoque (0)</option>
@@ -326,66 +211,9 @@ require_once __DIR__ . '/../inc/header.php';
                     </select>
                 </div>
 
-                <!-- LINHA 2: Faixa de Preço + Ordenação + Itens por Página + Botões -->
-                <div class="col-12 col-lg-4">
-                    <label class="form-label fw-bold text-muted small mb-1">
-                        <i class="fas fa-dollar-sign me-1"></i> Faixa de Preço de Venda (R$)
-                    </label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-light text-muted">De R$</span>
-                        <input type="number" 
-                               step="0.01" 
-                               min="0" 
-                               name="preco_min" 
-                               id="filtro_preco_min" 
-                               class="form-control tabular-nums" 
-                               placeholder="0,00" 
-                               value="<?= $precoMin !== null ? htmlspecialchars((string)$precoMin) : '' ?>" 
-                               aria-label="Preço mínimo em Reais">
-                        <span class="input-group-text bg-light text-muted">Até R$</span>
-                        <input type="number" 
-                               step="0.01" 
-                               min="0" 
-                               name="preco_max" 
-                               id="filtro_preco_max" 
-                               class="form-control tabular-nums" 
-                               placeholder="Sem limite" 
-                               value="<?= $precoMax !== null ? htmlspecialchars((string)$precoMax) : '' ?>" 
-                               aria-label="Preço máximo em Reais">
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                    <label for="filtro_ordem" class="form-label fw-bold text-muted small mb-1">
-                        <i class="fas fa-arrow-down-a-z me-1"></i> Ordenação
-                    </label>
-                    <select name="ordem" id="filtro_ordem" class="form-select form-select-sm" aria-label="Ordenar listagem de produtos">
-                        <option value="recentes" <?= ($ordemFiltro === 'recentes') ? 'selected' : '' ?>>Mais Recentes (ID Desc)</option>
-                        <option value="antigos" <?= ($ordemFiltro === 'antigos') ? 'selected' : '' ?>>Mais Antigos (ID Asc)</option>
-                        <option value="nome_az" <?= ($ordemFiltro === 'nome_az') ? 'selected' : '' ?>>Nome (A - Z)</option>
-                        <option value="nome_za" <?= ($ordemFiltro === 'nome_za') ? 'selected' : '' ?>>Nome (Z - A)</option>
-                        <option value="menor_estoque" <?= ($ordemFiltro === 'menor_estoque') ? 'selected' : '' ?>>Menor Estoque</option>
-                        <option value="maior_estoque" <?= ($ordemFiltro === 'maior_estoque') ? 'selected' : '' ?>>Maior Estoque</option>
-                        <option value="menor_preco" <?= ($ordemFiltro === 'menor_preco') ? 'selected' : '' ?>>Menor Preço</option>
-                        <option value="maior_preco" <?= ($ordemFiltro === 'maior_preco') ? 'selected' : '' ?>>Maior Preço</option>
-                        <option value="validade_prox" <?= ($ordemFiltro === 'validade_prox') ? 'selected' : '' ?>>Validade Mais Próxima</option>
-                    </select>
-                </div>
-
-                <div class="col-12 col-sm-6 col-md-4 col-lg-2">
-                    <label for="filtro_itens_por_pagina" class="form-label fw-bold text-muted small mb-1">
-                        <i class="fas fa-list-ol me-1"></i> Itens / Pág.
-                    </label>
-                    <select name="itens_por_pagina" id="filtro_itens_por_pagina" class="form-select form-select-sm tabular-nums" aria-label="Quantidade de itens por página">
-                        <option value="10" <?= ($limit === 10) ? 'selected' : '' ?>>10 por pág.</option>
-                        <option value="25" <?= ($limit === 25) ? 'selected' : '' ?>>25 por pág.</option>
-                        <option value="50" <?= ($limit === 50) ? 'selected' : '' ?>>50 por pág.</option>
-                        <option value="100" <?= ($limit === 100) ? 'selected' : '' ?>>100 por pág.</option>
-                    </select>
-                </div>
-
-                <div class="col-12 col-md-4 col-lg-3 d-flex align-items-end gap-2">
-                    <button type="submit" class="btn btn-primary fw-bold w-100 shadow-sm" title="Aplicar Filtros">
+                <!-- 5. Botões de Ação -->
+                <div class="col-12 col-sm-6 col-lg-2 d-flex gap-2 justify-content-lg-end">
+                    <button type="submit" class="btn btn-primary fw-bold w-100 shadow-sm" title="Filtrar">
                         <i class="fas fa-filter me-1"></i> Filtrar
                     </button>
                     <?php if ($hasActiveFilters): ?>
@@ -402,7 +230,7 @@ require_once __DIR__ . '/../inc/header.php';
     <div class="so-card">
         <div class="so-card-header d-flex justify-content-between align-items-center">
             <h5 class="so-card-title mb-0"><i class="fas fa-list text-primary me-2"></i>Catálogo Cadastrado</h5>
-            <span class="so-badge so-badge-primary tabular-nums"><?= $totalRows === 1 ? '1 item' : $totalRows . ' itens' ?></span>
+            <span class="so-badge so-badge-primary tabular-nums"><?= $totalRows === 1 ? '1 produto' : number_format($totalRows, 0, ',', '.') . ' produtos' ?></span>
         </div>
         <div class="so-card-body p-0">
             <div class="table-responsive">
