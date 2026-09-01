@@ -21,6 +21,7 @@ $data_fim        = trim($_GET['data_fim'] ?? '');
 $cliente_id      = filter_var($_GET['cliente_id'] ?? '', FILTER_VALIDATE_INT);
 $forma_pagamento = trim($_GET['forma_pagamento'] ?? '');
 $busca           = trim($_GET['busca'] ?? '');
+$hasActiveFilters = !empty($busca) || !empty($data_inicio) || !empty($data_fim) || !empty($cliente_id) || !empty($forma_pagamento);
 
 // ── 2. Lista de Clientes para o Select ───────────────────────────────────────
 $stmtClientes = $pdo->query("SELECT id, nome FROM clientes ORDER BY nome ASC");
@@ -208,66 +209,69 @@ require_once __DIR__ . '/../inc/header.php';
         </div>
     </div>
 
-    <!-- ══ BARRA DE FILTROS UNIFICADA (RESPONSIVA E SEM LIVE SEARCH CONCORRENTE) ══ -->
-    <div class="so-card mb-3">
-        <div class="so-card-header py-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <h6 class="so-card-title m-0 text-sm">
-                <i class="fas fa-filter text-primary"></i> Filtros de Pesquisa
-            </h6>
-            <?php if (!empty($busca) || !empty($data_inicio) || !empty($data_fim) || !empty($cliente_id) || !empty($forma_pagamento)): ?>
-                <span class="badge bg-light text-primary border font-monospace text-xs">
-                    <i class="fas fa-circle-dot me-1 text-success"></i>Filtros Ativos
-                </span>
-            <?php endif; ?>
-        </div>
-        <div class="so-card-body p-3">
-            <form method="GET" action="<?= BASE_URL ?>/vendas/historico.php" class="row g-2 align-items-end">
-                <div class="col-12 col-md-3">
-                    <label for="filtro_busca" class="form-label fw-bold text-muted small mb-1">Buscar Venda / Cliente</label>
-                    <div class="position-relative">
-                        <input type="text" id="filtro_busca" name="busca" class="form-control form-control-sm ps-4" placeholder="Nº da venda ou cliente..." value="<?= htmlspecialchars($busca) ?>">
-                        <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
-                    </div>
+    <!-- ══ BARRA DE FILTROS UNIFICADA (1 LINHA COMPACTA BENTO GRID) ═══════════ -->
+    <div class="so-card p-3 mb-3">
+        <form method="GET" action="<?= BASE_URL ?>/vendas/historico.php" class="row g-2 align-items-center">
+            
+            <!-- 1. Busca por Texto (Venda, NFC-e ou Cliente) -->
+            <div class="col-12 col-md-4 col-lg-3">
+                <div class="position-relative">
+                    <input type="text" id="filtro_busca" name="busca" class="form-control ps-4 shadow-none" placeholder="Buscar Nº venda, cliente..." value="<?= htmlspecialchars($busca) ?>" aria-label="Buscar Nº da venda, NFC-e ou cliente">
+                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
                 </div>
-                <div class="col-12 col-md-3">
-                    <label for="filtro_cliente_id" class="form-label fw-bold text-muted small mb-1">Cliente</label>
-                    <select id="filtro_cliente_id" name="cliente_id" class="form-select form-select-sm">
-                        <option value="">-- Todos os Clientes --</option>
-                        <?php foreach ($clientesLista as $cli): ?>
-                            <option value="<?= $cli['id'] ?>" <?= ($cliente_id == $cli['id']) ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($cli['nome']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+            </div>
+
+            <!-- 2. Cliente -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <select id="filtro_cliente_id" name="cliente_id" class="form-select shadow-none" onchange="this.form.submit()" aria-label="Filtrar por Cliente">
+                    <option value="">Todos os Clientes</option>
+                    <?php foreach ($clientesLista as $cli): ?>
+                        <option value="<?= $cli['id'] ?>" <?= ($cliente_id == $cli['id']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($cli['nome']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <!-- 3. Data Inicial -->
+            <div class="col-6 col-sm-3 col-md-2 col-lg-2">
+                <div class="input-group">
+                    <span class="input-group-text bg-light text-muted small px-2" title="Data Inicial"><i class="fas fa-calendar-day"></i></span>
+                    <input type="date" id="filtro_data_inicio" name="data_inicio" class="form-control tabular-nums shadow-none px-2" value="<?= htmlspecialchars($data_inicio) ?>" aria-label="Data Inicial" title="Data Inicial">
                 </div>
-                <div class="col-6 col-md-2">
-                    <label for="filtro_data_inicio" class="form-label fw-bold text-muted small mb-1">Data Inicial</label>
-                    <input type="date" id="filtro_data_inicio" name="data_inicio" class="form-control form-control-sm tabular-nums" value="<?= htmlspecialchars($data_inicio) ?>">
+            </div>
+
+            <!-- 4. Data Final -->
+            <div class="col-6 col-sm-3 col-md-2 col-lg-2">
+                <div class="input-group">
+                    <span class="input-group-text bg-light text-muted small px-2" title="Data Final"><i class="fas fa-calendar-check"></i></span>
+                    <input type="date" id="filtro_data_fim" name="data_fim" class="form-control tabular-nums shadow-none px-2" value="<?= htmlspecialchars($data_fim) ?>" aria-label="Data Final" title="Data Final">
                 </div>
-                <div class="col-6 col-md-2">
-                    <label for="filtro_data_fim" class="form-label fw-bold text-muted small mb-1">Data Final</label>
-                    <input type="date" id="filtro_data_fim" name="data_fim" class="form-control form-control-sm tabular-nums" value="<?= htmlspecialchars($data_fim) ?>">
-                </div>
-                <div class="col-12 col-md-2">
-                    <label for="filtro_forma_pagamento" class="form-label fw-bold text-muted small mb-1">Forma Pagamento</label>
-                    <select id="filtro_forma_pagamento" name="forma_pagamento" class="form-select form-select-sm">
-                        <option value="">-- Todas --</option>
-                        <option value="DINHEIRO" <?= ($forma_pagamento === 'DINHEIRO') ? 'selected' : '' ?>>Dinheiro</option>
-                        <option value="PIX" <?= ($forma_pagamento === 'PIX') ? 'selected' : '' ?>>PIX</option>
-                        <option value="CARTÃO DE CRÉDITO" <?= ($forma_pagamento === 'CARTÃO DE CRÉDITO') ? 'selected' : '' ?>>Cartão de Crédito</option>
-                        <option value="CARTÃO DE DÉBITO" <?= ($forma_pagamento === 'CARTÃO DE DÉBITO') ? 'selected' : '' ?>>Cartão de Débito</option>
-                    </select>
-                </div>
-                <div class="col-12 d-flex justify-content-end gap-2 pt-2 border-top mt-2">
-                    <a href="<?= BASE_URL ?>/vendas/historico.php" class="btn btn-secondary btn-sm shadow-sm" title="Limpar Filtros">
-                        <i class="fas fa-undo me-1"></i> Limpar Filtros
-                    </a>
-                    <button type="submit" class="btn btn-primary btn-sm fw-bold shadow-sm">
-                        <i class="fas fa-filter me-1"></i> Aplicar Filtros
-                    </button>
-                </div>
-            </form>
-        </div>
+            </div>
+
+            <!-- 5. Forma de Pagamento -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                <select id="filtro_forma_pagamento" name="forma_pagamento" class="form-select shadow-none" onchange="this.form.submit()" aria-label="Filtrar por Forma de Pagamento">
+                    <option value="">Todas as Formas</option>
+                    <option value="DINHEIRO" <?= ($forma_pagamento === 'DINHEIRO') ? 'selected' : '' ?>>Dinheiro</option>
+                    <option value="PIX" <?= ($forma_pagamento === 'PIX') ? 'selected' : '' ?>>PIX</option>
+                    <option value="CARTÃO DE CRÉDITO" <?= ($forma_pagamento === 'CARTÃO DE CRÉDITO') ? 'selected' : '' ?>>Cartão de Crédito</option>
+                    <option value="CARTÃO DE DÉBITO" <?= ($forma_pagamento === 'CARTÃO DE DÉBITO') ? 'selected' : '' ?>>Cartão de Débito</option>
+                </select>
+            </div>
+
+            <!-- 6. Botões de Ação -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-1 d-flex gap-1 justify-content-lg-end">
+                <button type="submit" class="btn btn-primary fw-bold w-100 shadow-sm" title="Filtrar" aria-label="Aplicar Filtros">
+                    <i class="fas fa-filter"></i>
+                </button>
+                <?php if ($hasActiveFilters): ?>
+                <a href="<?= BASE_URL ?>/vendas/historico.php" class="btn btn-secondary px-3 shadow-sm" title="Limpar Filtros" aria-label="Limpar Filtros">
+                    <i class="fas fa-undo"></i>
+                </a>
+                <?php endif; ?>
+            </div>
+        </form>
     </div>
 
     <!-- ══ TABELA MODULAR DE HISTÓRICO DE VENDAS ═════════════════════════════ -->
