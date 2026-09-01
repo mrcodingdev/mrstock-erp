@@ -677,7 +677,6 @@ body.sidebar-collapsed .main-panel {
   .row > [class*="col-"] .so-card,
   .row > [class*="col-"] .info-box {
     animation: none !important;
-    transform: none !important;
   }
 }
 
@@ -1098,6 +1097,7 @@ body.sidebar-collapsed .main-panel {
 }
 
 .so-card:hover {
+  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
