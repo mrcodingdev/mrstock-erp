@@ -377,23 +377,23 @@ require_once __DIR__ . '/inc/header.php';
                 <div class="so-card-body p-3">
                     <div class="row g-3">
                         <div class="col-12 col-sm-6">
-                            <a href="<?= BASE_URL ?>/vendas/pdv.php" class="btn btn-success w-100 py-3 fw-bold text-start shadow-sm justify-content-start">
-                                <i class="fas fa-cash-register fa-lg me-2"></i> Abrir PDV Caixa
+                            <a href="<?= BASE_URL ?>/vendas/pdv.php" class="btn btn-success w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                                <i class="fas fa-cash-register fa-lg"></i> Abrir PDV Caixa
                             </a>
                         </div>
                         <div class="col-12 col-sm-6">
-                            <a href="<?= BASE_URL ?>/produtos/index.php" class="btn btn-primary w-100 py-3 fw-bold text-start shadow-sm justify-content-start">
-                                <i class="fas fa-boxes-stacked fa-lg me-2"></i> Gestão de Estoque
+                            <a href="<?= BASE_URL ?>/produtos/index.php" class="btn btn-primary w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                                <i class="fas fa-boxes-stacked fa-lg"></i> Gestão de Estoque
                             </a>
                         </div>
                         <div class="col-12 col-sm-6">
-                            <a href="<?= BASE_URL ?>/compras/nova.php" class="btn btn-secondary w-100 py-3 fw-bold text-start shadow-sm justify-content-start">
-                                <i class="fas fa-cart-flatbed fa-lg me-2"></i> Nova Compra
+                            <a href="<?= BASE_URL ?>/compras/nova.php" class="btn btn-secondary w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                                <i class="fas fa-cart-flatbed fa-lg"></i> Nova Compra
                             </a>
                         </div>
                         <div class="col-12 col-sm-6">
-                            <a href="<?= BASE_URL ?>/relatorios/analise.php" class="btn btn-dark w-100 py-3 fw-bold text-start shadow-sm justify-content-start">
-                                <i class="fas fa-chart-line fa-lg me-2"></i> Relatórios & DRE
+                            <a href="<?= BASE_URL ?>/relatorios/analise.php" class="btn btn-dark w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                                <i class="fas fa-chart-line fa-lg"></i> Relatórios & DRE
                             </a>
                         </div>
                     </div>
