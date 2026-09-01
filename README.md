@@ -33,83 +33,84 @@
     <a href="#visao-geral">Visão Geral</a> •
     <a href="#pilares-de-engenharia">Pilares Técnicos</a> •
     <a href="#arquitetura-do-sistema">Arquitetura</a> •
+    <a href="#modelagem-de-dados">Modelo de Dados (DER)</a> •
+    <a href="#fluxos-de-processamento-acid">Fluxos Transacionais</a> •
     <a href="#modulos-do-sistema">Módulos</a> •
     <a href="#controle-de-acesso-rbac">Matriz RBAC</a> •
-    <a href="#modelagem-de-dados">Modelo de Dados</a> •
     <a href="#seguranca-e-integridade">Segurança</a> •
     <a href="#instalacao-e-execucao">Instalação</a> •
-    <a href="#equipe-e-creditos">Equipe</a>
+    <a href="#equipe-e-creditos">Equipe & Orientadores</a>
   </p>
 </div>
 
 ---
 
-## <a id="visao-geral"></a>📌 Visão Geral & Estudo de Caso
+## <a id="visao-geral"></a>Visão Geral & Estudo de Caso
 
-O **MrStock ERP** é uma solução completa de gestão empresarial e frente de caixa voltada para o varejo de pequeno e médio porte. O projeto foi concebido e modelado com base nas necessidades operacionais da **Papelaria Real**, um estabelecimento varejista com alto volume de itens cadastrados, produtos fracionados e controle sazonal de compras.
+O **MrStock ERP** é uma plataforma de gestão empresarial e frente de caixa voltada para o varejo de pequeno e médio porte. O projeto foi concebido e modelado com base nas necessidades operacionais da **Papelaria Real**, um estabelecimento comercial com alto volume de itens cadastrados, fracionamento de mercadorias e demanda sazonal concentrada.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                                   PAPELARIA REAL                                       │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
-│  • +1.000 SKUs ativos divididos em 10 Famílias Funcionais de Produtos                 │
+│  • Mais de 1.000 SKUs ativos divididos em 10 Famílias Funcionais de Produtos           │
 │  • Picos sazonais de atendimento (Volta às Aulas) exigindo PDV com resposta instantânea│
-│  • Risco de perdas em itens perecíveis (colas, tintas, corretivos, borrachas)         │
+│  • Risco de perdas financeiras em itens perecíveis (colas, tintas, corretores, borrachas)│
 │  • Necessidade de emissão ágil de NFC-e e impressão térmica padronizada               │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 🎯 Principais Dores Solucionadas
-1. **Velocidade de Checkout:** Redução do tempo de fila no PDV via leitura contínua de código de barras, atalhos de teclado (`F1` a `F9`) e cálculo dinâmico de troco.
-2. **Ruptura de Estoque:** Controle de estoque mínimo com alertas visuais e filtros rápidos por status.
-3. **Gestão de Validade:** Painel executivo que sinaliza automaticamente produtos a vencer em até 30 dias.
-4. **Sigilo Comercial:** Operador de caixa executa vendas com excelência sem ter acesso a preços de custo ou margens de lucro.
+### Principais Dores Solucionadas
+1. **Tempo de Atendimento no Caixa:** Redução do tempo de fila no PDV através de leitura contínua de código de barras, atalhos de teclado (F1 a F9) e cálculo dinâmico de troco.
+2. **Prevenção de Ruptura de Estoque:** Controle paramétrico de estoque mínimo com alertas visuais e filtros de busca em tempo real.
+3. **Gestão de Validade de Perecíveis:** Monitoramento ativo que sinaliza automaticamente produtos com vencimento em até 30 dias.
+4. **Governança e Sigilo Comercial:** Operador de caixa executa vendas com integridade sem ter acesso a preços de custo ou margens de lucro bruto.
 
 ---
 
-## <a id="pilares-de-engenharia"></a>⚡ Pilares de Engenharia de Software
+## <a id="pilares-de-engenharia"></a>Pilares de Engenharia de Software
 
 ```
    ┌───────────────────────┐   ┌───────────────────────┐   ┌───────────────────────┐
-   │    TRANSAÇÕES ACID    │   │     ANTI-SLOP UX      │   │     GOVERNANÇA RBAC   │
-   │  Isolamento InnoDB no │   │  Design System Sólido │   │  Segregação estrita   │
-   │  checkout e entradas  │   │  com tipografia tnum  │   │  de perfis comerciais │
+   │    TRANSAÇÕES ACID    │   │  DESIGN SYSTEM SÓLIDO │   │     GOVERNANÇA RBAC   │
+   │  Isolamento InnoDB no │   │  Tipografia Tabular   │   │  Segregação estrita   │
+   │  checkout e entradas  │   │  com botões sólidos   │   │  de perfis comerciais │
    └───────────────────────┘   └───────────────────────┘   └───────────────────────┘
 ```
 
-* **Transações Atômicas (ACID):** Toda operação de compra ou venda utiliza `PDO::beginTransaction()`, `commit()` e `rollBack()`. Se ocorrer qualquer interrupção, o estoque e o saldo financeiro são revertidos instantaneamente.
-* **Tipografia Tabular (`tnum`):** Todos os valores monetários (`R$`), quantidades, códigos de barras e datas utilizam `font-variant-numeric: tabular-nums`, garantindo alinhamento vertical perfeito em tabelas e cupons fiscais.
-* **Design System Corporativo:** Botões 100% sólidos com contraste acessível (WCAG 2.1 AA), ausência de contornos transparentes e navegação suave.
+* **Transações Atômicas (ACID):** Toda operação de compra, venda ou cancelamento utiliza `PDO::beginTransaction()`, `commit()` e `rollBack()`. Caso ocorra qualquer inconsistência de saldo ou interrupção de rede, os registros e saldos são revertidos instantaneamente.
+* **Tipografia Numérica Tabular (`tnum`):** Todos os valores monetários (R$), quantidades, códigos de barras, IDs e datas utilizam `font-variant-numeric: tabular-nums`, assegurando alinhamento vertical e legibilidade de balcão.
+* **Design System Sólido:** Interface desenvolvida com cores de fábrica preenchidas e contraste em conformidade com as diretrizes de acessibilidade WCAG 2.1 AA.
 
 ---
 
-## <a id="arquitetura-do-sistema"></a>🏗️ Arquitetura do Sistema
+## <a id="arquitetura-do-sistema"></a>Arquitetura do Sistema
 
-O sistema adota uma arquitetura em camadas orientada a serviços leves com **PHP 8.2 Nativo / PDO / MySQL 8.0**:
+O sistema adota uma arquitetura em camadas com separação clara de responsabilidades desenvolvida em **PHP 8.2 Nativo / PDO / MySQL 8.0**:
 
 ```mermaid
 graph TD
     User([Operador / Administrador]) -->|HTTPS / HTTP| Router[Frente de Controladores PHP]
     
-    subgraph Camada de Apresentacao
+    subgraph Camada_Apresentacao [Camada de Apresentação]
         Router --> UI_PDV[Frente de Caixa - PDV]
         Router --> UI_Estoque[Estoque & Produtos]
         Router --> UI_Compras[Gestão de Compras]
         Router --> UI_Relatorios[Relatórios & Curva ABC]
     end
     
-    subgraph Seguranca e Sessao
-        Router --> AuthGuards[RBAC Guard / inc/auth.php]
-        Router --> CSRFGuards[Anti-CSRF Engine]
+    subgraph Seguranca_Sessao [Segurança & Sessão]
+        Router --> AuthGuards[RBAC Guard - inc/auth.php]
+        Router --> CSRFGuards[Anti-CSRF Token Engine]
     end
     
-    subgraph Camada de Negocio
+    subgraph Camada_Negocio [Camada de Negócio & Regras Fiscais]
         UI_PDV --> CoreSales[Processador de Vendas & NFC-e]
-        UI_Compras --> CorePurchases[Entrada Master-Detail]
+        UI_Compras --> CorePurchases[Entrada Master-Detail & Custo Médio]
         UI_Estoque --> CoreStock[Controle de Saldo & Validade]
     end
     
-    subgraph Persistencia e Dados
+    subgraph Persistencia_Dados [Persistência & Dados]
         CoreSales -->|ACID Transaction| DB[(MySQL 8.0 / mrstock_db)]
         CorePurchases -->|ACID Transaction| DB
         CoreStock --> DB
@@ -118,30 +119,198 @@ graph TD
 
 ---
 
-## <a id="modulos-do-sistema"></a>📦 Módulos do Sistema
+## <a id="modelagem-de-dados"></a>Modelagem de Dados (Diagrama Entidade-Relacionamento)
 
-<details open>
-<summary><b>🛒 1. Frente de Caixa & Ponto de Venda (PDV)</b></summary>
-<br>
+A base de dados `mrstock_db` foi modelada segundo a 3ª Forma Normal (3FN), com integridade referencial estrita e engine **InnoDB**:
 
-O PDV foi desenvolvido para operação contínua e ágil no balcão:
-* **Bipagem e Busca Inteligente:** Adição de itens via leitor de código de barras com confirmação sonora (`Web Audio API`) e busca preditiva.
+```mermaid
+erDiagram
+    CATEGORIAS ||--o{ PRODUTOS : "categoriza"
+    FORNECEDORES ||--o{ PRODUTOS : "fornece"
+    FORNECEDORES ||--o{ COMPRAS : "fatura"
+    USUARIOS ||--o{ COMPRAS : "registra"
+    COMPRAS ||--|{ ITENS_COMPRA : "contem"
+    PRODUTOS ||--o{ ITENS_COMPRA : "item_de"
+    CLIENTES ||--o{ VENDAS : "realiza"
+    USUARIOS ||--o{ VENDAS : "opera"
+    VENDAS ||--|{ ITENS_VENDA : "contem"
+    PRODUTOS ||--o{ ITENS_VENDA : "compoe"
+
+    CATEGORIAS {
+        int id PK
+        string nome
+        string descricao
+        string icone
+    }
+
+    FORNECEDORES {
+        int id PK
+        string nome
+        string cnpj
+        string email
+        string telefone
+        string endereco
+        string status
+    }
+
+    CLIENTES {
+        int id PK
+        string nome
+        string cpf
+        string email
+        string telefone
+        string endereco
+        string status
+    }
+
+    PRODUTOS {
+        int id PK
+        string nome
+        string codigo_de_barra
+        int categoria_id FK
+        int fornecedor_id FK
+        decimal preco_custo
+        decimal preco_venda
+        int quantidade
+        int estoque_minimo
+        date validade
+        string status
+    }
+
+    COMPRAS {
+        int id PK
+        int fornecedor_id FK
+        decimal valor_total
+        datetime data_compra
+        string status
+        int usuario_id FK
+    }
+
+    ITENS_COMPRA {
+        int id PK
+        int compra_id FK
+        int produto_id FK
+        int quantidade
+        decimal preco_unitario
+        decimal subtotal
+    }
+
+    VENDAS {
+        int id PK
+        int cliente_id FK
+        int usuario_id FK
+        decimal valor_total
+        decimal desconto
+        decimal valor_pago
+        decimal troco
+        string forma_pagamento
+        string chave_nfce
+        datetime data_venda
+        string status
+    }
+
+    ITENS_VENDA {
+        int id PK
+        int venda_id FK
+        int produto_id FK
+        int quantidade
+        decimal preco_unitario
+        decimal subtotal
+    }
+
+    USUARIOS {
+        int id PK
+        string nome
+        string email
+        string senha
+        string perfil
+        string status
+    }
+
+    CONFIGURACOES {
+        int id PK
+        string nome_empresa
+        string cnpj
+        string endereco
+        string telefone
+        string mensagem_cupom
+    }
+```
+
+---
+
+## <a id="fluxos-de-processamento-acid"></a>Fluxos de Processamento Transacional (ACID)
+
+### 1. Sequência de Checkout no PDV e Emissão de NFC-e
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Op as Operador de Caixa
+    participant UI as Frente de Caixa (PDV)
+    participant Core as processa_venda.php
+    participant DB as MySQL (InnoDB)
+    participant Fiscal as Engine Fiscal NFC-e
+    participant Term as Impressora Térmica
+
+    Op->>UI: Bipagem de Produtos + Pressionar F8
+    UI->>Core: POST /vendas/processa_venda.php (Token CSRF, Itens, Forma Pagamento)
+    Core->>Core: Validar Sessão, RBAC e Token Anti-CSRF
+    Core->>DB: PDO::beginTransaction()
+    
+    loop Para cada item do carrinho
+        Core->>DB: SELECT quantidade, estoque_minimo FROM produtos WHERE id = ? FOR UPDATE
+        alt Saldo de Estoque Insuficiente
+            Core->>DB: PDO::rollBack()
+            Core-->>UI: Retornar Erro de Saldo Insuficiente
+        else Saldo Disponível
+            Core->>DB: UPDATE produtos SET quantidade = quantidade - ? WHERE id = ?
+        end
+    end
+
+    Core->>Fiscal: Gerar Chave de Acesso (44 Dígitos) + QR Code SEFAZ v2.0
+    Fiscal-->>Core: Chave e Protocolo Gerados
+    Core->>DB: INSERT INTO vendas (cliente_id, valor_total, desconto, forma_pagamento, chave_nfce)
+    Core->>DB: INSERT INTO itens_venda (venda_id, produto_id, quantidade, preco_unitario, subtotal)
+    Core->>DB: PDO::commit()
+    
+    Core-->>UI: Redirecionar para cupom.php?id=XXX
+    UI->>Term: Renderizar Cupom Fiscal 80mm com QR Code
+```
+
+### 2. Ciclo de Vida e Estados do Estoque
+
+```mermaid
+stateDiagram-v2
+    [*] --> EmEstoque: Cadastro Inicial / Entrada de Nota
+    EmEstoque --> BaixoEstoque: Saldo <= Estoque Mínimo
+    BaixoEstoque --> SemEstoque: Saldo = 0
+    SemEstoque --> EmEstoque: Reabastecimento via Compras
+    EmEstoque --> Vencendo30d: Validade <= 30 Dias
+    Vencendo30d --> Vencido: Validade < Data Atual
+    EmEstoque --> Inativo: Inativação Manual / Descontinuação
+    Inativo --> EmEstoque: Reativação pelo Administrador
+```
+
+---
+
+## <a id="modulos-do-sistema"></a>Módulos do Sistema
+
+### 1. Frente de Caixa & Ponto de Venda (PDV)
+* **Bipagem Contínua:** Adição instantânea de itens via leitor de código de barras com confirmação sonora via Web Audio API.
 * **Atalhos Operacionais de Teclado:**
-  * <kbd>F1</kbd> — Ajuda rápida e catálogo de atalhos.
-  * <kbd>F2</kbd> — Foco imediato na busca de produtos.
-  * <kbd>F4</kbd> — Aplicação de desconto percentual ou em valor fixo (R$).
-  * <kbd>F8</kbd> — Abertura do modal de fechamento e recebimento.
-  * <kbd>F9</kbd> — Consulta rápida de clientes e CPF.
-  * <kbd>ESC</kbd> — Cancelamento de item ou saída de modais.
-* **Simulação de NFC-e:** Emissão de cupom fiscal acadêmico com chave de 44 dígitos, protocolo de autorização e **QR Code de Consulta Pública**.
-* **Fechamento e Troco Dinâmico:** Teclado com botões rápidos de cédulas (R$ 5, R$ 10, R$ 20, R$ 50, R$ 100, R$ 200) e cálculo em tempo real do troco.
-</details>
+  * <kbd>F1</kbd> — Ajuda e catálogo rápido de atalhos.
+  * <kbd>F2</kbd> — Foco imediato no campo de busca de produtos.
+  * <kbd>F4</kbd> — Inserção de desconto percentual ou em valor fixo (R$).
+  * <kbd>F8</kbd> — Abertura do modal de fechamento e pagamento.
+  * <kbd>F9</kbd> — Consulta e associação de CPF do cliente.
+  * <kbd>ESC</kbd> — Cancelamento ou saída de modais.
+* **Simulação de NFC-e:** Emissão com composição oficial de chave de acesso de 44 dígitos:
+  $$\text{Chave NFC-e} = \text{cUF}(35) + \text{AAMM} + \text{CNPJ}(14) + \text{mod}(65) + \text{serie}(001) + \text{nNF}(9) + \text{tpEmis}(1) + \text{cNF}(8) + \text{cDV}(1)$$
+* **Fechamento e Troco Dinâmico:** Cédulas rápidas (R$ 5, R$ 10, R$ 20, R$ 50, R$ 100, R$ 200) com cálculo de troco em tempo real.
 
-<details>
-<summary><b>📦 2. Gestão de Estoque & Catálogo</b></summary>
-<br>
-
-* **10 Famílias Funcionais de Produtos:** Organização especializada para papelarias:
+### 2. Gestão de Estoque & Catálogo
+* **10 Famílias Funcionais de Produtos:**
   1. *Cadernos & Blocos*
   2. *Canetas & Marcadores*
   3. *Lápis & Apontadores*
@@ -152,149 +321,122 @@ O PDV foi desenvolvido para operação contínua e ágil no balcão:
   8. *Corte & Medição*
   9. *Tintas & Pintura*
   10. *Grampeadores & Fixação*
-* **Barra Unificada de Filtros (1 Linha):** Busca textual ao vivo, filtro por categoria, fornecedor e status do estoque com submissão automática.
-* **Etiquetas de Código de Barras:** Geração de folhas de etiquetas prontas para impressoras térmicas e convencionais.
-* **Alerta de Validade em 30 Dias:** Identificação imediata de lotes perecíveis.
-</details>
+* **Barra Unificada de Filtros em 1 Linha:** Busca textual ampla, categoria, fornecedor e status de disponibilidade com submissão automática.
+* **Etiquetas de Código de Barras:** Geração de folhas de etiquetas prontas para impressoras térmicas e padrão A4.
+* **Gestão de Validade:** Alertas automáticos para produtos com validade próxima (< 30 dias) ou vencidos.
 
-<details>
-<summary><b>📑 3. Gestão de Compras & Abastecimento (Master-Detail)</b></summary>
-<br>
+### 3. Gestão de Compras & Abastecimento (Master-Detail)
+* **Lançamento de Entradas:** Formulário mestre-detalhe com inclusão dinâmica de múltiplos itens por nota de fornecedor.
+* **Custo Médio Ponderado:** Recálculo automático de custo e margem comercial com incremento atômico de saldo.
 
-* **Lançamento de Notas de Entrada:** Interface master-detail dinâmica permitindo inclusão de múltiplos produtos em uma única nota.
-* **Recálculo Automático de Preços:** Atualização do preço de custo, margem e preço sugerido de venda com incremento automático de saldo no estoque em transação atômica.
-</details>
+### 4. Inteligência Financeira, Curva ABC & DRE
+* **Curva ABC de Produtos:** Classificação analítica do catálogo baseada no Princípio de Pareto:
+  * **Classe A:** 20% dos itens responsáveis por 80% do faturamento.
+  * **Classe B:** 30% dos itens responsáveis por 15% do faturamento.
+  * **Classe C:** 50% dos itens responsáveis por 5% do faturamento.
+* **DRE Gerencial:** Demonstrativo com Receita Bruta, Deduções Comerciais, Custo da Mercadoria Vendida (CMV) e Lucro Bruto Real.
+* **Histórico de Vendas:** Rastreabilidade completa com cancelamento auditado e estorno automático de mercadorias.
 
-<details>
-<summary><b>📊 4. Inteligência Financeira, Curva ABC & DRE</b></summary>
-<br>
-
-* **Curva ABC de Produtos:** Separação analítica do catálogo em Classe A (80% da receita), Classe B (15%) e Classe C (5%), permitindo compras estratégicas.
-* **DRE Gerencial:** Demonstrativo com Receita Bruta, Deduções, Custo da Mercadoria Vendida (CMV) e Lucro Operacional Líquido.
-* **Histórico de Vendas com Auditoria:** Rastreabilidade de vendas com cancelamento auditado e estorno automático de mercadorias para o estoque.
-</details>
-
-<details>
-<summary><b>👥 5. Cadastros Comerciais & CRM</b></summary>
-<br>
-
-* **Clientes e Fornecedores:** Validação automática com máscaras de CPF, CNPJ, CEP e telefone.
-* **Integração WhatsApp:** Botão circular padronizado para abertura direta de conversas no WhatsApp Web em 1 clique.
-</details>
+### 5. Cadastros Comerciais & CRM
+* **Clientes e Fornecedores:** Formulários com máscaras dinâmicas de CPF, CNPJ, CEP e telefone.
+* **Integração WhatsApp:** Botão de contato direto com WhatsApp Web integrado nas listagens.
 
 ---
 
-## <a id="controle-de-acesso-rbac"></a>🔐 Matriz de Perfis de Acesso (RBAC)
+## <a id="controle-de-acesso-rbac"></a>Matriz de Perfis de Acesso (RBAC)
 
-O sistema conta com barreira de autorização estrita em nível de rota e de renderização de interface:
+O sistema implementa barreiras de autorização estritas em nível de rota e interface:
 
-| Rota / Módulo do Sistema | Administrador | Operador de Caixa | Justificativa Operacional |
+| Rota / Módulo do Sistema | Administrador | Operador de Caixa | Justificativa de Governança |
 | :--- | :---: | :---: | :--- |
-| `vendas/pdv.php` (Frente de Caixa) | ✅ Permitido | ✅ Permitido | Operação central de atendimento e vendas |
-| `vendas/historico.php` | ✅ Todas as Vendas | ✅ Apenas Vendas Próprias | Auditoria de turno do operador |
-| `produtos/index.php` (Preço de Venda) | ✅ Visualiza | ✅ Visualiza | Consulta de preços no balcão |
-| `produtos/` (Preço de Custo / Lucro) | ✅ Visualiza | ❌ Bloqueado | **Sigilo Comercial:** Caixa não visualiza margem |
-| `compras/` (Entrada de Notas) | ✅ Total | ❌ Bloqueado | Abastecimento restrito à gerência |
-| `relatorios/curva_abc.php` | ✅ Total | ❌ Bloqueado | Inteligência financeira estratégica |
-| `relatorios/dre.php` | ✅ Total | ❌ Bloqueado | Demonstrativo contábil restrito |
-| `configuracoes.php` / Backup SQL | ✅ Total | ❌ Bloqueado | Governança e segurança do banco de dados |
+| `vendas/pdv.php` (Frente de Caixa) | Permitido | Permitido | Operação central de atendimento e vendas |
+| `vendas/historico.php` | Todas as Vendas | Apenas Vendas Próprias | Auditoria de turno individual do operador |
+| `produtos/index.php` (Preço de Venda) | Visualiza | Visualiza | Consulta rápida de preços no balcão |
+| `produtos/` (Preço de Custo / Lucro) | Visualiza | Bloqueado | **Sigilo Comercial:** Margem e custo são confidenciais |
+| `compras/` (Entrada de Notas) | Total | Bloqueado | Gestão de compras restrita à gerência |
+| `relatorios/curva_abc.php` | Total | Bloqueado | Relatório financeiro estratégico |
+| `relatorios/dre.php` | Total | Bloqueado | Demonstrativo contábil restrito |
+| `configuracoes.php` / Backup SQL | Total | Bloqueado | Governança de dados e integridade do banco |
 
 ---
 
-## <a id="modelagem-de-dados"></a>🗄️ Modelagem de Dados (`mrstock_db`)
+## <a id="seguranca-e-integridade"></a>Segurança e Integridade de Dados
 
-O banco de dados foi modelado para integridade referencial rigorosa com tabelas em conformidade com as Formas Normais:
-
-```
-mrstock_db
-├── categorias       (id, nome, descricao, icone)
-├── fornecedores     (id, nome, cnpj, email, telefone, endereco, status)
-├── clientes         (id, nome, cpf, email, telefone, endereco, status)
-├── produtos         (id, nome, codigo_de_barra, categoria_id, fornecedor_id, 
-│                     preco_custo, preco_venda, quantidade, estoque_minimo, validade, status)
-├── compras          (id, fornecedor_id, valor_total, data_compra, status, usuario_id)
-├── itens_compra     (id, compra_id, produto_id, quantidade, preco_unitario, subtotal)
-├── vendas           (id, cliente_id, usuario_id, valor_total, desconto, valor_pago, troco,
-│                     forma_pagamento, chave_nfce, data_venda, status)
-├── itens_venda      (id, venda_id, produto_id, quantidade, preco_unitario, subtotal)
-├── configuracoes    (id, nome_empresa, cnpj, endereco, telefone, mensagem_cupom)
-└── usuarios         (id, nome, email, senha, perfil, status)
-```
+1. **Prepared Statements PDO:** Eliminação completa de vetores de SQL Injection com binding tipado explícito (`PDO::PARAM_INT`, `PDO::PARAM_STR`).
+2. **Proteção Anti-CSRF:** Injeção e validação de tokens criptográficos por sessão em todas as submissões POST (`csrf_input()` e `csrf_verify()`).
+3. **Tratamento de Saída contra XSS:** Todas as variáveis renderizadas no HTML passam por `htmlspecialchars($var, ENT_QUOTES, 'UTF-8')`.
+4. **Criptografia de Senhas:** Hashing de senhas utilizando o algoritmo nativo `password_hash()` com Bcrypt.
+5. **Transações InnoDB:** Isolamento de concorrência e garantia de integridade de saldo em picos de vendas.
 
 ---
 
-## <a id="seguranca-e-integridade"></a>🛡️ Segurança e Integridade
-
-1. **Prepared Statements PDO:** Eliminação completa de vetores de SQL Injection com binding explícito de variáveis (`PDO::PARAM_INT`, `PDO::PARAM_STR`).
-2. **Tokens Anti-CSRF:** Validação de autenticidade em todas as submissões POST através de `csrf_input()` e `csrf_verify()`.
-3. **Escapamento contra XSS:** Todas as variáveis de saída são tratadas com `htmlspecialchars($d, ENT_QUOTES, 'UTF-8')`.
-4. **Criptografia Bcrypt:** Armazenamento seguro de senhas com algoritmo nativo `password_hash()`.
-5. **Transações InnoDB:** Isolamento de concorrência e garantia de consistência de saldo.
-
----
-
-## <a id="instalacao-e-execucao"></a>⚙️ Instalação e Execução Local
+## <a id="instalacao-e-execucao"></a>Instalação e Execução Local
 
 ### Pré-requisitos
-* **XAMPP** (ou Apache 2.4+ / PHP 8.2+ / MySQL 8.0+).
-* Extensões PHP obrigatórias: `pdo_mysql`, `mbstring`, `openssl`, `gd`.
+* Servidor Web (Apache 2.4+ / PHP 8.2+ / MySQL 8.0+ ou MariaDB 10.4+) — Recomendado: **XAMPP**.
+* Extensões PHP obrigatórias ativas no `php.ini`: `pdo_mysql`, `mbstring`, `openssl`, `gd`.
 
 ### Passo a Passo
 
-1. **Clonar o Repositório no `htdocs`:**
+1. **Clonar o Repositório no diretório público do servidor:**
    ```bash
    cd C:/xampp/htdocs/
    git clone https://github.com/mrcodingdev/mrstock-erp.git MrStock
    ```
 
 2. **Criar a Base de Dados e Importar o Schema:**
-   * Acesse o phpMyAdmin em `http://localhost/phpmyadmin/`.
+   * Abra o phpMyAdmin (`http://localhost/phpmyadmin/`).
    * Crie o banco de dados: `mrstock_db`.
-   * Importe o script inicial: [`database/mrstock_db.sql`](database/mrstock_db.sql).
+   * Importe o script: [`database/mrstock_db.sql`](database/mrstock_db.sql).
 
 3. **Configuração de Ambiente:**
-   * O sistema já está configurado por padrão para conexão local (`localhost`, usuário `root`, sem senha, porta `3306`).
-   * Para personalizar URLs ou credenciais, edite [`config.php`](config.php) e [`inc/database.php`](inc/database.php).
+   * O sistema já está configurado por padrão para ambiente local (`localhost`, usuário `root`, sem senha, porta `3306`).
+   * Para ajustes de credenciais ou rotas, consulte [`config.php`](config.php) e [`inc/database.php`](inc/database.php).
 
-4. **Acessar o ERP:**
-   * Abra no navegador: `http://localhost/MrStock/`
+4. **Acessar o ERP no Navegador:**
+   * Abra: `http://localhost/MrStock/`
 
-### 🔑 Credenciais de Teste Homologadas
+### Credenciais de Demonstração Homologadas
 
-| Perfil | Usuário | Senha | Acesso |
+| Perfil | Usuário | Senha | Nível de Acesso |
 | :--- | :---: | :---: | :--- |
 | **Administrador** | `admin` | `admin` | Acesso irrestrito a todos os módulos, compras, DRE e configurações |
-| **Operador de Caixa** | `caixa` | `caixa` | Acesso operacional restrito ao PDV e consultas de balcão |
+| **Operador de Caixa** | `caixa` | `caixa` | Acesso restrito à frente de caixa (PDV) e consultas de balcão |
 
 ---
 
-## <a id="roadmap-de-evolucao"></a>🗺️ Roadmap de Evolução
+## <a id="roadmap-de-evolucao"></a>Roadmap de Evolução
 
-* [x] **v1.0** — Estrutura base de Frente de Caixa e Cadastros.
-* [x] **v2.0 (Versão Oficial do TCC)** — Transações ACID, Simulação Fiscal NFC-e com QR Code, Curva ABC, DRE, Barra de Filtros em 1 Linha e Design System Sólido em PHP 8.2 Nativo / PDO.
+* [x] **v1.0** — Estrutura inicial de Frente de Caixa e Cadastros Básicos.
+* [x] **v2.0 (Versão Oficial do TCC)** — Transações ACID, Simulação Fiscal NFC-e com QR Code, Curva ABC, DRE, Filtros em 1 Linha e Design System Sólido em PHP 8.2 Nativo / PDO.
 * [ ] **v3.0 (Trabalhos Futuros)** — Migração da arquitetura para o framework **Laravel**, integração com API oficial de emissão fiscal (Focus NFe / SEFAZ via certificado A1) e aplicativo mobile para inventário.
 
 ---
 
-## <a id="equipe-e-creditos"></a>👥 Equipe do Projeto & Créditos Acadêmicos
+## <a id="equipe-e-creditos"></a>Equipe do Projeto & Orientadores
 
-Projeto concebido e desenvolvido como **Trabalho de Conclusão de Curso (TCC)** no curso Técnico em Desenvolvimento de Sistemas da **ETEC**:
+Trabalho de Conclusão de Curso (TCC) apresentado ao curso Técnico em Desenvolvimento de Sistemas da **ETEC**:
 
-* **Douglas** — *Direção Técnica, Arquitetura de Software, Engenharia Backend & Frontend*
+### Desenvolvedores
+* **Douglas** — *Direção Técnica, Arquitetura de Software e Desenvolvimento Full-Stack*
 * **Nikolas** — *Engenharia de Banco de Dados, Modelagem DER e Otimização SQL*
 * **Cesar** — *Levantamento de Requisitos, Modelagem de Negócio e Relações Comerciais*
 * **Enzo** — *Engenharia de Documentação, Casos de Uso e Roteiros de Testes QA*
 * **Sugahara** — *Validação de Usabilidade, Navegação do Sistema e Demonstração Executiva*
-* **Prof. Vinicius** — *Orientação Técnica e Acadêmica*
+
+### Orientadores Acadêmicos
+* **Prof. Luiz Flávio de Almeida** — *Orientação Metodológica, Documentação e Governança de TCC*
+* **Prof. Vinicius Sewaybricker** — *Orientação Técnica, Arquitetura de Software e Engenharia de Sistemas*
 
 ---
 
-## 📄 Licença
+## Licença
 
-Distribuído sob a licença **MIT**. Veja o arquivo [`LICENSE`](LICENSE) para mais detalhes.
+Distribuído sob a licença **MIT**. Consulte o arquivo [`LICENSE`](LICENSE) para mais detalhes.
 
 <div align="center">
   <sub>MrStock ERP v2.0 • Papelaria Real • ETEC 2026</sub>
 </div>
+
 
 
