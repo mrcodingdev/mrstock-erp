@@ -211,11 +211,11 @@ require_once __DIR__ . '/../inc/header.php';
 <div class="modal fade" id="modalCategoria" tabindex="-1" aria-labelledby="modalCategoriaLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shadow-lg border" style="border-radius: var(--mr-radius); border-color: #cbd5e1 !important;">
-            <div class="modal-header bg-dark text-white border-bottom py-3" style="border-color: #cbd5e1 !important;">
-                <h5 class="modal-title fw-bold text-white" id="modalCategoriaLabel">
+            <div class="modal-header bg-white border-bottom py-3" style="border-color: #cbd5e1 !important;">
+                <h5 class="modal-title fw-bold text-dark" id="modalCategoriaLabel">
                     <i class="fas fa-tags text-primary me-2"></i> <?= $editCategoria ? 'Editar Categoria' : 'Nova Categoria' ?>
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar" onclick="window.location='<?= BASE_URL ?>/categorias/index.php'"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" onclick="window.location='<?= BASE_URL ?>/categorias/index.php'"></button>
             </div>
             <form action="<?= BASE_URL ?>/categorias/functions.php?tipo=categoria" method="POST">
                 <?= csrf_input() ?>
