@@ -1,45 +1,97 @@
 <?php
 /**
- * MrStock ERP - Dashboard Operacional com Design System SalesOps
+ * MrStock ERP - Dashboard Operacional com Design System SalesOps (v0)
  */
 $pageTitle  = 'Dashboard Operacional';
 $activePage = 'dashboard';
 require_once __DIR__ . '/inc/database.php';
 require_once __DIR__ . '/inc/auth.php';
 
-$stmtTotal       = $pdo->query("SELECT COUNT(*) as total FROM produtos WHERE status = 'ativo'");
-$totalProdutos   = (int)$stmtTotal->fetch()['total'];
+// ── 1. Total de Produtos Ativos ─────────────────────────────────────────────
+$stmtTotal     = $pdo->query("SELECT COUNT(*) AS total FROM produtos WHERE status = 'ativo'");
+$totalProdutos = (int)($stmtTotal->fetchColumn() ?: 0);
 
-$stmtEstoqueBaixo  = $pdo->query("SELECT p.*, f.nome as fornecedor_nome FROM produtos p LEFT JOIN fornecedores f ON p.fornecedor_id = f.id WHERE p.quantidade <= p.estoque_minimo AND p.status = 'ativo' ORDER BY p.quantidade ASC LIMIT 5");
+// ── 2. Vendas do Dia (Total Faturado e Quantidade de Transações) ─────────────
+$stmtVendasHoje  = $pdo->query("
+    SELECT COALESCE(SUM(total), 0) AS total, 
+           COUNT(*)                AS qtd 
+    FROM vendas 
+    WHERE DATE(data_venda) = CURDATE()
+");
+$rowVendasHoje   = $stmtVendasHoje->fetch();
+$vendasHojeTotal = (float)($rowVendasHoje['total'] ?? 0);
+$vendasHojeQtd   = (int)($rowVendasHoje['qtd'] ?? 0);
+
+// ── 3. Produtos com Ruptura / Estoque Baixo ─────────────────────────────────
+$stmtEstoqueBaixo = $pdo->query("
+    SELECT p.id, p.nome, p.quantidade, p.estoque_minimo, f.nome AS fornecedor_nome 
+    FROM produtos p 
+    LEFT JOIN fornecedores f ON p.fornecedor_id = f.id 
+    WHERE p.quantidade <= p.estoque_minimo AND p.status = 'ativo' 
+    ORDER BY p.quantidade ASC, p.nome ASC 
+    LIMIT 5
+");
 $produtosEstoqueBaixo = $stmtEstoqueBaixo->fetchAll();
 
-$stmtTotalBaixo  = $pdo->query("SELECT COUNT(*) as total FROM produtos WHERE quantidade <= estoque_minimo AND status = 'ativo'");
-$totalEstoqueBaixo = (int)$stmtTotalBaixo->fetch()['total'];
+$stmtTotalBaixo    = $pdo->query("SELECT COUNT(*) AS total FROM produtos WHERE quantidade <= estoque_minimo AND status = 'ativo'");
+$totalEstoqueBaixo = (int)($stmtTotalBaixo->fetchColumn() ?: 0);
 
-$stmtVencimento  = $pdo->query("SELECT * FROM produtos WHERE validade IS NOT NULL AND validade <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) AND status = 'ativo' ORDER BY validade ASC LIMIT 5");
+// ── 4. Produtos Próximos ao Vencimento (Janela de 30 Dias) ───────────────────
+$stmtVencimento = $pdo->query("
+    SELECT id, nome, quantidade, validade 
+    FROM produtos 
+    WHERE validade IS NOT NULL AND validade <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) AND status = 'ativo' 
+    ORDER BY validade ASC, nome ASC 
+    LIMIT 5
+");
 $produtosVencimento = $stmtVencimento->fetchAll();
 
-$stmtTotalVenc   = $pdo->query("SELECT COUNT(*) as total FROM produtos WHERE validade IS NOT NULL AND validade <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) AND status = 'ativo'");
-$totalVencimento = (int)$stmtTotalVenc->fetch()['total'];
+$stmtTotalVenc   = $pdo->query("SELECT COUNT(*) AS total FROM produtos WHERE validade IS NOT NULL AND validade <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) AND status = 'ativo'");
+$totalVencimento = (int)($stmtTotalVenc->fetchColumn() ?: 0);
 
-$stmtVendasHoje  = $pdo->query("SELECT SUM(total) as vendas_hoje FROM vendas WHERE DATE(data_venda) = CURDATE()");
-$vendasHoje      = (float)($stmtVendasHoje->fetch()['vendas_hoje'] ?? 0);
-
-$stmtUltimasVendas = $pdo->query("SELECT v.*, c.nome as cliente_nome FROM vendas v LEFT JOIN clientes c ON v.cliente_id = c.id ORDER BY v.id DESC LIMIT 5");
+// ── 5. Últimas Vendas Realizadas ─────────────────────────────────────────────
+$stmtUltimasVendas = $pdo->query("
+    SELECT v.id, v.data_venda, v.total, v.forma_pagamento, 
+           COALESCE(c.nome, 'Consumidor Final') AS cliente_nome 
+    FROM vendas v 
+    LEFT JOIN clientes c ON v.cliente_id = c.id 
+    ORDER BY v.data_venda DESC, v.id DESC 
+    LIMIT 5
+");
 $ultimasVendas = $stmtUltimasVendas->fetchAll();
+
+// ── 6. Formatação Limpa de Formas de Pagamento ───────────────────────────────
+if (!function_exists('render_forma_pagamento')) {
+    function render_forma_pagamento(string $forma): string {
+        $formaUpper = mb_strtoupper(trim($forma), 'UTF-8');
+        if (strpos($formaUpper, 'DINHEIRO') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-1"><i class="fas fa-money-bill-wave text-success"></i> <span>Dinheiro</span></span>';
+        } elseif (strpos($formaUpper, 'PIX') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-1"><i class="fas fa-bolt text-warning"></i> <span>PIX</span></span>';
+        } elseif (strpos($formaUpper, 'CRÉDITO') !== false || strpos($formaUpper, 'CREDITO') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-1"><i class="fas fa-credit-card text-primary"></i> <span>Cartão de Crédito</span></span>';
+        } elseif (strpos($formaUpper, 'DÉBITO') !== false || strpos($formaUpper, 'DEBITO') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-1"><i class="fas fa-credit-card text-info"></i> <span>Cartão de Débito</span></span>';
+        }
+        return '<span class="text-dark d-inline-flex align-items-center gap-1"><i class="fas fa-wallet text-secondary"></i> <span>' . htmlspecialchars($forma, ENT_QUOTES, 'UTF-8') . '</span></span>';
+    }
+}
 
 require_once __DIR__ . '/inc/header.php';
 ?>
 
-<!-- Alert de feedback -->
-<?php if (isset($_GET['erro']) && $_GET['erro'] === 'estoque'): ?>
-<div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 mb-3" role="alert">
-    <i class="fas fa-exclamation-triangle me-2"></i>
+<!-- Alert de feedback para estoque insuficiente -->
+<?php if (isset($_GET['erro']) && $_GET['erro'] === 'estoque'): 
+    $disp = (int)($_GET['disponivel'] ?? 0);
+    $solic = (int)($_GET['solicitado'] ?? 1);
+?>
+<div class="alert alert-danger alert-dismissible fade show shadow-sm border border-danger mb-3" role="alert">
+    <i class="fas fa-triangle-exclamation me-2"></i>
     <strong>Estoque Insuficiente!</strong>
-    Produto <strong><?= htmlspecialchars($_GET['produto'] ?? '') ?></strong>
-    — solicitado: <strong><?= (int)($_GET['solicitado'] ?? 1) ?></strong>,
-    disponível: <strong><?= (int)($_GET['disponivel'] ?? 0) ?></strong> unidade(s).
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    Produto <strong><?= htmlspecialchars($_GET['produto'] ?? '', ENT_QUOTES, 'UTF-8') ?></strong>
+    — solicitado: <strong class="tabular-nums"><?= $solic ?></strong> <?= ($solic === 1 ? 'unidade' : 'unidades') ?>,
+    disponível: <strong class="tabular-nums"><?= $disp ?></strong> <?= ($disp === 1 ? 'unidade' : 'unidades') ?>.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar alerta"></button>
 </div>
 <?php endif; ?>
 
@@ -59,106 +111,123 @@ require_once __DIR__ . '/inc/header.php';
 </div>
 
 <div class="content-body">
-    <!-- ══ CARDS DE RESUMO (SALESOPS STAT CARDS) ═════════════════════════════ -->
+    <!-- ══ CARDS DE RESUMO (BENTO GRID SALESOPS DE ELITE) ════════════════════ -->
     <div class="row g-3 mb-4">
+        <!-- Card 1: Produtos Ativos -->
         <div class="col-12 col-sm-6 col-lg-3">
-            <div class="so-card so-stat-card--primary p-3 mb-0">
+            <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <small class="text-muted text-uppercase fw-bold text-xs">Produtos Ativos</small>
-                        <h3 class="mb-0 fw-bold text-dark"><?= $totalProdutos ?></h3>
-                        <small class="text-muted">Itens no catálogo</small>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Produtos Ativos</span>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalProdutos ?></h3>
+                        <small class="text-muted"><?= ($totalProdutos === 1) ? '1 item no catálogo' : "$totalProdutos itens no catálogo" ?></small>
                     </div>
-                    <div class="bg-light p-3 rounded-circle" style="color:var(--mr-bg-primary);">
-                        <i class="fas fa-boxes-stacked fa-2x"></i>
+                    <div class="kpi-icon-box kpi-icon-box--primary">
+                        <i class="fas fa-boxes-stacked"></i>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Card 2: Vendas Hoje -->
         <div class="col-12 col-sm-6 col-lg-3">
-            <div class="so-card so-stat-card--success p-3 mb-0">
+            <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <small class="text-muted text-uppercase fw-bold text-xs">Vendas Hoje</small>
-                        <h3 class="mb-0 fw-bold text-success">R$ <?= number_format($vendasHoje, 2, ',', '.') ?></h3>
-                        <small class="text-muted">Faturamento diário</small>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vendas Hoje</span>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($vendasHojeTotal, 2, ',', '.') ?></h3>
+                        <small class="text-muted"><?= ($vendasHojeQtd === 1 ? '1 transação hoje' : "$vendasHojeQtd transações hoje") ?></small>
                     </div>
-                    <div class="bg-light p-3 rounded-circle text-success">
-                        <i class="fas fa-dollar-sign fa-2x"></i>
+                    <div class="kpi-icon-box kpi-icon-box--success">
+                        <i class="fas fa-dollar-sign"></i>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Card 3: Estoque Baixo -->
         <div class="col-12 col-sm-6 col-lg-3">
-            <div class="so-card so-stat-card--warning p-3 mb-0">
+            <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <small class="text-muted text-uppercase fw-bold text-xs">Estoque Baixo</small>
-                        <h3 class="mb-0 fw-bold text-warning"><?= $totalEstoqueBaixo ?></h3>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Estoque Baixo</span>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalEstoqueBaixo ?></h3>
                         <small class="text-muted">Abaixo do mínimo</small>
                     </div>
-                    <div class="bg-light p-3 rounded-circle text-warning">
-                        <i class="fas fa-triangle-exclamation fa-2x"></i>
+                    <div class="kpi-icon-box kpi-icon-box--warning">
+                        <i class="fas fa-triangle-exclamation"></i>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Card 4: Vencimentos (30d) -->
         <div class="col-12 col-sm-6 col-lg-3">
-            <div class="so-card so-stat-card--danger p-3 mb-0">
+            <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <small class="text-muted text-uppercase fw-bold text-xs">Vencimentos (30d)</small>
-                        <h3 class="mb-0 fw-bold text-danger"><?= $totalVencimento ?></h3>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vencimentos (30d)</span>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalVencimento ?></h3>
                         <small class="text-muted">Validade próxima</small>
                     </div>
-                    <div class="bg-light p-3 rounded-circle text-danger">
-                        <i class="fas fa-calendar-xmark fa-2x"></i>
+                    <div class="kpi-icon-box kpi-icon-box--danger">
+                        <i class="fas fa-calendar-xmark"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- ══ LAYOUT DE 2 COLUNAS ALINHADAS ═════════════════════════════════════ -->
     <div class="row g-4">
-        <!-- Coluna Esquerda: Últimas Vendas Realizadas -->
+        <!-- ── COLUNA ESQUERDA ─────────────────────────────────────────────── -->
         <div class="col-lg-6">
+            <!-- Card: Últimas Vendas Realizadas -->
             <div class="so-card mb-4">
                 <div class="so-card-header d-flex justify-content-between align-items-center">
-                    <h5 class="so-card-title text-dark m-0"><i class="fas fa-clock-rotate-left text-primary me-2"></i> Últimas Vendas Realizadas</h5>
-                    <a href="<?= BASE_URL ?>/vendas/historico.php" class="btn btn-sm btn-primary">Ver Histórico</a>
+                    <h5 class="so-card-title text-dark m-0">
+                        <i class="fas fa-clock-rotate-left text-primary me-2"></i> Últimas Vendas Realizadas
+                    </h5>
+                    <a href="<?= BASE_URL ?>/vendas/historico.php" class="btn btn-sm btn-primary">
+                        <i class="fas fa-list me-1"></i> Ver Histórico
+                    </a>
                 </div>
                 <div class="so-card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0 so-table align-middle">
                             <thead>
                                 <tr>
-                                    <th width="20%">Cód / Hora</th>
-                                    <th width="40%">Cliente</th>
-                                    <th width="20%">Pgto</th>
-                                    <th width="20%" class="text-end pe-3">Valor</th>
+                                    <th scope="col" width="22%">Cód / Hora</th>
+                                    <th scope="col" width="38%">Cliente</th>
+                                    <th scope="col" width="22%">Pagamento</th>
+                                    <th scope="col" width="18%" class="text-end pe-3">Valor</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if (count($ultimasVendas) > 0): ?>
                                     <?php foreach ($ultimasVendas as $v): ?>
                                     <tr>
-                                        <td>
-                                            <strong class="font-monospace text-primary">#<?= str_pad((string)$v['id'], 4, '0', STR_PAD_LEFT) ?></strong>
-                                            <br><small class="text-muted"><?= date('H:i', strtotime($v['data_venda'])) ?></small>
+                                        <td class="tabular-nums">
+                                            <strong class="font-monospace text-primary tabular-nums">#<?= str_pad((string)$v['id'], 6, '0', STR_PAD_LEFT) ?></strong>
+                                            <br><small class="text-muted tabular-nums"><?= date('H:i', strtotime($v['data_venda'])) ?></small>
                                         </td>
                                         <td>
-                                            <span class="text-dark fw-semibold"><?= htmlspecialchars($v['cliente_nome'] ?? 'Consumidor Final') ?></span>
+                                            <span class="text-dark fw-semibold d-block"><?= htmlspecialchars($v['cliente_nome'] ?? 'Consumidor Final', ENT_QUOTES, 'UTF-8') ?></span>
                                         </td>
                                         <td>
-                                            <span class="badge bg-light text-dark border" style="font-size:0.75rem;"><?= htmlspecialchars($v['forma_pagamento']) ?></span>
+                                            <?= render_forma_pagamento($v['forma_pagamento'] ?? '') ?>
                                         </td>
                                         <td class="text-end pe-3">
-                                            <strong class="text-success">R$ <?= number_format((float)$v['total'], 2, ',', '.') ?></strong>
+                                            <strong class="text-dark fw-bold tabular-nums">R$ <?= number_format((float)$v['total'], 2, ',', '.') ?></strong>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <tr><td colspan="4" class="text-center py-4 text-muted"><i class="fas fa-info-circle me-1"></i> Nenhuma venda registrada hoje.</td></tr>
+                                    <tr>
+                                        <td colspan="4" class="text-center py-4 text-muted">
+                                            <i class="fas fa-info-circle me-1"></i> Nenhuma venda registrada hoje.
+                                        </td>
+                                    </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
@@ -166,20 +235,25 @@ require_once __DIR__ . '/inc/header.php';
                 </div>
             </div>
 
-            <!-- Ruptura de Estoque -->
+            <!-- Card: Ruptura de Estoque -->
             <div class="so-card">
                 <div class="so-card-header d-flex justify-content-between align-items-center">
-                    <h5 class="so-card-title text-warning m-0"><i class="fas fa-triangle-exclamation text-warning me-2"></i> Ruptura de Estoque</h5>
-                    <a href="<?= BASE_URL ?>/produtos/index.php?status=baixo_estoque" class="btn btn-sm btn-warning">Ajustar Estoque</a>
+                    <h5 class="so-card-title text-warning m-0">
+                        <i class="fas fa-triangle-exclamation text-warning me-2"></i> Ruptura de Estoque
+                    </h5>
+                    <a href="<?= BASE_URL ?>/produtos/index.php?status=baixo_estoque" class="btn btn-sm btn-warning">
+                        <i class="fas fa-sliders me-1"></i> Ajustar Estoque
+                    </a>
                 </div>
                 <div class="so-card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0 so-table align-middle">
                             <thead>
                                 <tr>
-                                    <th width="50%">Produto</th>
-                                    <th width="25%" class="text-center">Qtd Atual</th>
-                                    <th width="25%" class="text-center">Qtd Mínima</th>
+                                    <th scope="col" width="40%">Produto</th>
+                                    <th scope="col" width="28%">Fornecedor</th>
+                                    <th scope="col" width="16%" class="text-center">Qtd Atual</th>
+                                    <th scope="col" width="16%" class="text-center">Qtd Mínima</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -187,21 +261,30 @@ require_once __DIR__ . '/inc/header.php';
                                     <?php foreach ($produtosEstoqueBaixo as $p): ?>
                                     <tr>
                                         <td>
-                                            <strong class="text-dark"><?= htmlspecialchars($p['nome']) ?></strong>
-                                            <br><small class="text-muted"><i class="fas fa-truck me-1"></i> <?= htmlspecialchars($p['fornecedor_nome'] ?? 'Sem Fornecedor') ?></small>
+                                            <strong class="text-dark d-block"><?= htmlspecialchars($p['nome'], ENT_QUOTES, 'UTF-8') ?></strong>
+                                            <small class="text-muted font-monospace tabular-nums">#<?= str_pad((string)$p['id'], 4, '0', STR_PAD_LEFT) ?></small>
                                         </td>
-                                        <td class="text-center">
-                                            <?php if ($p['quantidade'] == 0): ?>
-                                                <span class="so-badge so-badge-danger"><i class="fas fa-ban me-1"></i> Esgotado (0)</span>
+                                        <td>
+                                            <span class="text-secondary"><?= htmlspecialchars($p['fornecedor_nome'] ?? 'Sem Fornecedor', ENT_QUOTES, 'UTF-8') ?></span>
+                                        </td>
+                                        <td class="text-center tabular-nums">
+                                            <?php if ((int)$p['quantidade'] <= 0): ?>
+                                                <span class="so-badge so-badge-danger tabular-nums"><i class="fas fa-ban me-1"></i> 0 un</span>
                                             <?php else: ?>
-                                                <span class="so-badge so-badge-warning"><?= (int)$p['quantidade'] ?> un</span>
+                                                <span class="so-badge so-badge-warning tabular-nums"><?= (int)$p['quantidade'] ?> un</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td class="text-center text-muted fw-bold"><?= (int)$p['estoque_minimo'] ?> un</td>
+                                        <td class="text-center text-muted fw-bold tabular-nums">
+                                            <?= (int)$p['estoque_minimo'] ?> un
+                                        </td>
                                     </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <tr><td colspan="3" class="text-center py-4 text-muted"><i class="fas fa-check-circle text-success me-1"></i> Todos os produtos estão com estoque ideal.</td></tr>
+                                    <tr>
+                                        <td colspan="4" class="text-center py-4 text-muted">
+                                            <i class="fas fa-circle-check text-success me-1"></i> Todos os produtos estão com estoque ideal.
+                                        </td>
+                                    </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
@@ -210,44 +293,73 @@ require_once __DIR__ . '/inc/header.php';
             </div>
         </div>
 
-        <!-- Coluna Direita: Vencimentos e Atalhos Operacionais -->
+        <!-- ── COLUNA DIREITA ──────────────────────────────────────────────── -->
         <div class="col-lg-6">
-            <!-- Perto do Vencimento -->
+            <!-- Card: Perto do Vencimento -->
             <div class="so-card mb-4">
                 <div class="so-card-header d-flex justify-content-between align-items-center">
-                    <h5 class="so-card-title text-danger m-0"><i class="fas fa-calendar-alt text-danger me-2"></i> Perto do Vencimento</h5>
-                    <a href="<?= BASE_URL ?>/produtos/index.php?status=vencido" class="btn btn-sm btn-danger">Gerenciar Vencimentos</a>
+                    <h5 class="so-card-title text-danger m-0">
+                        <i class="fas fa-calendar-alt text-danger me-2"></i> Perto do Vencimento
+                    </h5>
+                    <a href="<?= BASE_URL ?>/produtos/index.php?status=vencido" class="btn btn-sm btn-danger">
+                        <i class="fas fa-clock me-1"></i> Gerenciar Vencimentos
+                    </a>
                 </div>
                 <div class="so-card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0 so-table align-middle">
                             <thead>
                                 <tr>
-                                    <th width="50%">Produto</th>
-                                    <th width="25%">Validade</th>
-                                    <th width="25%" class="text-center">Status</th>
+                                    <th scope="col" width="45%">Produto</th>
+                                    <th scope="col" width="25%">Validade</th>
+                                    <th scope="col" width="30%" class="text-center">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if (count($produtosVencimento) > 0): ?>
                                     <?php foreach ($produtosVencimento as $p):
-                                        $dv   = new DateTime($p['validade']);
-                                        $hoje = new DateTime();
-                                        $dias = (int)$hoje->diff($dv)->format('%r%a');
-                                        $cls  = $dias < 0 ? 'so-badge-danger' : ($dias <= 15 ? 'so-badge-danger' : 'so-badge-warning');
-                                        $lbl  = $dias < 0 ? 'Vencido' : "Faltam {$dias} dias";
+                                        $dv     = new DateTime($p['validade']);
+                                        $hoje   = new DateTime('today');
+                                        $dvDate = new DateTime($dv->format('Y-m-d'));
+                                        $diff   = $hoje->diff($dvDate);
+                                        $dias   = (int)$diff->format('%r%a');
+
+                                        if ($dias < 0) {
+                                            $cls = 'so-badge-danger';
+                                            $lbl = 'Vencido (' . abs($dias) . ($dias === -1 ? ' dia atrás)' : ' dias atrás)');
+                                        } elseif ($dias === 0) {
+                                            $cls = 'so-badge-danger';
+                                            $lbl = 'Vence hoje';
+                                        } elseif ($dias === 1) {
+                                            $cls = 'so-badge-danger';
+                                            $lbl = 'Vence amanhã (1 dia)';
+                                        } elseif ($dias <= 15) {
+                                            $cls = 'so-badge-danger';
+                                            $lbl = "Faltam {$dias} dias";
+                                        } else {
+                                            $cls = 'so-badge-warning';
+                                            $lbl = "Faltam {$dias} dias";
+                                        }
                                     ?>
                                     <tr>
                                         <td>
-                                            <strong class="text-dark"><?= htmlspecialchars($p['nome']) ?></strong>
-                                            <br><small class="text-muted">Estoque atual: <?= (int)$p['quantidade'] ?> un</small>
+                                            <strong class="text-dark d-block"><?= htmlspecialchars($p['nome'], ENT_QUOTES, 'UTF-8') ?></strong>
+                                            <small class="text-muted">Estoque atual: <span class="tabular-nums fw-semibold"><?= (int)$p['quantidade'] ?></span> <?= ((int)$p['quantidade'] === 1) ? 'unidade' : 'unidades' ?></small>
                                         </td>
-                                        <td><?= date('d/m/Y', strtotime($p['validade'])) ?></td>
-                                        <td class="text-center"><span class="so-badge <?= htmlspecialchars($cls) ?>"><?= htmlspecialchars($lbl) ?></span></td>
+                                        <td class="tabular-nums">
+                                            <span class="fw-semibold text-dark tabular-nums"><?= date('d/m/Y', strtotime($p['validade'])) ?></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="so-badge <?= htmlspecialchars($cls, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($lbl, ENT_QUOTES, 'UTF-8') ?></span>
+                                        </td>
                                     </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <tr><td colspan="3" class="text-center py-4 text-muted"><i class="fas fa-check-circle text-success me-1"></i> Nenhum produto com validade crítica.</td></tr>
+                                    <tr>
+                                        <td colspan="3" class="text-center py-4 text-muted">
+                                            <i class="fas fa-circle-check text-success me-1"></i> Nenhum produto com validade crítica.
+                                        </td>
+                                    </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
@@ -255,30 +367,32 @@ require_once __DIR__ . '/inc/header.php';
                 </div>
             </div>
 
-            <!-- Ações Rápidas do Sistema -->
+            <!-- Card: Atalhos & Ações Rápidas -->
             <div class="so-card">
-                <div class="so-card-header bg-dark text-white">
-                    <h5 class="so-card-title text-white m-0"><i class="fas fa-bolt text-warning me-2"></i> Atalhos & Ações Rápidas</h5>
+                <div class="so-card-header d-flex align-items-center">
+                    <h5 class="so-card-title text-dark m-0">
+                        <i class="fas fa-bolt text-warning me-2"></i> Atalhos & Ações Rápidas
+                    </h5>
                 </div>
                 <div class="so-card-body p-3">
-                    <div class="row g-2">
+                    <div class="row g-3">
                         <div class="col-12 col-sm-6">
-                            <a href="<?= BASE_URL ?>/vendas/pdv.php" class="btn btn-success w-100 py-3 fw-bold text-start shadow-sm">
+                            <a href="<?= BASE_URL ?>/vendas/pdv.php" class="btn btn-success w-100 py-3 fw-bold text-start shadow-sm justify-content-start">
                                 <i class="fas fa-cash-register fa-lg me-2"></i> Abrir PDV Caixa
                             </a>
                         </div>
                         <div class="col-12 col-sm-6">
-                            <a href="<?= BASE_URL ?>/produtos/index.php" class="btn btn-primary w-100 py-3 fw-bold text-start shadow-sm">
+                            <a href="<?= BASE_URL ?>/produtos/index.php" class="btn btn-primary w-100 py-3 fw-bold text-start shadow-sm justify-content-start">
                                 <i class="fas fa-boxes-stacked fa-lg me-2"></i> Gestão de Estoque
                             </a>
                         </div>
                         <div class="col-12 col-sm-6">
-                            <a href="<?= BASE_URL ?>/compras/nova.php" class="btn btn-secondary w-100 py-3 fw-bold text-start shadow-sm">
-                                <i class="fas fa-cart-flatbed fa-lg me-2"></i> Nova Compra (Entrada)
+                            <a href="<?= BASE_URL ?>/compras/nova.php" class="btn btn-secondary w-100 py-3 fw-bold text-start shadow-sm justify-content-start">
+                                <i class="fas fa-cart-flatbed fa-lg me-2"></i> Nova Compra
                             </a>
                         </div>
                         <div class="col-12 col-sm-6">
-                            <a href="<?= BASE_URL ?>/relatorios/analise.php" class="btn btn-dark w-100 py-3 fw-bold text-start shadow-sm">
+                            <a href="<?= BASE_URL ?>/relatorios/analise.php" class="btn btn-dark w-100 py-3 fw-bold text-start shadow-sm justify-content-start">
                                 <i class="fas fa-chart-line fa-lg me-2"></i> Relatórios & DRE
                             </a>
                         </div>
