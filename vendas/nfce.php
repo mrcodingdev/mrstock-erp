@@ -8,6 +8,7 @@ $pageTitle  = 'Consulta Fiscal NFC-e';
 $activePage = 'fiscal';
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
+require_once __DIR__ . '/../inc/functions.php';
 
 // ── 1. Estatísticas Globais para os Stat Cards (Bento Grid) ─────────────────
 $stmtStats = $pdo->query("
@@ -35,18 +36,28 @@ $cuponsHoje      = (int)($statsHoje['cupons_hoje'] ?? 0);
 $faturamentoHoje = (float)($statsHoje['faturamento_hoje'] ?? 0.0);
 
 // ── 2. Filtros Recebidos via GET ─────────────────────────────────────────────
-$busca       = trim($_GET['busca'] ?? '');
-$data_inicio = trim($_GET['data_inicio'] ?? '');
-$data_fim    = trim($_GET['data_fim'] ?? '');
-$hasActiveFilters = !empty($busca) || !empty($data_inicio) || !empty($data_fim);
+$busca           = trim($_GET['busca'] ?? '');
+$cliente_id      = filter_var($_GET['cliente_id'] ?? '', FILTER_VALIDATE_INT) ?: null;
+$data_inicio     = trim($_GET['data_inicio'] ?? '');
+$data_fim        = trim($_GET['data_fim'] ?? '');
+$forma_pagamento = trim($_GET['forma_pagamento'] ?? '');
+$hasActiveFilters = !empty($busca) || !empty($data_inicio) || !empty($data_fim) || !empty($cliente_id) || !empty($forma_pagamento);
 
-// ── 3. Construção Dinâmica da Query SQL com PDO ──────────────────────────────
+// ── 3. Carregamento da Lista de Clientes para o Select ───────────────────────
+$stmtClientes = $pdo->query("SELECT id, nome FROM clientes ORDER BY nome ASC");
+$clientesLista = $stmtClientes->fetchAll(PDO::FETCH_ASSOC);
+
+// ── 4. Construção Dinâmica da Query SQL com PDO ──────────────────────────────
 $where = ["1=1"];
 $params = [];
 
 if (!empty($busca)) {
-    $where[] = "(cf.chave_acesso LIKE :busca OR c.nome LIKE :busca OR CAST(cf.venda_id AS CHAR) LIKE :busca)";
+    $where[] = "(cf.chave_acesso LIKE :busca OR c.nome LIKE :busca OR c.cpf_cnpj LIKE :busca OR CAST(cf.venda_id AS CHAR) LIKE :busca)";
     $params[':busca'] = "%{$busca}%";
+}
+if ($cliente_id) {
+    $where[] = "v.cliente_id = :cliente_id";
+    $params[':cliente_id'] = $cliente_id;
 }
 if (!empty($data_inicio)) {
     $where[] = "DATE(cf.data_emissao) >= :data_inicio";
@@ -56,12 +67,16 @@ if (!empty($data_fim)) {
     $where[] = "DATE(cf.data_emissao) <= :data_fim";
     $params[':data_fim'] = $data_fim;
 }
+if (!empty($forma_pagamento)) {
+    $where[] = "v.forma_pagamento = :forma_pagamento";
+    $params[':forma_pagamento'] = $forma_pagamento;
+}
 
 $whereSql = implode(" AND ", $where);
 
-// ── 4. Contagem para Paginação ───────────────────────────────────────────────
+// ── 5. Contagem para Paginação ───────────────────────────────────────────────
 $countSql = "
-    SELECT COUNT(*) 
+    SELECT COUNT(cf.id) 
     FROM cupons_fiscais cf 
     JOIN vendas v ON cf.venda_id = v.id 
     LEFT JOIN clientes c ON v.cliente_id = c.id 
@@ -69,21 +84,25 @@ $countSql = "
 ";
 $stmtCount = $pdo->prepare($countSql);
 foreach ($params as $k => $v) {
-    $stmtCount->bindValue($k, $v);
+    if (is_int($v)) {
+        $stmtCount->bindValue($k, $v, PDO::PARAM_INT);
+    } else {
+        $stmtCount->bindValue($k, $v, PDO::PARAM_STR);
+    }
 }
 $stmtCount->execute();
 $totalCupons = (int)$stmtCount->fetchColumn();
 
-// ── 5. Paginação Centralizada (10 itens por página) ──────────────────────────
+// ── 6. Paginação Centralizada (10 itens por página) ──────────────────────────
 $limit = 10;
 $page  = max(1, (int)($_GET['pagina'] ?? 1));
 $offset = ($page - 1) * $limit;
 $totalPages = ceil($totalCupons / $limit);
 if ($page > $totalPages && $totalPages > 0) $page = $totalPages;
 
-// ── 6. Busca Paginada de Cupons Fiscais ──────────────────────────────────────
+// ── 7. Busca Paginada de Cupons Fiscais ──────────────────────────────────────
 $sql = "
-    SELECT cf.*, v.total, c.nome AS cliente_nome 
+    SELECT cf.*, v.total, v.forma_pagamento, c.nome AS cliente_nome, c.cpf_cnpj AS cliente_documento
     FROM cupons_fiscais cf 
     JOIN vendas v ON cf.venda_id = v.id 
     LEFT JOIN clientes c ON v.cliente_id = c.id 
@@ -93,12 +112,38 @@ $sql = "
 ";
 $stmt = $pdo->prepare($sql);
 foreach ($params as $k => $v) {
-    $stmt->bindValue($k, $v);
+    if (is_int($v)) {
+        $stmt->bindValue($k, $v, PDO::PARAM_INT);
+    } else {
+        $stmt->bindValue($k, $v, PDO::PARAM_STR);
+    }
 }
 $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
 $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $cupons = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// ── 8. Helper de Formatação de Forma de Pagamento ────────────────────────────
+if (!function_exists('render_forma_pagamento')) {
+    function render_forma_pagamento(string $forma): string {
+        $formaUpper = mb_strtoupper(trim($forma), 'UTF-8');
+        if (strpos($formaUpper, 'DINHEIRO') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-money-bill-wave text-success"></i><span>Dinheiro</span></span>';
+        } elseif (strpos($formaUpper, 'PIX') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-bolt text-warning"></i><span>PIX</span></span>';
+        } elseif (strpos($formaUpper, 'CRÉDITO') !== false || strpos($formaUpper, 'CREDITO') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-credit-card text-primary"></i><span>Cartão de Crédito</span></span>';
+        } elseif (strpos($formaUpper, 'DÉBITO') !== false || strpos($formaUpper, 'DEBITO') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-credit-card text-info"></i><span>Cartão de Débito</span></span>';
+        }
+        return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-wallet text-secondary"></i><span>' . htmlspecialchars($forma, ENT_QUOTES, 'UTF-8') . '</span></span>';
+    }
+}
+if (!function_exists('render_forma_pagamento_badge')) {
+    function render_forma_pagamento_badge(string $forma): string {
+        return render_forma_pagamento($forma);
+    }
+}
 
 require_once __DIR__ . '/../inc/header.php';
 ?>
@@ -183,34 +228,59 @@ require_once __DIR__ . '/../inc/header.php';
         <div class="so-card p-3 mb-3">
             <form method="GET" action="<?= BASE_URL ?>/vendas/nfce.php" class="row g-2 align-items-end">
                 <!-- 1. Campo de Busca -->
-                <div class="col-12 col-md-5">
+                <div class="col-12 col-md-4 col-lg-3">
                     <label for="buscaNfce" class="form-label fw-bold text-dark text-xs mb-1">Buscar por Chave / Cliente / ID Venda</label>
                     <div class="position-relative">
-                        <input type="text" name="busca" id="buscaNfce" class="form-control ps-4 shadow-none" placeholder="Buscar por chave de acesso, cliente ou ID da venda..." value="<?= htmlspecialchars($busca) ?>" aria-label="Buscar por chave de acesso, cliente ou ID da venda">
+                        <input type="text" name="busca" id="buscaNfce" class="form-control ps-4 shadow-none" placeholder="Chave, cliente ou ID da venda..." value="<?= htmlspecialchars($busca) ?>" aria-label="Buscar por chave de acesso, cliente ou ID da venda">
                         <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
                     </div>
                 </div>
 
-                <!-- 2. Data Inicial -->
-                <div class="col-6 col-md-2">
+                <!-- 2. Cliente -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+                    <label for="clienteIdNfce" class="form-label fw-bold text-dark text-xs mb-1">Cliente</label>
+                    <select id="clienteIdNfce" name="cliente_id" class="form-select shadow-none" aria-label="Filtrar por Cliente">
+                        <option value="">-- Todos os Clientes --</option>
+                        <?php foreach ($clientesLista as $cli): ?>
+                            <option value="<?= $cli['id'] ?>" <?= ($cliente_id == $cli['id']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($cli['nome']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <!-- 3. Data Inicial -->
+                <div class="col-6 col-sm-3 col-md-2 col-lg-2">
                     <label for="dataInicioNfce" class="form-label fw-bold text-dark text-xs mb-1">Data Inicial</label>
                     <input type="date" name="data_inicio" id="dataInicioNfce" class="form-control tabular-nums shadow-none px-2" value="<?= htmlspecialchars($data_inicio) ?>" aria-label="Data Inicial">
                 </div>
 
-                <!-- 3. Data Final -->
-                <div class="col-6 col-md-2">
+                <!-- 4. Data Final -->
+                <div class="col-6 col-sm-3 col-md-2 col-lg-2">
                     <label for="dataFimNfce" class="form-label fw-bold text-dark text-xs mb-1">Data Final</label>
                     <input type="date" name="data_fim" id="dataFimNfce" class="form-control tabular-nums shadow-none px-2" value="<?= htmlspecialchars($data_fim) ?>" aria-label="Data Final">
                 </div>
 
-                <!-- 4. Botões de Ação -->
-                <div class="col-12 col-md-3 d-flex gap-2">
+                <!-- 5. Forma de Pagamento -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-1">
+                    <label for="formaPagamentoNfce" class="form-label fw-bold text-dark text-xs mb-1">Pagamento</label>
+                    <select id="formaPagamentoNfce" name="forma_pagamento" class="form-select shadow-none" aria-label="Filtrar por Forma de Pagamento">
+                        <option value="">-- Todas --</option>
+                        <option value="DINHEIRO" <?= ($forma_pagamento === 'DINHEIRO') ? 'selected' : '' ?>>Dinheiro</option>
+                        <option value="PIX" <?= ($forma_pagamento === 'PIX') ? 'selected' : '' ?>>PIX</option>
+                        <option value="CARTÃO DE CRÉDITO" <?= ($forma_pagamento === 'CARTÃO DE CRÉDITO') ? 'selected' : '' ?>>Cartão Crédito</option>
+                        <option value="CARTÃO DE DÉBITO" <?= ($forma_pagamento === 'CARTÃO DE DÉBITO') ? 'selected' : '' ?>>Cartão Débito</option>
+                    </select>
+                </div>
+
+                <!-- 6. Botões de Ação -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-2 d-flex gap-2 justify-content-lg-end">
                     <button type="submit" class="btn btn-primary fw-bold flex-fill shadow-sm" title="Filtrar Cupons" aria-label="Filtrar Cupons">
                         <i class="fas fa-filter me-1"></i> Filtrar
                     </button>
                     <?php if ($hasActiveFilters): ?>
                     <a href="<?= BASE_URL ?>/vendas/nfce.php" class="btn btn-secondary px-3 shadow-sm" title="Limpar Filtros" aria-label="Limpar Filtros">
-                        <i class="fas fa-undo me-1"></i> Limpar
+                        <i class="fas fa-undo"></i>
                     </a>
                     <?php endif; ?>
                 </div>
@@ -228,12 +298,13 @@ require_once __DIR__ . '/../inc/header.php';
                     <table class="table table-hover mb-0 so-table align-middle">
                         <thead>
                             <tr>
-                                <th scope="col" width="16%">Data da Emissão</th>
-                                <th scope="col" width="10%" class="text-center">ID Venda</th>
-                                <th scope="col" width="40%">Chave de Acesso (44 dígitos)</th>
+                                <th scope="col" width="14%">Data da Emissão</th>
+                                <th scope="col" width="8%" class="text-center">ID Venda</th>
+                                <th scope="col" width="34%">Chave de Acesso (44 dígitos)</th>
                                 <th scope="col" width="16%">Cliente</th>
+                                <th scope="col" width="12%">Pagamento</th>
                                 <th scope="col" width="10%" class="text-end">Total Cupom</th>
-                                <th scope="col" width="8%" class="text-center">Ações</th>
+                                <th scope="col" width="6%" class="text-center">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -255,7 +326,13 @@ require_once __DIR__ . '/../inc/header.php';
                                         </code>
                                     </td>
                                     <td>
-                                        <span class="text-dark fw-medium"><?= htmlspecialchars($cf['cliente_nome'] ?? 'Consumidor Final') ?></span>
+                                        <span class="text-dark fw-medium d-block"><?= htmlspecialchars($cf['cliente_nome'] ?? 'Consumidor Final') ?></span>
+                                        <?php if (!empty($cf['cliente_documento'])): ?>
+                                            <small class="text-muted tabular-nums"><?= htmlspecialchars(formatar_cpf_cnpj($cf['cliente_documento'])) ?></small>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?= render_forma_pagamento($cf['forma_pagamento'] ?? '') ?>
                                     </td>
                                     <td class="text-end">
                                         <span class="text-dark fw-bold tabular-nums">R$ <?= number_format((float)$cf['total'], 2, ',', '.') ?></span>
@@ -269,7 +346,7 @@ require_once __DIR__ . '/../inc/header.php';
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="6" class="text-center py-5 text-muted">
+                                    <td colspan="7" class="text-center py-5 text-muted">
                                         <i class="fas fa-receipt fs-1 d-block mb-3 text-secondary opacity-50"></i>
                                         <span class="fw-semibold d-block text-dark mb-1">Nenhum cupom fiscal encontrado</span>
                                         <span class="text-muted text-xs"><?= $hasActiveFilters ? 'Nenhum cupom fiscal corresponde aos filtros informados.' : 'Nenhum cupom fiscal emitido até o momento.' ?></span>
