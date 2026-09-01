@@ -110,20 +110,24 @@ $stmt->execute();
 $vendas = $stmt->fetchAll();
 
 /**
- * Renderiza badge semântico com ícone correspondente à forma de pagamento
+ * Renderiza forma de pagamento em texto limpo com ícone contextual colorido
  */
-function render_forma_pagamento_badge(string $forma): string {
+function render_forma_pagamento(string $forma): string {
     $formaUpper = mb_strtoupper(trim($forma), 'UTF-8');
     if (strpos($formaUpper, 'DINHEIRO') !== false) {
-        return '<span class="badge bg-light text-dark border"><i class="fas fa-money-bill-wave me-1 text-success"></i>Dinheiro</span>';
+        return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-money-bill-wave text-success"></i><span>Dinheiro</span></span>';
     } elseif (strpos($formaUpper, 'PIX') !== false) {
-        return '<span class="badge bg-light text-dark border"><i class="fas fa-bolt me-1 text-warning"></i>PIX</span>';
+        return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-bolt text-warning"></i><span>PIX</span></span>';
     } elseif (strpos($formaUpper, 'CRÉDITO') !== false || strpos($formaUpper, 'CREDITO') !== false) {
-        return '<span class="badge bg-light text-dark border"><i class="fas fa-credit-card me-1 text-primary"></i>Cartão de Crédito</span>';
+        return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-credit-card text-primary"></i><span>Cartão de Crédito</span></span>';
     } elseif (strpos($formaUpper, 'DÉBITO') !== false || strpos($formaUpper, 'DEBITO') !== false) {
-        return '<span class="badge bg-light text-dark border"><i class="fas fa-credit-card me-1 text-info"></i>Cartão de Débito</span>';
+        return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-credit-card text-info"></i><span>Cartão de Débito</span></span>';
     }
-    return '<span class="badge bg-light text-dark border"><i class="fas fa-wallet me-1 text-secondary"></i>' . htmlspecialchars($forma, ENT_QUOTES, 'UTF-8') . '</span>';
+    return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-wallet text-secondary"></i><span>' . htmlspecialchars($forma, ENT_QUOTES, 'UTF-8') . '</span></span>';
+}
+
+function render_forma_pagamento_badge(string $forma): string {
+    return render_forma_pagamento($forma);
 }
 
 require_once __DIR__ . '/../inc/header.php';
@@ -144,13 +148,13 @@ require_once __DIR__ . '/../inc/header.php';
 <div class="content-body">
     <?php if (isset($_GET['erro'])): ?>
         <?php if ($_GET['erro'] === 'cupom_invalido'): ?>
-        <div class="alert alert-warning alert-dismissible fade show shadow-sm border-0 mb-3" role="alert">
+        <div class="alert alert-warning alert-dismissible fade show shadow-sm border border-warning mb-3" role="alert">
             <i class="fas fa-triangle-exclamation me-2"></i>
             <strong>Aviso:</strong> Identificador de venda não especificado para emissão do cupom fiscal.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
         </div>
         <?php elseif ($_GET['erro'] === 'venda_nao_encontrada'): ?>
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 mb-3" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm border border-danger mb-3" role="alert">
             <i class="fas fa-circle-xmark me-2"></i>
             <strong>Erro:</strong> Venda não localizada no banco de dados.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
@@ -158,73 +162,72 @@ require_once __DIR__ . '/../inc/header.php';
         <?php endif; ?>
     <?php endif; ?>
 
-    <!-- ══ CARDS DE KPI (RESUMO DAS VENDAS FILTRADAS) ════════════════════════ -->
+    <!-- ══ CARDS DE KPI (BENTO GRID MODERNO - SEM 4PX BORDER) ═══════════════ -->
     <div class="row g-3 mb-3">
         <div class="col-12 col-sm-6 col-md-4">
-            <div class="so-card so-stat-card--primary p-3 mb-0">
+            <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vendas Filtradas</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalVendasQtd ?></h3>
-                        <small class="text-muted"><span class="tabular-nums"><?= $totalItensVendidos ?></span> itens no total</small>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($totalVendasQtd, 0, ',', '.') ?></h3>
+                        <small class="text-muted"><span class="tabular-nums"><?= $totalItensVendidos ?></span> <?= ($totalItensVendidos === 1) ? 'item no total' : 'itens no total' ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
-                        <i class="fas fa-receipt fa-2x"></i>
+                        <i class="fas fa-receipt"></i>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-md-4">
-            <div class="so-card so-stat-card--success p-3 mb-0">
+            <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Faturamento Filtrado</span>
-                        <h3 class="fw-bold text-success m-0 tabular-nums">R$ <?= number_format($faturamentoTotal, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($faturamentoTotal, 2, ',', '.') ?></h3>
                         <small class="text-muted">Total líquido realizado</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--success">
-                        <i class="fas fa-dollar-sign fa-2x"></i>
+                        <i class="fas fa-dollar-sign"></i>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-12 col-sm-12 col-md-4">
-            <div class="so-card so-stat-card--info p-3 mb-0">
+            <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Ticket Médio</span>
-                        <h3 class="fw-bold text-info m-0 tabular-nums">R$ <?= number_format($ticketMedio, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($ticketMedio, 2, ',', '.') ?></h3>
                         <small class="text-muted">Média por cupom fiscal</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--info">
-                        <i class="fas fa-chart-line fa-2x"></i>
+                        <i class="fas fa-chart-line"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ══ BARRA DE FILTROS AVANÇADOS E LIVE SEARCH ══════════════════════════ -->
+    <!-- ══ BARRA DE FILTROS UNIFICADA (RESPONSIVA E SEM LIVE SEARCH CONCORRENTE) ══ -->
     <div class="so-card mb-3">
         <div class="so-card-header py-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h6 class="so-card-title m-0 text-sm">
                 <i class="fas fa-filter text-primary"></i> Filtros de Pesquisa
             </h6>
-            <!-- Live Search rápido -->
-            <div class="so-search-box">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="liveSearchVendas" class="form-control form-control-sm" placeholder="Filtrar ao vivo..." aria-label="Filtrar vendas ao vivo por cliente, código ou pagamento" onkeyup="filtrarVendas(this)">
-            </div>
+            <?php if (!empty($busca) || !empty($data_inicio) || !empty($data_fim) || !empty($cliente_id) || !empty($forma_pagamento)): ?>
+                <span class="badge bg-light text-primary border font-monospace text-xs">
+                    <i class="fas fa-circle-dot me-1 text-success"></i>Filtros Ativos
+                </span>
+            <?php endif; ?>
         </div>
         <div class="so-card-body p-3">
             <form method="GET" action="<?= BASE_URL ?>/vendas/historico.php" class="row g-2 align-items-end">
-                <div class="col-6 col-md-2">
-                    <label for="filtro_data_inicio" class="form-label fw-bold text-muted small mb-1">Data Inicial</label>
-                    <input type="date" id="filtro_data_inicio" name="data_inicio" class="form-control form-control-sm tabular-nums" value="<?= htmlspecialchars($data_inicio) ?>">
-                </div>
-                <div class="col-6 col-md-2">
-                    <label for="filtro_data_fim" class="form-label fw-bold text-muted small mb-1">Data Final</label>
-                    <input type="date" id="filtro_data_fim" name="data_fim" class="form-control form-control-sm tabular-nums" value="<?= htmlspecialchars($data_fim) ?>">
+                <div class="col-12 col-md-3">
+                    <label for="filtro_busca" class="form-label fw-bold text-muted small mb-1">Buscar Venda / Cliente</label>
+                    <div class="position-relative">
+                        <input type="text" id="filtro_busca" name="busca" class="form-control form-control-sm ps-4" placeholder="Nº da venda ou cliente..." value="<?= htmlspecialchars($busca) ?>">
+                        <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
+                    </div>
                 </div>
                 <div class="col-12 col-md-3">
                     <label for="filtro_cliente_id" class="form-label fw-bold text-muted small mb-1">Cliente</label>
@@ -237,6 +240,14 @@ require_once __DIR__ . '/../inc/header.php';
                         <?php endforeach; ?>
                     </select>
                 </div>
+                <div class="col-6 col-md-2">
+                    <label for="filtro_data_inicio" class="form-label fw-bold text-muted small mb-1">Data Inicial</label>
+                    <input type="date" id="filtro_data_inicio" name="data_inicio" class="form-control form-control-sm tabular-nums" value="<?= htmlspecialchars($data_inicio) ?>">
+                </div>
+                <div class="col-6 col-md-2">
+                    <label for="filtro_data_fim" class="form-label fw-bold text-muted small mb-1">Data Final</label>
+                    <input type="date" id="filtro_data_fim" name="data_fim" class="form-control form-control-sm tabular-nums" value="<?= htmlspecialchars($data_fim) ?>">
+                </div>
                 <div class="col-12 col-md-2">
                     <label for="filtro_forma_pagamento" class="form-label fw-bold text-muted small mb-1">Forma Pagamento</label>
                     <select id="filtro_forma_pagamento" name="forma_pagamento" class="form-select form-select-sm">
@@ -247,13 +258,13 @@ require_once __DIR__ . '/../inc/header.php';
                         <option value="CARTÃO DE DÉBITO" <?= ($forma_pagamento === 'CARTÃO DE DÉBITO') ? 'selected' : '' ?>>Cartão de Débito</option>
                     </select>
                 </div>
-                <div class="col-12 col-md-3 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary btn-sm fw-bold w-100 shadow-sm">
-                        <i class="fas fa-search me-1"></i> Filtrar
-                    </button>
-                    <a href="<?= BASE_URL ?>/vendas/historico.php" class="btn btn-secondary btn-sm w-100 shadow-sm" title="Limpar Filtros">
-                        <i class="fas fa-undo me-1"></i> Limpar
+                <div class="col-12 d-flex justify-content-end gap-2 pt-2 border-top mt-2">
+                    <a href="<?= BASE_URL ?>/vendas/historico.php" class="btn btn-secondary btn-sm shadow-sm" title="Limpar Filtros">
+                        <i class="fas fa-undo me-1"></i> Limpar Filtros
                     </a>
+                    <button type="submit" class="btn btn-primary btn-sm fw-bold shadow-sm">
+                        <i class="fas fa-filter me-1"></i> Aplicar Filtros
+                    </button>
                 </div>
             </form>
         </div>
@@ -261,9 +272,11 @@ require_once __DIR__ . '/../inc/header.php';
 
     <!-- ══ TABELA MODULAR DE HISTÓRICO DE VENDAS ═════════════════════════════ -->
     <div class="so-card">
-        <div class="so-card-header">
-            <h5 class="so-card-title"><i class="fas fa-receipt text-primary"></i> Vendas Registradas</h5>
-            <span class="so-badge so-badge-primary tabular-nums"><?= $totalVendasQtd ?> cupons</span>
+        <div class="so-card-header d-flex justify-content-between align-items-center">
+            <h5 class="so-card-title m-0"><i class="fas fa-receipt text-primary"></i> Vendas Registradas</h5>
+            <span class="text-muted small tabular-nums fw-semibold">
+                <?= $totalVendasQtd ?> <?= ($totalVendasQtd === 1) ? 'venda registrada' : 'vendas registradas' ?>
+            </span>
         </div>
         <div class="so-card-body p-0">
             <div class="table-responsive">
@@ -271,9 +284,9 @@ require_once __DIR__ . '/../inc/header.php';
                     <thead>
                         <tr>
                             <th width="10%">Nº Venda</th>
-                            <th width="18%">Data / Hora</th>
+                            <th width="16%">Data / Hora</th>
                             <th width="28%">Cliente</th>
-                            <th width="10%" class="text-center">Itens</th>
+                            <th width="12%" class="text-center">Qtd. Itens</th>
                             <th width="16%">Pagamento</th>
                             <th width="12%" class="text-end pe-3">Total (R$)</th>
                             <th width="6%" class="text-center">Ações</th>
@@ -283,30 +296,28 @@ require_once __DIR__ . '/../inc/header.php';
                         <?php if (count($vendas) > 0): ?>
                             <?php foreach ($vendas as $v): ?>
                             <tr class="linha-venda">
-                                <td class="fw-bold text-muted font-monospace tabular-nums">
+                                <td class="fw-bold text-dark font-monospace tabular-nums">
                                     #<?= str_pad((string)$v['id'], 6, '0', STR_PAD_LEFT) ?>
                                 </td>
                                 <td class="tabular-nums">
-                                    <i class="far fa-clock text-muted me-1"></i>
-                                    <?= date('d/m/Y H:i', strtotime($v['data_venda'])) ?>
+                                    <div class="fw-semibold text-dark"><?= date('d/m/Y', strtotime($v['data_venda'])) ?></div>
+                                    <div class="text-muted small"><?= date('H:i', strtotime($v['data_venda'])) ?></div>
                                 </td>
                                 <td>
-                                    <strong class="text-dark d-block"><?= htmlspecialchars($v['cliente_nome'] ?? 'Consumidor Final') ?></strong>
+                                    <strong class="text-dark d-block"><?= htmlspecialchars($v['cliente_nome'] ?? 'Consumidor Final', ENT_QUOTES, 'UTF-8') ?></strong>
                                     <?php if (!empty($v['chave_acesso'])): ?>
-                                        <small class="text-muted font-monospace text-2xs tabular-nums d-block">
-                                            NFC-e: <?= substr($v['chave_acesso'], 0, 18) ?>...
-                                        </small>
+                                        <span class="badge bg-light text-secondary border font-monospace text-2xs tabular-nums mt-1 d-inline-flex align-items-center gap-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Chave NFC-e: <?= htmlspecialchars($v['chave_acesso'], ENT_QUOTES, 'UTF-8') ?>">
+                                            <i class="fas fa-qrcode text-muted"></i> NFC-e <?= substr($v['chave_acesso'], 0, 8) ?>...<?= substr($v['chave_acesso'], -4) ?>
+                                        </span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-center">
-                                    <span class="badge bg-light text-dark border px-2 py-1 tabular-nums">
-                                        <?= (int)$v['qtd_itens'] ?> item(ns)
-                                    </span>
+                                <td class="text-center tabular-nums text-secondary">
+                                    <?= ((int)$v['qtd_itens'] === 1) ? '1 item' : (int)$v['qtd_itens'] . ' itens' ?>
                                 </td>
                                 <td>
-                                    <?= render_forma_pagamento_badge($v['forma_pagamento'] ?? '') ?>
+                                    <?= render_forma_pagamento($v['forma_pagamento'] ?? '') ?>
                                 </td>
-                                <td class="text-end pe-3 fw-bold text-success tabular-nums">
+                                <td class="text-end pe-3 fw-bold text-dark tabular-nums">
                                     R$ <?= number_format((float)$v['total'], 2, ',', '.') ?>
                                 </td>
                                 <td class="text-center">
@@ -314,7 +325,7 @@ require_once __DIR__ . '/../inc/header.php';
                                         <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações da venda #<?= $v['id'] ?>" title="Ações da venda #<?= $v['id'] ?>">
                                             <i class="fas fa-ellipsis-vertical"></i>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2">
+                                        <ul class="dropdown-menu dropdown-menu-end shadow border py-2">
                                             <li>
                                                 <a class="dropdown-item py-1" href="<?= BASE_URL ?>/vendas/cupom.php?venda_id=<?= $v['id'] ?>" target="_blank">
                                                     <i class="fas fa-print text-primary me-2"></i> Imprimir Cupom 80mm
@@ -354,7 +365,7 @@ require_once __DIR__ . '/../inc/header.php';
         <div class="card-footer bg-white border-top p-3">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
                 <span class="text-muted small">
-                    Exibindo <strong class="tabular-nums"><?= $firstItem ?></strong> a <strong class="tabular-nums"><?= $lastItem ?></strong> de <strong class="tabular-nums"><?= $totalVendasQtd ?></strong> vendas
+                    Exibindo <strong class="tabular-nums text-dark"><?= $firstItem ?></strong> a <strong class="tabular-nums text-dark"><?= $lastItem ?></strong> de <strong class="tabular-nums text-dark"><?= $totalVendasQtd ?></strong> <?= ($totalVendasQtd === 1) ? 'venda' : 'vendas' ?>
                 </span>
                 <?php if ($totalPages > 1): ?>
                 <nav aria-label="Navegação da listagem">
@@ -421,14 +432,13 @@ require_once __DIR__ . '/../inc/header.php';
 </div>
 
 <script>
-function filtrarVendas(input) {
-    const termo = input.value.toLowerCase().trim();
-    const linhas = document.querySelectorAll('#tabelaVendas tbody .linha-venda');
-    linhas.forEach(linha => {
-        const texto = linha.textContent.toLowerCase();
-        linha.style.display = texto.includes(termo) ? '' : 'none';
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicialização de tooltips Bootstrap 5 para chaves fiscais
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
     });
-}
+});
 </script>
 
 <?php require_once __DIR__ . '/../inc/footer.php'; ?>
