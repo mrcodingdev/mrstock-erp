@@ -8,8 +8,33 @@
 // 1. Caminho absoluto da raiz do projeto no filesystem
 define('ROOT_PATH', realpath(__DIR__));
 
+// 2. Carregador Nativo de Variáveis de Ambiente (.env)
+if (file_exists(ROOT_PATH . '/.env')) {
+    $lines = file(ROOT_PATH . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || strpos($line, '#') === 0) {
+            continue;
+        }
+        if (strpos($line, '=') !== false) {
+            list($envName, $envVal) = explode('=', $line, 2);
+            $envName = trim($envName);
+            $envVal  = trim($envVal);
+            if ((strpos($envVal, '"') === 0 && substr($envVal, -1) === '"') || 
+                (strpos($envVal, "'") === 0 && substr($envVal, -1) === "'")) {
+                $envVal = substr($envVal, 1, -1);
+            }
+            if (!array_key_exists($envName, $_SERVER) && !array_key_exists($envName, $_ENV)) {
+                putenv("{$envName}={$envVal}");
+                $_ENV[$envName] = $envVal;
+                $_SERVER[$envName] = $envVal;
+            }
+        }
+    }
+}
+
 // ====================================================================
-// DETECÇÃO DINÂMICA DE AMBIENTE (XAMPP LOCAL vs PRODUÇÃO UNAUX)
+// 3. DETECÇÃO DINÂMICA DE AMBIENTE E ROTAS (Local vs Nuvem)
 // ====================================================================
 $httpHost = $_SERVER['HTTP_HOST'] ?? '';
 $isLocal = empty($httpHost) 
@@ -19,11 +44,12 @@ $isLocal = empty($httpHost)
         || strpos($httpHost, '192.168.') === 0 
         || strpos($httpHost, '10.') === 0;
 
-if ($isLocal) {
-    // ── AMBIENTE LOCAL (XAMPP / DESENVOLVIMENTO) ─────────────────────
-    define('ENVIRONMENT', 'development');
-    
-    // URL base do projeto detectada automaticamente no XAMPP
+define('ENVIRONMENT', getenv('APP_ENV') ?: ($isLocal ? 'development' : 'production'));
+
+// Rota base (BASE_URL)
+if (getenv('APP_URL')) {
+    define('BASE_URL', rtrim(getenv('APP_URL'), '/'));
+} elseif ($isLocal) {
     $_projRoot = str_replace('\\', '/', ROOT_PATH);
     $_docRoot  = str_replace('\\', '/', realpath($_SERVER['DOCUMENT_ROOT'] ?? ''));
     if ($_docRoot && strpos($_projRoot, $_docRoot) === 0) {
@@ -32,26 +58,18 @@ if ($isLocal) {
         define('BASE_URL', '/' . basename(ROOT_PATH));
     }
     unset($_projRoot, $_docRoot);
-
-    // Credenciais do MySQL Local (XAMPP)
-    define('DB_HOST', 'localhost');
-    define('DB_NAME', 'mrstock_db');
-    define('DB_USER', 'root');
-    define('DB_PASS', '');
-
 } else {
-    // ── AMBIENTE REMOTO (PRODUÇÃO PROFEEHOST / UNAUX) ───────────────
-    define('ENVIRONMENT', 'production');
-    
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
     define('BASE_URL', rtrim($protocol . $httpHost, '/'));
-
-    // Credenciais do MySQL Remoto no ProFreeHost (configuradas no VistaPanel)
-    define('DB_HOST', 'localhost');           // Host MySQL oficial do VistaPanel
-    define('DB_NAME', 'mrstock_db');  // Nome real da base de dados
-    define('DB_USER', 'root');             // Usuário MySQL oficial
-    define('DB_PASS', '');             // Senha da conta (vPanel Password)
 }
+
+// ====================================================================
+// 4. CREDENCIAIS DE BANCO DE DADOS (Injetadas via .env)
+// ====================================================================
+define('DB_HOST', getenv('DB_HOST') ?: ($isLocal ? 'localhost' : 'localhost'));
+define('DB_NAME', getenv('DB_NAME') ?: ($isLocal ? 'mrstock_db' : 'mrstock_db'));
+define('DB_USER', getenv('DB_USER') ?: ($isLocal ? 'root' : 'root'));
+define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '');
 
 // 3. Supressão de Assinatura do Servidor (CWE-497)
 @ini_set('expose_php', 'off');

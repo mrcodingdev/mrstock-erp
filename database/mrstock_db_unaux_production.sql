@@ -71,7 +71,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (1,'João Silva','joao@email.com','(11) 98765-4321','ativo','2026-06-03 21:36:30',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'Maria Oliveira','maria@email.com','(11) 91234-5678','ativo','2026-06-03 21:36:30','Não informado','','','','','SP',''),(3,'Carlos Souza','carlos@email.com','(11) 99999-8888','ativo','2026-06-03 21:36:30','111.111.111-11','','','','','','11111-11'),(4,'Lucas Mendes','lucas@email.com','(11) 98888-7777','ativo','2026-08-26 10:46:01','Não informado','Av. Paulista, 1000','','Bela Vista','Sorocaba','SP','01310-100');
+INSERT INTO `clientes` VALUES (1,'João Silva','joao@email.com','(11) 98765-4321','ativo','2026-06-03 21:36:30',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'Maria Oliveira','maria@email.com','(11) 91234-5678','ativo','2026-06-03 21:36:30','Não informado','','','','','SP',''),(3,'Carlos Souza','carlos@email.com','(11) 99999-8888','ativo','2026-06-03 21:36:30','111.111.111-11','','','','','','11111-11'),(4,'Lucas Mendes','lucas@email.com','(11) 98888-7777','ativo','2026-08-26 10:46:01','Não informado','Av. Paulista, 1000','','Bela Vista','São Paulo','SP','01310-100');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +194,7 @@ CREATE TABLE `fornecedores` (
 
 LOCK TABLES `fornecedores` WRITE;
 /*!40000 ALTER TABLE `fornecedores` DISABLE KEYS */;
-INSERT INTO `fornecedores` VALUES (1,'Tilibra S.A','44.990.901/0001-43','(14) 3235-4000','vendas@tilibra.com.br','ativo',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'Bic Brasil','04.148.243/0001-16','(11) 2118-8000','comercial@bic.com','ativo',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,'Acrilex','50.334.808/0001-38','(11) 98888-7777','contato@acrilex.com','ativo','a','','','','','SP','01310-100');
+INSERT INTO `fornecedores` VALUES (1,'Tilibra S.A','44.990.901/0001-43','(14) 3235-4000','vendas@tilibra.com.br','ativo',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'Bic Brasil','04.148.243/0001-16','(11) 2118-8000','comercial@bic.com','ativo',NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,'Acrilex','50.334.808/0001-38','(11) 4344-8800','contato@acrilex.com','ativo','Estrada das Lágrimas, 100','','Rudge Ramos','São Bernardo do Campo','SP','09642-000');
 /*!40000 ALTER TABLE `fornecedores` ENABLE KEYS */;
 UNLOCK TABLES;
 
