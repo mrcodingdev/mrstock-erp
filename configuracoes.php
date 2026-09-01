@@ -1,7 +1,7 @@
 <?php
 /**
  * MrStock ERP — Central de Configurações & Preferências do Sistema
- * Versão 2.1.0 (SalesOps Enterprise Edition + Micro-Patches)
+ * Versão 2.1.0 (Papelaria Real Edition + Micro-Patches)
  */
 $pageTitle  = 'Configurações';
 $activePage = 'configuracoes';
@@ -394,7 +394,7 @@ require_once __DIR__ . '/inc/header.php';
             <i class="fas fa-code-branch me-1"></i> <?= defined('MRSTOCK_VERSION') ? MRSTOCK_VERSION : 'v2.1.0' ?>
         </span>
         <span class="badge bg-secondary text-white small">
-            <?= defined('MRSTOCK_EDITION') ? MRSTOCK_EDITION : 'SalesOps Enterprise' ?>
+            Papelaria Real
         </span>
     </div>
 </div>
@@ -859,8 +859,8 @@ require_once __DIR__ . '/inc/header.php';
                         <div class="col-md-4 col-12">
                             <div class="p-3 bg-light rounded border text-center">
                                 <small class="text-muted d-block text-xs text-uppercase fw-bold">Edição do Núcleo</small>
-                                <strong class="text-dark fs-6"><?= defined('MRSTOCK_EDITION') ? MRSTOCK_EDITION : 'SalesOps Enterprise' ?></strong>
-                                <span class="badge bg-primary text-white mt-1">Design System v0</span>
+                                <strong class="text-dark fs-6">Papelaria Real</strong>
+                                <span class="badge bg-primary text-white mt-1">ERP v2.1.0</span>
                             </div>
                         </div>
                         <div class="col-md-4 col-12">

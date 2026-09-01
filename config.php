@@ -13,7 +13,7 @@ define('ROOT_PATH', realpath(__DIR__));
 // ====================================================================
 if (!defined('MRSTOCK_VERSION')) {
     define('MRSTOCK_VERSION', 'v2.1.0');
-    define('MRSTOCK_EDITION', 'SalesOps Core Enterprise');
+    define('MRSTOCK_EDITION', 'Papelaria Real');
     define('MRSTOCK_BUILD_DATE', '01/09/2026');
 }
 

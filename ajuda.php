@@ -1,7 +1,7 @@
 <?php
 /**
  * MrStock ERP — Central de Ajuda, Base de Conhecimento & FAQ Operacional
- * Versão 2.1.0 (SalesOps Enterprise Edition + Benchmark Corporativo de Suporte)
+ * Versão 2.1.0 (Papelaria Real Edition)
  */
 $pageTitle  = 'Central de Ajuda';
 $activePage = 'ajuda';
@@ -17,7 +17,7 @@ $isAdmin  = is_admin();
 
 // ══ CONTRATO DE DADOS ESTRUTURADOS DO BACKEND ═════════════════════════════════
 
-// 1. Cards Bento de Acesso Rápido
+// 1. Cards Bento de Acesso Rápido (Sem Badges Decorativos Poluídos)
 $bentoCards = [
     [
         'categoria' => 'atalhos',
@@ -26,8 +26,6 @@ $bentoCards = [
         'icone'     => 'fa-keyboard',
         'bg_icon'   => '#284936',
         'borda_top' => 'so-bento-card--primary',
-        'badge'     => 'Operação Ágil',
-        'badge_bg'  => 'bg-success',
         'preview'   => '<code>F2</code> Leitor | <code>F4</code> Pagar | <code>F9</code> Cancelar'
     ],
     [
@@ -37,8 +35,6 @@ $bentoCards = [
         'icone'     => 'fa-boxes-stacked',
         'bg_icon'   => '#0284c7',
         'borda_top' => 'so-bento-card--info',
-        'badge'     => 'Gôndola & Saldos',
-        'badge_bg'  => 'bg-info',
         'preview'   => 'Classificação por Famílias & Etiquetas Térmicas'
     ],
     [
@@ -48,8 +44,6 @@ $bentoCards = [
         'icone'     => 'fa-chart-line',
         'bg_icon'   => '#16a34a',
         'borda_top' => 'so-bento-card--success',
-        'badge'     => 'Gestão e BI',
-        'badge_bg'  => 'bg-primary',
         'preview'   => 'Auditoria de CMV, Margem Bruta e Pareto'
     ],
     [
@@ -59,8 +53,6 @@ $bentoCards = [
         'icone'     => 'fa-headset',
         'bg_icon'   => '#d97706',
         'borda_top' => 'so-bento-card--warning',
-        'badge'     => 'Atendimento Direto',
-        'badge_bg'  => 'bg-warning text-dark',
         'preview'   => 'WhatsApp Oficial & Contingência Local'
     ],
 ];
@@ -77,67 +69,51 @@ $chipsCategorias = [
     ['id' => 'suporte',  'label' => 'Suporte & FAQ',              'icon' => 'fa-headset'],
 ];
 
-// 3. Mesa de Atalhos de Teclado do PDV
+// 3. Mesa de Atalhos de Teclado do PDV (3 Colunas Limpas)
 $atalhosPdv = [
     [
         'tecla'      => 'F1',
         'acao'       => 'Manual do Caixa / Ajuda Rápida',
-        'descricao'  => 'Abre a janela flutuante com o resumo dos comandos operacionais sem interromper a venda em andamento.',
-        'badge_tipo' => 'Geral',
-        'badge_cor'  => 'bg-secondary'
+        'descricao'  => 'Abre a janela flutuante com o resumo dos comandos operacionais sem interromper a venda em andamento.'
     ],
     [
         'tecla'      => 'F2',
         'acao'       => 'Focar Leitor de Código de Barras',
-        'descricao'  => 'Direciona imediatamente o cursor para o campo de bipagem automática por leitor óptico ou busca textual.',
-        'badge_tipo' => 'Essencial',
-        'badge_cor'  => 'bg-primary'
+        'descricao'  => 'Direciona imediatamente o cursor para o campo de bipagem automática por leitor óptico ou busca textual.'
     ],
     [
         'tecla'      => 'F4',
         'acao'       => 'Finalizar Venda / Pagamento / NFC-e',
-        'descricao'  => 'Abre o modal de recebimento com cálculo dinâmico de troco, seleção de pagamento e emissão do cupom fiscal.',
-        'badge_tipo' => 'Fechamento',
-        'badge_cor'  => 'bg-success'
+        'descricao'  => 'Abre o modal de recebimento com cálculo dinâmico de troco, seleção de pagamento e emissão do cupom fiscal.'
     ],
     [
         'tecla'      => 'F7',
         'acao'       => 'Aplicar Desconto no Total',
-        'descricao'  => 'Concede abatimento em reais (R$) ou percentual no valor total do carrinho com recálculo instantâneo.',
-        'badge_tipo' => 'Desconto',
-        'badge_cor'  => 'bg-info'
+        'descricao'  => 'Concede abatimento em reais (R$) ou percentual no valor total do carrinho com recálculo instantâneo.'
     ],
     [
         'tecla'      => 'F8',
         'acao'       => 'Identificar Cliente / CPF na Nota',
-        'descricao'  => 'Foca no campo de seleção de cliente cadastrado ou digitação de CPF/CNPJ para inclusão no documento fiscal.',
-        'badge_tipo' => 'Fiscal',
-        'badge_cor'  => 'bg-warning text-dark'
+        'descricao'  => 'Foca no campo de seleção de cliente cadastrado ou digitação de CPF/CNPJ para inclusão no documento fiscal.'
     ],
     [
         'tecla'      => 'F9',
         'acao'       => 'Cancelar Venda Atual',
-        'descricao'  => 'Limpa todos os itens do carrinho atual e restabelece a frente de caixa para a próxima operação.',
-        'badge_tipo' => 'Perigo',
-        'badge_cor'  => 'bg-danger'
+        'descricao'  => 'Limpa todos os itens do carrinho atual e restabelece a frente de caixa para a próxima operação.'
     ],
     [
         'tecla'      => 'F10',
         'acao'       => 'Consultar Estoque Rápido',
-        'descricao'  => 'Abre a consulta instantânea de preços de venda, estoque disponível e saldo físico por item.',
-        'badge_tipo' => 'Consulta',
-        'badge_cor'  => 'bg-secondary'
+        'descricao'  => 'Abre a consulta instantânea de preços de venda, estoque disponível e saldo físico por item.'
     ],
     [
         'tecla'      => 'ESC',
         'acao'       => 'Fechar Modais e Janelas',
-        'descricao'  => 'Fecha qualquer janela suspensa ativa (pagamentos, atalhos, avisos de estoque) e devolve o foco ao leitor.',
-        'badge_tipo' => 'Navegação',
-        'badge_cor'  => 'bg-dark'
+        'descricao'  => 'Fecha qualquer janela suspensa ativa (pagamentos, atalhos, avisos de estoque) e devolve o foco ao leitor.'
     ],
 ];
 
-// 4. Módulos Operacionais da Base de Conhecimento
+// 4. Módulos Operacionais da Base de Conhecimento (Sem Badge de Perfil no Header)
 $modulosAjuda = [
     [
         'id'        => 'M1',
@@ -146,8 +122,6 @@ $modulosAjuda = [
         'titulo'    => 'Módulo 1: Operando a Frente de Caixa (PDV)',
         'icone'     => 'fa-cash-register',
         'cor_icone' => 'text-success',
-        'perfil'    => 'Acesso Geral',
-        'perfil_bg' => 'bg-success',
         'passos'    => [
             [
                 'num'   => 1,
@@ -184,8 +158,6 @@ $modulosAjuda = [
         'titulo'    => 'Módulo 2: Vendas, Consulta Fiscal NFC-e & Reimpressão',
         'icone'     => 'fa-receipt',
         'cor_icone' => 'text-primary',
-        'perfil'    => 'Acesso Geral',
-        'perfil_bg' => 'bg-success',
         'passos'    => [
             [
                 'num'   => 1,
@@ -222,8 +194,6 @@ $modulosAjuda = [
         'titulo'    => 'Módulo 3: Catálogo, Gestão de Estoque & Etiquetas Térmicas',
         'icone'     => 'fa-boxes-stacked',
         'cor_icone' => 'text-info',
-        'perfil'    => $isAdmin ? 'Acesso Total (Admin)' : 'Consulta & Saldos (Caixa)',
-        'perfil_bg' => $isAdmin ? 'bg-primary' : 'bg-success',
         'passos'    => [
             [
                 'num'   => 1,
@@ -260,8 +230,6 @@ $modulosAjuda = [
         'titulo'    => 'Módulo 4: Gestão de Clientes & Atendimento Humanizado',
         'icone'     => 'fa-users',
         'cor_icone' => 'text-success',
-        'perfil'    => 'Acesso Geral',
-        'perfil_bg' => 'bg-success',
         'passos'    => [
             [
                 'num'   => 1,
@@ -298,8 +266,6 @@ $modulosAjuda = [
         'titulo'    => 'Módulo 5: Gestão de Fornecedores & Ordens de Compra',
         'icone'     => 'fa-truck-field',
         'cor_icone' => 'text-primary',
-        'perfil'    => 'Exclusivo Admin',
-        'perfil_bg' => 'bg-primary',
         'passos'    => [
             [
                 'num'   => 1,
@@ -336,8 +302,6 @@ $modulosAjuda = [
         'titulo'    => 'Módulo 6: Inteligência Financeira, DRE Gerencial & Curva ABC',
         'icone'     => 'fa-chart-pie',
         'cor_icone' => 'text-warning',
-        'perfil'    => 'Exclusivo Admin',
-        'perfil_bg' => 'bg-primary',
         'passos'    => [
             [
                 'num'   => 1,
@@ -374,8 +338,6 @@ $modulosAjuda = [
         'titulo'    => 'Módulo 7: Resolução de Problemas, Segurança & Contingência',
         'icone'     => 'fa-shield-halved',
         'cor_icone' => 'text-danger',
-        'perfil'    => 'Exclusivo Admin',
-        'perfil_bg' => 'bg-primary',
         'passos'    => [
             [
                 'num'   => 1,
@@ -467,7 +429,7 @@ require_once __DIR__ . '/inc/header.php';
 
 <!-- ══ ESTILOS ESPECÍFICOS DA CENTRAL DE AJUDA & TECLADO TÁTIL ═════════════════ -->
 <style>
-/* KBD Corporativo Tátil SalesOps */
+/* KBD Corporativo Tátil */
 .so-kbd {
     display: inline-flex;
     align-items: center;
@@ -582,10 +544,9 @@ require_once __DIR__ . '/inc/header.php';
 
 <div class="content-body">
 
-    <!-- ══ BARRA DE BUSCA HERO SEARCH-FIRST ══════════════════════════════════════ -->
+    <!-- ══ BARRA DE BUSCA HERO SEARCH-FIRST (LIMPA SEM BADGE SPAM) ═══════════════ -->
     <div class="so-card mb-4 border overflow-hidden so-search-hero">
         <div class="p-4 text-center so-bento-hero">
-            <span class="badge bg-primary text-white px-3 py-1 rounded-pill mb-2 fw-semibold">Base de Conhecimento SalesOps Enterprise v2.1</span>
             <h3 class="fw-bold text-dark mb-2">Como podemos te ajudar hoje?</h3>
             <p class="text-muted mb-3" style="font-size: 0.95rem;">Digite uma palavra-chave para filtrar instantaneamente atalhos, módulos operacionais e perguntas frequentes.</p>
             
@@ -620,14 +581,11 @@ require_once __DIR__ . '/inc/header.php';
         </div>
     </div>
 
-    <!-- ══ CARDS BENTO DE ACESSO RÁPIDO (GRID 4 COLUNAS) ═════════════════════════ -->
+    <!-- ══ CARDS BENTO DE ACESSO RÁPIDO (LIMPOS SEM BADGES DECORATIVOS) ══════════ -->
     <div class="row g-3 mb-4" id="bentoCardsGrid">
         <?php foreach ($bentoCards as $card): ?>
             <div class="col-md-6 col-xl-3 ajuda-bento-card" data-categoria="<?= htmlspecialchars($card['categoria']) ?>">
                 <div class="so-card <?= htmlspecialchars($card['borda_top']) ?> so-bento-item h-100 p-3 border">
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="badge <?= htmlspecialchars($card['badge_bg']) ?> text-white small"><?= htmlspecialchars($card['badge']) ?></span>
-                    </div>
                     <div class="d-flex align-items-center gap-3">
                         <div class="rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0"
                              style="width: 44px; height: 44px; background: <?= htmlspecialchars($card['bg_icon']) ?>; font-size: 1.15rem;">
@@ -646,7 +604,7 @@ require_once __DIR__ . '/inc/header.php';
         <?php endforeach; ?>
     </div>
 
-    <!-- ══ SEÇÃO 1: MESA DE ATALHOS DE TECLADO DO PDV ═══════════════════════════ -->
+    <!-- ══ SEÇÃO 1: MESA DE ATALHOS DE TECLADO DO PDV (3 COLUNAS LIMPAS) ═════════ -->
     <div class="so-card mb-4 border ajuda-section" data-categoria="atalhos" data-keywords="atalho teclado f1 f2 f4 f7 f8 f9 f10 esc pdv caixa tecla operacao comando balcao leitor cupom">
         <div class="so-card-header bg-dark text-white d-flex justify-content-between align-items-center">
             <h5 class="so-card-title text-white m-0">
@@ -663,9 +621,8 @@ require_once __DIR__ . '/inc/header.php';
                     <thead class="table-light text-secondary small">
                         <tr>
                             <th width="15%" class="text-center" scope="col">Tecla de Atalho</th>
-                            <th width="30%" scope="col">Ação Operacional</th>
-                            <th width="45%" scope="col">Descrição do Fluxo no Caixa</th>
-                            <th width="10%" class="text-center" scope="col">Tipo</th>
+                            <th width="35%" scope="col">Ação Operacional</th>
+                            <th width="50%" scope="col">Descrição do Fluxo no Caixa</th>
                         </tr>
                     </thead>
                     <tbody class="small">
@@ -680,9 +637,6 @@ require_once __DIR__ . '/inc/header.php';
                                 <td class="text-muted">
                                     <?= htmlspecialchars($at['descricao']) ?>
                                 </td>
-                                <td class="text-center">
-                                    <span class="badge <?= htmlspecialchars($at['badge_cor']) ?> text-white"><?= htmlspecialchars($at['badge_tipo']) ?></span>
-                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -691,7 +645,7 @@ require_once __DIR__ . '/inc/header.php';
         </div>
     </div>
 
-    <!-- ══ SEÇÃO 2: MANUAIS OPERACIONAIS PASSO A PASSO (ACCORDION) ════════════ -->
+    <!-- ══ SEÇÃO 2: MANUAIS OPERACIONAIS PASSO A PASSO (ACCORDION LIMPO SEM BADGE SPAM) ════════════ -->
     <div class="so-card mb-4 border ajuda-section" data-categoria="pdv vendas estoque clientes gestao" data-keywords="manuais modais modulos passo a passo estoque nfc-e compras dre curva abc contingencia">
         <div class="so-card-header d-flex justify-content-between align-items-center">
             <h5 class="so-card-title m-0">
@@ -706,17 +660,14 @@ require_once __DIR__ . '/inc/header.php';
                          data-categoria="<?= htmlspecialchars($mod['categoria']) ?>" 
                          data-keywords="<?= htmlspecialchars($mod['keywords']) ?>">
                         <h2 class="accordion-header" id="heading<?= htmlspecialchars($mod['id']) ?>">
-                            <button class="accordion-button collapsed fw-bold text-dark d-flex align-items-center justify-content-between gap-2" 
+                            <button class="accordion-button collapsed fw-bold text-dark" 
                                     type="button" 
                                     data-bs-toggle="collapse" 
                                     data-bs-target="#collapse<?= htmlspecialchars($mod['id']) ?>" 
                                     aria-expanded="false" 
                                     aria-controls="collapse<?= htmlspecialchars($mod['id']) ?>">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas <?= htmlspecialchars($mod['icone']) ?> <?= htmlspecialchars($mod['cor_icone']) ?> me-2"></i>
-                                    <span><?= htmlspecialchars($mod['titulo']) ?></span>
-                                </div>
-                                <span class="badge <?= htmlspecialchars($mod['perfil_bg']) ?> text-white ms-auto me-3 small"><?= htmlspecialchars($mod['perfil']) ?></span>
+                                <i class="fas <?= htmlspecialchars($mod['icone']) ?> <?= htmlspecialchars($mod['cor_icone']) ?> me-2"></i>
+                                <span><?= htmlspecialchars($mod['titulo']) ?></span>
                             </button>
                         </h2>
                         <div id="collapse<?= htmlspecialchars($mod['id']) ?>" 
@@ -924,4 +875,3 @@ function filtrarAjuda(termo) {
 </script>
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>
-
