@@ -31,33 +31,36 @@ require_once __DIR__ . '/../inc/header.php';
 
     <!-- ══ ALERTAS DE ESTOQUE E STATUS ═══════════════════════════════════════ -->
     <?php if (isset($_GET['erro'])): ?>
-        <?php if ($_GET['erro'] === 'estoque'): ?>
-        <div class="alert alert-danger alert-dismissible fade show mx-3 mt-3 shadow border-0" role="alert" id="alertaEstoque">
+        <?php if ($_GET['erro'] === 'estoque'): 
+            $disp  = (int)($_GET['disponivel'] ?? 0);
+            $solic = (int)($_GET['solicitado'] ?? 1);
+        ?>
+        <div class="alert alert-danger alert-dismissible fade show mx-3 mt-3 shadow-sm border border-danger-subtle" role="alert" id="alertaEstoque">
             <div class="d-flex align-items-center">
                 <i class="fas fa-exclamation-triangle fa-2x me-3 text-danger"></i>
                 <div>
                     <h6 class="mb-1 fw-bold"><i class="fas fa-ban text-danger me-1"></i> Estoque Insuficiente — Venda Bloqueada!</h6>
                     <span>Produto: <strong><?= htmlspecialchars($_GET['produto'] ?? '') ?></strong></span><br>
-                    <small>Disponível no estoque: <strong class="text-danger"><?= (int)($_GET['disponivel'] ?? 0) ?></strong> unidade(s) &nbsp;|&nbsp;
-                    Solicitado: <strong><?= (int)($_GET['solicitado'] ?? 1) ?></strong> unidade(s)</small>
+                    <small>Disponível no estoque: <strong class="text-danger tabular-nums"><?= $disp ?></strong> <?= $disp === 1 ? 'unidade' : 'unidades' ?> &nbsp;|&nbsp;
+                    Solicitado: <strong class="tabular-nums"><?= $solic ?></strong> <?= $solic === 1 ? 'unidade' : 'unidades' ?></small>
                 </div>
             </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
         </div>
         <?php elseif ($_GET['erro'] === 'carrinho_vazio'): ?>
-        <div class="alert alert-warning alert-dismissible fade show mx-3 mt-3 shadow-sm border-0" role="alert">
+        <div class="alert alert-warning alert-dismissible fade show mx-3 mt-3 shadow-sm border border-warning-subtle" role="alert">
             <i class="fas fa-cart-arrow-down me-2"></i> <strong>Carrinho vazio.</strong> Adicione produtos antes de finalizar.
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
         </div>
         <?php elseif ($_GET['erro'] === 'cupom_invalido'): ?>
-        <div class="alert alert-warning alert-dismissible fade show mx-3 mt-3 shadow-sm border-0" role="alert">
+        <div class="alert alert-warning alert-dismissible fade show mx-3 mt-3 shadow-sm border border-warning-subtle" role="alert">
             <i class="fas fa-triangle-exclamation me-2"></i> <strong>Aviso:</strong> Identificador de venda não especificado para emissão do cupom.
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
         </div>
         <?php elseif ($_GET['erro'] === 'venda_nao_encontrada'): ?>
-        <div class="alert alert-danger alert-dismissible fade show mx-3 mt-3 shadow-sm border-0" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show mx-3 mt-3 shadow-sm border border-danger-subtle" role="alert">
             <i class="fas fa-circle-xmark me-2"></i> <strong>Erro:</strong> Venda não localizada no banco de dados.
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
         </div>
         <?php endif; ?>
     <?php endif; ?>
@@ -71,10 +74,10 @@ require_once __DIR__ . '/../inc/header.php';
                 <span class="fw-bold text-dark fs-6">Frente de Caixa</span>
             </div>
             <div class="d-flex align-items-center gap-2">
-                <button type="button" class="btn btn-secondary btn-sm fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalGuiaAtalhos">
+                <button type="button" class="btn btn-secondary btn-sm fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalGuiaAtalhos" aria-label="Abrir guia de atalhos (F1)">
                     <i class="fas fa-keyboard me-1 text-white"></i> Atalhos (F1)
                 </button>
-                <button type="button" class="btn btn-danger btn-sm fw-semibold shadow-sm" onclick="limparCarrinho()" title="Cancelar Venda (F9)">
+                <button type="button" class="btn btn-danger btn-sm fw-semibold shadow-sm" onclick="limparCarrinho()" title="Cancelar Venda (F9)" aria-label="Cancelar venda atual (F9)">
                     <i class="fas fa-times me-1"></i> Cancelar (F9)
                 </button>
             </div>
@@ -87,13 +90,13 @@ require_once __DIR__ . '/../inc/header.php';
                      COLUNA ESQUERDA: CUPOM DIGITAL & TOTALIZADOR FINANCEIRO
                      ══════════════════════════════════════════════════════════════ -->
                 <div class="col-lg-5 col-12">
-                    <div class="so-card mb-0 d-flex flex-column border">
-                        <div class="so-card-header py-3 bg-dark text-white d-flex justify-content-between align-items-center">
+                    <div class="so-card mb-0 d-flex flex-column border shadow-sm">
+                        <div class="so-card-header py-3 bg-dark text-white d-flex justify-content-between align-items-center border-bottom">
                             <div class="d-flex align-items-center gap-2">
                                 <i class="fas fa-receipt text-success"></i>
                                 <span class="fw-bold">Cupom Fiscal Digital</span>
                             </div>
-                            <span class="badge bg-success text-white rounded-pill px-3 py-1 fw-bold" id="badge_itens_count" style="font-size:0.8rem;">0 itens</span>
+                            <span class="badge bg-success text-white rounded-pill px-3 py-1 fw-bold tabular-nums" id="badge_itens_count" style="font-size:0.8rem;">0 itens</span>
                         </div>
 
                         <!-- Lista de Itens do Cupom com Altura Estável e Padronizada -->
@@ -124,19 +127,19 @@ require_once __DIR__ . '/../inc/header.php';
                         <div class="p-3 bg-light border-top">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span class="text-muted small fw-bold">SUBTOTAL:</span>
-                                <span class="fw-bold text-dark" id="display_subtotal">R$ 0,00</span>
+                                <span class="fw-bold text-dark tabular-nums" id="display_subtotal">R$ 0,00</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="text-muted small fw-bold">DESCONTO (R$):</span>
+                                <label for="desconto_input" class="text-muted small fw-bold mb-0">DESCONTO (R$):</label>
                                 <div class="w-desconto-input">
-                                    <input type="number" step="0.01" min="0" id="desconto_input" class="form-control form-control-sm text-end fw-bold shadow-none" value="0.00" oninput="recalcularTotal()">
+                                    <input type="number" step="0.01" min="0" id="desconto_input" class="form-control form-control-sm text-end fw-bold shadow-none tabular-nums" value="0.00" oninput="recalcularTotal()" aria-label="Valor de desconto em reais">
                                 </div>
                             </div>
 
                             <!-- Display Grande de Total -->
                             <div class="pdv-total-display mb-3 text-center">
                                 <div class="text-uppercase fw-bold text-light opacity-75 mb-1" style="font-size:0.75rem;letter-spacing:0.08em;">Total a Pagar</div>
-                                <div class="pdv-total-amount" id="display_total">R$ 0,00</div>
+                                <div class="pdv-total-amount tabular-nums" id="display_total">R$ 0,00</div>
                             </div>
 
                             <!-- Formulário Oculto de Submissão -->
@@ -152,7 +155,7 @@ require_once __DIR__ . '/../inc/header.php';
                                 <input type="hidden" name="forma_pagamento" id="input_forma_pagamento" value="DINHEIRO">
 
                                 <div class="d-grid">
-                                    <button type="button" class="btn btn-primary btn-lg py-3 fw-bold shadow" id="btnPagarModal" onclick="abrirModalPagamento()">
+                                    <button type="button" class="btn btn-primary btn-lg py-3 fw-bold shadow-sm" id="btnPagarModal" onclick="abrirModalPagamento()" aria-label="Pagar e emitir NFC-e (F4)">
                                         <i class="fas fa-cash-register me-2"></i> Pagar / Emitir NFC-e (F4)
                                     </button>
                                 </div>
@@ -167,14 +170,14 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="col-lg-7 col-12">
                     
                     <!-- 1. Leitor Rápido de Código de Barras / Busca Textual -->
-                    <div class="so-card p-3 mb-3 border">
-                        <label class="form-label text-secondary fw-bold d-flex justify-content-between align-items-center mb-1">
+                    <div class="so-card p-3 mb-3 border shadow-sm">
+                        <label for="barcode_input" class="form-label text-secondary fw-bold d-flex justify-content-between align-items-center mb-1">
                             <span><i class="fas fa-barcode text-primary me-1"></i> Leitor de Código de Barras / Busca Rápida</span>
-                            <span class="badge bg-primary text-white">Atalho F2</span>
+                            <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">F2</kbd>
                         </label>
                         <div class="input-group input-group-lg shadow-sm">
-                            <span class="input-group-text bg-light border-1"><i class="fas fa-barcode text-muted"></i></span>
-                            <input type="text" id="barcode_input" class="form-control form-control-lg border-1 bg-white fw-bold" placeholder="Bipe o código ou digite o nome e [Enter]..." autocomplete="off" autofocus>
+                            <span class="input-group-text bg-light border"><i class="fas fa-barcode text-muted"></i></span>
+                            <input type="text" id="barcode_input" class="form-control form-control-lg border bg-white fw-bold" placeholder="Bipe o código ou digite o nome e [Enter]..." autocomplete="off" autofocus aria-label="Código de barras ou busca de produto">
                         </div>
                         <small class="text-muted mt-1 d-block" style="font-size:0.75rem;">
                             Bipagem automática: o item é inserido instantaneamente no cupom digital.
@@ -188,7 +191,7 @@ require_once __DIR__ . '/../inc/header.php';
                             <span class="text-muted" style="font-size:0.7rem;">Use as setas ou a rodinha do mouse</span>
                         </label>
                         <div class="category-chips-nav-wrapper">
-                            <button type="button" class="btn-chips-scroll btn-chips-prev" id="btnChipsPrev" onclick="scrollChipsBar(-200)" title="Rolar famílias para esquerda" aria-label="Rolar para esquerda">
+                            <button type="button" class="btn-chips-scroll btn-chips-prev" id="btnChipsPrev" onclick="scrollChipsBar(-200)" title="Rolar famílias para esquerda" aria-label="Rolar famílias para esquerda">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
                             <div class="category-chips-bar" id="categoryChipsBar">
@@ -201,17 +204,17 @@ require_once __DIR__ . '/../inc/header.php';
                                     </button>
                                 <?php endforeach; ?>
                             </div>
-                            <button type="button" class="btn-chips-scroll btn-chips-next" id="btnChipsNext" onclick="scrollChipsBar(200)" title="Rolar famílias para direita" aria-label="Rolar para direita">
+                            <button type="button" class="btn-chips-scroll btn-chips-next" id="btnChipsNext" onclick="scrollChipsBar(200)" title="Rolar famílias para direita" aria-label="Rolar famílias para direita">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>
                     </div>
 
                     <!-- 3. Grade Rápida de Produtos (Quick Product Deck) -->
-                    <div class="so-card p-3 mb-3 border">
+                    <div class="so-card p-3 mb-3 border shadow-sm">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="fw-bold text-dark small"><i class="fas fa-boxes-stacked text-primary me-1"></i> Catálogo Rápido (Clique para Adicionar)</span>
-                            <span class="text-muted small" id="catalogo_count_label"><?= count($produtos) ?> itens ativos</span>
+                            <span class="text-muted small tabular-nums" id="catalogo_count_label"><?= count($produtos) === 1 ? '1 item ativo' : count($produtos) . ' itens ativos' ?></span>
                         </div>
                         <div class="quick-product-grid" id="quickProductGrid">
                             <!-- Preenchido dinamicamente via JS -->
@@ -219,12 +222,12 @@ require_once __DIR__ . '/../inc/header.php';
                     </div>
 
                     <!-- 4. Dados do Cliente & Opções da Venda -->
-                    <div class="so-card p-3 mb-0 border">
+                    <div class="so-card p-3 mb-0 border shadow-sm">
                         <h6 class="fw-bold text-dark mb-3"><i class="fas fa-user-check text-primary me-1"></i> Dados do Cliente & Identificação Fiscal</h6>
                         <div class="row g-2">
                             <div class="col-md-6 col-12">
-                                <label class="form-label text-muted small fw-bold mb-1">Cliente Vinculado (Opcional)</label>
-                                <select id="cliente_select" class="form-select form-select-sm" onchange="atualizarClienteSelecionado(this)">
+                                <label for="cliente_select" class="form-label text-muted small fw-bold mb-1">Cliente Vinculado (Opcional)</label>
+                                <select id="cliente_select" class="form-select form-select-sm border bg-white shadow-sm" onchange="atualizarClienteSelecionado(this)">
                                     <option value="">Consumidor Final (Sem Vínculo)</option>
                                     <?php foreach ($clientes as $cli): ?>
                                         <option value="<?= (int)$cli['id'] ?>"><?= htmlspecialchars($cli['nome']) ?></option>
@@ -232,8 +235,8 @@ require_once __DIR__ . '/../inc/header.php';
                                 </select>
                             </div>
                             <div class="col-md-6 col-12">
-                                <label class="form-label text-muted small fw-bold mb-1">CPF/CNPJ na Nota (Opcional)</label>
-                                <input type="text" id="cpf_cliente" class="form-control form-control-sm" placeholder="000.000.000-00 ou 00.000.000/0000-00" maxlength="18" oninput="mascaraCpfCnpj(this)">
+                                <label for="cpf_cliente" class="form-label text-muted small fw-bold mb-1">CPF/CNPJ na Nota (Opcional)</label>
+                                <input type="text" id="cpf_cliente" class="form-control form-control-sm border bg-white shadow-sm tabular-nums" placeholder="000.000.000-00 ou 00.000.000/0000-00" maxlength="18" oninput="mascaraCpfCnpj(this)">
                             </div>
                         </div>
                     </div>
@@ -244,11 +247,11 @@ require_once __DIR__ . '/../inc/header.php';
     </div>
 
     <!-- ══ MODAL GUIA DE ATALHOS & MANUAL DO CAIXA (F1) ═══════════════════════ -->
-    <div class="modal fade" id="modalGuiaAtalhos" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalGuiaAtalhos" tabindex="-1" aria-labelledby="modalGuiaAtalhosLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--mr-radius);">
-                <div class="modal-header bg-dark text-white border-0 py-3">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-keyboard text-primary me-2"></i> Atalhos de Teclado do Caixa</h5>
+            <div class="modal-content border shadow-sm" style="border-radius: var(--mr-radius);">
+                <div class="modal-header bg-dark text-white border-bottom py-3">
+                    <h5 class="modal-title fw-bold" id="modalGuiaAtalhosLabel"><i class="fas fa-keyboard text-primary me-2"></i> Atalhos de Teclado do Caixa</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -256,31 +259,31 @@ require_once __DIR__ . '/../inc/header.php';
                     <div class="list-group list-group-flush border rounded">
                         <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                             <span><strong class="text-dark">F1</strong> — Abrir este Guia de Atalhos</span>
-                            <kbd class="bg-dark text-white px-2 py-1">F1</kbd>
+                            <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">F1</kbd>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                             <span><strong class="text-dark">F2</strong> — Focar campo do Leitor / Busca</span>
-                            <kbd class="bg-primary text-white px-2 py-1">F2</kbd>
+                            <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">F2</kbd>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                             <span><strong class="text-dark">F4</strong> — Abrir Pagamento & Emissão de NFC-e</span>
-                            <kbd class="bg-success text-white px-2 py-1">F4</kbd>
+                            <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">F4</kbd>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                             <span><strong class="text-dark">F8</strong> — Alternar Forma de Pagamento</span>
-                            <kbd class="bg-warning text-dark px-2 py-1">F8</kbd>
+                            <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">F8</kbd>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                             <span><strong class="text-dark">F9</strong> — Cancelar / Limpar Cupom Atual</span>
-                            <kbd class="bg-danger text-white px-2 py-1">F9</kbd>
+                            <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">F9</kbd>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center py-2">
                             <span><strong class="text-dark">ESC</strong> — Fechar Janelas e Modais</span>
-                            <kbd class="bg-secondary text-white px-2 py-1">ESC</kbd>
+                            <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">ESC</kbd>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-0 bg-light">
+                <div class="modal-footer border-top bg-light">
                     <button type="button" class="btn btn-secondary px-4 fw-bold shadow-sm" data-bs-dismiss="modal">Fechar (ESC)</button>
                 </div>
             </div>
@@ -288,25 +291,28 @@ require_once __DIR__ . '/../inc/header.php';
     </div>
 
     <!-- ══ MODAL DE FINALIZAÇÃO, CÉDULAS RÁPIDAS E TROCO DINÂMICO (F4) ═════════ -->
-    <div class="modal fade" id="modalFinalizarVenda" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade" id="modalFinalizarVenda" tabindex="-1" aria-labelledby="modalFinalizarVendaLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--mr-radius);">
-                <div class="modal-header bg-primary text-white border-0 py-3">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-cash-register me-2"></i> Finalizar Venda — Frente de Caixa</h5>
+            <div class="modal-content border shadow-sm" style="border-radius: var(--mr-radius);">
+                <div class="modal-header bg-primary text-white border-bottom py-3">
+                    <h5 class="modal-title fw-bold" id="modalFinalizarVendaLabel"><i class="fas fa-cash-register me-2"></i> Finalizar Venda — Frente de Caixa</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <!-- Resumo da Venda -->
-                    <div class="text-center p-3 mb-3 bg-light rounded border">
+                    <!-- Resumo da Venda: Total em Preto Corporativo -->
+                    <div class="text-center p-3 mb-3 bg-light rounded border shadow-sm">
                         <span class="text-muted fw-bold d-block mb-1" style="font-size:0.85rem;">TOTAL A RECEBER</span>
-                        <h2 class="text-success fw-bold mb-0">R$ <span id="modal_total_display">0,00</span></h2>
+                        <h2 class="text-dark fw-bold mb-0 tabular-nums">R$ <span id="modal_total_display">0,00</span></h2>
                         <small class="text-muted" id="modal_cliente_display">Consumidor Final</small>
                     </div>
 
                     <!-- Seleção de Forma de Pagamento no Modal -->
                     <div class="mb-3">
-                        <label class="form-label text-secondary fw-bold">Forma de Pagamento <span class="badge bg-warning text-dark ms-1">F8</span></label>
-                        <select id="modal_forma_pagamento" class="form-select form-select-lg border-0 bg-light shadow-sm" onchange="aoMudarFormaPagamentoModal(this.value)">
+                        <label for="modal_forma_pagamento" class="form-label text-secondary fw-bold d-flex justify-content-between align-items-center mb-1">
+                            <span>Forma de Pagamento</span>
+                            <kbd class="bg-light text-secondary border px-2 py-0 text-2xs fw-bold">F8</kbd>
+                        </label>
+                        <select id="modal_forma_pagamento" class="form-select form-select-lg border bg-white shadow-sm" onchange="aoMudarFormaPagamentoModal(this.value)">
                             <option value="DINHEIRO">Dinheiro Espécie</option>
                             <option value="PIX">PIX Automático</option>
                             <option value="CARTÃO DE CRÉDITO">Cartão de Crédito</option>
@@ -318,31 +324,31 @@ require_once __DIR__ . '/../inc/header.php';
                     <div id="secaoDinheiroTroco">
                         <label class="form-label text-secondary fw-bold mb-2">Cédulas Rápidas</label>
                         <div class="d-flex flex-wrap gap-2 mb-3">
-                            <button type="button" class="btn-cedula flex-fill" onclick="definirCedula(10)">R$ 10</button>
-                            <button type="button" class="btn-cedula flex-fill" onclick="definirCedula(20)">R$ 20</button>
-                            <button type="button" class="btn-cedula flex-fill" onclick="definirCedula(50)">R$ 50</button>
-                            <button type="button" class="btn-cedula flex-fill" onclick="definirCedula(100)">R$ 100</button>
-                            <button type="button" class="btn-cedula flex-fill" onclick="definirCedula(200)">R$ 200</button>
-                            <button type="button" class="btn-cedula flex-fill" onclick="definirValorExato()">Exato</button>
+                            <button type="button" class="btn-cedula flex-fill tabular-nums" onclick="definirCedula(10)" aria-label="Inserir cédula de 10 reais">R$ 10</button>
+                            <button type="button" class="btn-cedula flex-fill tabular-nums" onclick="definirCedula(20)" aria-label="Inserir cédula de 20 reais">R$ 20</button>
+                            <button type="button" class="btn-cedula flex-fill tabular-nums" onclick="definirCedula(50)" aria-label="Inserir cédula de 50 reais">R$ 50</button>
+                            <button type="button" class="btn-cedula flex-fill tabular-nums" onclick="definirCedula(100)" aria-label="Inserir cédula de 100 reais">R$ 100</button>
+                            <button type="button" class="btn-cedula flex-fill tabular-nums" onclick="definirCedula(200)" aria-label="Inserir cédula de 200 reais">R$ 200</button>
+                            <button type="button" class="btn-cedula flex-fill fw-bold" onclick="definirValorExato()" aria-label="Inserir valor exato">Exato</button>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label text-secondary fw-bold">Valor Recebido (R$)</label>
+                            <label for="modal_valor_recebido" class="form-label text-secondary fw-bold">Valor Recebido (R$)</label>
                             <div class="input-group input-group-lg shadow-sm">
-                                <span class="input-group-text bg-light border-0 fw-bold">R$</span>
-                                <input type="number" step="0.01" min="0" id="modal_valor_recebido" class="form-control border-0 bg-light fw-bold text-dark fs-4" placeholder="0,00" oninput="calcularTroco()">
+                                <span class="input-group-text bg-light border fw-bold">R$</span>
+                                <input type="number" step="0.01" min="0" id="modal_valor_recebido" class="form-control border bg-white fw-bold text-dark fs-4 tabular-nums" placeholder="0,00" oninput="calcularTroco()" aria-label="Valor recebido em dinheiro">
                             </div>
                         </div>
 
                         <!-- Painel Dinâmico de Troco -->
                         <div id="trocoBox" class="troco-box troco-valido text-center">
                             <span class="text-muted fw-bold d-block mb-1" style="font-size:0.8rem;" id="trocoTitulo">TROCO A DEVOLVER</span>
-                            <h3 class="fw-bold mb-0 text-success" id="trocoValorDisplay">R$ 0,00</h3>
+                            <h3 class="fw-bold mb-0 text-success tabular-nums" id="trocoValorDisplay">R$ 0,00</h3>
                             <small class="text-danger fw-bold d-none" id="trocoAlertaInsuficiente"><i class="fas fa-exclamation-circle me-1"></i> Valor recebido é menor que o total!</small>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-0 bg-light p-3">
+                <div class="modal-footer border-top bg-light p-3">
                     <button type="button" class="btn btn-secondary px-4 fw-bold shadow-sm" data-bs-dismiss="modal">Voltar (ESC)</button>
                     <button type="button" class="btn btn-success px-4 py-2 fw-bold shadow-sm" id="btnConfirmarVendaModal" onclick="confirmarVendaFinal()">
                         <i class="fas fa-check-circle me-2"></i> Confirmar e Emitir NFC-e
@@ -353,20 +359,20 @@ require_once __DIR__ . '/../inc/header.php';
     </div>
 
     <!-- Modal de Alerta de Estoque (Frontend) -->
-    <div class="modal fade" id="modalEstoque" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalEstoque" tabindex="-1" aria-labelledby="modalEstoqueLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--mr-radius);">
-                <div class="modal-header bg-danger text-white border-0">
-                    <h5 class="modal-title fw-bold"><i class="fas fa-exclamation-triangle me-2"></i> Estoque Insuficiente</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <div class="modal-content border shadow-sm" style="border-radius: var(--mr-radius);">
+                <div class="modal-header bg-danger text-white border-bottom py-3">
+                    <h5 class="modal-title fw-bold" id="modalEstoqueLabel"><i class="fas fa-exclamation-triangle me-2"></i> Estoque Insuficiente</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body text-center py-4">
                     <i class="fas fa-boxes-stacked fa-3x text-danger mb-3"></i>
                     <h5 id="modalEstoqueMsg" class="fw-bold text-dark"></h5>
                     <p id="modalEstoqueDetalhe" class="text-muted mb-0"></p>
                 </div>
-                <div class="modal-footer border-0 justify-content-center">
-                    <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal">Entendido (ESC)</button>
+                <div class="modal-footer border-top justify-content-center bg-light">
+                    <button type="button" class="btn btn-danger px-4 fw-bold shadow-sm" data-bs-dismiss="modal">Entendido (ESC)</button>
                 </div>
             </div>
         </div>
@@ -504,7 +510,9 @@ function renderizarGradeRapida(filtroCat = '', buscaTexto = '') {
     }
 
     const countLabel = document.getElementById('catalogo_count_label');
-    if (countLabel) countLabel.textContent = `${filtrados.length} itens encontrados`;
+    if (countLabel) {
+        countLabel.textContent = filtrados.length === 1 ? '1 item encontrado' : `${filtrados.length} itens encontrados`;
+    }
 
     if (filtrados.length === 0) {
         grid.innerHTML = `<div class="p-4 text-center text-muted w-100"><i class="fas fa-search me-1"></i> Nenhum produto encontrado nesta família.</div>`;
@@ -517,14 +525,17 @@ function renderizarGradeRapida(filtroCat = '', buscaTexto = '') {
         const jaNoCarrinho = carrinho.find(i => i.id === parseInt(p.id))?.quantidade || 0;
         const qtdRestante = parseInt(p.quantidade) - jaNoCarrinho;
 
+        // Regra #6: Remover badge cinza de estoque normal, usando text-muted small com tabular-nums (badge vermelha apenas para estoque crítico <= 3)
+        const stockHtml = qtdRestante <= 3
+            ? `<span class="badge bg-danger text-white tabular-nums">Estq: ${qtdRestante}</span>`
+            : `<span class="text-muted small tabular-nums">Estq: ${qtdRestante}</span>`;
+
         html += `
             <div class="quick-prod-card" onclick="adicionarItemDireto(${p.id})">
                 <div class="quick-prod-card__name" title="${p.nome}">${p.nome}</div>
                 <div class="quick-prod-card__footer">
-                    <span class="quick-prod-card__price">R$ ${precoFmt}</span>
-                    <span class="quick-prod-card__stock badge ${qtdRestante <= 3 ? 'bg-danger text-white' : 'bg-light text-secondary border'}">
-                        Estq: ${qtdRestante}
-                    </span>
+                    <span class="quick-prod-card__price tabular-nums">R$ ${precoFmt}</span>
+                    <span class="quick-prod-card__stock">${stockHtml}</span>
                 </div>
             </div>
         `;
@@ -558,9 +569,14 @@ function processarAdicao(id, nome, preco, qtdMax, qtd) {
     const totalSolicit = jaNoCarrinho + qtd;
 
     if (totalSolicit > qtdMax) {
+        const dispTxt     = qtdMax === 1 ? '1 unidade' : `${qtdMax} unidades`;
+        const carrinhoTxt = jaNoCarrinho === 1 ? '1 unidade' : `${jaNoCarrinho} unidades`;
+        const solicTxt    = qtd === 1 ? '1 unidade' : `${qtd} unidades`;
+        const totalTxt    = totalSolicit === 1 ? '1 unidade' : `${totalSolicit} unidades`;
+
         mostrarAlertaEstoque(
             'Estoque Insuficiente!',
-            `Produto: ${nome}\nDisponível: ${qtdMax} | Já no carrinho: ${jaNoCarrinho}\nSolicitado: ${qtd} (Total: ${totalSolicit})`
+            `Produto: ${nome}\nDisponível: ${dispTxt} | Já no carrinho: ${carrinhoTxt}\nSolicitado: ${solicTxt} (Total: ${totalTxt})`
         );
         return false;
     }
@@ -580,7 +596,8 @@ function processarAdicao(id, nome, preco, qtdMax, qtd) {
     }
 
     playBeep('success');
-    showToast(`${qtd}x ${nome} adicionado ao cupom.`, 'success');
+    const toastQtdTxt = qtd === 1 ? '1 item' : `${qtd} itens`;
+    showToast(`${toastQtdTxt} (${nome}) adicionado ao cupom.`, 'success');
     renderizarCarrinho();
     renderizarGradeRapida(categoriaAtivaFiltro, document.getElementById('barcode_input').value);
     return true;
@@ -603,7 +620,8 @@ function alterarQuantidadeItem(id, delta) {
     }
 
     if (novaQtd > item.max) {
-        mostrarAlertaEstoque('Estoque Insuficiente!', `Disponível no estoque: ${item.max} unidade(s).`);
+        const dispTxt = item.max === 1 ? '1 unidade' : `${item.max} unidades`;
+        mostrarAlertaEstoque('Estoque Insuficiente!', `Disponível no estoque: ${dispTxt}.`);
         return;
     }
 
@@ -663,27 +681,27 @@ function renderizarCarrinho() {
         
         html += `
             <tr class="align-middle">
-                <td class="text-muted fw-bold font-monospace" style="font-size:0.75rem;">#${seq}</td>
+                <td class="text-muted fw-bold font-monospace tabular-nums" style="font-size:0.75rem;">#${seq}</td>
                 <td>
                     <strong class="text-dark d-block" style="font-size:0.85rem;line-height:1.2;">${item.nome}</strong>
-                    <small class="text-muted" style="font-size:0.75rem;">R$ ${formatarMoeda(item.preco)} un.</small>
+                    <small class="text-muted tabular-nums" style="font-size:0.75rem;">R$ ${formatarMoeda(item.preco)} un.</small>
                 </td>
                 <td class="text-center">
                     <div class="pdv-stepper">
-                        <button type="button" class="pdv-stepper-btn" onclick="alterarQuantidadeItem(${item.id}, -1)" title="Diminuir">
+                        <button type="button" class="pdv-stepper-btn" onclick="alterarQuantidadeItem(${item.id}, -1)" title="Diminuir" aria-label="Diminuir quantidade de ${item.nome}">
                             <i class="fas fa-minus" style="font-size:0.65rem;"></i>
                         </button>
-                        <span class="pdv-stepper-val">${item.quantidade}</span>
-                        <button type="button" class="pdv-stepper-btn" onclick="alterarQuantidadeItem(${item.id}, 1)" title="Aumentar">
+                        <span class="pdv-stepper-val tabular-nums">${item.quantidade}</span>
+                        <button type="button" class="pdv-stepper-btn" onclick="alterarQuantidadeItem(${item.id}, 1)" title="Aumentar" aria-label="Aumentar quantidade de ${item.nome}">
                             <i class="fas fa-plus" style="font-size:0.65rem;"></i>
                         </button>
                     </div>
                 </td>
-                <td class="text-end fw-bold text-dark pe-2" style="font-size:0.9rem;">
+                <td class="text-end fw-bold text-dark pe-2 tabular-nums" style="font-size:0.9rem;">
                     R$ ${formatarMoeda(item.subtotal)}
                 </td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-link text-danger p-0 border-0 shadow-none" onclick="removerItem(${item.id})" title="Remover item">
+                    <button type="button" class="btn btn-link text-danger p-0 border-0 shadow-none" onclick="removerItem(${item.id})" title="Remover item" aria-label="Remover ${item.nome} do cupom">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </td>
@@ -692,7 +710,7 @@ function renderizarCarrinho() {
     });
 
     tbody.innerHTML = html;
-    if (badgeItens) badgeItens.textContent = `${totalQtd} item(s)`;
+    if (badgeItens) badgeItens.textContent = `${totalQtd === 1 ? '1 item' : totalQtd + ' itens'}`;
     
     // Auto-scroll suave para o final da lista
     const scrollCont = document.getElementById('container_cupom_scroll');
@@ -830,13 +848,13 @@ function calcularTroco() {
 
     if (valRecebido < totalVendaAtual) {
         trocoBox.className = 'troco-box troco-insuficiente text-center';
-        trocoDisplay.className = 'fw-bold mb-0 text-danger';
+        trocoDisplay.className = 'fw-bold mb-0 text-danger tabular-nums';
         trocoDisplay.textContent = `Faltam R$ ${formatarMoeda(Math.abs(troco))}`;
         alertaInsuf.classList.remove('d-none');
         btnConfirmar.disabled = true;
     } else {
         trocoBox.className = 'troco-box troco-valido text-center';
-        trocoDisplay.className = 'fw-bold mb-0 text-success';
+        trocoDisplay.className = 'fw-bold mb-0 text-success tabular-nums';
         trocoDisplay.textContent = `R$ ${formatarMoeda(troco)}`;
         alertaInsuf.classList.add('d-none');
         btnConfirmar.disabled = false;
