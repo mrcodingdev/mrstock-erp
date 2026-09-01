@@ -20,15 +20,20 @@ header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
 /**
  * Helpers Globais de Controle de Acesso Baseado em Papéis (RBAC)
  */
-function is_admin(): bool {
-    $perfil = $_SESSION['user_perfil'] ?? $_SESSION['usuario_nivel'] ?? $_SESSION['perfil'] ?? '';
-    return strtolower((string)$perfil) === 'admin';
-}
-
-function require_admin(): void {
-    if (!is_admin()) {
-        $_SESSION['flash_error'] = "Acesso restrito. Este recurso requer privilégios de Administrador.";
-        header("Location: " . BASE_URL . "/dashboard.php");
-        exit;
+if (!function_exists('is_admin')) {
+    function is_admin(): bool {
+        $perfil = $_SESSION['user_perfil'] ?? $_SESSION['usuario_nivel'] ?? $_SESSION['perfil'] ?? '';
+        return strtolower((string)$perfil) === 'admin';
     }
 }
+
+if (!function_exists('require_admin')) {
+    function require_admin(): void {
+        if (!is_admin()) {
+            $_SESSION['flash_error'] = "Acesso restrito. Este recurso requer privilégios de Administrador.";
+            header("Location: " . BASE_URL . "/dashboard.php");
+            exit;
+        }
+    }
+}
+

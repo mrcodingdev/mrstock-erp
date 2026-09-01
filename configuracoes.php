@@ -11,32 +11,9 @@ require_once __DIR__ . '/inc/auth.php';
 require_once __DIR__ . '/inc/functions.php';
 
 $userId   = (int)($_SESSION['user_id'] ?? 1);
-$userRole = $_SESSION['user_perfil'] ?? $_SESSION['usuario_nivel'] ?? 'admin';
-$userName = $_SESSION['user_name'] ?? $_SESSION['username'] ?? 'admin';
-$isAdmin  = ($userRole === 'admin');
-
-// Helper para buscar configurações do banco
-function get_app_config($pdo, $chave, $default = '') {
-    try {
-        $stmt = $pdo->prepare("SELECT valor FROM configuracoes WHERE chave = ?");
-        $stmt->execute([$chave]);
-        $val = $stmt->fetchColumn();
-        return ($val !== false) ? $val : $default;
-    } catch (Exception $e) {
-        return $default;
-    }
-}
-
-// Helper para salvar configuração
-function set_app_config($pdo, $chave, $valor) {
-    try {
-        $stmt = $pdo->prepare("INSERT INTO configuracoes (chave, valor) VALUES (?, ?) ON DUPLICATE KEY UPDATE valor = ?");
-        $stmt->execute([$chave, $valor, $valor]);
-        return true;
-    } catch (Exception $e) {
-        return false;
-    }
-}
+$userRole = $_SESSION['user_perfil'] ?? $_SESSION['usuario_nivel'] ?? 'caixa';
+$userName = $_SESSION['user_name'] ?? $_SESSION['username'] ?? 'Usuário';
+$isAdmin  = is_admin();
 
 // ── ROTINA DE BACKUP SQL EM 1-CLIQUE (EXCLUSIVO ADMIN) ────────────────────────
 if (isset($_GET['acao']) && $_GET['acao'] === 'exportar_backup_sql') {
@@ -58,11 +35,7 @@ if (isset($_GET['acao']) && $_GET['acao'] === 'exportar_backup_sql') {
     echo "-- ============================================================================\n\n";
     echo "SET FOREIGN_KEY_CHECKS=0;\nSET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\nSET NAMES utf8mb4;\n\n";
 
-    $tabelas = [
-        'usuarios', 'categorias', 'fornecedores', 'clientes', 
-        'produtos', 'lotes', 'movimentacoes', 'compras', 
-        'itens_compra', 'vendas', 'vendas_itens', 'cupons_fiscais', 'configuracoes'
-    ];
+    $tabelas = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
 
     foreach ($tabelas as $tab) {
         // Estrutura da Tabela
@@ -102,7 +75,7 @@ $msgFeedback  = '';
 $tipoFeedback = 'success';
 $activeTab    = $_GET['tab'] ?? 'perfil';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     csrf_verify();
     $acao = $_POST['acao'] ?? '';
 
