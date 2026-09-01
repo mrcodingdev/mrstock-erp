@@ -100,18 +100,19 @@ if ($tipo === 'baixo') {
         $descricao = "Listagem analítica de transações comerciais emitidas entre " . date('d/m/Y', strtotime($data_inicio)) . " e " . date('d/m/Y', strtotime($data_fim)) . ".";
     } elseif (!empty($data_inicio)) {
         $descricao = "Listagem analítica de transações comerciais emitidas a partir de " . date('d/m/Y', strtotime($data_inicio)) . ".";
+    } elseif (!empty($data_fim)) {
+        $descricao = "Listagem analítica de transações comerciais emitidas até " . date('d/m/Y', strtotime($data_fim)) . ".";
     } else {
         $descricao = "Consolidado cronológico de todas as transações comerciais realizadas no Ponto de Venda (PDV).";
     }
 
     $whereVSql = implode(' AND ', $whereV);
     $stmt = $pdo->prepare("
-        SELECT v.id, v.data_venda, v.forma_pagamento, v.total, v.desconto,
+        SELECT v.id, v.data_venda, v.forma_pagamento, v.total,
                COALESCE(c.nome, 'Consumidor Final') AS cliente_nome,
-               COALESCE(u.username, 'Caixa') AS operador_nome
+               (SELECT COALESCE(SUM(vi.quantidade), 0) FROM vendas_itens vi WHERE vi.venda_id = v.id) AS total_itens
         FROM vendas v 
         LEFT JOIN clientes c ON v.cliente_id = c.id 
-        LEFT JOIN usuarios u ON v.usuario_id = u.id 
         WHERE {$whereVSql} 
         ORDER BY v.data_venda DESC, v.id DESC
     ");
@@ -120,9 +121,9 @@ if ($tipo === 'baixo') {
 
     // Cálculos de KPIs
     $totalRegistros     = count($dados);
-    $totalFaturado      = array_sum(array_column($dados, 'total'));
-    $totalDescontos     = array_sum(array_column($dados, 'desconto'));
-    $ticketMedio        = $totalRegistros > 0 ? ($totalFaturado / $totalRegistros) : 0;
+    $totalFaturado      = (float)array_sum(array_column($dados, 'total'));
+    $totalItensVendidos = (int)array_sum(array_column($dados, 'total_itens'));
+    $ticketMedio        = $totalRegistros > 0 ? ($totalFaturado / $totalRegistros) : 0.0;
 
 } else {
     // tipo === 'completo' (Inventário Geral)
@@ -599,7 +600,7 @@ $excelUrl = BASE_URL . '/relatorios/excel.php?' . http_build_query($excelParams)
                         <div class="kpi-mini-card kpi-success">
                             <span class="kpi-label">Transações Realizadas</span>
                             <div class="kpi-value tabular-nums"><?= $totalRegistros ?></div>
-                            <span class="kpi-sub">pedidos emitidos no PDV</span>
+                            <span class="kpi-sub"><?= $totalRegistros === 1 ? 'pedido emitido no PDV' : 'pedidos emitidos no PDV' ?></span>
                         </div>
                         <div class="kpi-mini-card kpi-success">
                             <span class="kpi-label">Faturamento Total</span>
@@ -607,14 +608,14 @@ $excelUrl = BASE_URL . '/relatorios/excel.php?' . http_build_query($excelParams)
                             <span class="kpi-sub">receita bruta de vendas</span>
                         </div>
                         <div class="kpi-mini-card">
+                            <span class="kpi-label">Volume de Itens</span>
+                            <div class="kpi-value tabular-nums"><?= number_format($totalItensVendidos, 0, ',', '.') ?> un</div>
+                            <span class="kpi-sub">produtos faturados</span>
+                        </div>
+                        <div class="kpi-mini-card">
                             <span class="kpi-label">Ticket Médio</span>
                             <div class="kpi-value tabular-nums">R$ <?= number_format($ticketMedio, 2, ',', '.') ?></div>
                             <span class="kpi-sub">média por transação</span>
-                        </div>
-                        <div class="kpi-mini-card kpi-warning">
-                            <span class="kpi-label">Descontos Concedidos</span>
-                            <div class="kpi-value tabular-nums">R$ <?= number_format($totalDescontos, 2, ',', '.') ?></div>
-                            <span class="kpi-sub">abatimentos comerciais</span>
                         </div>
 
                     <?php else: ?>
@@ -647,10 +648,10 @@ $excelUrl = BASE_URL . '/relatorios/excel.php?' . http_build_query($excelParams)
                     <thead>
                         <tr>
                             <?php if ($tipo === 'vendas'): ?>
-                                <th scope="col" style="width:10%;" class="text-center">ID Venda</th>
-                                <th scope="col" style="width:18%;">Data / Hora</th>
-                                <th scope="col" style="width:28%;">Cliente</th>
-                                <th scope="col" style="width:18%;">Operador</th>
+                                <th scope="col" style="width:12%;" class="text-center">ID Venda</th>
+                                <th scope="col" style="width:20%;">Data / Hora</th>
+                                <th scope="col" style="width:30%;">Cliente</th>
+                                <th scope="col" style="width:12%;" class="text-center">Qtd Itens</th>
                                 <th scope="col" style="width:14%;">Pagamento</th>
                                 <th scope="col" style="width:12%;" class="text-end">Total (R$)</th>
 
@@ -692,7 +693,7 @@ $excelUrl = BASE_URL . '/relatorios/excel.php?' . http_build_query($excelParams)
                                     <td class="text-center fw-bold tabular-nums">#<?= str_pad((string)$d['id'], 5, '0', STR_PAD_LEFT) ?></td>
                                     <td class="tabular-nums"><?= date('d/m/Y H:i', strtotime($d['data_venda'])) ?></td>
                                     <td class="fw-semibold text-dark"><?= htmlspecialchars((string)$d['cliente_nome'], ENT_QUOTES, 'UTF-8') ?></td>
-                                    <td class="text-muted"><?= htmlspecialchars((string)$d['operador_nome'], ENT_QUOTES, 'UTF-8') ?></td>
+                                    <td class="text-center tabular-nums"><?= (int)$d['total_itens'] ?> un</td>
                                     <td><span class="doc-badge doc-badge-primary"><?= htmlspecialchars((string)$d['forma_pagamento'], ENT_QUOTES, 'UTF-8') ?></span></td>
                                     <td class="text-end fw-bold tabular-nums text-dark">R$ <?= number_format((float)$d['total'], 2, ',', '.') ?></td>
 
@@ -743,7 +744,9 @@ $excelUrl = BASE_URL . '/relatorios/excel.php?' . http_build_query($excelParams)
                     <tfoot>
                         <tr>
                             <?php if ($tipo === 'vendas'): ?>
-                                <td colspan="5" class="text-end fw-bold">TOTAL GERAL FATURADO:</td>
+                                <td colspan="3" class="text-end fw-bold">TOTAL GERAL FATURADO:</td>
+                                <td class="text-center fw-bold tabular-nums"><?= number_format($totalItensVendidos, 0, ',', '.') ?> un</td>
+                                <td></td>
                                 <td class="text-end fw-bold tabular-nums">R$ <?= number_format((float)$totalFaturado, 2, ',', '.') ?></td>
 
                             <?php elseif ($tipo === 'baixo'): ?>

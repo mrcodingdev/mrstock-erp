@@ -296,7 +296,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="so-card-body d-flex flex-column flex-grow-1 justify-content-between">
                     <div>
                         <p class="text-muted fs-sm mb-3">
-                            Extrato analítico de todas as vendas emitidas na frente de caixa, registrando clientes associados, operadores responsáveis, formas de pagamento utilizadas, descontos concedidos e faturamento líquido.
+                            Extrato analítico de todas as transações emitidas na frente de caixa, registrando clientes associados, formas de pagamento utilizadas, volume de itens faturados e receita bruta consolidada.
                         </p>
 
                         <!-- Painel de Resumo Operacional em Tempo Real -->
