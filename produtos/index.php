@@ -107,79 +107,77 @@ require_once __DIR__ . '/../inc/header.php';
 
 <div class="content-body">
     <?php if (isset($_GET['msg']) && $_GET['msg'] == 'sucesso'): ?>
-    <div class="alert alert-success alert-dismissible fade show shadow-sm border-0" role="alert">
-        <strong>Sucesso!</strong> Registro de produto salvo no banco de dados.
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <div class="alert alert-success alert-dismissible fade show shadow-sm border" role="alert">
+        <i class="fas fa-check-circle me-2"></i> <strong>Sucesso!</strong> Registro de produto salvo no banco de dados.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
     </div>
     <?php elseif (isset($_GET['msg']) && $_GET['msg'] == 'inativado'): ?>
-    <div class="alert alert-warning alert-dismissible fade show shadow-sm border-0" role="alert">
+    <div class="alert alert-warning alert-dismissible fade show shadow-sm border" role="alert">
         <i class="fas fa-info-circle me-2"></i> <strong>Produto Inativado!</strong> Como este produto já possui histórico de vendas ou compras, ele foi inativado para manter a integridade fiscal.
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
     </div>
     <?php elseif (isset($_GET['msg']) && $_GET['msg'] == 'reativado'): ?>
-    <div class="alert alert-success alert-dismissible fade show shadow-sm border-0" role="alert">
+    <div class="alert alert-success alert-dismissible fade show shadow-sm border" role="alert">
         <i class="fas fa-check-circle me-2"></i> <strong>Produto Reativado!</strong> O produto voltou a ficar ativo para vendas no PDV e consultas.
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
     </div>
     <?php elseif (isset($_GET['erro']) && $_GET['erro'] == 'barcode_duplicado'): ?>
-    <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm border" role="alert">
         <i class="fas fa-exclamation-triangle me-2"></i> <strong>Erro de Cadastro:</strong> Este código de barras já está cadastrado em outro produto.
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
     </div>
     <?php endif; ?>
 
-    <!-- ══ BARRA DE FILTROS E BUSCA EM TEMPO REAL ═════════════════════════ -->
+    <!-- ══ BARRA DE FILTROS E BUSCA UNIFICADA ═════════════════════════════ -->
     <div class="so-card mb-3">
         <div class="so-card-body p-3">
-            <div class="row g-2 align-items-center justify-content-between">
-                <div class="col-md-4">
-                    <!-- Live Search Instantâneo -->
+            <form method="GET" action="<?= BASE_URL ?>/produtos/index.php" class="row g-2 align-items-center">
+                <div class="col-12 col-md-5">
                     <div class="so-search-box w-100" style="max-width:100%;">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="liveSearchProdutos" class="form-control" placeholder="Filtrar ao vivo por nome, código..." onkeyup="filtrarAoVivo(this)">
+                        <input type="text" name="busca" id="liveSearchProdutos" class="form-control" placeholder="Buscar por nome, código de barras..." value="<?= htmlspecialchars($buscaFiltro) ?>" onkeyup="filtrarAoVivo(this)" aria-label="Buscar produtos por nome ou código">
                     </div>
                 </div>
-                <div class="col-md-8">
-                    <form method="GET" action="<?= BASE_URL ?>/produtos/index.php" class="row g-2 justify-content-md-end justify-content-start align-items-center">
-                        <div class="col-12 col-sm-auto">
-                            <select name="categoria_id" class="form-select form-select-sm shadow-none" onchange="this.form.submit()">
-                                <option value="">Todas as Categorias</option>
-                                <?php foreach ($categoriasLista as $c): ?>
-                                    <option value="<?= $c['id'] ?>" <?= ($categoriaFiltro === (int)$c['id']) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($c['nome']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-12 col-sm-auto">
-                            <select name="status" class="form-select form-select-sm shadow-none" onchange="this.form.submit()">
-                                <option value="">Status: Ativos</option>
-                                <option value="ativo" <?= ($statusFiltro === 'ativo') ? 'selected' : '' ?>>Em Estoque (&gt;0)</option>
-                                <option value="baixo_estoque" <?= ($statusFiltro === 'baixo_estoque') ? 'selected' : '' ?>>Estoque Baixo</option>
-                                <option value="sem_estoque" <?= ($statusFiltro === 'sem_estoque') ? 'selected' : '' ?>>Sem Estoque (0)</option>
-                                <option value="vencido" <?= ($statusFiltro === 'vencido') ? 'selected' : '' ?>>Vencidos</option>
-                                <option value="inativo" <?= ($statusFiltro === 'inativo') ? 'selected' : '' ?>>Apenas Inativos</option>
-                                <option value="todos" <?= ($statusFiltro === 'todos') ? 'selected' : '' ?>>Todos os Registros</option>
-                            </select>
-                        </div>
-                        <?php if (!empty($statusFiltro) || !empty($buscaFiltro) || !empty($categoriaFiltro)): ?>
-                        <div class="col-12 col-sm-auto">
-                            <a href="<?= BASE_URL ?>/produtos/index.php" class="btn btn-secondary btn-sm w-100" title="Limpar Filtros">
-                                <i class="fas fa-undo me-1"></i> Limpar
-                            </a>
-                        </div>
-                        <?php endif; ?>
-                    </form>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <select name="categoria_id" class="form-select shadow-none" onchange="this.form.submit()" aria-label="Filtrar por Categoria">
+                        <option value="">Todas as Categorias</option>
+                        <?php foreach ($categoriasLista as $c): ?>
+                            <option value="<?= $c['id'] ?>" <?= ($categoriaFiltro === (int)$c['id']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($c['nome']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
-            </div>
+                <div class="col-12 col-sm-6 col-md-2">
+                    <select name="status" class="form-select shadow-none" onchange="this.form.submit()" aria-label="Filtrar por Status">
+                        <option value="">Status: Ativos</option>
+                        <option value="ativo" <?= ($statusFiltro === 'ativo') ? 'selected' : '' ?>>Em Estoque (&gt;0)</option>
+                        <option value="baixo_estoque" <?= ($statusFiltro === 'baixo_estoque') ? 'selected' : '' ?>>Estoque Baixo</option>
+                        <option value="sem_estoque" <?= ($statusFiltro === 'sem_estoque') ? 'selected' : '' ?>>Sem Estoque (0)</option>
+                        <option value="vencido" <?= ($statusFiltro === 'vencido') ? 'selected' : '' ?>>Vencidos</option>
+                        <option value="inativo" <?= ($statusFiltro === 'inativo') ? 'selected' : '' ?>>Apenas Inativos</option>
+                        <option value="todos" <?= ($statusFiltro === 'todos') ? 'selected' : '' ?>>Todos os Registros</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-2 d-flex gap-2 justify-content-md-end">
+                    <button type="submit" class="btn btn-primary w-100" title="Pesquisar">
+                        <i class="fas fa-search me-1"></i> Filtrar
+                    </button>
+                    <?php if (!empty($statusFiltro) || !empty($buscaFiltro) || !empty($categoriaFiltro)): ?>
+                    <a href="<?= BASE_URL ?>/produtos/index.php" class="btn btn-secondary" title="Limpar Filtros" aria-label="Limpar Filtros">
+                        <i class="fas fa-undo"></i>
+                    </a>
+                    <?php endif; ?>
+                </div>
+            </form>
         </div>
     </div>
 
     <!-- ══ TABELA MODULAR DE PRODUTOS ══════════════════════════════════════ -->
     <div class="so-card">
-        <div class="so-card-header">
-            <h5 class="so-card-title"><i class="fas fa-list text-primary"></i> Catálogo Cadastrado</h5>
-            <span class="so-badge so-badge-primary"><?= $totalRows ?> itens</span>
+        <div class="so-card-header d-flex justify-content-between align-items-center">
+            <h5 class="so-card-title mb-0"><i class="fas fa-list text-primary me-2"></i>Catálogo Cadastrado</h5>
+            <span class="so-badge so-badge-primary tabular-nums"><?= $totalRows === 1 ? '1 item' : $totalRows . ' itens' ?></span>
         </div>
         <div class="so-card-body p-0">
             <div class="table-responsive">
@@ -214,44 +212,43 @@ require_once __DIR__ . '/../inc/header.php';
                                     $hoje = new DateTime(date('Y-m-d'));
                                     $dias = (int)$hoje->diff($dv)->format('%r%a');
                                     if ($dias < 0) {
-                                        $validadeHtml = '<span class="so-badge so-badge-danger"><i class="fas fa-times-circle"></i> Vencido</span><br><small class="text-muted">'.date('d/m/Y',strtotime($p['validade'])).'</small>';
+                                        $validadeHtml = '<span class="so-badge so-badge-danger"><i class="fas fa-times-circle me-1"></i> Vencido</span><br><small class="text-muted tabular-nums">'.date('d/m/Y',strtotime($p['validade'])).'</small>';
                                     } elseif ($dias <= 15) {
-                                        $validadeHtml = '<span class="so-badge so-badge-danger">Faltam '.$dias.'d</span><br><small class="text-muted">'.date('d/m/Y',strtotime($p['validade'])).'</small>';
+                                        $validadeHtml = '<span class="so-badge so-badge-danger tabular-nums">Faltam '.$dias.'d</span><br><small class="text-muted tabular-nums">'.date('d/m/Y',strtotime($p['validade'])).'</small>';
                                     } elseif ($dias <= 30) {
-                                        $validadeHtml = '<span class="so-badge so-badge-warning">Faltam '.$dias.'d</span><br><small class="text-muted">'.date('d/m/Y',strtotime($p['validade'])).'</small>';
+                                        $validadeHtml = '<span class="so-badge so-badge-warning tabular-nums">Faltam '.$dias.'d</span><br><small class="text-muted tabular-nums">'.date('d/m/Y',strtotime($p['validade'])).'</small>';
                                     } else {
-                                        $validadeHtml = '<span class="text-secondary fw-semibold small"><i class="fas fa-calendar-check text-success me-1"></i>'.date('d/m/Y',strtotime($p['validade'])).'</span>';
+                                        $validadeHtml = '<span class="text-secondary fw-semibold small tabular-nums"><i class="fas fa-calendar-check text-success me-1"></i>'.date('d/m/Y',strtotime($p['validade'])).'</span>';
                                     }
                                 }
                                 $catNomeExib = !empty($p['categoria_nome_rel']) ? $p['categoria_nome_rel'] : ($p['categoria'] ?: 'Geral');
                             ?>
                             <tr class="linha-produto">
-                                <td class="fw-bold text-muted font-monospace">#<?= str_pad((string)$p['id'], 4, '0', STR_PAD_LEFT) ?></td>
+                                <td class="fw-bold text-muted font-monospace tabular-nums">#<?= str_pad((string)$p['id'], 4, '0', STR_PAD_LEFT) ?></td>
                                 <td>
                                     <strong class="text-dark d-block"><?= htmlspecialchars($p['nome']) ?></strong>
                                     <small class="text-muted text-uppercase" style="font-size:11px;">
                                         <i class="fas fa-tag me-1 text-secondary"></i><?= htmlspecialchars($catNomeExib) ?>
                                         <?php if (!empty($p['codigo_de_barra'])): ?>
-                                            &nbsp;|&nbsp;<i class="fas fa-barcode text-muted"></i> <?= htmlspecialchars($p['codigo_de_barra']) ?>
+                                            &nbsp;|&nbsp;<i class="fas fa-barcode text-muted"></i> <span class="tabular-nums font-monospace"><?= htmlspecialchars($p['codigo_de_barra']) ?></span>
                                         <?php endif; ?>
                                     </small>
                                 </td>
                                 <td>
-                                    <i class="fas fa-truck text-muted me-1"></i> 
                                     <?= htmlspecialchars($p['fornecedor_nome'] ?? 'Sem Vínculo') ?>
                                 </td>
                                 <td class="text-center">
-                                    <span class="fw-bold text-dark d-block"><?= (int)$p['quantidade'] ?> un</span>
+                                    <span class="fw-bold text-dark d-block tabular-nums"><?= (int)$p['quantidade'] ?> un</span>
                                     <?= $badgeEstoque ?>
                                 </td>
                                 <td><?= $validadeHtml ?></td>
-                                <td class="fw-bold text-success">
+                                <td class="fw-bold text-dark tabular-nums">
                                     R$ <?= number_format((float)$p['preco_venda'], 2, ',', '.') ?>
                                 </td>
                                 <td class="text-center">
                                     <!-- Menu de Ações em Linha (3 Pontos) -->
                                     <div class="dropdown">
-                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações">
+                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações para <?= htmlspecialchars($p['nome']) ?>" title="Ações">
                                             <i class="fas fa-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2" style="font-size: 0.85rem;">
@@ -317,7 +314,7 @@ require_once __DIR__ . '/../inc/header.php';
         <div class="card-footer bg-white border-top p-3">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
                 <span class="text-muted small">
-                    Exibindo <strong><?= $firstItem ?></strong> a <strong><?= $lastItem ?></strong> de <strong><?= $totalRows ?></strong> produtos
+                    Exibindo <strong class="tabular-nums"><?= $firstItem ?></strong> a <strong class="tabular-nums"><?= $lastItem ?></strong> de <strong class="tabular-nums"><?= $totalRows ?></strong> <?= $totalRows === 1 ? 'produto' : 'produtos' ?>
                 </span>
                 <?php if ($totalPages > 1): ?>
                 <nav aria-label="Navegação da listagem">
@@ -327,7 +324,7 @@ require_once __DIR__ . '/../inc/header.php';
                                 $queryParams = $_GET;
                                 $queryParams['pagina'] = $page - 1;
                             ?>
-                            <a class="page-link" href="index.php?<?= http_build_query($queryParams) ?>" aria-label="Anterior">
+                            <a class="page-link tabular-nums" href="index.php?<?= http_build_query($queryParams) ?>" aria-label="Anterior">
                                 <i class="fas fa-chevron-left me-1"></i> Anterior
                             </a>
                         </li>
@@ -340,7 +337,7 @@ require_once __DIR__ . '/../inc/header.php';
                         if ($startPage > 1) {
                             $queryParams = $_GET;
                             $queryParams['pagina'] = 1;
-                            echo '<li class="page-item"><a class="page-link" href="index.php?' . http_build_query($queryParams) . '">1</a></li>';
+                            echo '<li class="page-item"><a class="page-link tabular-nums" href="index.php?' . http_build_query($queryParams) . '">1</a></li>';
                             if ($startPage > 2) {
                                 echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
                             }
@@ -351,7 +348,7 @@ require_once __DIR__ . '/../inc/header.php';
                             $queryParams['pagina'] = $i;
                         ?>
                             <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
-                                <a class="page-link" href="index.php?<?= http_build_query($queryParams) ?>"><?= $i ?></a>
+                                <a class="page-link tabular-nums" href="index.php?<?= http_build_query($queryParams) ?>"><?= $i ?></a>
                             </li>
                         <?php endfor; ?>
                         
@@ -362,7 +359,7 @@ require_once __DIR__ . '/../inc/header.php';
                             }
                             $queryParams = $_GET;
                             $queryParams['pagina'] = $totalPages;
-                            echo '<li class="page-item"><a class="page-link" href="index.php?' . http_build_query($queryParams) . '">' . $totalPages . '</a></li>';
+                            echo '<li class="page-item"><a class="page-link tabular-nums" href="index.php?' . http_build_query($queryParams) . '">' . $totalPages . '</a></li>';
                         }
                         ?>
                         
@@ -371,7 +368,7 @@ require_once __DIR__ . '/../inc/header.php';
                                $queryParams = $_GET;
                                $queryParams['pagina'] = $page + 1;
                            ?>
-                            <a class="page-link" href="index.php?<?= http_build_query($queryParams) ?>" aria-label="Próximo">
+                            <a class="page-link tabular-nums" href="index.php?<?= http_build_query($queryParams) ?>" aria-label="Próximo">
                                 Próximo <i class="fas fa-chevron-right ms-1"></i>
                             </a>
                         </li>
@@ -384,12 +381,12 @@ require_once __DIR__ . '/../inc/header.php';
 </div>
 
 <!-- Modal Produto -->
-<div class="modal fade" id="modalProduto" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+<div class="modal fade" id="modalProduto" tabindex="-1" aria-labelledby="modalProdutoLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: var(--mr-radius);">
+        <div class="modal-content border shadow-sm" style="border-radius: var(--mr-radius);">
             <div class="modal-header bg-dark text-white border-0 py-3">
                 <h5 class="modal-title fw-bold" id="modalProdutoLabel"><i class="fas fa-box-open me-2 text-warning"></i> <?= $editProduto ? 'Editar Produto' : 'Cadastrar Produto' ?></h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="window.location='<?= BASE_URL ?>/produtos/index.php'"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar" onclick="window.location='<?= BASE_URL ?>/produtos/index.php'"></button>
             </div>
             <form action="<?= BASE_URL ?>/produtos/functions.php?tipo=produto" method="POST">
                 <?= csrf_input() ?>
@@ -397,22 +394,22 @@ require_once __DIR__ . '/../inc/header.php';
                     <input type="hidden" name="acao" value="salvar">
                     <input type="hidden" name="id"   id="prod_id" value="<?= $editProduto ? $editProduto['id'] : '' ?>">
                     
-                    <div class="card border-0 shadow-sm mb-3">
+                    <div class="card border shadow-sm mb-3">
                         <div class="card-body">
-                            <h6 class="text-primary fw-bold mb-3"><i class="fas fa-info-circle"></i> Informações Básicas</h6>
+                            <h6 class="fw-bold text-dark mb-3"><i class="fas fa-info-circle text-primary me-2"></i>Informações Básicas</h6>
                             <div class="row">
                                 <div class="col-md-8 mb-3">
-                                    <label class="form-label fw-bold">Nome do Produto <span class="text-danger">*</span></label>
+                                    <label for="prod_nome" class="form-label fw-bold text-dark">Nome do Produto <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="nome" id="prod_nome" value="<?= $editProduto ? htmlspecialchars($editProduto['nome']) : '' ?>" required>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label fw-bold">Código de Barras</label>
-                                    <input type="text" class="form-control font-monospace" name="codigo_de_barra" id="prod_codigo_de_barra" placeholder="EAN-13 / CODE128" value="<?= $editProduto ? htmlspecialchars($editProduto['codigo_de_barra'] ?? '') : '' ?>">
+                                    <label for="prod_codigo_de_barra" class="form-label fw-bold text-dark">Código de Barras</label>
+                                    <input type="text" class="form-control font-monospace tabular-nums" name="codigo_de_barra" id="prod_codigo_de_barra" placeholder="EAN-13 / CODE128" value="<?= $editProduto ? htmlspecialchars($editProduto['codigo_de_barra'] ?? '') : '' ?>">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label fw-bold">Categoria</label>
+                                    <label for="prod_categoria_id" class="form-label fw-bold text-dark">Categoria</label>
                                     <select class="form-select" name="categoria_id" id="prod_categoria_id">
                                         <option value="">-- Selecione a Categoria --</option>
                                         <?php foreach ($categoriasLista as $cat): ?>
@@ -422,7 +419,7 @@ require_once __DIR__ . '/../inc/header.php';
                                     <input type="hidden" name="categoria" id="prod_categoria_texto" value="<?= $editProduto ? htmlspecialchars($editProduto['categoria']) : 'Geral' ?>">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label fw-bold">Fornecedor Responsável</label>
+                                    <label for="prod_fornecedor_id" class="form-label fw-bold text-dark">Fornecedor Responsável</label>
                                     <select class="form-select" name="fornecedor_id" id="prod_fornecedor_id">
                                         <option value="">Nenhum / Sem Vínculo</option>
                                         <?php foreach ($fornecedoresLista as $forn): ?>
@@ -431,32 +428,32 @@ require_once __DIR__ . '/../inc/header.php';
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label fw-bold text-success">Data de Validade</label>
-                                    <input type="date" class="form-control" name="validade" id="prod_validade" min="2020-01-01" max="2099-12-31" value="<?= $editProduto ? $editProduto['validade'] : '' ?>">
+                                    <label for="prod_validade" class="form-label fw-bold text-dark">Data de Validade</label>
+                                    <input type="date" class="form-control tabular-nums" name="validade" id="prod_validade" min="2020-01-01" max="2099-12-31" value="<?= $editProduto ? $editProduto['validade'] : '' ?>">
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card border-0 shadow-sm">
+                    <div class="card border shadow-sm">
                         <div class="card-body">
-                            <h6 class="text-danger fw-bold mb-3"><i class="fas fa-tags"></i> Preços e Controle de Estoque</h6>
+                            <h6 class="fw-bold text-dark mb-3"><i class="fas fa-tags text-primary me-2"></i>Preços e Controle de Estoque</h6>
                             <div class="row">
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label fw-bold text-muted">Custo (R$)</label>
-                                    <input type="number" step="0.01" min="0" class="form-control" name="preco_compra" id="prod_preco_compra" value="<?= $editProduto ? $editProduto['preco_compra'] : '0.00' ?>">
+                                    <label for="prod_preco_compra" class="form-label fw-bold text-dark">Custo (R$)</label>
+                                    <input type="number" step="0.01" min="0" class="form-control tabular-nums" name="preco_compra" id="prod_preco_compra" value="<?= $editProduto ? $editProduto['preco_compra'] : '0.00' ?>">
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label fw-bold text-success">Venda (R$) <span class="text-danger">*</span></label>
-                                    <input type="number" step="0.01" min="0" class="form-control" name="preco_venda" id="prod_preco_venda" value="<?= $editProduto ? $editProduto['preco_venda'] : '0.00' ?>" required style="border-left:3px solid #10b981;">
+                                    <label for="prod_preco_venda" class="form-label fw-bold text-dark">Venda (R$) <span class="text-danger">*</span></label>
+                                    <input type="number" step="0.01" min="0" class="form-control tabular-nums" name="preco_venda" id="prod_preco_venda" value="<?= $editProduto ? $editProduto['preco_venda'] : '0.00' ?>" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label fw-bold">Estoque Atual</label>
-                                    <input type="number" step="1" min="0" class="form-control" name="quantidade" id="prod_quantidade" value="<?= $editProduto ? $editProduto['quantidade'] : '0' ?>">
+                                    <label for="prod_quantidade" class="form-label fw-bold text-dark">Estoque Atual</label>
+                                    <input type="number" step="1" min="0" class="form-control tabular-nums" name="quantidade" id="prod_quantidade" value="<?= $editProduto ? $editProduto['quantidade'] : '0' ?>">
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label fw-bold text-warning border-bottom border-warning pb-1">Estoque Mínimo</label>
-                                    <input type="number" step="1" min="0" class="form-control" name="estoque_minimo" id="prod_minimo" value="<?= $editProduto ? $editProduto['estoque_minimo'] : '0' ?>" required style="border-left:3px solid #f59e0b;">
+                                    <label for="prod_minimo" class="form-label fw-bold text-dark">Estoque Mínimo <span class="text-danger">*</span></label>
+                                    <input type="number" step="1" min="0" class="form-control tabular-nums" name="estoque_minimo" id="prod_minimo" value="<?= $editProduto ? $editProduto['estoque_minimo'] : '0' ?>" required>
                                 </div>
                             </div>
                         </div>
