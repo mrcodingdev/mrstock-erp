@@ -661,26 +661,6 @@ body.sidebar-collapsed .main-panel {
   animation-delay: 0.48s;
 }
 
-/* Respeito à preferência do usuário por movimento reduzido (Acessibilidade WCAG 2.1 AA) */
-@media (prefers-reduced-motion: reduce) {
-  .content-header,
-  .so-card,
-  .info-box,
-  .card,
-  .settings-tabs-container,
-  .so-chips-bar,
-  .filter-container,
-  .so-filter-container,
-  .so-search-hero,
-  .pdv-master-container,
-  .ajuda-section,
-  .row > [class*="col-"] .so-card,
-  .row > [class*="col-"] .info-box {
-    animation: none !important;
-  }
-}
-
-
 /* Info Box / Dashboard Cards */
 .info-box {
   display: flex;
