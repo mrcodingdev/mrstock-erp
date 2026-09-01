@@ -554,8 +554,19 @@ body.sidebar-collapsed .main-panel {
   color: #ef4444 !important;
 }
 
-/* ===== TRANSIÇÃO SALESOPS: SLIDE-IN DA ESQUERDA COM FADE (STAGGERED) ===== */
+/* ===== TRANSIÇÃO SALESOPS / MRSTOCK: SLIDE-IN DA ESQUERDA COM FADE (STAGGERED) ===== */
 @keyframes salesOpsSlideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mrStockSlideIn {
   0% {
     opacity: 0;
     transform: translateX(-20px);
@@ -585,43 +596,91 @@ body.sidebar-collapsed .main-panel {
   flex: 1;
 }
 
-/* Cards e Painéis com Entrada Suave da Esquerda para a Direita (Duração 0.5s) */
+/* Contêineres Estruturais, Abas, Filtros e Cards com Entrada Suave da Esquerda para a Direita (0.5s) */
 .so-card,
 .info-box,
-.card {
+.card,
+.settings-tabs-container,
+.so-chips-bar,
+.filter-container,
+.so-filter-container,
+.so-search-hero,
+.pdv-master-container,
+.ajuda-section {
   animation: salesOpsSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Efeito Cascata Suave (Staggered Delay nos Grids de Cards) */
+/* Cascata Harmônica para Contêineres Estruturais de Topo, Abas e Filtros */
+.so-search-hero {
+  animation-delay: 0.06s;
+}
+
+.settings-tabs-container,
+.filter-container,
+.so-filter-container,
+.pdv-master-container {
+  animation-delay: 0.08s;
+}
+
+.so-chips-bar {
+  animation-delay: 0.12s;
+}
+
+.ajuda-section {
+  animation-delay: 0.18s;
+}
+
+/* Efeito Cascata Suave (Staggered Delay nos Grids de Cards e Bento) */
 .row > [class*="col-"]:nth-child(1) .so-card,
 .row > [class*="col-"]:nth-child(1) .info-box {
-  animation-delay: 0.05s;
+  animation-delay: 0.08s;
 }
 
 .row > [class*="col-"]:nth-child(2) .so-card,
 .row > [class*="col-"]:nth-child(2) .info-box {
-  animation-delay: 0.15s;
+  animation-delay: 0.16s;
 }
 
 .row > [class*="col-"]:nth-child(3) .so-card,
 .row > [class*="col-"]:nth-child(3) .info-box {
-  animation-delay: 0.25s;
+  animation-delay: 0.24s;
 }
 
 .row > [class*="col-"]:nth-child(4) .so-card,
 .row > [class*="col-"]:nth-child(4) .info-box {
-  animation-delay: 0.35s;
+  animation-delay: 0.32s;
 }
 
 .row > [class*="col-"]:nth-child(5) .so-card,
 .row > [class*="col-"]:nth-child(5) .info-box {
-  animation-delay: 0.45s;
+  animation-delay: 0.40s;
 }
 
 .row > [class*="col-"]:nth-child(6) .so-card,
 .row > [class*="col-"]:nth-child(6) .info-box {
-  animation-delay: 0.55s;
+  animation-delay: 0.48s;
 }
+
+/* Respeito à preferência do usuário por movimento reduzido (Acessibilidade WCAG 2.1 AA) */
+@media (prefers-reduced-motion: reduce) {
+  .content-header,
+  .so-card,
+  .info-box,
+  .card,
+  .settings-tabs-container,
+  .so-chips-bar,
+  .filter-container,
+  .so-filter-container,
+  .so-search-hero,
+  .pdv-master-container,
+  .ajuda-section,
+  .row > [class*="col-"] .so-card,
+  .row > [class*="col-"] .info-box {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
 
 /* Info Box / Dashboard Cards */
 .info-box {
