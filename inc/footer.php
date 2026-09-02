@@ -1,5 +1,5 @@
         <!-- ===== RODAPÉ INSTITUCIONAL CORPORATIVO (ESTILO GESTÃOCLICK COMPACTO) ===== -->
-        <footer class="so-footer-gestaoclick">
+        <footer class="so-footer-gestaoclick" style="background: #222d31 !important; border-top: 1px solid rgba(255, 255, 255, 0.08) !important; color: #cbd5e1 !important; margin-top: auto;">
             <div class="so-footer-gestaoclick__container">
                 <div class="row g-3 align-items-center">
                     <!-- COLUNA 1: Marca & Sistema (Enxuto com Logo Oficial) -->
