@@ -1,6 +1,6 @@
 /* ==========================================================================
    MrStock ERP — Design System & Custom Stylesheet
-   Paleta Institucional Oficial + Componentes SalesOps (v0)
+   Paleta Institucional Oficial do MrStock ERP (Papelaria Real)
    ========================================================================== */
 
 :root {
@@ -45,7 +45,7 @@ html.sidebar-collapsed-preload body .so-caret {
   display: none !important;
 }
 
-/* ===== Sidebar Estrutura (SalesOps v0 + Animação Fluida com Fade) ===== */
+/* ===== Sidebar Estrutura MrStock ERP (Animação Fluida com Fade) ===== */
 .so-sidebar {
   width: var(--mr-w-open);
   background: var(--mr-bg-dark);
@@ -554,8 +554,8 @@ body.sidebar-collapsed .main-panel {
   color: #ef4444 !important;
 }
 
-/* ===== TRANSIÇÃO SALESOPS / MRSTOCK: SLIDE-IN DA ESQUERDA COM FADE (STAGGERED) ===== */
-@keyframes salesOpsSlideInLeft {
+/* ===== TRANSIÇÃO INSTITUCIONAL MRSTOCK ERP: SLIDE-IN DA ESQUERDA COM FADE (STAGGERED) ===== */
+@keyframes mrStockSlideInLeft {
   0% {
     opacity: 0;
     transform: translateX(-20px);
@@ -566,7 +566,8 @@ body.sidebar-collapsed .main-panel {
   }
 }
 
-@keyframes mrStockSlideIn {
+/* Alias de retrocompatibilidade */
+@keyframes salesOpsSlideInLeft {
   0% {
     opacity: 0;
     transform: translateX(-20px);
@@ -579,7 +580,7 @@ body.sidebar-collapsed .main-panel {
 
 .content-header {
   padding: 20px 24px 0 24px;
-  animation: salesOpsSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: mrStockSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .content-header h1,
@@ -607,7 +608,7 @@ body.sidebar-collapsed .main-panel {
 .so-search-hero,
 .pdv-master-container,
 .ajuda-section {
-  animation: salesOpsSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: mrStockSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Cascata Harmônica para Contêineres Estruturais de Topo, Abas e Filtros */
@@ -1065,7 +1066,7 @@ body.sidebar-collapsed .main-panel {
   pointer-events: auto;
 }
 
-/* ===== Componentes Modulares SalesOps Design System ===== */
+/* ===== Componentes Modulares MrStock Design System ===== */
 .so-card {
   background: #ffffff;
   border: 1px solid #cbd5e1;
@@ -2192,7 +2193,7 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 }
 
 /* ==========================================================================
-   UTILITÁRIOS ENTERPRISE / SALESOPS (BADGES, TIPOGRAFIA, AVATARES, TABELAS)
+   UTILITÁRIOS ENTERPRISE MRSTOCK (BADGES, TIPOGRAFIA, AVATARES, TABELAS)
    ========================================================================== */
 
 .badge-emerald { background-color: #059669 !important; color: #ffffff !important; }
