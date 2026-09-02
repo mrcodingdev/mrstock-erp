@@ -1,65 +1,65 @@
-﻿# Fluxos de Processo & Arquitetura do Sistema — MrStock ERP v2.0
+# 🔄 Fluxos Operacionais e Ciclo de Vida do Sistema
 
-Este documento apresenta os fluxogramas e diagramas de sequência dos processos de negócio fundamentais da Papelaria Real no **MrStock ERP**.
+Os diagramas abaixo ilustram a esteira completa de processamento de dados no MrStock ERP v2.1.0:
 
 ---
 
-## 1. Macrofluxo Integrado do ERP
+## 1. Ciclo de Vida Comercial Integrado (Entrada ➔ PDV ➔ BI)
 
 ```mermaid
-flowchart TD
-    subgraph Suprimentos [1. Módulo de Compras]
-        A1[Identificação de Estoque Crítico no Dashboard] --> A2[Emissão de Pedido de Compra]
-        A2 --> A3[Recebimento Físico e Conferência de Nota]
-        A3 --> A4[Lançamento da Compra no Sistema]
-        A4 --> A5[Incremento Automático de Estoque e Registro no Razão]
-    end
+sequenceDiagram
+    autonumber
+    actor Fornecedor
+    actor Admin as Administrador
+    actor Caixa as Operador de Caixa
+    actor Cliente
+    participant Compras as Módulo Compras
+    participant DB as MariaDB (mrstock_db)
+    participant PDV as Frente de Caixa
+    participant Fiscal as Módulo Fiscal (NFC-e)
+    participant BI as Analytics & DRE
 
-    subgraph Operacao [2. Módulo de Produtos & Etiquetas]
-        A5 --> B1[Geração de Etiquetas Térmicas SVG]
-        B1 --> B2[Fixação de Códigos de Barras nas Gôndolas e Itens]
-    end
-
-    subgraph Vendas [3. Módulo PDV & Frente de Caixa]
-        B2 --> C1[Leitura Ótica no PDV com Bipe 880Hz]
-        C1 --> C2[Aplicação de Desconto F9 e Fechamento F8]
-        C2 --> C3[Cálculo de Troco Dinâmico e Seleção de Cédula]
-        C3 --> C4[Commit Transacional com Lock Pessimista]
-        C4 --> C5[Baixa Automática de Estoque e Emissão de Cupom]
-    end
-
-    subgraph Inteligencia [4. Módulo de Inteligência & Relatórios]
-        C4 --> D1[Atualização em Tempo Real do Dashboard]
-        D1 --> D2[Análise de Curva ABC e Margem Bruta]
-        D2 --> D3[Exportação de Inventário em Excel e PDF]
-        D3 --> A1
-    end
+    Fornecedor->>Admin: Entrega Mercadorias com NF
+    Admin->>Compras: Registra Compra (Itens, Quantidades e Preço de Custo)
+    Compras->>DB: Transação ACID: Atualiza Estoque + Recalcula CMP (Custo Médio)
+    
+    Cliente->>Caixa: Apresenta Produtos no Balcão
+    Caixa->>PDV: Bipa Códigos de Barras (Leitor ou F2)
+    PDV->>PDV: Valida Margem Negativa e Limite de Desconto
+    Caixa->>PDV: Pressiona F4 (Pagamento em Dinheiro/Cartão/Pix)
+    PDV->>DB: Lock Pessimista (SELECT ... FOR UPDATE) + Decrementa Estoque
+    DB-->>PDV: Transação Commitada
+    PDV->>Fiscal: Gera Cupom Térmico com QR Code SEFAZ e Tributos IBPT
+    Fiscal-->>Cliente: Emissão de Cupom Fiscal
+    
+    Admin->>BI: Acessa Relatórios Gerenciais
+    BI->>DB: Consolida Faturamento, CMV, Lucro Bruto e Curva ABC
 ```
 
 ---
 
-## 2. Fluxo Detalhado do PDV com Bloqueio Pessimista
+## 2. Fluxo Transacional do Checkout no PDV (Concorrência & ACID)
 
 ```mermaid
 flowchart TD
-    Start([Início da Venda]) --> Input[Operador Bipe Código de Barras F2]
-    Input --> Beep[Web Audio API sintetiza Bip 880Hz]
-    Beep --> Cart[Item adicionado ao carrinho local]
-    Cart --> Checkout{Pressionou F8?}
-    Checkout -- Não --> Input
-    Checkout -- Sim --> Modal[Abre Modal de Troco Dinâmico]
-    Modal --> Cash[Operador clica na Cédula ou digita Valor Pago]
-    Cash --> Calc[Calcula Troco em Tempo Real]
-    Calc --> Submit[Dispara POST para vendas/functions.php]
-    Submit --> TransBegin[PDO: beginTransaction]
-    TransBegin --> Lock[SELECT ... FOR UPDATE no Produto]
-    Lock --> CheckStock{Saldo >= Solicitado?}
-    CheckStock -- Não --> Rollback[PDO: rollBack]
-    Rollback --> ErrorPage[Retorna erro de estoque insuficiente ao PDV]
-    CheckStock -- Sim --> InsertSale[INSERT INTO vendas e vendas_itens]
-    InsertSale --> UpdateStock[UPDATE produtos SET quantidade = quantidade - ?]
-    UpdateStock --> InsertMov[INSERT INTO movimentacoes tipo saida_venda]
-    InsertMov --> Commit[PDO: commit]
-    Commit --> PrintCupom[Redireciona para emissão de Cupom Térmico]
-    PrintCupom --> End([Fim da Venda])
+    Start(["Início da Venda"]) --> ReadItem["Operador Bipa / Seleciona Produto"]
+    ReadItem --> CheckMem["Item inserido na grade do PDV (Memória JS)"]
+    CheckMem --> ApplyDesc{"Aplicar Desconto?"}
+    ApplyDesc -- Sim --> ValidaDesc["Valida Desconto <= Teto & Preço >= Custo (Trava)"]
+    ApplyDesc -- Não --> FinishModal["Pressiona F4 (Modal de Finalização)"]
+    ValidaDesc --> FinishModal
+    FinishModal --> CalcTroco["Calcula Troco com Math.round(centesimal)"]
+    CalcTroco --> SubmitPost["Submete POST para /vendas/pdv.php (com Token CSRF)"]
+    
+    SubmitPost --> BeginTx["Backend: $pdo->beginTransaction()"]
+    BeginTx --> LockRow["SELECT quantidade, preco_compra FROM produtos WHERE id = ? FOR UPDATE"]
+    LockRow --> CheckStock{"Saldo em Estoque Suficiente?"}
+    
+    CheckStock -- Não --> RollbackTx["$pdo->rollBack() & Retorna Erro de Ruptura"]
+    CheckStock -- Sim --> InsertVenda["INSERT INTO vendas & vendas_itens"]
+    InsertVenda --> DecStock["UPDATE produtos SET quantidade = quantidade - ?"]
+    DecStock --> InsertLog["INSERT INTO logs & movimentacoes (saida_venda)"]
+    InsertLog --> CommitTx["$pdo->commit()"]
+    CommitTx --> RedirectCupom["Redireciona para /vendas/cupom.php?id=X"]
+    RedirectCupom --> PlaySuccess["Sintetizador Web Audio API emite Beep de Sucesso"]
 ```

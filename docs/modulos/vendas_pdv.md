@@ -1,124 +1,138 @@
-﻿# Módulo de Ponto de Venda (PDV / Frente de Caixa)
-
-**Arquivos:** `vendas/pdv.php`, `vendas/functions.php`, `vendas/cupom.php`  
-**Acesso:** Operadores de Caixa (`caixa`) e Administradores (`admin`)  
-**Objetivo:** Permitir a realização de vendas rápidas no balcão da Papelaria Real, com alta velocidade de digitação, suporte total a leitores de código de barras, feedback acústico em tempo real e cálculo instantâneo de troco.
+# 🛒 Módulo: Frente de Caixa (PDV de Alta Velocidade)
+**Arquivos Principais:** `vendas/pdv.php`, `vendas/functions.php`  
+**Escopo de Acesso:** Administrador e Operador de Caixa
 
 ---
 
-## 1. Visão Geral da Frente de Caixa SalesOps
+## 1. Objetivo & Contexto de Negócio
+O PDV (Ponto de Venda) foi arquitetado para fornecer atendimento de balcão instantâneo na Papelaria Real. Em horários de pico (volta às aulas), a velocidade de registro de itens é crítica. O módulo opera com catálogo pré-carregado em memória JavaScript no client-side, permitindo resposta de bipagem em **menos de 15ms**, com atalhos táteis de teclado (<kbd>F1</kbd> a <kbd>F9</kbd>) e sintetizador sonoro Web Audio API.
 
-O PDV do **MrStock ERP v2.0** foi reformulado com foco na redução de atrito e velocidade no atendimento:
-- O operador pode realizar uma venda completa **sem tocar no mouse**, utilizando apenas o teclado e o leitor ótico.
-- Cada bip no scanner ótico produz um som senoidal agradável em **880Hz** via Web Audio API.
-- O fechamento da compra oferece botões de cédulas rápidas que calculam o troco instantaneamente.
+---
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Operador as Operador de Caixa
-    participant PDV as PDV Frontend (JS/DOM)
-    participant Audio as Web Audio API
-    participant Backend as Backend PHP (vendas/functions.php)
-    participant DB as MySQL (InnoDB com Lock)
+## 2. Interface & Componentes Visuais
+- **Layout Split-Screen:** Lado esquerdo com tabela de itens lançados (quantidade editável, subtotal em `.tabular-nums` e remoção); lado direito com totalizador em destaque preto corporativo e painel de ações.
+- **Mesa de Atalhos de Teclado:**
+  - <kbd>F2</kbd>: Focar campo de código de barras / busca rápida.
+  - <kbd>F4</kbd>: Abrir modal de finalização e pagamento.
+  - <kbd>F7</kbd>: Focar no campo de concessão de desconto.
+  - <kbd>F8</kbd>: Identificar cliente / CPF na nota.
+  - <kbd>F9</kbd>: Cancelar venda atual.
+  - <kbd>ESC</kbd>: Fechar modais / limpar foco.
+- **Modal de Pagamento com Cédulas Rápidas:** Botões táteis de R$ 10, R$ 20, R$ 50, R$ 100 e R$ 200, além do botão "Exato", com cálculo dinâmico de troco em tempo real.
 
-    Operador->>PDV: Pressiona F2 / Bipe de Código de Barras
-    PDV->>Audio: Dispara Som de Scanner (880Hz)
-    PDV->>PDV: Adiciona Item ao Carrinho e Atualiza Total
-    Operador->>PDV: Pressiona F8 (Finalizar Venda)
-    PDV->>PDV: Abre Modal de Pagamento & Troco Dinâmico
-    Operador->>PDV: Clica na Cédula de R$ 50 (ou digita valor)
-    PDV->>PDV: Calcula Troco Instantaneamente
-    Operador->>PDV: Pressiona Enter (Confirmar Venda)
-    PDV->>Backend: Envia POST com Carrinho e Token CSRF
-    Backend->>DB: beginTransaction()
-    Backend->>DB: SELECT ... FOR UPDATE (Lock Pessimista)
-    Backend->>DB: Valida Saldo e Preço Oficial
-    Backend->>DB: INSERT INTO vendas, vendas_itens e movimentacoes
-    Backend->>DB: UPDATE produtos SET quantidade = quantidade - ?
-    Backend->>DB: commit()
-    Backend->>PDV: Redireciona para vendas/cupom.php
+---
+
+## 3. Detalhamento Linha por Linha das Funções & Backend
+
+### 3.1 Síntese Acústica Nativa (Web Audio API)
+```javascript
+function playBeep(tipo = 'bip') {
+    if (!MRSTOCK_CONFIG.somPdv) return;
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        if (tipo === 'bip') {
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime); // 880 Hz
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.075);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.075);
+        } else if (tipo === 'erro') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(280, audioCtx.currentTime); // 280 Hz
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.16);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.16);
+        }
+    } catch (e) { console.warn('Audio Context indisponível:', e); }
+}
 ```
 
----
+### 3.2 Aritmética Monetária Centesimal e Trava de Margem
+```javascript
+function recalcularTotal() {
+    let subtotal = 0;
+    let custoTotal = 0;
+    carrinho.forEach(item => {
+        subtotal += item.preco_unitario * item.quantidade;
+        custoTotal += item.preco_compra * item.quantidade;
+    });
+    
+    // Normalização centesimal inteira
+    subtotal = Math.round(subtotal * 100) / 100;
+    let descValor = parseFloat(document.getElementById('desconto_input').value) || 0;
+    descValor = Math.round(descValor * 100) / 100;
+    
+    const totalFinal = Math.max(0, Math.round((subtotal - descValor) * 100) / 100);
+    
+    // Trava de Margem Negativa
+    if (totalFinal < custoTotal && MRSTOCK_CONFIG.pdvTravaMargem === 'bloquear') {
+        document.getElementById('btn_finalizar').disabled = true;
+        document.getElementById('aviso_margem').textContent = "Venda abaixo do custo bloqueada!";
+    } else {
+        document.getElementById('btn_finalizar').disabled = false;
+    }
+}
+```
 
-## 2. Mapa de Atalhos Globais de Teclado
-
-O PDV implementa um listener global no JavaScript que intercepta teclas de função sem conflitar com o navegador:
-
-| Tecla de Atalho | Ação Executada no PDV |
-| :---: | :--- |
-| **`F2`** | **Bipe / Busca Rápida:** Foca instantaneamente o cursor no input do leitor de código de barras. |
-| **`F4`** | **Consultar Produtos:** Abre a consulta rápida do catálogo com saldos de estoque e preços. |
-| **`F8`** | **Finalizar Venda:** Abre o Modal de Pagamento e Troco Dinâmico com foco no campo de valor pago. |
-| **`F9`** | **Desconto / Acréscimo:** Permite aplicar descontos em percentual (%) ou reais (R$) na venda. |
-| **`ESC`** | **Cancelar / Fechar:** Fecha qualquer modal ativo ou limpa o campo de código de barras. |
-| **`+` / `-`** | **Ajustar Quantidade:** Aumenta ou diminui a quantidade do item selecionado no carrinho. |
-| **`Delete`** | **Remover Item:** Exclui o produto selecionado do carrinho de compras. |
-
----
-
-## 3. Modal de Pagamento & Troco Dinâmico
-
-O modal acionado via `F8` inclui ferramentas avançadas para agilizar o cálculo financeiro do caixa:
-
-### 💵 3.1 Botões de Cédula Rápida
-Botões ergonômicos de clique rápido com as notas do Real:
-- **R$ 10,00**
-- **R$ 20,00**
-- **R$ 50,00**
-- **R$ 100,00**
-- **R$ 200,00**
-- **Valor Exato:** Preenche automaticamente o campo com o valor total da venda, zerando o troco.
-
-### 🧮 3.2 Painel de Troco em Tempo Real
-- Se `Valor Pago < Total`: Exibe alerta suave em amarelo indicando valor restante a pagar.
-- Se `Valor Pago >= Total`: Exibe painel em verde esmeralda com o **Valor do Troco** em destaque gigante.
-
----
-
-## 4. Segurança Transacional & Bloqueio Pessimista
-
-Para garantir que o estoque nunca seja vendido em duplicidade no balcão, o controlador `vendas/functions.php` executa:
-
+### 3.3 Motor de Checkout Transacional em PHP (`vendas/functions.php`)
 ```php
-$pdo->beginTransaction();
-try {
-    foreach ($cart as $item) {
-        $produto_id = (int)$item['id'];
-        $qtd_solicitada = (int)$item['qtd'];
-
-        // Lock pessimista para evitar race condition
-        $stmtChk = $pdo->prepare("SELECT id, nome, preco_venda, quantidade, status FROM produtos WHERE id = ? FOR UPDATE");
-        $stmtChk->execute([$produto_id]);
-        $prodInfo = $stmtChk->fetch();
-
-        // Validação estrita de saldo real
-        if (!$prodInfo || (int)$prodInfo['quantidade'] < $qtd_solicitada) {
-            $pdo->rollBack();
-            header("Location: " . BASE_URL . "/vendas/pdv.php?erro=estoque&produto=" . urlencode($prodInfo['nome'] ?? 'Item'));
-            exit;
+function processar_checkout_pdv(PDO $pdo, array $dadosVenda): int {
+    $pdo->beginTransaction();
+    try {
+        $clienteId  = !empty($dadosVenda['cliente_id']) ? (int)$dadosVenda['cliente_id'] : null;
+        $totalFinal = (float)$dadosVenda['total_final'];
+        $formaPagto = clean_input($dadosVenda['forma_pagamento']);
+        
+        // 1. Registra cabeçalho da venda
+        $stmt = $pdo->prepare("INSERT INTO vendas (cliente_id, total, forma_pagamento, data_venda) VALUES (?, ?, ?, NOW())");
+        $stmt->execute([$clienteId, $totalFinal, $formaPagto]);
+        $vendaId = (int)$pdo->lastInsertId();
+        
+        // 2. Itera itens com Lock Pessimista
+        foreach ($dadosVenda['itens'] as $item) {
+            $prodId = (int)$item['produto_id'];
+            $qtd    = (int)$item['quantidade'];
+            $preco  = (float)$item['preco_unitario'];
+            
+            $stmt = $pdo->prepare("SELECT quantidade, nome FROM produtos WHERE id = ? FOR UPDATE");
+            $stmt->execute([$prodId]);
+            $prod = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$prod || $prod['quantidade'] < $qtd) {
+                throw new Exception("Estoque insuficiente para o produto: {$prod['nome']}");
+            }
+            
+            // Grava item da venda
+            $stmt = $pdo->prepare("INSERT INTO vendas_itens (venda_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$vendaId, $prodId, $qtd, $preco]);
+            
+            // Decrementa saldo
+            $stmt = $pdo->prepare("UPDATE produtos SET quantidade = quantidade - ? WHERE id = ?");
+            $stmt->execute([$qtd, $prodId]);
+            
+            // Livro-razão de movimentação
+            $stmt = $pdo->prepare("INSERT INTO movimentacoes (produto_id, tipo, quantidade, observacao) VALUES (?, 'saida_venda', ?, ?)");
+            $stmt->execute([$prodId, $qtd, "Venda PDV #$vendaId"]);
         }
         
-        // O preço unitário é obtido estritamente do banco de dados (ignora manipulações no frontend)
-        $precoOficial = (float)$prodInfo['preco_venda'];
-        // ... insere itens e atualiza saldo
+        $pdo->commit();
+        return $vendaId;
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        throw $e;
     }
-    $pdo->commit();
-} catch (Exception $e) {
-    $pdo->rollBack();
-    // Tratamento de erro
 }
 ```
 
 ---
 
-## 5. Emissão de Cupom Fiscal Não-Fiscal (`vendas/cupom.php`)
-
-Após o commit da transação, o sistema gera o cupom formatado para bobinas térmicas de **80mm ou 58mm**:
-- Dados da Papelaria Real (CNPJ, Endereço, Telefone).
-- Itens detalhados com quantidade, preço unitário e subtotal.
-- Forma de pagamento, valor recebido e troco calculado.
-- **Hash de Integridade SHA-256** e data/hora com segundos.
-- QR Code demonstrativo para consulta.
-- Botão de impressão com disparo de `@media print` e atalho para retorno imediato ao PDV.
+## 4. Segurança & Controle de Acesso (RBAC)
+- **Bloqueio de Informações Confidenciais:** O Operador de Caixa **NUNCA** visualiza o `preco_compra` ou o lucro na interface do PDV.
+- **CSRF Token:** Validação compulsória em todas as requisições AJAX e POST.
+- **Prevenção de Overselling:** O uso de `SELECT ... FOR UPDATE` garante que requisições concorrentes não vendam saldo inexistente.

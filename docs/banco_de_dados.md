@@ -1,192 +1,158 @@
-﻿# Banco de Dados & Dicionário de Dados — MrStock ERP v2.0
-
-**SGBD:** MySQL 8.0+ / MariaDB 10.4+  
-**Nome da Base:** `mrstock_db`  
-**Engine:** InnoDB  
+# 🗄️ Dicionário de Dados do Banco de Dados (`mrstock_db`)
+**Engine:** MySQL / MariaDB (InnoDB)  
 **Charset / Collation:** `utf8mb4` / `utf8mb4_general_ci`  
-**Integridade Referencial:** Ativa (Foreign Keys com `CASCADE` e `SET NULL`)
+**Total de Tabelas:** 14  
+**Integridade Referencial:** Chaves Estrangeiras com `ON DELETE CASCADE` / `RESTRICT` e Lock Pessimista (`FOR UPDATE`).
 
 ---
 
-## 1. Diagrama Entidade-Relacionamento (DER)
+## 📋 Lista das 14 Tabelas Oficiais
 
-```mermaid
-erDiagram
-    usuarios ||--o{ compras : "registra (usuario_id)"
-    usuarios ||--o{ vendas : "opera"
-    usuarios ||--o{ movimentacoes : "audita"
-    usuarios ||--o{ logs : "gera"
-    
-    categorias ||--o{ produtos : "classifica (categoria_id)"
-    fornecedores ||--o{ produtos : "fornece (fornecedor_id)"
-    fornecedores ||--o{ compras : "fatura (fornecedor_id)"
-    fornecedores ||--o{ lotes : "fornece (fornecedor_id)"
-    
-    produtos ||--o{ itens_compra : "compoe"
-    produtos ||--o{ vendas_itens : "vendido em"
-    produtos ||--o{ movimentacoes : "registrado em"
-    produtos ||--o{ lotes : "controlado em"
-    
-    compras ||--|{ itens_compra : "contem (CASCADE)"
-    vendas ||--|{ vendas_itens : "contem (CASCADE)"
-    vendas ||--o| cupons_fiscais : "emite (CASCADE)"
-    clientes ||--o{ vendas : "compra (SET NULL)"
+| # | Tabela | Descrição Funcional | Chave Primária | Quantidade de Colunas |
+| :---: | :--- | :--- | :---: | :---: |
+| **01** | `categorias` | 10 Famílias Funcionais de Produtos da Papelaria Real | `id` | 3 |
+| **02** | `clientes` | Cadastro de clientes, endereços e contato WhatsApp | `id` | 14 |
+| **03** | `fornecedores` | Homologação de parceiros comerciais e dados de contato | `id` | 13 |
+| **04** | `produtos` | Catálogo de produtos, saldo, preços, markup e shelf-life | `id` | 12 |
+| **05** | `lotes` | Rastreabilidade de lotes, validades e entradas | `id` | 9 |
+| **06** | `movimentacoes` | Livro-razão de movimentações de estoque e perdas | `id` | 6 |
+| **07** | `compras` | Registro de notas de compra e faturamento | `id` | 8 |
+| **08** | `itens_compra` | Itens vinculados a cada ordem de compra de fornecedor | `id` | 6 |
+| **09** | `vendas` | Cabeçalho das vendas finalizadas no PDV | `id` | 5 |
+| **10** | `vendas_itens` | Detalhamento dos itens comercializados por venda | `id` | 5 |
+| **11** | `cupons_fiscais` | Registro fiscal com chave de 44 dígitos e protocolo | `id` | 8 |
+| **12** | `usuarios` | Contas de acesso e níveis de privilégio (Admin/Caixa) | `id` | 4 |
+| **13** | `configuracoes` | Repositório dinâmico de parâmetros operacionais da loja | `chave` | 3 |
+| **14** | `logs` | Trilha de auditoria forense de ações operacionais | `id` | 7 |
+
+---
+
+## 🔍 Detalhamento dos Esquemas de Tabelas
+
+### 1. Tabela `produtos`
+Armazena os itens comercializados, controlando preços de custo, markup, estoque mínimo e validade.
+```sql
+CREATE TABLE `produtos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) NOT NULL,
+  `categoria` varchar(100) DEFAULT NULL,
+  `categoria_id` int(11) DEFAULT NULL,
+  `quantidade` int(11) DEFAULT 0,
+  `estoque_minimo` int(11) DEFAULT 5,
+  `validade` date DEFAULT NULL,
+  `preco_venda` decimal(10,2) NOT NULL,
+  `preco_compra` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `fornecedor_id` int(11) DEFAULT NULL,
+  `status` enum('ativo','inativo') DEFAULT 'ativo',
+  `codigo_de_barra` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_produtos_categoria` (`categoria_id`),
+  KEY `fk_produtos_fornecedor` (`fornecedor_id`),
+  CONSTRAINT `fk_produtos_categoria` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_produtos_fornecedor` FOREIGN KEY (`fornecedor_id`) REFERENCES `fornecedores` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
----
+### 2. Tabela `configuracoes`
+Tabela chave-valor para parâmetros do sistema gerenciados no painel de configurações.
+```sql
+CREATE TABLE `configuracoes` (
+  `chave` varchar(50) NOT NULL,
+  `valor` text NOT NULL,
+  `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`chave`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 
-## 2. Dicionário de Dados das 12 Tabelas Oficiais + Lotes
+### 3. Tabela `compras` e `itens_compra`
+```sql
+CREATE TABLE `compras` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fornecedor_id` int(11) NOT NULL,
+  `data_compra` datetime DEFAULT current_timestamp(),
+  `total` decimal(10,2) NOT NULL,
+  `status` enum('PAGA','PENDENTE','CANCELADA') DEFAULT 'PAGA',
+  `numero_nf` varchar(50) DEFAULT NULL,
+  `forma_pagamento` varchar(50) DEFAULT 'Boleto',
+  `observacoes` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_compras_fornecedor` (`fornecedor_id`),
+  CONSTRAINT `fk_compras_fornecedor` FOREIGN KEY (`fornecedor_id`) REFERENCES `fornecedores` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-### 👤 1. `usuarios` (Autenticação e Perfis)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador único do operador |
-| `username` | VARCHAR(50) | NÃO | UNIQUE | Nome de login de acesso |
-| `password` | VARCHAR(255) | NÃO | | Hash da senha gerado com Bcrypt |
-| `perfil` | ENUM('admin','caixa') | SIM | | Nível de acesso RBAC |
+CREATE TABLE `itens_compra` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `compra_id` int(11) NOT NULL,
+  `produto_id` int(11) NOT NULL,
+  `quantidade` decimal(10,3) NOT NULL,
+  `preco_unitario` decimal(10,2) NOT NULL,
+  `subtotal` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_itens_compra_compra` (`compra_id`),
+  KEY `fk_itens_compra_produto` (`produto_id`),
+  CONSTRAINT `fk_itens_compra_compra` FOREIGN KEY (`compra_id`) REFERENCES `compras` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_itens_compra_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 
----
+### 4. Tabela `vendas` e `vendas_itens`
+```sql
+CREATE TABLE `vendas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cliente_id` int(11) DEFAULT NULL,
+  `data_venda` datetime DEFAULT current_timestamp(),
+  `total` decimal(10,2) NOT NULL,
+  `forma_pagamento` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_vendas_data` (`data_venda`),
+  KEY `idx_vendas_cliente` (`cliente_id`),
+  CONSTRAINT `fk_vendas_cliente` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-### 📂 2. `categorias` (Classificação de Produtos)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador da categoria |
-| `nome` | VARCHAR(100) | NÃO | | Nome da categoria mercadológica |
-| `descricao` | TEXT | SIM | | Descrição e escopo da categoria |
+CREATE TABLE `vendas_itens` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `venda_id` int(11) NOT NULL,
+  `produto_id` int(11) NOT NULL,
+  `quantidade` int(11) NOT NULL,
+  `preco_unitario` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_vendas_itens_venda` (`venda_id`),
+  KEY `idx_vendas_itens_produto` (`produto_id`),
+  CONSTRAINT `fk_vendas_itens_venda` FOREIGN KEY (`venda_id`) REFERENCES `vendas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_vendas_itens_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 
----
+### 5. Tabela `movimentacoes`
+Rastreabilidade forense de todas as alterações de saldo.
+```sql
+CREATE TABLE `movimentacoes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `produto_id` int(11) NOT NULL,
+  `tipo` enum('entrada_compra','saida_venda','devolucao_cliente','devolucao_fornecedor','perda') NOT NULL,
+  `quantidade` int(11) NOT NULL,
+  `data_movimento` datetime DEFAULT current_timestamp(),
+  `observacao` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_movimentacoes_produto` (`produto_id`),
+  KEY `idx_movimentacoes_data` (`data_movimento`),
+  CONSTRAINT `fk_movimentacoes_produto` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 
-### 🚚 3. `fornecedores` (Parceiros e Distribuidores)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador do fornecedor |
-| `nome` | VARCHAR(255) | NÃO | | Razão Social / Nome Fantasia |
-| `cnpj` | VARCHAR(20) | SIM | | CNPJ formatado |
-| `telefone` | VARCHAR(20) | SIM | | Telefone para contato |
-| `email` | VARCHAR(255) | SIM | | E-mail de cotação |
-| `status` | ENUM('ativo','inativo') | SIM | | Status cadastral |
-
----
-
-### 👥 4. `clientes` (Cadastro de Consumidores)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador do cliente |
-| `nome` | VARCHAR(255) | NÃO | | Nome completo ou razão social |
-| `cpf_cnpj` | VARCHAR(18) | SIM | | Documento de identificação |
-| `telefone` | VARCHAR(20) | SIM | | WhatsApp para contato |
-| `email` | VARCHAR(255) | SIM | | E-mail para envio de comprovantes |
-| `status` | ENUM('ativo','inativo') | SIM | | Status do cliente |
-| `data_cadastro` | DATETIME | SIM | | Data de inclusão no sistema |
-
----
-
-### 📦 5. `produtos` (Catálogo e Inventário)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador do produto |
-| `nome` | VARCHAR(255) | NÃO | | Descrição comercial do item |
-| `codigo_de_barra` | VARCHAR(50) | SIM | INDEX | Código EAN-13 ou Code-128 |
-| `categoria_id` | INT(11) | SIM | FK | Vínculo com categorias (`ON DELETE SET NULL`) |
-| `fornecedor_id` | INT(11) | SIM | FK | Vínculo com fornecedores (`ON DELETE SET NULL`) |
-| `preco_compra` | DECIMAL(10,2) | NÃO | | Preço de custo de aquisição |
-| `preco_venda` | DECIMAL(10,2) | NÃO | | Preço de venda ao consumidor |
-| `quantidade` | INT(11) | SIM | | Saldo físico atual em estoque |
-| `estoque_minimo` | INT(11) | SIM | | Ponto de pedido para alertas |
-| `validade` | DATE | SIM | | Data de validade para itens perecíveis |
-| `status` | ENUM('ativo','inativo') | SIM | | Status de disponibilidade de venda |
-
----
-
-### 🛒 6. `compras` (Ordens de Compra e Entradas)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador do pedido de compra |
-| `fornecedor_id` | INT(11) | NÃO | FK | Fornecedor faturado |
-| `usuario_id` | INT(11) | NÃO | FK | Usuário administrador que lançou |
-| `numero_nota` | VARCHAR(50) | SIM | | Número da Nota Fiscal de entrada |
-| `valor_total` | DECIMAL(10,2) | NÃO | | Valor global da compra |
-| `tipo_pagamento`| VARCHAR(50) | SIM | | Forma de pagamento (Boleto, PIX, etc.) |
-| `status` | ENUM('PENDENTE','PAGA','CANCELADA') | SIM | | Status financeiro da ordem |
-| `data_compra` | DATETIME | SIM | | Data/hora do lançamento |
-
----
-
-### 📑 7. `itens_compra` (Itens Faturados na Compra)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador do item de compra |
-| `compra_id` | INT(11) | NÃO | FK | Vínculo com compras (`ON DELETE CASCADE`) |
-| `produto_id` | INT(11) | NÃO | FK | Vínculo com o produto adquirido |
-| `quantidade` | DECIMAL(10,3) | NÃO | | Quantidade recebida |
-| `preco_unitario`| DECIMAL(10,2) | NÃO | | Preço de custo unitário |
-| `subtotal` | DECIMAL(10,2) | NÃO | | Quantidade $\times$ Preço Unitário |
-
----
-
-### 💳 8. `vendas` (Transações Comerciais do PDV)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Número da venda / Cupom |
-| `cliente_id` | INT(11) | SIM | FK | Cliente comprador (`ON DELETE SET NULL`) |
-| `total` | DECIMAL(10,2) | NÃO | | Valor final liquidado |
-| `forma_pagamento`| VARCHAR(50) | NÃO | | DINHEIRO, PIX, CARTÃO DE CRÉDITO, etc. |
-| `data_venda` | DATETIME | SIM | INDEX | Data e hora exata da transação |
-
----
-
-### 🛍️ 9. `vendas_itens` (Itens Baixados na Venda)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador do item vendido |
-| `venda_id` | INT(11) | NÃO | FK | Vínculo com a venda (`ON DELETE CASCADE`) |
-| `produto_id` | INT(11) | NÃO | FK | Vínculo com o produto |
-| `quantidade` | INT(11) | NÃO | | Quantidade baixada |
-| `preco_unitario`| DECIMAL(10,2) | NÃO | | Preço oficial praticado na venda |
-
----
-
-### 📈 10. `movimentacoes` (Livro-Razão de Auditoria)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador do movimento |
-| `produto_id` | INT(11) | NÃO | FK | Produto movimentado (`ON DELETE CASCADE`) |
-| `tipo` | ENUM('entrada_compra','saida_venda','devolucao_cliente','devolucao_fornecedor','perda') | NÃO | | Motivo do fluxo |
-| `quantidade` | INT(11) | NÃO | | Quantidade alterada |
-| `data_movimento`| DATETIME | SIM | INDEX | Carimbo de data/hora |
-| `observacao` | VARCHAR(255) | SIM | | Detalhes e número do documento associado |
-
----
-
-### 🖨️ 11. `cupons_fiscais` (Espelhos Fiscais)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador do cupom |
-| `venda_id` | INT(11) | NÃO | FK | Vínculo com a venda (`ON DELETE CASCADE`) |
-| `chave_acesso` | VARCHAR(44) | NÃO | UNIQUE | Chave de segurança formatada |
-| `data_emissao` | DATETIME | SIM | | Data e hora de emissão |
-
----
-
-### 📝 12. `logs` (Trilha de Auditoria de Sistema)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador do log |
-| `usuario_id` | INT(11) | NÃO | FK | Operador que realizou a ação |
-| `acao` | VARCHAR(100) | NÃO | | Tipo da ação (LOGIN, INSERT, UPDATE) |
-| `descricao` | TEXT | SIM | | Detalhamento do evento |
-| `tabela_afetada`| VARCHAR(100) | SIM | | Entidade modificada |
-| `ip_usuario` | VARCHAR(45) | SIM | | Endereço IP do cliente |
-| `data_log` | DATETIME | SIM | | Carimbo temporal do evento |
-
----
-
-### 🏷️ 13. `lotes` (Controle Auxiliar de Lotes e Validades)
-| Campo | Tipo | Nulo | Chave | Descrição |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT(11) | NÃO | PK (AI) | Identificador do lote |
-| `produto_id` | INT(11) | NÃO | FK | Vínculo com produto (`ON DELETE CASCADE`) |
-| `numero_lote` | VARCHAR(50) | NÃO | | Código impresso na embalagem |
-| `data_validade`| DATE | NÃO | | Data limite de uso |
-| `quantidade` | INT(11) | NÃO | | Saldo disponível do lote |
-| `preco_compra` | DECIMAL(10,2) | NÃO | | Custo do lote específico |
+### 6. Tabela `cupons_fiscais`
+```sql
+CREATE TABLE `cupons_fiscais` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `venda_id` int(11) NOT NULL,
+  `chave_acesso` varchar(44) NOT NULL,
+  `protocolo_autorizacao` varchar(20) DEFAULT NULL,
+  `data_emissao` datetime DEFAULT current_timestamp(),
+  `xml_simulado` longtext DEFAULT NULL,
+  `qr_code_payload` text DEFAULT NULL,
+  `status` enum('AUTORIZADA','CANCELADA','REJEITADA') DEFAULT 'AUTORIZADA',
+  PRIMARY KEY (`id`),
+  KEY `idx_cupons_venda` (`venda_id`),
+  CONSTRAINT `fk_cupons_venda` FOREIGN KEY (`venda_id`) REFERENCES `vendas` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```

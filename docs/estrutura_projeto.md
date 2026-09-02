@@ -1,133 +1,85 @@
-# Estrutura Física do Projeto — MrStock ERP v2.0
+# 📂 Estrutura de Diretórios e Arquivos — MrStock ERP v2.1.0
 
-Este documento apresenta a árvore de diretórios, a finalidade de cada arquivo e o mapa modular da arquitetura do **MrStock ERP**.
-
----
-
-## 1. Árvore de Diretórios Completa
+A raiz do projeto em `C:\xampp\htdocs\MrStock\` adota uma arquitetura modular coesa em PHP 8.2 nativo:
 
 ```
-MrStock/
-├── .htaccess                       # Regras de segurança, bloqueio de diretórios e cabeçalhos HTTP
-├── .gitignore                      # Exclusões de arquivos temporários e logs do Git
-├── config.php                      # Configurações globais, detecção híbrida de URL e session hardening
-├── index.php                       # Roteador principal (redireciona para login ou dashboard)
-├── login.php                       # Tela de autenticação com Bcrypt e proteção contra brute force
+C:\xampp\htdocs\MrStock\
+├── .htaccess                       # Hardening de produção Apache (bloqueio de .env, .sql, etc.)
+├── .env.example                    # Modelo de variáveis de ambiente
+├── config.php                      # Configurações globais, detecção de ambiente e headers HTTP
+├── configuracoes.php               # Painel administrativo de parâmetros (7 abas) e Backup SQL
+├── dashboard.php                   # Painel principal Bento Grid e Venda Rápida
+├── ajuda.php                       # Central de Ajuda, Base de Conhecimento e Mesa de Atalhos
+├── login.php                       # Tela de autenticação com segurança defensiva e CSRF
 ├── logout.php                      # Encerramento seguro de sessão e destruição de cookies
-├── dashboard.php                   # Painel principal com KPIs, alertas e venda rápida
+├── index.php                       # Roteador inicial (redireciona para login ou dashboard)
 │
-├── inc/                            # Middlewares, helpers e componentes compartilhados
-│   ├── auth.php                    # Middleware de autenticação e proteção RBAC de rotas
-│   ├── barcode_helper.php          # [NOVO v2.0] Gerador vetorial autônomo de código de barras SVG (Code-128B/EAN-13)
-│   ├── database.php                # Singleton de conexão PDO com MySQL (utf8mb4 e ATTR_EMULATE_PREPARES => false)
-│   ├── functions.php               # Utilitários de segurança (sanitize, csrf_token, csrf_verify, redirect_to)
-│   ├── header.php                  # Cabeçalho HTML5, CSS SalesOps, script síncrono Anti-FOUC e Topbar
-│   └── footer.php                  # Fechamento de layout, modais globais e scripts JavaScript
+├── assets/                         # Identidade visual e mídias
+│   └── img/                        # Logotipo oficial Papelaria Real, favicon e ícones SVG
 │
-├── produtos/                       # Módulo de Gestão de Produtos e Estoque
-│   ├── index.php                   # Listagem com Live Search, filtros, paginação verde e menu 3 pontos (.so-actions-btn)
-│   ├── functions.php               # CRUD de produtos, upload de imagem, cálculo de margem e validações
-│   ├── etiquetas.php               # [NOVO v2.0] Gerador e impressor de folhas de etiquetas térmicas e A4 em SVG
-│   └── movimentacoes.php           # Livro-razão e auditoria de movimentações de estoque (entradas/saídas/perdas)
+├── categorias/                     # Módulo de Categorias / Famílias de Produtos
+│   ├── index.php                   # Listagem com contagem de vínculos e busca
+│   ├── form.php                    # Modal/Formulário de cadastro e edição
+│   └── functions.php               # Operações CRUD com PDO e validações relacionais
 │
-├── categorias/                     # Módulo de Classificação Mercadológica
-│   ├── index.php                   # Listagem com Live Search e menu de ações
-│   └── functions.php               # CRUD de categorias de produtos
-│
-├── clientes/                       # Módulo de Cadastro de Clientes
-│   ├── index.php                   # Listagem com CPF/CNPJ, link para WhatsApp API e menu de ações
+├── clientes/                       # Módulo de Gestão de Clientes
+│   ├── index.php                   # Tabela com busca, status e WhatsApp circular
+│   ├── form.php                    # Formulário com CPF/CNPJ e busca CEP
 │   └── functions.php               # CRUD de clientes e validação de documentos
 │
+├── compras/                        # Módulo de Compras & Entrada de Mercadorias
+│   ├── index.php                   # Histórico de compras de fornecedores
+│   ├── nova.php                    # Lançamento de NF com recálculo de CMP
+│   ├── visualizar.php              # Detalhamento de itens da nota de compra
+│   └── functions.php               # Regras transacionais ACID de entrada
+│
 ├── fornecedores/                   # Módulo de Gestão de Fornecedores
-│   ├── index.php                   # Listagem com CNPJ, contatos e link direto para WhatsApp
+│   ├── index.php                   # Catálogo de parceiros comerciais
+│   ├── form.php                    # Formulário com CNPJ e contato ágil
 │   └── functions.php               # CRUD de fornecedores
 │
-├── compras/                        # Módulo de Gestão de Compras e Abastecimento
-│   ├── index.php                   # Listagem de pedidos de compra com status de pagamento
-│   ├── nova.php                    # Formulário de entrada de mercadorias com busca dinâmica de itens
-│   ├── visualizar.php              # Visualização detalhada (Master-Detail) com suporte a impressão
-│   └── functions.php               # Controlador transacional de compras com atualização de estoque
+├── produtos/                       # Módulo de Estoque e Catálogo
+│   ├── index.php                   # Catálogo com filtros por família e alertas
+│   ├── form.php                    # Cadastro com markup e validade
+│   ├── movimentacoes.php           # Livro-razão de entradas, saídas e perdas
+│   ├── etiquetas.php               # Emissor de etiquetas de código de barras
+│   └── functions.php               # Funções de saldo, estoque mínimo e preço
 │
-├── vendas/                         # Módulo de Frente de Caixa (PDV) e Histórico Comercial
-│   ├── pdv.php                     # Frente de caixa com atalhos F2-F9, Web Audio API 880Hz e troco dinâmico
-│   ├── functions.php               # Controlador do PDV com bloqueio pessimista (SELECT ... FOR UPDATE) e transação ACID
-│   ├── historico.php               # Histórico de vendas com filtros avançados, KPIs e ações de cancelamento
-│   ├── cupom.php                   # Visualizador de cupom não-fiscal formatado para impressora térmica (80mm/58mm)
-│   └── nfce.php                    # Layout demonstrativo de emissão de NFC-e com QR Code mock
+├── vendas/                         # Módulo de Frente de Caixa e Vendas
+│   ├── pdv.php                     # Terminal de PDV com catálogo em memória JS
+│   ├── cupom.php                   # Emissor térmico (80mm/58mm/A4) com QR Code
+│   ├── nfce.php                    # Consulta de Danfe NFC-e Didática
+│   ├── historico.php               # Histórico de vendas e cancelamento/estorno
+│   └── functions.php               # Motor de checkout transacional e concorrência
 │
-├── relatorios/                     # Módulo de Inteligência Comercial e Exportação de Dados
-│   ├── index.php                   # Central de emissão de relatórios
-│   ├── analise.php                 # Centro de inteligência com gráficos Chart.js e seletor de períodos
-│   ├── pdf.php                     # Renderização de relatórios em formato para impressão
-│   └── excel.php                   # Exportação de inventário em planilha formatada (9 colunas estritas)
+├── relatorios/                     # Centro de Inteligência e Relatórios
+│   ├── index.php                   # Painel DRE Gerencial e Inventário Geral
+│   ├── analise.php                 # Curva ABC (80-15-5) e gráficos Chart.js
+│   ├── pdf.php                     # Gerador de relatório executivo A4 em 9 colunas
+│   └── excel.php                   # Exportador CSV/Excel formatado
 │
-├── css/                            # Folhas de Estilo e Assets de Design System
-│   ├── style.css                   # Folha de estilo mestra do Design System SalesOps (Sidebar, tabelas, modais, tema verde)
-│   ├── bootstrap.min.css           # Framework CSS Bootstrap 5.3 (cópia local offline)
-│   ├── all.min.css                 # Ícones FontAwesome 6 (cópia local offline)
-│   └── inter.css                   # Tipografia Inter otimizada para telas corporativas
+├── inc/                            # Núcleo de Bibliotecas e Includes Globais
+│   ├── auth.php                    # Controle de sessão, RBAC e CSRF
+│   ├── database.php                # Conexão singleton PDO com tratamento de erros
+│   ├── functions.php               # Formatadores de moeda, data, flash messages e configs
+│   ├── header.php                  # Topbar institucional e Sidebar colapsável
+│   ├── footer.php                  # Rodapé corporativo e scripts globais
+│   ├── barcode_helper.php          # Algoritmos vetoriais SVG (Code 128B e QR Code)
+│   └── viacep.php                  # Proxy seguro para consulta de CEP
 │
-├── js/                             # Scripts e Bibliotecas Frontend
-│   ├── bootstrap.bundle.min.js     # Componentes interativos do Bootstrap (Modais, tooltips, dropdowns)
-│   └── chart.min.js                # Biblioteca de gráficos estatísticos Chart.js (cópia local offline)
+├── css/                            # Folhas de Estilo Locais
+│   ├── style.css                   # Design System MrStock (botões sólidos, animações)
+│   ├── bootstrap.min.css           # Framework Bootstrap 5.3 local
+│   ├── all.min.css                 # FontAwesome 6.x local
+│   └── inter.css                   # Tipografia Inter auto-hospedada
 │
-├── webfonts/                       # Fontes locais para funcionamento 100% offline
-│   ├── fa-solid-900.*              # FontAwesome Solid
-│   ├── fa-regular-400.*            # FontAwesome Regular
-│   ├── fa-brands-400.*             # FontAwesome Brands
-│   └── inter_font_*.*              # Arquivos de fonte WOFF2 da família Inter
+├── js/                             # Scripts e Bibliotecas Client-side
+│   ├── bootstrap.bundle.min.js     # Popper e componentes interativos
+│   └── chart.min.js                # Biblioteca Chart.js para dashboards
 │
-├── database/                       # Scripts e Dumps do Banco de Dados
-│   └── mrstock_db.sql              # Dump DDL e DML oficial do banco de dados (12 tabelas InnoDB + seed Papelaria Real)
-│
-└── docs/                           # Documentação Técnica Oficial do TCC
-    ├── visao_geral.md              # Visão geral, objetivos e ficha técnica
-    ├── estrutura_projeto.md        # Este documento (árvore física e descrição dos arquivos)
-    ├── tecnologias_utilizadas.md   # Stack tecnológica detalhada e justificativas
-    ├── banco_de_dados.md           # Modelo conceitual, lógico e dicionário de dados
-    ├── banco_de_dados_atualizado.md# Especificação detalhada do schema DDL, constraints e índices
-    ├── fluxo_sistema.md            # Diagramas de fluxo e processos de negócio
-    ├── diario_de_desenvolvimento.md# Histórico evolutivo e marcos de entrega do TCC
-    ├── perguntas_banca.md          # Guia preparatório de perguntas e respostas para a banca
-    ├── melhorias_futuras.md        # Roadmap de expansão pós-TCC
-    ├── revisao_final_tcc.md        # Checklist de homologação para a apresentação
-    └── modulos/                    # Manuais detalhados de cada módulo do sistema
-        ├── navegacao_e_layout.md   # [NOVO v2.0] Especificação da Sidebar, Topbar, Popover e Paginação
-        ├── etiquetas.md            # [NOVO v2.0] Manual de impressão de etiquetas térmicas e código de barras SVG
-        ├── vendas_pdv.md           # Manual do PDV com atalhos, som e troco dinâmico
-        ├── produtos.md             # Manual de produtos, estoque mínimo e Live Search
-        ├── dashboard.md            # Manual do Dashboard e KPIs em tempo real
-        ├── compras.md              # Manual de compras e controle de pedidos
-        ├── clientes.md             # Manual de clientes e integração com WhatsApp
-        ├── fornecedores.md         # Manual de fornecedores e cotações
-        ├── movimentacoes.md        # Manual do livro-razão de estoque
-        ├── historico_vendas.md     # Manual de histórico de vendas e cancelamentos
-        ├── cupom.md                # Manual do cupom não-fiscal térmico
-        ├── nfce.md                 # Manual da prévia de NFC-e
-        ├── relatorios.md           # Manual de emissão de relatórios gerenciais
-        ├── analise.md              # Manual do centro de inteligência e gráficos
-        └── login.md                # Manual de autenticação e segurança de sessão
+├── webfonts/                       # Fontes WOFF2 / TTF locais (FontAwesome e Inter)
+├── database/                       # Scripts de Banco de Dados
+│   ├── mrstock_db.sql              # Dump completo local
+│   └── mrstock_db_unaux_production.sql # Dump de produção sem CREATE DATABASE
+└── docs/                           # Documentação Técnica e Acadêmica Oficial
 ```
-
----
-
-## 2. Detecção Híbrida de Ambiente em `config.php`
-
-O arquivo `config.php` possui lógica dinâmica para resolução automática da constante `BASE_URL`:
-
-```php
-// Caminho absoluto no disco
-define('ROOT_PATH', realpath(__DIR__));
-
-// Detecção inteligente de documento raiz
-$_projRoot = str_replace('\\', '/', ROOT_PATH);
-$_docRoot  = str_replace('\\', '/', realpath($_SERVER['DOCUMENT_ROOT'] ?? ''));
-
-if ($_docRoot && strpos($_projRoot, $_docRoot) === 0) {
-    define('BASE_URL', rtrim(str_replace($_docRoot, '', $_projRoot), '/'));
-} else {
-    define('BASE_URL', '/' . basename(ROOT_PATH));
-}
-```
-
-Essa implementação garante portabilidade imediata (*Plug-and-Play*) sem necessidade de editar caminhos manuais, seja executando localmente em `http://localhost/mrstock/` ou em hospedagens remotas (ex: `http://mrstock.unaux.com/`).

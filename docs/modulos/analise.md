@@ -1,28 +1,72 @@
-﻿# Módulo de Inteligência Comercial (Centro de Análise & BI)
-
-**Arquivos:** `relatorios/analise.php`  
-**Acesso:** Exclusivo para Administradores (`admin`)  
-**Objetivo:** Apoiar a tomada de decisões gerenciais através de cálculos de lucratividade, margem comercial média e gráficos estatísticos interativos.
+# 📊 Módulo: Centro de Análise Avançada & Curva ABC (80-15-5)
+**Arquivo Principal:** `relatorios/analise.php`  
+**Escopo de Acesso:** Exclusivo Administrador (`require_admin()`)
 
 ---
 
-## 1. Seletor de Períodos & Métricas Financeiras
-
-O centro de análise permite alternar entre 3 janelas temporais:
-1. **Últimos 7 Dias:** Acompanhamento da semana em curso.
-2. **Mês Atual:** Fechamento do período contábil vigente.
-3. **Últimos 12 Meses:** Visão macro e sazonalidade (volta às aulas, períodos promocionais).
-
-### 📈 Indicadores Calculados:
-- **Receita Total Bruta (R$):** Valor total faturado no período.
-- **Custo Total de Mercadorias Vendidas - CMV (R$):** Custo de compra dos produtos baixados.
-- **Lucro Bruto (R$):** $\text{Receita} - \text{CMV}$.
-- **Margem de Lucro Geral (%):** $(\text{Lucro Bruto} / \text{Receita}) \times 100$.
+## 1. Objetivo & Contexto de Negócio
+Aplica o princípio de Pareto ao acervo da Papelaria Real, classificando os produtos em **Curva ABC (80-15-5)** com base na representatividade de faturamento acumulado:
+- **Classe A (80% da Receita):** Produtos de altíssimo giro (cadernos universitários, canetas azuis, resmas de sulfite). Nunca podem faltar em estoque.
+- **Classe B (15% da Receita):** Produtos de giro moderado (estojos, calculadoras, tintas específicas).
+- **Classe C (5% da Receita):** Produtos de cauda longa (compassos profissionais, réguas técnicas). Exigem compras fracionadas.
 
 ---
 
-## 2. Gráficos com Chart.js 4+
+## 2. Interface & Componentes Visuais
+- **Gráficos Interativos Chart.js:**
+  1. *Faturamento vs Custo Histórico (Gráfico de Linhas / Área)*
+  2. *Distribuição de Vendas por Categoria (Gráfico Doughnut)*
+  3. *Top 10 Produtos Mais Vendidos (Gráfico de Barras Horizontais)*
+- **Tabela da Curva ABC:** Produto, Quantidade Vendida, Faturamento Total, % de Representatividade Individual, % Acumulado e **Badge de Classificação (A, B, C)**.
 
-1. **Faturamento vs Custo:** Gráfico comparativo de barras revelando a rentabilidade diária/mensal.
-2. **Distribuição de Vendas por Categoria:** Gráfico em rosca (*Doughnut*) destacando a participação das categorias no faturamento.
-3. **Curva ABC / Top Produtos:** Gráfico horizontal classificando os itens de maior impacto financeiro.
+---
+
+## 3. Detalhamento Linha por Linha das Funções & Backend
+
+### 3.1 Algoritmo de Classificação da Curva ABC (80-15-5)
+```php
+function calcular_curva_abc(PDO $pdo, string $dataInicio, string $dataFim): array {
+    // 1. Total faturado por produto
+    $sql = "SELECT p.id, p.nome, c.nome as categoria_nome, 
+                   SUM(vi.quantidade) as qtd_vendida, 
+                   SUM(vi.quantidade * vi.preco_unitario) as faturamento_total 
+            FROM vendas_itens vi 
+            JOIN vendas v ON vi.venda_id = v.id 
+            JOIN produtos p ON vi.produto_id = p.id 
+            LEFT JOIN categorias c ON p.categoria_id = c.id 
+            WHERE DATE(v.data_venda) BETWEEN ? AND ? 
+            GROUP BY p.id 
+            ORDER BY faturamento_total DESC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$dataInicio, $dataFim]);
+    $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    $faturamentoGeral = array_sum(array_column($produtos, 'faturamento_total'));
+    $acumulado = 0;
+    
+    foreach ($produtos as &$prod) {
+        $faturamentoProd = (float)$prod['faturamento_total'];
+        $percIndividual = ($faturamentoGeral > 0) ? ($faturamentoProd / $faturamentoGeral) * 100 : 0;
+        $acumulado += $percIndividual;
+        
+        $prod['perc_individual'] = round($percIndividual, 2);
+        $prod['perc_acumulado']  = round($acumulado, 2);
+        
+        // Classificação Pareto
+        if ($acumulado <= 80.0) {
+            $prod['classe_abc'] = 'A';
+        } elseif ($acumulado <= 95.0) {
+            $prod['classe_abc'] = 'B';
+        } else {
+            $prod['classe_abc'] = 'C';
+        }
+    }
+    return $produtos;
+}
+```
+
+---
+
+## 4. Segurança & Controle de Acesso (RBAC)
+- **Acesso Restrito:** Acesso exclusivo ao perfil `admin`.
+- **Renderização Client-Side Segura:** Os dados para o Chart.js são serializados via `json_encode()` com sanitização UTF-8.

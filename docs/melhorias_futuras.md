@@ -1,27 +1,34 @@
-﻿# Propostas de Melhorias Futuras — MrStock ERP
-
-Este documento lista as oportunidades de expansão tecnológica e funcional do **MrStock ERP** para fases posteriores ao TCC.
+# 🚀 Melhorias Futuras & Roadmap Arquitetural (Versão 3.0)
+**MrStock ERP** — Evolução Tecnológica Pós-Banca ETEC
 
 ---
 
-## 🚀 Roadmap de Evolução Tecnológica
+## 1. Visão Estratégica da Versão 3.0
 
-### 1. Integração Direta com SEFAZ (NFC-e / NF-e em Produção)
-- Implementação de comunicação via WebServices SOAP com a SEFAZ-SP.
-- Assinatura digital de XMLs utilizando Certificado Digital ICP-Brasil (A1).
-- Envio síncrono e impressão da DANFE NFC-e oficial com QR Code homologado.
+Embora a versão atual **v2.1.0 em PHP 8.2 Nativo** atenda plenamente a todos os requisitos operacionais da Papelaria Real e aos critérios de avaliação da banca da ETEC, o roadmap corporativo prevê as seguintes evoluções:
 
-### 2. Módulo de E-commerce & Catálogo Online
-- API RESTful em PHP/JSON para sincronização de catálogo com loja virtual da Papelaria Real.
-- Gestão unificada de estoque físico e estoque web para evitar ruptura de pedidos online.
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                          ROADMAP DE EVOLUÇÃO MRSTOCK v3.0                              │
+├─────────────────────────┬──────────────────────────────┬───────────────────────────────┤
+│ 🏗️ Framework Laravel 11  │ 🌐 Ecossistema de APIs REST  │ 🏢 Arquitetura Multi-Filial   │
+├─────────────────────────┼──────────────────────────────┼───────────────────────────────┤
+│ • Camadas Service & DTO │ • OpenAPI / Swagger 3.0      │ • Controle de Múltiplos CNPJs │
+│ • Eloquent ORM & Migr.  │ • Integração E-commerce      │ • Transferência entre Lojas   │
+│ • Validações FormRequest│ • App Mobile para Inventário │ • Estoque Central Compartilhad│
+└─────────────────────────┴──────────────────────────────┴───────────────────────────────┘
+```
 
-### 3. Aplicativo Mobile para Inventário e Conferência (Flutter)
-- App Android/iOS para leitura de códigos de barras pela câmera do smartphone.
-- Realização de contagem rápida de inventário de gôndola e recebimento de mercadorias no depósito.
+---
 
-### 4. Inteligência Artificial Preditiva de Demanda
-- Algoritmo de previsão de vendas sazonais (ex: Volta às Aulas em Janeiro/Fevereiro e Dia das Crianças).
-- Sugestão automática de quantidades ideais nos pedidos de compra de acordo com o histórico dos anos anteriores.
+## 2. Vetores de Evolução Tecnológica
 
-### 5. Controle Multi-Filiais / Multi-Lojas
-- Suporte a múltiplas lojas físicas com transferência de mercadorias entre estoques filiais e matriz.
+1. **Migração para Laravel 11:**
+   - Adoção de arquitetura limpa em camadas (Controllers magros, Services de negócio e Repositories).
+   - Versionamento de banco de dados via Laravel Migrations e Seeders.
+2. **APIs RESTful e Integração com Marketplaces:**
+   - Exposição de endpoints autenticados via Laravel Sanctum para integração de estoque com Mercado Livre, Shopee e loja virtual própria da Papelaria Real.
+3. **Containerização Docker LAMP:**
+   - Criação de ambiente containerizado com `docker-compose.yml` pré-configurado (PHP-FPM 8.3, Nginx, MariaDB 11 e Redis para cache de sessão).
+4. **TEF Dedicado no PDV:**
+   - Integração direta com PinPads bancários via DLLs de Transferência Eletrônica de Fundos (TEF).

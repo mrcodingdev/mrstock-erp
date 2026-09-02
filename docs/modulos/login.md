@@ -1,34 +1,59 @@
-﻿# Módulo de Autenticação, Login & Hardening de Sessão
-
-**Arquivos:** `login.php`, `logout.php`, `config.php`, `inc/auth.php`  
-**Acesso:** Público (Não autenticado)  
-**Objetivo:** Prover uma barreira de autenticação segura, protegida contra força bruta, sequestro de sessão (*Session Hijacking*) e ataques CSRF/XSS.
+# 🔐 Módulo: Autenticação, Sessão & Logout
+**Arquivos Principais:** `login.php`, `logout.php`, `inc/auth.php`  
+**Escopo de Acesso:** Público / Usuários Autenticados
 
 ---
 
-## 1. Arquitetura de Segurança do Login
+## 1. Objetivo & Contexto de Negócio
+Gerencia a porta de entrada segura do MrStock ERP. Implementa os mais rigorosos padrões de segurança cibernética (OWASP Top 10), garantindo a autenticidade de operadores de caixa e administradores, isolamento de sessão e proteção contra ataques de força bruta.
 
-```mermaid
-flowchart TD
-    A[Acesso a login.php] --> B[Gera Token CSRF na Sessão]
-    B --> C[Operador envia Usuário e Senha via POST]
-    C --> D{Valida CSRF Token?}
-    D -- Não --> E[Retorna HTTP 403 Forbidden]
-    D -- Sim --> F[Busca Usuário no Banco via PDO Prepared Statement]
-    F --> G{password_verify(senha, hash)?}
-    G -- Não --> H[Exibe Alerta de Credenciais Inválidas]
-    G -- Sim --> I[session_regenerate_id(true)]
-    I --> J[Grava user_id e perfil na Sessão]
-    J --> K{Perfil == admin?}
-    K -- Sim --> L[Redireciona para dashboard.php]
-    K -- Não --> M[Redireciona para vendas/pdv.php]
+---
+
+## 2. Interface & Componentes Visuais
+- **Design Split-Screen Corporativo:** Lado esquerdo com gradiente institucional verde Papelaria Real (`#1a4231`), formas geométricas animadas e logotipo; lado direito com formulário limpo.
+- **Formulário Acessível:** Inputs com ícones temáticos, foco visível de alto contraste e botão de login 100% sólido.
+- **Feedback de Erro Seguro:** Mensagens genéricas de falha ("Usuário ou senha incorretos"), prevenindo enumeração de contas.
+
+---
+
+## 3. Detalhamento Linha por Linha das Funções & Backend
+
+### 3.1 Validação de Credenciais com BCrypt e Regeneração de Sessão
+```php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
+    $username = clean_input($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+    
+    $stmt = $pdo->prepare("SELECT id, username, password, perfil FROM usuarios WHERE username = ?");
+    $stmt->execute([$username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($user && password_verify($password, $user['password'])) {
+        // Regeneração atômica de ID de sessão (mitiga Session Fixation)
+        session_regenerate_id(true);
+        
+        $_SESSION['usuario_id']   = (int)$user['id'];
+        $_SESSION['usuario_nome'] = $user['username'];
+        $_SESSION['usuario_perfil'] = $user['perfil'];
+        
+        // Log de autenticação
+        log_sistema($pdo, $user['id'], "Login", "Autenticação bem-sucedida", "usuarios");
+        
+        // Redirecionamento inteligente por perfil
+        if ($user['perfil'] === 'caixa') {
+            redirect('vendas/pdv.php');
+        } else {
+            redirect('dashboard.php');
+        }
+    } else {
+        set_flash("Usuário ou senha inválidos.", "danger");
+    }
+}
 ```
 
 ---
 
-## 2. Medidas de Hardening Implementadas
-
-1. **Bcrypt Cost 12:** Senhas armazenadas com salt dinâmico e alto custo computacional.
-2. **Regeneração de ID de Sessão:** `session_regenerate_id(true)` impede ataques de fixação de sessão.
-3. **Cookies Defensivos:** Parâmetros `HttpOnly` e `SameSite=Lax` previnem leitura via JavaScript ou envio cruzado indevido.
-4. **Logout Seguro (`logout.php`):** Limpa o array `$_SESSION`, destrói os cookies no navegador e encerra a sessão no servidor.
+## 4. Segurança & Controle de Acesso (RBAC)
+- **Cookies Seguros:** `session_set_cookie_params()` configurado com `HttpOnly`, `SameSite=Lax` e `use_strict_mode`.
+- **Destruição Completa no Logout (`logout.php`):** `session_unset()`, `session_destroy()`, expiração de cookies e headers `no-cache, no-store`.

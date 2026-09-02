@@ -1,26 +1,32 @@
-﻿# Checklist de Homologação & Revisão Final do TCC
-
-**Data da Homologação:** 21/08/2026  
-**Status Geral:** ✅ **SISTEMA 100% HOMOLOGADO E PRONTO PARA A BANCA**
+# 🎓 Manual de Homologação & Revisão Final do TCC
+**MrStock ERP v2.1.0** — Banca Examinadora da ETEC Fernando Prestes
 
 ---
 
-## 📋 Checklist de Itens e Funcionalidades
+## 1. Divisão Estratégica da Equipe na Apresentação
 
-| Item / Funcionalidade | Status | Evidência / Observação |
-| :--- | :---: | :--- |
-| **Banco de Dados InnoDB (12 Tabelas + Lotes)** | ✅ Concluído | Integridade referencial `CASCADE`/`SET NULL` e charset `utf8mb4` |
-| **Catálogo Seed (15 Produtos Papelaria Real)** | ✅ Concluído | SKUs com EAN-13, estoque, preços de custo e venda |
-| **Autenticação & RBAC (Admin / Caixa)** | ✅ Concluído | Bcrypt cost 12, redirecionamento e isolamento de rotas |
-| **PDV com Atalhos Globais (F2-F9, ESC)** | ✅ Concluído | Navegação 100% por teclado |
-| **Web Audio API (880Hz)** | ✅ Concluído | Síntese de bipe de leitor ótico via oscilador nativo |
-| **Modal de Troco Dinâmico (Cédulas Rápidas)** | ✅ Concluído | Botões de R$ 10 a R$ 200 e cálculo instantâneo |
-| **Pessimistic Locking (SELECT ... FOR UPDATE)** | ✅ Concluído | Prevenção contra venda duplicada de estoque no PDV |
-| **Módulo de Etiquetas SVG (Code-128/EAN-13)** | ✅ Concluído | Geração vetorial pura em PHP e `@media print` |
-| **Sidebar Retrátil 260px/72px + Anti-FOUC** | ✅ Concluído | Persistência em `localStorage` e script síncrono no `<head>` |
-| **Topbar & Popover de Usuário (z-index: 99999)** | ✅ Concluído | Avatar dinâmico `AD`/`CX` e menu flutuante soberano |
-| **Tabelas com Live Search e Menu 3 Pontos** | ✅ Concluído | Filtragem instantânea e ações padronizadas `.so-actions-btn` |
-| **Exportação Excel (9 Colunas Estritas)** | ✅ Concluído | Planilha formatada sem colunas fantasmas |
-| **Centro de Inteligência (BI com Chart.js)** | ✅ Concluído | Análise temporal (7 dias, mês, ano) e cálculo de margem |
-| **Suíte de Testes Automatizados (Scripts CLI)** | ✅ Concluído | 38/38 asserções aprovadas no `test_full_system_audit.php` |
-| **Documentação Técnica em `docs/` (23 Arquivos)** | ✅ Concluído | Manuais atualizados e alinhados à Versão 2.0 |
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                   DIVISÃO DE PAPÉIS & RESPONSABILIDADES NA BANCA                       │
+├───────────────────┬───────────────────────────────┬────────────────────────────────────┤
+│ Membro da Equipe  │ Especialidade / Foco          │ Ponto Alto da Fala                 │
+├───────────────────┼───────────────────────────────┼────────────────────────────────────┤
+│ 👨‍💻 Douglas        │ Direção Técnica & Arquitetura │ Transações ACID, PDV, Segurança    │
+│ 🗄️ Nikolas        │ Banco de Dados & DER          │ Modelagem 14 Tabelas, Índices, CMP │
+│ 👔 Cesar          │ Cliente & Requisitos de Varejo│ Papelaria Real, Dores do Negócio   │
+│ 📄 Enzo           │ Documentação & Normas ABNT    │ PRDs, Relatórios e Metodologia     │
+│ 🎤 Sugahara       │ Navegação & Demonstração Live │ Operação do PDV, Atalhos e BI      │
+└───────────────────┴───────────────────────────────┴────────────────────────────────────┘
+```
+
+---
+
+## 2. Estrutura dos 15 Minutos de Apresentação
+
+1. **Minutos 0 a 3 (Cesar):** Apresentação da Papelaria Real (Sueli & Osnir), contexto de mercado, gargalos de estoque e proposta de valor.
+2. **Minutos 3 a 6 (Nikolas & Enzo):** Arquitetura relacional (14 tabelas), Dicionário de Dados, integridade referencial e documentação formal.
+3. **Minutos 6 a 12 (Sugahara & Douglas):** Demonstração ao vivo no navegador (Three-Tier Smoke Testing):
+   - Tier 1: Venda rápida no PDV com bipagem sonora, desconto e emissão de cupom NFC-e.
+   - Tier 2: Bloqueio de segurança RBAC (Caixa tentando ver custos/relatórios) e troca de senha BCrypt.
+   - Tier 3: Apuração do DRE Gerencial, Curva ABC e Backup SQL em 1-clique.
+4. **Minutos 12 a 15 (Douglas):** Conclusão, métricas Core Web Vitals (LCP 0.38s), trabalhos futuros (v3.0 Laravel) e abertura para a banca.

@@ -1,46 +1,59 @@
-﻿# Módulo de Produtos & Controle de Estoque
-
-**Arquivos:** `produtos/index.php`, `produtos/functions.php`, `produtos/etiquetas.php`  
-**Acesso:** Exclusivo para Administradores (`admin`)  
-**Objetivo:** Centralizar o cadastro, categorização, precificação (custo, markup e venda), controle de estoque mínimo e emissão de etiquetas de código de barras da Papelaria Real.
+# 📦 Módulo: Catálogo de Produtos & Controle de Estoque
+**Arquivos Principais:** `produtos/index.php`, `produtos/form.php`, `produtos/functions.php`  
+**Escopo de Acesso:** Administrador (Edição/Custo) e Caixa (Consulta Rápida)
 
 ---
 
-## 1. Visão Geral da Interface SalesOps
-
-A listagem de produtos (`produtos/index.php`) conta com as inovações da **Versão 2.0**:
-- **Live Search Instantâneo:** Filtragem reativa por nome, código EAN-13 ou categoria em tempo real via JavaScript.
-- **Menu de Ações Flutuante (3 Pontos):** Ações agrupadas em `.so-actions-btn` (*Editar*, *Visualizar*, *Imprimir Etiqueta*, *Excluir*).
-- **Badges Semânticos de Estoque:**
-  - 🟢 **Normal:** Saldo superior ao estoque mínimo.
-  - 🟡 **Estoque Baixo:** Saldo igual ou inferior ao estoque mínimo.
-  - 🔴 **Sem Estoque:** Saldo zerado (desabilitado para venda no PDV).
-- **Paginação Institucional Verde:** Navegação ágil com 10 ou 20 itens por página.
+## 1. Objetivo & Contexto de Negócio
+Gerencia todo o acervo de mercadorias da Papelaria Real. Organizado estritamente pelas **10 Famílias Funcionais de Produtos**, o módulo monitora o estoque mínimo de segurança, calcula o markup de venda sobre o Custo Médio Ponderado, rastreia validades de perecíveis (shelf-life) e fornece busca instantânea por código de barras ou nome.
 
 ---
 
-## 2. Estrutura de Precificação e Markup
-
-O cadastro de produtos realiza o cálculo e exibição de margem comercial:
-
-$$\text{Margem Bruta (\%)} = \left( \frac{\text{Preço de Venda} - \text{Preço de Custo}}{\text{Preço de Custo}} \right) \times 100$$
-
-### 📦 Campos do Cadastro de Produto:
-1. **Nome do Produto:** Descrição comercial completa (ex: *Caderno Universitário 10 Matérias Spiral*).
-2. **Código de Barras (EAN-13 / Code-128):** Código numérico de 13 dígitos para bipe no leitor ótico.
-3. **Categoria:** Vínculo com a tabela `categorias` (`ON DELETE SET NULL`).
-4. **Fornecedor Principal:** Vínculo com a tabela `fornecedores` (`ON DELETE SET NULL`).
-5. **Preço de Custo (Compra):** Valor pago ao distribuidor em R$.
-6. **Preço de Venda:** Valor final cobrado do consumidor no balcão.
-7. **Estoque Atual:** Saldo físico disponível na loja.
-8. **Estoque Mínimo:** Ponto de pedido para alertas automáticos no Dashboard.
-9. **Data de Validade:** Opcional (utilizado para tintas, colas e itens químicos).
+## 2. Interface & Componentes Visuais
+- **Painel de Chips de Filtro por Família:** Botões segmentados para filtragem rápida (`Cadernos & Blocos`, `Canetas & Marcadores`, `Lápis & Apontadores`, etc.).
+- **Tabela com Badges Semânticos de Estoque:**
+  - *Verde*: Saldo normal (`> estoque_minimo`).
+  - *Amarelo*: Estoque de atenção (`<= estoque_minimo`).
+  - *Vermelho*: Estoque zerado / ruptura.
+  - *Alerta Laranja*: Vencimento em menos de 30 dias.
+- **Modal de Cadastro e Edição:** Campos para Nome, Família, Código de Barras (com gerador automático), Fornecedor, Preço de Compra, Margem de Lucro (% Markup), Preço de Venda e Validade.
 
 ---
 
-## 3. Ações Disponíveis
+## 3. Detalhamento Linha por Linha das Funções & Backend
 
-- **Novo Produto:** Modal com validação de campos obrigatórios e cálculo de margem em tempo real.
-- **Edição Rápida:** Ajuste de preços, saldos e códigos com validação CSRF.
-- **Impressão de Etiquetas:** Atalho direto para gerar o código de barras SVG no formato térmico ou folha A4.
-- **Exclusão Segura:** Verificação de integridade referencial antes da remoção.
+### 3.1 Cadastro com Cálculo Automático de Markup e Código de Barras
+```php
+function cadastrar_produto(PDO $pdo, array $dados): int {
+    $nome           = clean_input($dados['nome']);
+    $categoriaId    = (int)$dados['categoria_id'];
+    $fornecedorId   = !empty($dados['fornecedor_id']) ? (int)$dados['fornecedor_id'] : null;
+    $quantidade     = (int)$dados['quantidade'];
+    $estoqueMinimo  = (int)($dados['estoque_minimo'] ?? 5);
+    $precoCompra    = (float)$dados['preco_compra'];
+    $precoVenda     = (float)$dados['preco_venda'];
+    $validade       = !empty($dados['validade']) ? $dados['validade'] : null;
+    $codigoBarra    = !empty($dados['codigo_de_barra']) ? clean_input($dados['codigo_de_barra']) : gerar_codigo_ean13_unico($pdo);
+    
+    $stmt = $pdo->prepare("INSERT INTO produtos 
+        (nome, categoria_id, fornecedor_id, quantidade, estoque_minimo, preco_compra, preco_venda, validade, codigo_de_barra, status) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'ativo')");
+    $stmt->execute([$nome, $categoriaId, $fornecedorId, $quantidade, $estoqueMinimo, $precoCompra, $precoVenda, $validade, $codigoBarra]);
+    
+    $produtoId = (int)$pdo->lastInsertId();
+    
+    if ($quantidade > 0) {
+        $stmt = $pdo->prepare("INSERT INTO movimentacoes (produto_id, tipo, quantidade, observacao) VALUES (?, 'entrada_compra', ?, 'Saldo Inicial de Cadastro')");
+        $stmt->execute([$produtoId, $quantidade]);
+    }
+    
+    return $produtoId;
+}
+```
+
+---
+
+## 4. Segurança & Controle de Acesso (RBAC)
+- **Proteção de Margens:** O perfil Caixa **NÃO visualiza as colunas de Preço de Compra, Fornecedor ou Markup** na tabela de produtos.
+- **Ações Administrativas:** Modificar preço, cadastrar ou excluir produtos exige perfil `admin`.
+- **Integridade Referencial:** A exclusão é impedida caso o produto possua registros vinculados em compras ou vendas.
