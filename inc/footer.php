@@ -1,3 +1,61 @@
+        <!-- ===== RODAPÉ INSTITUCIONAL CORPORATIVO (ESTILO GESTÃOCLICK COMPACTO) ===== -->
+        <footer class="so-footer-gestaoclick">
+            <div class="so-footer-gestaoclick__container">
+                <div class="row g-3 align-items-center">
+                    <!-- COLUNA 1: Marca & Sistema (Enxuto com Logo Oficial) -->
+                    <div class="col-lg-4 col-md-5 col-12">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="MrStock Logo" style="width: 24px; height: 24px; object-fit: contain;">
+                            <span class="fw-bold text-white fs-6">MrStock ERP</span>
+                            <span class="badge" style="background: #284936; color: #fff; font-size: 0.7rem;">v2.1.0</span>
+                        </div>
+                        <div style="color: #cbd5e1; font-size: 0.8125rem;">Papelaria Real • Sistema Integrado de Gestão & PDV</div>
+                    </div>
+
+                    <!-- COLUNA 2: Mr. Coding (Compacta e Direta) -->
+                    <div class="col-lg-4 col-md-4 col-12 text-md-center">
+                        <div class="fw-bold text-white fs-6 mb-1"><i class="fas fa-code text-info me-1"></i> Mr. Coding</div>
+                        <div style="color: #cbd5e1; font-size: 0.8125rem; font-weight: 500;">Douglas • Nikolas • Cesar • Enzo • Sugahara</div>
+                    </div>
+
+                    <!-- COLUNA 3: Precisando de Suporte? (3 botões circulares compactos + telefone) -->
+                    <div class="col-lg-4 col-md-3 col-12 text-md-end text-center">
+                        <div class="fw-bold text-white fs-6 mb-2">Precisando de suporte?</div>
+                        <div class="d-inline-flex align-items-center justify-content-md-end justify-content-center gap-3">
+                            <!-- WhatsApp -->
+                            <a href="https://wa.me/5511987654321" target="_blank" rel="noopener noreferrer" class="so-footer-gestaoclick__support-item" title="Falar no WhatsApp">
+                                <div class="so-footer-gestaoclick__support-circle so-footer-gestaoclick__support-circle--wa">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <span>WhatsApp</span>
+                            </a>
+                            <!-- Atendimento -->
+                            <a href="mailto:contato@mrstock.com.br" class="so-footer-gestaoclick__support-item" title="Enviar E-mail">
+                                <div class="so-footer-gestaoclick__support-circle so-footer-gestaoclick__support-circle--help">
+                                    <i class="fas fa-headset"></i>
+                                </div>
+                                <span>Atendimento</span>
+                            </a>
+                            <!-- Central de Ajuda -->
+                            <a href="<?= BASE_URL ?>/ajuda.php" class="so-footer-gestaoclick__support-item" title="Acessar FAQ">
+                                <div class="so-footer-gestaoclick__support-circle so-footer-gestaoclick__support-circle--faq">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <span>Ajuda</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-BARRA INFERIOR (1 Linha Compacta) -->
+                <div class="so-footer-gestaoclick__bottom mt-2 pt-2" style="border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.75rem; color: #94a3b8;">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center">
+                        <span>MrStock ERP © 2026 Papelaria Real</span>
+                        <span>(11) 98765-4321 • contato@mrstock.com.br</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div><!-- /main-panel -->
 
     <script src="<?= BASE_URL ?>/js/bootstrap.bundle.min.js"></script>

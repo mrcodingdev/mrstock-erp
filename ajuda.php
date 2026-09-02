@@ -605,7 +605,7 @@ require_once __DIR__ . '/inc/header.php';
     </div>
 
     <!-- ══ SEÇÃO 1: MESA DE ATALHOS DE TECLADO DO PDV (3 COLUNAS LIMPAS) ═════════ -->
-    <div class="so-card mb-4 border ajuda-section" data-categoria="atalhos" data-keywords="atalho teclado f1 f2 f4 f7 f8 f9 f10 esc pdv caixa tecla operacao comando balcao leitor cupom">
+    <div class="so-card mb-4 border ajuda-section" id="atalhos" data-categoria="atalhos" data-keywords="atalho teclado f1 f2 f4 f7 f8 f9 f10 esc pdv caixa tecla operacao comando balcao leitor cupom">
         <div class="so-card-header bg-dark text-white d-flex justify-content-between align-items-center">
             <h5 class="so-card-title text-white m-0">
                 <i class="fas fa-keyboard text-success me-2"></i>Mesa Tátil de Atalhos de Teclado (Frente de Caixa)

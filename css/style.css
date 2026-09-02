@@ -2031,3 +2031,162 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
   color: #0f172a;
 }
 
+
+/* ==========================================================================
+   RODAPÉ INSTITUCIONAL CORPORATIVO (ESTILO GESTÃOCLICK COMPACTO)
+   ========================================================================== */
+.so-footer-gestaoclick {
+  margin-top: auto;
+  padding: 1.25rem 1.5rem 0.6rem 1.5rem;
+  background: #222d31 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1;
+  animation: salesOpsSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.15s;
+}
+
+.so-footer-gestaoclick__container {
+  width: 100%;
+}
+
+.so-footer-gestaoclick__title {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.so-footer-gestaoclick__list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: #cbd5e1;
+}
+
+.so-footer-gestaoclick__support-grid {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.so-footer-gestaoclick__support-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #cbd5e1;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.so-footer-gestaoclick__support-item span {
+  font-size: 0.72rem;
+  color: #cbd5e1;
+  transition: color 0.2s;
+}
+
+.so-footer-gestaoclick__support-item:hover,
+.so-footer-gestaoclick__support-item:focus {
+  transform: translateY(-2px);
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+.so-footer-gestaoclick__support-item:hover span {
+  color: #38bdf8;
+}
+
+.so-footer-gestaoclick__support-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.so-footer-gestaoclick__support-circle--wa {
+  background: #25D366 !important;
+  border-color: #25D366 !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 8px rgba(37, 211, 102, 0.25);
+}
+
+.so-footer-gestaoclick__support-circle--help {
+  border: 1.5px solid #38bdf8;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.so-footer-gestaoclick__support-circle--help:hover,
+.so-footer-gestaoclick__support-item:hover .so-footer-gestaoclick__support-circle--help {
+  background: #38bdf8;
+  color: #222d31;
+}
+
+.so-footer-gestaoclick__support-circle--faq {
+  border: 1.5px solid #a78bfa;
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.08);
+}
+
+.so-footer-gestaoclick__support-circle--faq:hover,
+.so-footer-gestaoclick__support-item:hover .so-footer-gestaoclick__support-circle--faq {
+  background: #a78bfa;
+  color: #222d31;
+}
+
+.so-footer-gestaoclick__contact-direct {
+  color: #94a3b8;
+}
+
+.so-footer-gestaoclick__bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* Responsividade Mobile (Breakpoint <= 768px) */
+@media (max-width: 768px) {
+  .so-footer-gestaoclick {
+    padding: 1rem 1rem 0.6rem 1rem;
+    text-align: center;
+  }
+
+  .so-footer-gestaoclick__title {
+    text-align: center;
+  }
+
+  .so-footer-gestaoclick__list {
+    text-align: center;
+  }
+
+  .so-footer-gestaoclick__support-grid {
+    justify-content: center;
+  }
+
+  .so-footer-gestaoclick__contact-direct {
+    text-align: center;
+  }
+
+  .so-footer-gestaoclick__bottom .d-flex {
+    flex-direction: column;
+    text-align: center;
+    justify-content: center !important;
+    gap: 0.25rem;
+  }
+}
