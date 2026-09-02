@@ -74,11 +74,12 @@ $_menuGroups = [
         'id'       => 'menuRelatorios',
         'title'    => 'Inteligência & Relatórios',
         'icon'     => 'fa-solid fa-chart-pie',
-        'active'   => in_array($_ap, ['analise', 'relatorios']),
+        'active'   => in_array($_ap, ['analise', 'relatorios', 'logs']),
         'rbac'     => 'admin', // Grupo inteiro exclusivo Admin
         'items'    => [
-            ['id' => 'analise',    'href' => BASE_URL . '/relatorios/analise.php', 'icon' => 'fa-solid fa-chart-line', 'label' => 'Centro de Análise',     'rbac' => 'admin'],
-            ['id' => 'relatorios', 'href' => BASE_URL . '/relatorios/index.php',   'icon' => 'fa-solid fa-print',      'label' => 'Relatórios PDF / Excel', 'rbac' => 'admin'],
+            ['id' => 'analise',    'href' => BASE_URL . '/relatorios/analise.php', 'icon' => 'fa-solid fa-chart-line',     'label' => 'Centro de Análise',     'rbac' => 'admin'],
+            ['id' => 'relatorios', 'href' => BASE_URL . '/relatorios/index.php',   'icon' => 'fa-solid fa-print',          'label' => 'Relatórios PDF / Excel', 'rbac' => 'admin'],
+            ['id' => 'logs',       'href' => BASE_URL . '/relatorios/logs.php',    'icon' => 'fa-solid fa-clipboard-list', 'label' => 'Auditoria & Logs',       'rbac' => 'admin'],
         ]
     ],
 ];

@@ -40,13 +40,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_perfil']   = $user['perfil'];
             $_SESSION['usuario_nivel'] = $user['perfil'];
             $_SESSION['perfil']        = $user['perfil'];
+
+            registrar_log($pdo, 'LOGIN_SUCESSO', "Usuário {$user['username']} ({$user['perfil']}) autenticou-se no sistema", 'usuarios', (int)$user['id']);
+
             header("Location: " . BASE_URL . ($user['perfil'] == 'caixa' ? "/vendas/pdv.php" : "/dashboard.php"));
             exit;
         } else {
             $erro = "Credenciais inválidas. Tente novamente.";
+            $uidFallback = ($user && !empty($user['id'])) ? (int)$user['id'] : 1;
+            registrar_log($pdo, 'FALHA_LOGIN', "Tentativa de login rejeitada para o usuário '$username' (Senha incorreta ou inexistente)", 'usuarios', $uidFallback);
         }
     } else {
         $erro = "Credenciais inválidas. Tente novamente.";
+        $uidFallback = ($user && !empty($user['id'])) ? (int)$user['id'] : 1;
+        registrar_log($pdo, 'FALHA_LOGIN', "Tentativa de login rejeitada para o usuário '$username' (Senha incorreta ou inexistente)", 'usuarios', $uidFallback);
     }
 }
 ?>

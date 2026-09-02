@@ -236,6 +236,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         $msgFeedback = 'Cache de preferências e sessões temporárias limpo com êxito!';
         $tipoFeedback = 'success';
     }
+
+    // Registro de Auditoria no Log do Sistema
+    if ($tipoFeedback === 'success' && !empty($msgFeedback)) {
+        $abaAtiva = $activeTab;
+        registrar_log($pdo, 'CONFIGURACAO_ALTERADA', "Parâmetros do sistema atualizados na aba '$abaAtiva' por " . ($_SESSION['user_name'] ?? 'Admin'), 'configuracoes');
+    }
 }
 
 // Carrega dados da sessão e loja

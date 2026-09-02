@@ -142,6 +142,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $pdo->commit();
 
+            if ($acao === 'venda_rapida') {
+                registrar_log($pdo, 'VENDA_RAPIDA', "Venda Rápida #$venda_id registrada. Total: R$ " . number_format($total, 2, ',', '.') . " ($forma_pagamento)", 'vendas');
+            } else {
+                registrar_log($pdo, 'VENDA_PDV', "Venda PDV #$venda_id finalizada. Total: R$ " . number_format($totalLiquido, 2, ',', '.') . " ($forma_pagamento)", 'vendas');
+            }
+
             $redirect = ($acao === 'venda_rapida')
                 ? BASE_URL . "/dashboard.php?msg=sucesso"
                 : BASE_URL . "/vendas/nfce.php?msg=sucesso&venda_id=" . $venda_id;

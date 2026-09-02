@@ -2190,3 +2190,19 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
     gap: 0.25rem;
   }
 }
+
+/* ==========================================================================
+   UTILITÁRIOS ENTERPRISE / SALESOPS (BADGES, TIPOGRAFIA, AVATARES, TABELAS)
+   ========================================================================== */
+
+.badge-emerald { background-color: #059669 !important; color: #ffffff !important; }
+.badge-indigo { background-color: #4f46e5 !important; color: #ffffff !important; }
+.badge-purple { background-color: #7c3aed !important; color: #ffffff !important; }
+.badge-rose { background-color: #e11d48 !important; color: #ffffff !important; }
+.text-xxs { font-size: 0.6875rem !important; }
+.fs-xs { font-size: 0.75rem !important; }
+.shadow-xs { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important; }
+.avatar-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem; flex-shrink: 0; }
+.tr-clickable { cursor: pointer; transition: background-color 0.15s ease-in-out; }
+.tr-clickable:hover { background-color: rgba(40, 73, 54, 0.04) !important; }
+

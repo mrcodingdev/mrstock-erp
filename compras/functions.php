@@ -88,6 +88,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmtMov->execute([$p_id, $qtd, $obs]);
                 }
 
+                registrar_log($pdo, 'COMPRA_REGISTRADA', "Ordem de Compra #$compra_id registrada. Valor: R$ " . number_format($valor_total, 2, ',', '.'), 'compras');
+
                 $pdo->commit();
                 header("Location: " . BASE_URL . "/compras/index.php?msg=sucesso");
             } catch (Exception $e) {

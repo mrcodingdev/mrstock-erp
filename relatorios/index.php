@@ -74,6 +74,9 @@ require_once __DIR__ . '/../inc/header.php';
         <p class="text-muted m-0">Emissão de relatórios oficiais em PDF A4 de alta fidelidade e exportação de planilhas em Excel.</p>
     </div>
     <div class="d-flex gap-2 flex-wrap">
+        <a href="<?= BASE_URL ?>/relatorios/logs.php" class="btn btn-outline-primary fw-semibold shadow-sm">
+            <i class="fa-solid fa-clock-rotate-left me-1"></i> Auditoria de Logs
+        </a>
         <a href="<?= BASE_URL ?>/relatorios/analise.php" class="btn btn-secondary fw-semibold shadow-sm text-white">
             <i class="fa-solid fa-chart-line me-1"></i> Centro de Análise BI
         </a>

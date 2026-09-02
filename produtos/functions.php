@@ -78,12 +78,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt = $pdo->prepare($sql);
                     $stmt->execute([$nome, $codigo_de_barra, $categoria, $categoria_id, $validade, $fornecedor_id, $preco_venda, $preco_compra, $quantidade, $estoque_minimo, $id]);
                     $prod_id = $id;
+
+                    registrar_log($pdo, 'PRODUTO_EDITADO', "Produto #$id ($nome) atualizado. Preço Venda: R$ $preco_venda, Saldo: $quantidade", 'produtos');
                 } else {
                     $sql  = "INSERT INTO produtos (nome, codigo_de_barra, categoria, categoria_id, validade, fornecedor_id, preco_venda, preco_compra, quantidade, estoque_minimo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     $stmt = $pdo->prepare($sql);
                     $stmt->execute([$nome, $codigo_de_barra, $categoria, $categoria_id, $validade, $fornecedor_id, $preco_venda, $preco_compra, $quantidade, $estoque_minimo]);
                     $prod_id         = (int)$pdo->lastInsertId();
                     $diff_quantidade = $quantidade;
+
+                    registrar_log($pdo, 'PRODUTO_CRIADO', "Novo produto cadastrado: $nome. Preço Venda: R$ $preco_venda, Estoque Inicial: $quantidade", 'produtos');
                 }
 
                 if ($diff_quantidade > 0) {
@@ -121,6 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Possui vendas ou compras vinculadas: Inativa logicamente (Soft Delete)
                     $stmt = $pdo->prepare("UPDATE produtos SET status = 'inativo' WHERE id = ?");
                     $stmt->execute([$id]);
+                    registrar_log($pdo, 'PRODUTO_EXCLUIDO', "Produto #$id inativado/removido do catálogo", 'produtos');
                     header("Location: " . BASE_URL . "/produtos/index.php?msg=inativado");
                     exit;
                 } else {
@@ -131,9 +136,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     } catch (PDOException $e) {
                         $stmt = $pdo->prepare("UPDATE produtos SET status = 'inativo' WHERE id = ?");
                         $stmt->execute([$id]);
-                        header("Location: " . BASE_URL . "/produtos/index.php?msg=inativado");
-                        exit;
                     }
+                    registrar_log($pdo, 'PRODUTO_EXCLUIDO', "Produto #$id inativado/removido do catálogo", 'produtos');
+                    header("Location: " . BASE_URL . "/produtos/index.php?msg=sucesso");
+                    exit;
                 }
             }
             header("Location: " . BASE_URL . "/produtos/index.php?msg=sucesso");
@@ -143,6 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($id) {
                 $stmt = $pdo->prepare("UPDATE produtos SET status = 'ativo' WHERE id = ?");
                 $stmt->execute([$id]);
+                registrar_log($pdo, 'PRODUTO_REATIVADO', "Produto #$id reativado no catálogo", 'produtos');
                 header("Location: " . BASE_URL . "/produtos/index.php?msg=reativado");
                 exit;
             }
@@ -190,6 +197,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmtUpd = $pdo->prepare("UPDATE produtos SET quantidade = quantidade - ? WHERE id = ?");
                 }
                 $stmtUpd->execute([$quantidade, $produto_id]);
+
+                $motivo = !empty($observacao) ? $observacao : 'Ajuste manual';
+                registrar_log($pdo, 'AJUSTE_ESTOQUE', "Movimentação manual ($tipo_mov): $quantidade unidades no Produto #$produto_id. Motivo: $motivo", 'movimentacoes');
 
                 $pdo->commit();
                 header("Location: " . BASE_URL . "/produtos/movimentacoes.php?msg=sucesso");

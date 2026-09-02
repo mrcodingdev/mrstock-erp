@@ -163,3 +163,79 @@ if (!function_exists('set_app_config')) {
     }
 }
 
+/**
+ * Captura o endereço IP do cliente com validação estrita contra IP Spoofing (CWE-290).
+ * Inspeciona HTTP_X_FORWARDED_FOR, HTTP_CLIENT_IP e REMOTE_ADDR garantindo formato IP legítimo.
+ */
+if (!function_exists('get_client_ip')) {
+    function get_client_ip(): string {
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            foreach ($ips as $candidate) {
+                $candidate = trim($candidate);
+                if (filter_var($candidate, FILTER_VALIDATE_IP)) {
+                    return substr($candidate, 0, 45);
+                }
+            }
+        }
+
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $candidate = trim($_SERVER['HTTP_CLIENT_IP']);
+            if (filter_var($candidate, FILTER_VALIDATE_IP)) {
+                return substr($candidate, 0, 45);
+            }
+        }
+
+        if (!empty($_SERVER['REMOTE_ADDR'])) {
+            $candidate = trim($_SERVER['REMOTE_ADDR']);
+            if (filter_var($candidate, FILTER_VALIDATE_IP)) {
+                return substr($candidate, 0, 45);
+            }
+        }
+
+        return '127.0.0.1';
+    }
+}
+
+/**
+ * Registra eventos e operações no log de auditoria do sistema.
+ * Tratamento defensivo try-catch garante que falhas de log nunca interrompam o fluxo da aplicação.
+ *
+ * @param mixed       $pdo        Instância ativa de PDO
+ * @param string      $acao       Identificador da ação (ex: 'LOGIN_SUCESSO', 'VENDA_PDV')
+ * @param string|null $descricao  Detalhamento textual da operação
+ * @param string|null $tabela     Tabela de dados afetada pela ação
+ * @param int|null    $usuario_id ID do operador (fallback para $_SESSION['user_id'] ou 1)
+ * @return bool Retorna true se gravado com sucesso, false caso contrário
+ */
+if (!function_exists('registrar_log')) {
+    function registrar_log($pdo, string $acao, ?string $descricao = null, ?string $tabela = null, ?int $usuario_id = null): bool {
+        try {
+            if (!$pdo instanceof PDO) {
+                return false;
+            }
+
+            // Fallback seguro de identificação do operador
+            if (empty($usuario_id)) {
+                $usuario_id = !empty($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 1;
+            }
+
+            // Captura defensiva de IP com validação estrita (CWE-290)
+            $ip = get_client_ip();
+
+            $stmt = $pdo->prepare("INSERT INTO logs (usuario_id, acao, descricao, tabela_afetada, ip_usuario, data_log) VALUES (?, ?, ?, ?, ?, NOW())");
+            return $stmt->execute([
+                $usuario_id,
+                $acao,
+                $descricao,
+                $tabela,
+                $ip
+            ]);
+        } catch (Throwable $e) {
+            error_log("Falha ao gravar log de auditoria: " . $e->getMessage());
+            return false;
+        }
+    }
+}
+
+

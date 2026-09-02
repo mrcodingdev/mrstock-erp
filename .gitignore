@@ -22,4 +22,5 @@ GLOBAL_BRAIN_MANIFEST.md
 *.bak
 *backup*.php
 scripts/deploy_ftp.py
+07_Megabrain_Obsidian/
 .env
