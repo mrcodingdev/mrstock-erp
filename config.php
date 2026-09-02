@@ -75,9 +75,9 @@ if (getenv('APP_URL')) {
 // ====================================================================
 // 4. CREDENCIAIS DE BANCO DE DADOS (Injetadas via .env)
 // ====================================================================
-define('DB_HOST', getenv('DB_HOST') ?: ($isLocal ? 'localhost' : 'localhost'));
-define('DB_NAME', getenv('DB_NAME') ?: ($isLocal ? 'mrstock_db' : 'mrstock_db'));
-define('DB_USER', getenv('DB_USER') ?: ($isLocal ? 'root' : 'root'));
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_NAME', getenv('DB_NAME') ?: 'mrstock_db');
+define('DB_USER', getenv('DB_USER') ?: 'root');
 define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '');
 
 // 3. Supressão de Assinatura do Servidor (CWE-497)
