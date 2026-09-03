@@ -62,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MrStock ERP - Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades e PDV Ágil para Papelaria Real.">
     <title>MrStock ERP - Login</title>
     <link rel="preload" href="<?= BASE_URL ?>/webfonts/inter_font_1.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="<?= BASE_URL ?>/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>

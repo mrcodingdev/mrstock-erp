@@ -112,6 +112,7 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MrStock ERP - Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades e PDV Ágil para Papelaria Real.">
     <title><?= htmlspecialchars($pageTitle ?? 'MrStock ERP', ENT_QUOTES, 'UTF-8') ?></title>
     
     <!-- Script Anti-FOUC para Restauração Instantânea do Estado da Sidebar -->
