@@ -2207,3 +2207,75 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 .tr-clickable { cursor: pointer; transition: background-color 0.15s ease-in-out; }
 .tr-clickable:hover { background-color: rgba(40, 73, 54, 0.04) !important; }
 
+/* ==========================================================================
+   PADRONIZAÇÃO GLOBAL DE MODAIS (MRSTOCK DESIGN SYSTEM)
+   Normaliza contornos, cantos arredondados (8px), cabeçalhos e erradica frestas ou bordas brancas
+   ========================================================================== */
+.modal-dialog {
+  margin: 1.75rem auto;
+}
+@media (max-width: 576px) {
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+}
+
+/* Container do Modal: Borda nítida, raio contido de 8px e overflow perfeito */
+.modal-content {
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important; /* Erradica qualquer fresta, borda fantasma ou sangria de fundo nos cantos */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+  background-color: #ffffff !important;
+}
+
+/* Cabeçalho Unificado do Modal */
+.modal-header {
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+  padding: 1rem 1.25rem !important;
+  margin-top: 0 !important;
+}
+
+/* Cabeçalho Padrão Clean Institucional (bg-white) */
+.modal-header.bg-white {
+  background-color: #ffffff !important;
+  border-bottom-color: #cbd5e1 !important;
+}
+
+/* Cabeçalhos Temáticos (bg-dark, bg-primary, bg-danger): Seamless e sem fresta superior */
+.modal-header.bg-dark {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  border-bottom-color: #334155 !important;
+  margin: -1px -1px 0 -1px !important;
+  width: calc(100% + 2px) !important;
+}
+
+.modal-header.bg-primary {
+  background-color: #284936 !important;
+  color: #ffffff !important;
+  border-bottom-color: #1e3829 !important;
+  margin: -1px -1px 0 -1px !important;
+  width: calc(100% + 2px) !important;
+}
+
+.modal-header.bg-danger {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border-bottom-color: #b91c1c !important;
+  margin: -1px -1px 0 -1px !important;
+  width: calc(100% + 2px) !important;
+}
+
+/* Rodapé do Modal */
+.modal-footer {
+  border-top: 1px solid #cbd5e1 !important;
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  background-color: #ffffff !important;
+  padding: 0.875rem 1.25rem !important;
+}
+
+

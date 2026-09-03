@@ -423,9 +423,9 @@ require_once __DIR__ . '/../inc/header.php';
 <div class="modal fade" id="modalProduto" tabindex="-1" aria-labelledby="modalProdutoLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content border shadow-sm" style="border-radius: var(--mr-radius);">
-            <div class="modal-header bg-dark text-white border-0 py-3">
-                <h5 class="modal-title fw-bold" id="modalProdutoLabel"><i class="fas fa-box-open me-2 text-warning"></i> <?= $editProduto ? 'Editar Produto' : 'Cadastrar Produto' ?></h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar" onclick="window.location='<?= BASE_URL ?>/produtos/index.php'"></button>
+            <div class="modal-header bg-white border-bottom py-3" style="border-color: #cbd5e1 !important;">
+                <h5 class="modal-title fw-bold text-dark" id="modalProdutoLabel"><i class="fas fa-box-open me-2 text-primary"></i> <?= $editProduto ? 'Editar Produto' : 'Cadastrar Produto' ?></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" onclick="window.location='<?= BASE_URL ?>/produtos/index.php'"></button>
             </div>
             <form action="<?= BASE_URL ?>/produtos/functions.php?tipo=produto" method="POST">
                 <?= csrf_input() ?>
