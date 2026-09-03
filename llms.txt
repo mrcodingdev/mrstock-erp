@@ -1,0 +1,15 @@
+# MrStock ERP — Sistema Integrado de Gestão Comercial e PDV
+
+> MrStock ERP é uma solução corporativa open-source de gestão integrada para o varejo de papelarias e comércios locais, desenvolvida como Trabalho de Conclusão de Curso (TCC) na ETEC.
+
+## Módulos do Sistema
+- **Frente de Caixa (PDV):** Emissão acadêmica de NFC-e, controle ágil de vendas, atalhos de teclado e troco dinâmico.
+- **Estoque & Lotes:** Rastreabilidade de shelf-life, controle de validades e estratégia de abate PEPS / FIFO.
+- **Auditoria & Logs:** Trilha de auditoria operacional transacional imutável com registro de IP e operador.
+- **Compras & Fornecedores:** Entrada de mercadorias com geração de lotes e precificação de custo.
+- **Dashboard Analítico:** Indicadores de desempenho (KPIs), produtos em nível crítico e Curva ABC.
+
+## Diretrizes Técnicas e de Arquitetura
+- **Linguagem:** PHP 8.2 Nativo com Prepared Statements via PDO.
+- **Banco de Dados:** MySQL / MariaDB (mrstock_db) com índices B-Tree e integridade referencial.
+- **Interface:** MrStock Design System (Papelaria Real), Bootstrap 5 sólido, sem outlines e WCAG 2.1 AA.

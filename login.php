@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             --brand-accent: #39e07b;
             --bg-color: #e8f3ee;
             --text-dark: #2d3748;
-            --text-muted: #718096;
+            --text-muted: #475569; /* Contraste Slate-600: 7.0:1 contra branco (WCAG AAA Compliance) */
         }
 
         *, *::before, *::after {
@@ -194,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         .left-content p {
             font-size: 1.1rem;
-            opacity: 0.9;
+            color: #f1f5f9; /* Branco suave de alto contraste contra o fundo verde */
             line-height: 1.6;
             max-width: 90%;
         }
