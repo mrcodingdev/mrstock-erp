@@ -6,6 +6,47 @@
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
 
+/**
+ * Abate estoque de lotes sequencialmente via estratégia PEPS / FIFO.
+ * Prioriza lotes com data de validade mais próxima com lock pessimista.
+ */
+if (!function_exists('abater_lotes_fifo')) {
+    function abater_lotes_fifo(PDO $pdo, int $produto_id, int $qtd_solicitada): void {
+        if ($qtd_solicitada <= 0 || $produto_id <= 0) {
+            return;
+        }
+
+        $stmtLotes = $pdo->prepare("
+            SELECT id, quantidade 
+            FROM lotes 
+            WHERE produto_id = ? AND quantidade > 0 AND data_validade >= CURDATE() 
+            ORDER BY data_validade ASC, id ASC 
+            FOR UPDATE
+        ");
+        $stmtLotes->execute([$produto_id]);
+        $lotes = $stmtLotes->fetchAll(PDO::FETCH_ASSOC);
+
+        $restante = $qtd_solicitada;
+        $stmtUpdateLote = $pdo->prepare("UPDATE lotes SET quantidade = ? WHERE id = ?");
+
+        foreach ($lotes as $lote) {
+            if ($restante <= 0) {
+                break;
+            }
+
+            $saldoLote = (int)$lote['quantidade'];
+            if ($saldoLote <= $restante) {
+                $stmtUpdateLote->execute([0, $lote['id']]);
+                $restante -= $saldoLote;
+            } else {
+                $novoSaldo = $saldoLote - $restante;
+                $stmtUpdateLote->execute([$novoSaldo, $lote['id']]);
+                $restante = 0;
+            }
+        }
+    }
+}
+
 $tipo = $_GET['tipo'] ?? '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -54,6 +95,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $stmtE = $pdo->prepare("UPDATE produtos SET quantidade = quantidade - ? WHERE id = ?");
                 $stmtE->execute([$quantidade, $produto_id]);
+
+                // Abate de lotes via estratégia PEPS / FIFO
+                abater_lotes_fifo($pdo, $produto_id, $quantidade);
 
                 $stmtM = $pdo->prepare("INSERT INTO movimentacoes (produto_id, tipo, quantidade, observacao) VALUES (?, 'saida_venda', ?, ?)");
                 $stmtM->execute([$produto_id, $quantidade, "Venda Rápida PDV #$venda_id"]);
@@ -130,6 +174,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmtI->execute([$venda_id, $itemVal['id'], $itemVal['quantidade'], $itemVal['preco_unitario']]);
                     $stmtE->execute([$itemVal['quantidade'], $itemVal['id']]);
                     $stmtM->execute([$itemVal['id'], $itemVal['quantidade'], "Venda PDV #$venda_id"]);
+
+                    // Abate de lotes via estratégia PEPS / FIFO
+                    abater_lotes_fifo($pdo, $itemVal['id'], $itemVal['quantidade']);
                 }
             }
 

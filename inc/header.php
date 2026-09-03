@@ -47,10 +47,11 @@ $_menuGroups = [
         'id'       => 'menuEstoque',
         'title'    => 'Catálogo & Estoque',
         'icon'     => 'fa-solid fa-boxes-stacked',
-        'active'   => in_array($_ap, ['produtos', 'categorias', 'movimentacoes', 'etiquetas']),
+        'active'   => in_array($_ap, ['produtos', 'categorias', 'movimentacoes', 'etiquetas', 'lotes']),
         'rbac'     => null,
         'items'    => [
             ['id' => 'produtos',      'href' => BASE_URL . '/produtos/index.php',         'icon' => 'fa-solid fa-box-open',           'label' => 'Produtos & Saldos',         'rbac' => null],
+            ['id' => 'lotes',         'href' => BASE_URL . '/lotes/index.php',            'icon' => 'fa-solid fa-calendar-days',       'label' => 'Lotes & Validades',         'rbac' => 'admin'],
             ['id' => 'etiquetas',     'href' => BASE_URL . '/produtos/etiquetas.php',     'icon' => 'fa-solid fa-barcode',            'label' => 'Gerador de Etiquetas',      'rbac' => 'admin'],
             ['id' => 'categorias',    'href' => BASE_URL . '/categorias/index.php',       'icon' => 'fa-solid fa-tags',               'label' => 'Categorias',                'rbac' => 'admin'],
             ['id' => 'movimentacoes', 'href' => BASE_URL . '/produtos/movimentacoes.php', 'icon' => 'fa-solid fa-arrow-right-arrow-left', 'label' => 'Movimentações de Estoque', 'rbac' => null],

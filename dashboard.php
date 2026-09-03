@@ -39,16 +39,30 @@ $totalEstoqueBaixo = (int)($stmtTotalBaixo->fetchColumn() ?: 0);
 // ── 4. Produtos Próximos ao Vencimento ───────────────────────────────────────
 $diasAlertaVenc = (int)get_app_config($pdo, 'alerta_vencimento_dias', '30');
 
-$stmtVencimento = $pdo->query("
-    SELECT id, nome, quantidade, validade 
-    FROM produtos 
-    WHERE validade IS NOT NULL AND validade <= DATE_ADD(CURDATE(), INTERVAL {$diasAlertaVenc} DAY) AND status = 'ativo' 
-    ORDER BY validade ASC, nome ASC 
+$dataLimiteVenc = date('Y-m-d', strtotime("+{$diasAlertaVenc} days"));
+$stmtVencimento = $pdo->prepare("
+    SELECT l.id, p.nome, l.numero_lote, l.quantidade, l.data_validade, 
+           DATEDIFF(l.data_validade, CURDATE()) AS dias_para_vencer 
+    FROM lotes l 
+    INNER JOIN produtos p ON l.produto_id = p.id 
+    WHERE l.quantidade > 0 
+      AND l.data_validade <= ? 
+      AND p.status = 'ativo' 
+    ORDER BY l.data_validade ASC, l.id ASC 
     LIMIT 5
 ");
-$produtosVencimento = $stmtVencimento->fetchAll();
+$stmtVencimento->execute([$dataLimiteVenc]);
+$produtosVencimento = $stmtVencimento->fetchAll(PDO::FETCH_ASSOC);
 
-$stmtTotalVenc   = $pdo->query("SELECT COUNT(*) AS total FROM produtos WHERE validade IS NOT NULL AND validade <= DATE_ADD(CURDATE(), INTERVAL {$diasAlertaVenc} DAY) AND status = 'ativo'");
+$stmtTotalVenc = $pdo->prepare("
+    SELECT COUNT(*) AS total 
+    FROM lotes l 
+    INNER JOIN produtos p ON l.produto_id = p.id 
+    WHERE l.quantidade > 0 
+      AND l.data_validade <= ? 
+      AND p.status = 'ativo'
+");
+$stmtTotalVenc->execute([$dataLimiteVenc]);
 $totalVencimento = (int)($stmtTotalVenc->fetchColumn() ?: 0);
 
 // ── 5. Últimas Vendas Realizadas ─────────────────────────────────────────────
@@ -303,7 +317,7 @@ require_once __DIR__ . '/inc/header.php';
                     <h5 class="so-card-title text-danger m-0">
                         <i class="fas fa-calendar-alt text-danger me-2"></i> Perto do Vencimento
                     </h5>
-                    <a href="<?= BASE_URL ?>/produtos/index.php?status=vencido" class="btn btn-sm btn-danger">
+                    <a href="<?= BASE_URL ?>/lotes/index.php" class="btn btn-sm btn-danger">
                         <i class="fas fa-clock me-1"></i> Gerenciar Vencimentos
                     </a>
                 </div>
@@ -312,7 +326,7 @@ require_once __DIR__ . '/inc/header.php';
                         <table class="table table-hover mb-0 so-table align-middle">
                             <thead>
                                 <tr>
-                                    <th scope="col" width="45%">Produto</th>
+                                    <th scope="col" width="45%">Produto / Lote</th>
                                     <th scope="col" width="25%">Validade</th>
                                     <th scope="col" width="30%" class="text-center">Status</th>
                                 </tr>
@@ -320,11 +334,7 @@ require_once __DIR__ . '/inc/header.php';
                             <tbody>
                                 <?php if (count($produtosVencimento) > 0): ?>
                                     <?php foreach ($produtosVencimento as $p):
-                                        $dv     = new DateTime($p['validade']);
-                                        $hoje   = new DateTime('today');
-                                        $dvDate = new DateTime($dv->format('Y-m-d'));
-                                        $diff   = $hoje->diff($dvDate);
-                                        $dias   = (int)$diff->format('%r%a');
+                                        $dias = (int)$p['dias_para_vencer'];
 
                                         if ($dias < 0) {
                                             $cls = 'so-badge-danger';
@@ -346,10 +356,15 @@ require_once __DIR__ . '/inc/header.php';
                                     <tr>
                                         <td>
                                             <strong class="text-dark d-block"><?= htmlspecialchars($p['nome'], ENT_QUOTES, 'UTF-8') ?></strong>
-                                            <small class="text-muted">Estoque atual: <span class="tabular-nums fw-semibold"><?= (int)$p['quantidade'] ?></span> <?= ((int)$p['quantidade'] === 1) ? 'unidade' : 'unidades' ?></small>
+                                            <div class="d-flex align-items-center gap-2 mt-1 flex-wrap">
+                                                <span class="badge bg-light text-dark border font-monospace" style="font-size: 0.72rem;">
+                                                    <i class="fas fa-barcode text-muted me-1"></i>Lote: <?= htmlspecialchars($p['numero_lote'], ENT_QUOTES, 'UTF-8') ?>
+                                                </span>
+                                                <small class="text-muted">Estoque: <span class="tabular-nums fw-semibold"><?= (int)$p['quantidade'] ?></span> un.</small>
+                                            </div>
                                         </td>
                                         <td class="tabular-nums">
-                                            <span class="fw-semibold text-dark tabular-nums"><?= date('d/m/Y', strtotime($p['validade'])) ?></span>
+                                            <span class="fw-semibold text-dark tabular-nums"><?= date('d/m/Y', strtotime($p['data_validade'])) ?></span>
                                         </td>
                                         <td class="text-center">
                                             <span class="so-badge <?= htmlspecialchars($cls, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($lbl, ENT_QUOTES, 'UTF-8') ?></span>

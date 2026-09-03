@@ -87,7 +87,7 @@ require_once __DIR__ . '/../inc/header.php';
                         <div class="card-header bg-dark text-white fw-bold"><i class="fas fa-boxes me-1"></i> 2. Adicionar Produtos</div>
                         <div class="card-body bg-light">
                             <div class="row g-2 align-items-end mb-2">
-                                <div class="col-12 col-md-5">
+                                <div class="col-12 col-md-4">
                                     <label class="form-label fw-bold">Produto</label>
                                     <select class="form-select" id="add_produto" onchange="atualizarPrecoSugerido()">
                                         <option value="">Selecione o produto...</option>
@@ -100,12 +100,20 @@ require_once __DIR__ . '/../inc/header.php';
                                     <label class="form-label fw-bold">Qtd.</label>
                                     <input type="number" step="1" min="1" class="form-control" id="add_qtd" value="1">
                                 </div>
-                                <div class="col-6 col-md-3">
+                                <div class="col-6 col-md-2">
                                     <label class="form-label fw-bold">Custo Unit. (R$)</label>
                                     <input type="number" step="0.01" min="0" class="form-control" id="add_preco" value="0.00">
                                 </div>
-                                <div class="col-12 col-md-2">
-                                    <button type="button" class="btn btn-success w-100 fw-bold" onclick="adicionarItem()"><i class="fas fa-plus"></i> Add</button>
+                                <div class="col-6 col-md-2">
+                                    <label class="form-label fw-bold">Nº Lote</label>
+                                    <input type="text" class="form-control font-monospace" id="add_lote" placeholder="Opcional">
+                                </div>
+                                <div class="col-6 col-md-2">
+                                    <label class="form-label fw-bold">Validade</label>
+                                    <input type="date" class="form-control" id="add_validade">
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <button type="button" class="btn btn-success w-100 fw-bold" onclick="adicionarItem()"><i class="fas fa-plus"></i> Adicionar Item</button>
                                 </div>
                             </div>
                         </div>
@@ -162,25 +170,30 @@ function adicionarItem() {
     const pNome = selectProd.options[selectProd.selectedIndex].text;
     const qtd = parseFloat(document.getElementById('add_qtd').value);
     const preco = parseFloat(document.getElementById('add_preco').value);
+    const numLote = document.getElementById('add_lote').value.trim();
+    const dtValidade = document.getElementById('add_validade').value;
 
     if (!pId || isNaN(qtd) || qtd <= 0 || isNaN(preco) || preco < 0) {
         alert("Preencha corretamente o produto, quantidade e preço.");
         return;
     }
 
-    // Verifica se já existe na lista e apenas soma
-    const existente = itensCarrinho.find(i => i.produto_id == pId);
+    // Verifica se já existe na lista com o mesmo lote e apenas soma
+    const existente = itensCarrinho.find(i => i.produto_id == pId && (i.numero_lote || '') === numLote);
     if (existente) {
         existente.quantidade += qtd;
         existente.preco_unitario = preco; // atualiza pro mais recente
         existente.subtotal = existente.quantidade * existente.preco_unitario;
+        if (dtValidade) existente.data_validade = dtValidade;
     } else {
         itensCarrinho.push({
             produto_id: pId,
             nome: pNome,
             quantidade: qtd,
             preco_unitario: preco,
-            subtotal: qtd * preco
+            subtotal: qtd * preco,
+            numero_lote: document.getElementById('add_lote').value.trim(),
+            data_validade: document.getElementById('add_validade').value
         });
     }
 
@@ -188,6 +201,8 @@ function adicionarItem() {
     selectProd.value = '';
     document.getElementById('add_qtd').value = '1';
     document.getElementById('add_preco').value = '0.00';
+    document.getElementById('add_lote').value = '';
+    document.getElementById('add_validade').value = '';
 
     renderizarTabela();
 }
@@ -210,9 +225,10 @@ function renderizarTabela() {
         document.getElementById('btnFinalizar').disabled = false;
         itensCarrinho.forEach((item, index) => {
             totalCompra += item.subtotal;
+            const loteBadge = item.numero_lote ? ` <span class="badge bg-light text-dark border font-monospace">${item.numero_lote}</span>` : '';
             tbody.innerHTML += `
                 <tr>
-                    <td class="text-start ps-3 fw-bold">${item.nome}</td>
+                    <td class="text-start ps-3 fw-bold">${item.nome}${loteBadge}</td>
                     <td>${item.quantidade}</td>
                     <td>R$ ${item.preco_unitario.toFixed(2).replace('.', ',')}</td>
                     <td class="text-primary fw-bold">R$ ${item.subtotal.toFixed(2).replace('.', ',')}</td>

@@ -3,11 +3,7 @@ require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
 
 // Proteção extra: Apenas Admin
-if (($_SESSION['user_perfil'] ?? $_SESSION['usuario_nivel'] ?? '') !== 'admin') {
-    $_SESSION['flash_error'] = "Acesso negado: módulo restrito a administradores.";
-    header("Location: " . BASE_URL . "/dashboard.php");
-    exit;
-}
+require_admin();
 
 $tipo = $_GET['tipo'] ?? '';
 
@@ -36,18 +32,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $valor_total = 0.0;
             $itensValidados = [];
             foreach ($itens as $item) {
-                $p_id  = filter_var($item['produto_id'] ?? 0, FILTER_VALIDATE_INT);
-                $qtd   = filter_var($item['quantidade'] ?? 0, FILTER_VALIDATE_INT);
-                $preco = (float)($item['preco_unitario'] ?? 0);
+                $p_id     = filter_var($item['produto_id'] ?? 0, FILTER_VALIDATE_INT);
+                $qtd      = filter_var($item['quantidade'] ?? 0, FILTER_VALIDATE_INT);
+                $preco    = (float)($item['preco_unitario'] ?? 0);
+                $num_lote = !empty($item['numero_lote']) ? trim($item['numero_lote']) : null;
+                $dt_val   = !empty($item['data_validade']) ? trim($item['data_validade']) : null;
+                $dt_fab   = !empty($item['data_fabricacao']) ? trim($item['data_fabricacao']) : null;
 
                 if ($p_id > 0 && $qtd > 0 && $preco >= 0) {
                     $subtot = $qtd * $preco;
                     $valor_total += $subtot;
                     $itensValidados[] = [
-                        'produto_id'     => $p_id,
-                        'quantidade'     => $qtd,
-                        'preco_unitario' => $preco,
-                        'subtotal'       => $subtot
+                        'produto_id'      => $p_id,
+                        'quantidade'      => $qtd,
+                        'preco_unitario'  => $preco,
+                        'subtotal'        => $subtot,
+                        'numero_lote'     => $num_lote,
+                        'data_validade'   => $dt_val,
+                        'data_fabricacao' => $dt_fab
                     ];
                 }
             }
@@ -69,8 +71,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmtItem = $pdo->prepare("INSERT INTO itens_compra (compra_id, produto_id, quantidade, preco_unitario, subtotal) VALUES (?, ?, ?, ?, ?)");
                 $stmtProd = $pdo->prepare("UPDATE produtos SET quantidade = quantidade + ?, preco_compra = ? WHERE id = ?");
                 $stmtMov  = $pdo->prepare("INSERT INTO movimentacoes (produto_id, tipo, quantidade, observacao) VALUES (?, 'entrada_compra', ?, ?)");
+                $stmtLote = $pdo->prepare("INSERT INTO lotes (produto_id, numero_lote, data_fabricacao, data_validade, quantidade, preco_compra, fornecedor_id, data_entrada) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
 
-                // 2. Loop Itens: Salva item, sobe estoque, gera movimentação
+                // 2. Loop Itens: Salva item, sobe estoque, gera movimentação e cria lote rastreável
                 foreach ($itensValidados as $item) {
                     $p_id   = $item['produto_id'];
                     $qtd    = $item['quantidade'];
@@ -86,6 +89,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // C. Registra Movimentação de Auditoria
                     $obs = "Entrada de Compra #" . $compra_id . " - Nota: " . ($numero_nota ?: 'S/N');
                     $stmtMov->execute([$p_id, $qtd, $obs]);
+
+                    // D. Registra Lote de Rastreabilidade
+                    $lote_num = !empty($item['numero_lote']) ? $item['numero_lote'] : ('L' . date('Ymd') . '-' . $compra_id . '-' . $p_id);
+                    $lote_val = !empty($item['data_validade']) ? $item['data_validade'] : date('Y-m-d', strtotime('+1 year'));
+                    $lote_fab = !empty($item['data_fabricacao']) ? $item['data_fabricacao'] : date('Y-m-d');
+                    $stmtLote->execute([$p_id, $lote_num, $lote_fab, $lote_val, $qtd, $preco, $fornecedor_id]);
                 }
 
                 registrar_log($pdo, 'COMPRA_REGISTRADA', "Ordem de Compra #$compra_id registrada. Valor: R$ " . number_format($valor_total, 2, ',', '.'), 'compras');
@@ -129,6 +138,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $stmtEstorno->execute([$ic['quantidade'], $ic['produto_id']]);
                             $stmtMovEst->execute([$ic['produto_id'], $ic['quantidade'], "Estorno de estoque por Cancelamento da Compra #{$id}"]);
                         }
+
+                        $stmtZeraLote = $pdo->prepare("UPDATE lotes SET quantidade = 0 WHERE numero_lote LIKE ?");
+                        $stmtZeraLote->execute(['%-' . $id . '-%']);
                     }
                     // Se a compra estava CANCELADA e foi reativada para PAGA/PENDENTE: reinsere no estoque
                     elseif ($statusAtual === 'CANCELADA' && in_array($novo_status, ['PAGA', 'PENDENTE'])) {

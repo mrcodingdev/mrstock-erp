@@ -291,6 +291,9 @@ CREATE TABLE `lotes` (
   PRIMARY KEY (`id`),
   KEY `produto_id` (`produto_id`),
   KEY `fornecedor_id` (`fornecedor_id`),
+  KEY `idx_lotes_validade` (`data_validade`),
+  KEY `idx_lotes_quantidade` (`quantidade`),
+  KEY `idx_lotes_fifo` (`produto_id`,`quantidade`,`data_validade`),
   CONSTRAINT `lotes_ibfk_1` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `lotes_ibfk_2` FOREIGN KEY (`fornecedor_id`) REFERENCES `fornecedores` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
