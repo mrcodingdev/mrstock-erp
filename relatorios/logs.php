@@ -536,7 +536,7 @@ require_once __DIR__ . '/../inc/header.php';
                                     'avatar'      => strtoupper(substr($log['username'], 0, 2))
                                 ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP), ENT_QUOTES, 'UTF-8');
                             ?>
-                                <tr class="tr-clickable">
+                                <tr>
                                     <!-- ID do Log -->
                                     <td class="text-center text-muted fw-bold tabular-nums">
                                         #<?= (int)$log['id'] ?>
@@ -664,21 +664,21 @@ require_once __DIR__ . '/../inc/header.php';
 <!-- ══ MODAL BOOTSTRAP DE INSPEÇÃO PROFUNDA DE LOGS (#modalDetalhesLog) ═══ -->
 <div class="modal fade" id="modalDetalhesLog" tabindex="-1" aria-labelledby="modalDetalhesLogLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content shadow-sm" style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden;">
+        <div class="modal-content shadow-sm" style="border: 1px solid #cbd5e1; border-radius: 8px;">
             <!-- Cabeçalho do Modal -->
-            <div class="modal-header bg-dark text-white px-4 py-3 align-items-center">
+            <div class="modal-header bg-white border-bottom py-3 align-items-center" style="border-color: #cbd5e1 !important;">
                 <div class="d-flex align-items-center gap-2">
                     <div class="avatar-circle bg-primary text-white">
                         <i class="fa-solid fa-shield-halved fs-xs"></i>
                     </div>
                     <div>
-                        <h5 class="modal-title fw-bold m-0 text-white" id="modalDetalhesLogLabel">
+                        <h5 class="modal-title fw-bold m-0 text-dark" id="modalDetalhesLogLabel">
                             Inspeção de Log de Auditoria <span id="modalLogId" class="badge bg-secondary text-white font-monospace text-xs ms-1">#0</span>
                         </h5>
-                        <small class="fs-xs" style="color: #cbd5e1;">Registro imutável da trilha de eventos do ERP MrStock</small>
+                        <small class="text-muted fs-xs">Registro imutável da trilha de eventos do ERP MrStock</small>
                     </div>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
 
             <!-- Corpo do Modal -->
@@ -720,7 +720,7 @@ require_once __DIR__ . '/../inc/header.php';
                                 <i class="fa-solid fa-network-wired me-1 text-primary"></i>Endereço IP
                             </span>
                             <div class="mt-1">
-                                <span id="modalLogIp" class="badge bg-light text-dark border font-monospace fs-xs px-2 py-1">-</span>
+                                <div id="modalLogIp" class="font-monospace text-dark text-xs bg-light px-2 py-1 rounded border text-break tabular-nums" style="word-break: break-all;">-</div>
                             </div>
                         </div>
                     </div>

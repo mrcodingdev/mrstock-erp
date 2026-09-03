@@ -150,21 +150,6 @@ require_once __DIR__ . '/../inc/header.php';
 </div>
 
 <div class="content-body">
-    <?php if (isset($_GET['msg'])): ?>
-        <?php if ($_GET['msg'] === 'sucesso'): ?>
-        <div class="alert alert-success alert-dismissible fade show shadow-sm border border-success mb-3" role="alert">
-            <i class="fa-solid fa-circle-check me-2"></i> <strong>Operação Concluída!</strong> <?= htmlspecialchars($_SESSION['flash_success'] ?? 'Registro de lote atualizado com sucesso.', ENT_QUOTES, 'UTF-8') ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-        </div>
-        <?php unset($_SESSION['flash_success']); ?>
-        <?php elseif ($_GET['msg'] === 'erro'): ?>
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm border border-danger mb-3" role="alert">
-            <i class="fa-solid fa-triangle-exclamation me-2"></i> <strong>Atenção!</strong> <?= htmlspecialchars($_SESSION['flash_error'] ?? 'Não foi possível processar a operação no lote.', ENT_QUOTES, 'UTF-8') ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-        </div>
-        <?php unset($_SESSION['flash_error']); ?>
-        <?php endif; ?>
-    <?php endif; ?>
 
     <!-- ══ CARDS DE RESUMO (BENTO GRID SALESOPS DE ELITE) ════════════════════ -->
     <div class="row g-3 mb-4">

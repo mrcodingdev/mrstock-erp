@@ -133,8 +133,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
 
                 $pdo->commit();
-                $_SESSION['flash_success'] = "Lote processado com sucesso!";
-                header("Location: " . BASE_URL . "/lotes/index.php?msg=sucesso");
+                $_SESSION['flash_success'] = 'Registro de lote salvo com sucesso!';
+                header('Location: ' . BASE_URL . '/lotes/index.php');
                 exit;
 
             } catch (Exception $e) {
@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 $pdo->commit();
                 $_SESSION['flash_success'] = "Lote excluído com sucesso!";
-                header("Location: " . BASE_URL . "/lotes/index.php?msg=sucesso");
+                header('Location: ' . BASE_URL . '/lotes/index.php');
                 exit;
 
             } catch (Exception $e) {
