@@ -255,6 +255,9 @@ CREATE TABLE `logs` (
   `data_log` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
+  KEY `idx_logs_data_log` (`data_log`),
+  KEY `idx_logs_acao` (`acao`),
+  KEY `idx_logs_tabela` (`tabela_afetada`),
   CONSTRAINT `logs_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
