@@ -330,7 +330,7 @@ require_once __DIR__ . '/../inc/header.php';
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow border py-2">
                                             <li>
-                                                <a class="dropdown-item py-1" href="<?= BASE_URL ?>/vendas/cupom.php?venda_id=<?= $v['id'] ?>" target="_blank">
+                                                <a class="dropdown-item py-1" href="<?= BASE_URL ?>/vendas/cupom.php?venda_id=<?= $v['id'] ?>" target="_blank" rel="noopener noreferrer">
                                                     <i class="fas fa-print text-primary me-2"></i> Imprimir Cupom 80mm
                                                 </a>
                                             </li>

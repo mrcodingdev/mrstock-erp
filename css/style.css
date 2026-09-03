@@ -2278,4 +2278,15 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
   padding: 0.875rem 1.25rem !important;
 }
 
+/* ==========================================================================
+   PADRONIZAÇÃO GLOBAL DE ACESSIBILIDADE E LAYOUT SEMÂNTICO (WCAG 2.1 AAA)
+   ========================================================================== */
+.main-content {
+  min-width: 0;
+  width: 100%;
+}
 
+/* Contraste estrito Slate-600 (7.0:1 contra branco) para textos auxiliares */
+.text-muted, .text-secondary {
+  color: #475569 !important;
+}

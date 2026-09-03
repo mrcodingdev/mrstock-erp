@@ -1,3 +1,5 @@
+        </main><!-- /mainContent -->
+
         <!-- ===== RODAPÉ INSTITUCIONAL CORPORATIVO (ESTILO GESTÃOCLICK COMPACTO) ===== -->
         <footer class="so-footer-gestaoclick" style="background: #222d31 !important; border-top: 1px solid rgba(255, 255, 255, 0.08) !important; color: #cbd5e1 !important; margin-top: auto;">
             <div class="so-footer-gestaoclick__container">

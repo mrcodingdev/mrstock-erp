@@ -129,7 +129,7 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
     <link href="<?= BASE_URL ?>/css/bootstrap.min.css?v=2.2.0" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css?v=2.2.0">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/inter.css?v=2.2.0">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.css?v=2.2.1">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.min.css?v=2.2.2">
     <link rel="icon" href="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" type="image/x-icon">
     <?php if (!empty($extraHead)) echo $extraHead; ?>
 </head>
@@ -223,6 +223,7 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
                     class="so-collapse-btn" 
                     id="soCollapseBtn" 
                     onclick="toggleSidebarCollapse()" 
+                    aria-label="Recolher ou expandir menu lateral"
                     title="Recolher / Expandir Menu Lateral">
                 <i class="fa-solid fa-chevron-left so-collapse-icon"></i>
                 <span class="so-label">Recolher Menu</span>
@@ -235,7 +236,7 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
         <!-- TOPBAR SUPERIOR (SALESOPS v0) -->
         <header class="so-header">
             <div class="d-flex align-items-center gap-3">
-                <button class="d-md-none border-0 bg-transparent text-secondary p-0 fs-5" onclick="toggleSidebar()" title="Abrir Menu">
+                <button class="d-md-none border-0 bg-transparent text-secondary p-0 fs-5" onclick="toggleSidebar()" aria-label="Alternar menu lateral" title="Abrir Menu">
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="d-flex align-items-center gap-2">
@@ -245,7 +246,7 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
 
             <!-- USER PROFILE POPOVER DROPDOWN -->
             <div class="so-profile" id="soProfile">
-                <button class="so-avatar-btn" type="button" id="soAvatarBtn" onclick="toggleProfileDropdown()">
+                <button class="so-avatar-btn" type="button" id="soAvatarBtn" onclick="toggleProfileDropdown()" aria-label="Menu de perfil do operador">
                     <div class="so-avatar <?= $_uPerf === 'admin' ? 'so-avatar--admin' : 'so-avatar--caixa' ?>">
                         <?= $_uInitials ?>
                     </div>
@@ -293,3 +294,5 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
             </div>
             <?php unset($_SESSION['flash_success']); ?>
         <?php endif; ?>
+
+        <main class="main-content flex-grow-1" role="main" id="mainContent">

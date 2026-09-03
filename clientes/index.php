@@ -178,7 +178,7 @@ require_once __DIR__ . '/../inc/header.php';
                                     <div class="d-flex align-items-center gap-2">
                                         <span class="text-dark tabular-nums"><i class="fas fa-phone text-muted me-1 small"></i> <?= htmlspecialchars(formatar_telefone($c['telefone'])) ?></span>
                                         <?php if ($hasZap): ?>
-                                            <a href="https://wa.me/55<?= $zapNum ?>" target="_blank" class="btn-whatsapp" title="Conversar no WhatsApp" aria-label="Conversar no WhatsApp com <?= htmlspecialchars($c['nome']) ?>">
+                                            <a href="https://wa.me/55<?= $zapNum ?>" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" title="Conversar no WhatsApp" aria-label="Conversar no WhatsApp com <?= htmlspecialchars($c['nome']) ?>">
                                                 <i class="fab fa-whatsapp"></i>
                                             </a>
                                         <?php endif; ?>
@@ -211,7 +211,7 @@ require_once __DIR__ . '/../inc/header.php';
                                             </li>
                                             <?php if ($hasZap): ?>
                                             <li>
-                                                <a class="dropdown-item py-1 text-success" href="https://wa.me/55<?= $zapNum ?>" target="_blank">
+                                                <a class="dropdown-item py-1 text-success" href="https://wa.me/55<?= $zapNum ?>" target="_blank" rel="noopener noreferrer">
                                                     <i class="fab fa-whatsapp text-success me-2"></i> Abrir WhatsApp
                                                 </a>
                                             </li>

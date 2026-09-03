@@ -338,7 +338,7 @@ require_once __DIR__ . '/../inc/header.php';
                                         <span class="text-dark fw-bold tabular-nums">R$ <?= number_format((float)$cf['total'], 2, ',', '.') ?></span>
                                     </td>
                                     <td class="text-center">
-                                        <a href="<?= BASE_URL ?>/vendas/cupom.php?venda_id=<?= $cf['venda_id'] ?>" target="_blank" class="btn btn-sm btn-primary shadow-sm" title="Visualizar Cupom Fiscal da Venda #<?= $cf['venda_id'] ?>" aria-label="Visualizar Cupom Fiscal da Venda #<?= $cf['venda_id'] ?>">
+                                        <a href="<?= BASE_URL ?>/vendas/cupom.php?venda_id=<?= $cf['venda_id'] ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary shadow-sm" title="Visualizar Cupom Fiscal da Venda #<?= $cf['venda_id'] ?>" aria-label="Visualizar Cupom Fiscal da Venda #<?= $cf['venda_id'] ?>">
                                             <i class="fas fa-receipt me-1"></i> Ver Cupom
                                         </a>
                                     </td>

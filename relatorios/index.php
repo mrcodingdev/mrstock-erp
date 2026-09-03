@@ -192,7 +192,7 @@ require_once __DIR__ . '/../inc/header.php';
 
                     <!-- Botões de Ação 100% Sólidos -->
                     <div class="d-flex gap-2 flex-wrap pt-2">
-                        <a href="<?= BASE_URL ?>/relatorios/pdf.php?tipo=completo" target="_blank" class="btn btn-primary fw-bold shadow-sm flex-fill text-white">
+                        <a href="<?= BASE_URL ?>/relatorios/pdf.php?tipo=completo" target="_blank" rel="noopener noreferrer" class="btn btn-primary fw-bold shadow-sm flex-fill text-white">
                             <i class="fa-solid fa-file-pdf me-1"></i> Visualizar / Imprimir PDF
                         </a>
                         <a href="<?= BASE_URL ?>/relatorios/excel.php?tipo=completo" class="btn btn-success fw-bold shadow-sm flex-fill text-white">
@@ -235,7 +235,7 @@ require_once __DIR__ . '/../inc/header.php';
 
                     <!-- Botões de Ação 100% Sólidos -->
                     <div class="d-flex gap-2 flex-wrap pt-2">
-                        <a href="<?= BASE_URL ?>/relatorios/pdf.php?tipo=baixo" target="_blank" class="btn btn-primary fw-bold shadow-sm flex-fill text-white">
+                        <a href="<?= BASE_URL ?>/relatorios/pdf.php?tipo=baixo" target="_blank" rel="noopener noreferrer" class="btn btn-primary fw-bold shadow-sm flex-fill text-white">
                             <i class="fa-solid fa-file-pdf me-1"></i> Visualizar / Imprimir PDF
                         </a>
                         <a href="<?= BASE_URL ?>/relatorios/excel.php?tipo=baixo" class="btn btn-success fw-bold shadow-sm flex-fill text-white">
@@ -278,7 +278,7 @@ require_once __DIR__ . '/../inc/header.php';
 
                     <!-- Botões de Ação 100% Sólidos -->
                     <div class="d-flex gap-2 flex-wrap pt-2">
-                        <a href="<?= BASE_URL ?>/relatorios/pdf.php?tipo=validade" target="_blank" class="btn btn-primary fw-bold shadow-sm flex-fill text-white">
+                        <a href="<?= BASE_URL ?>/relatorios/pdf.php?tipo=validade" target="_blank" rel="noopener noreferrer" class="btn btn-primary fw-bold shadow-sm flex-fill text-white">
                             <i class="fa-solid fa-file-pdf me-1"></i> Visualizar / Imprimir PDF
                         </a>
                         <a href="<?= BASE_URL ?>/relatorios/excel.php?tipo=validade" class="btn btn-success fw-bold shadow-sm flex-fill text-white">
@@ -320,7 +320,7 @@ require_once __DIR__ . '/../inc/header.php';
 
                         <!-- Botões Rápidos e Collapse de Filtro Personalizado -->
                         <div class="d-flex gap-2 flex-wrap mb-2">
-                            <a href="<?= BASE_URL ?>/relatorios/pdf.php?tipo=vendas" target="_blank" class="btn btn-primary fw-bold shadow-sm flex-fill text-white">
+                            <a href="<?= BASE_URL ?>/relatorios/pdf.php?tipo=vendas" target="_blank" rel="noopener noreferrer" class="btn btn-primary fw-bold shadow-sm flex-fill text-white">
                                 <i class="fa-solid fa-file-pdf me-1"></i> PDF Geral
                             </a>
                             <a href="<?= BASE_URL ?>/relatorios/excel.php?tipo=vendas" class="btn btn-success fw-bold shadow-sm flex-fill text-white">

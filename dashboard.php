@@ -117,7 +117,7 @@ require_once __DIR__ . '/inc/header.php';
         <p class="text-muted m-0">Visão global do estoque, faturamento do dia e alertas operacionais.</p>
     </div>
     <div class="d-flex gap-2 flex-wrap">
-        <a href="<?= BASE_URL ?>/relatorios/pdf.php" target="_blank" class="btn btn-secondary fw-semibold shadow-sm">
+        <a href="<?= BASE_URL ?>/relatorios/pdf.php" target="_blank" rel="noopener noreferrer" class="btn btn-secondary fw-semibold shadow-sm">
             <i class="fas fa-file-pdf me-1"></i> Abrir Relatório PDF
         </a>
         <a href="<?= BASE_URL ?>/vendas/pdv.php" class="btn btn-primary fw-bold shadow-sm">
