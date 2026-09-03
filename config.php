@@ -9,6 +9,15 @@
 define('ROOT_PATH', realpath(__DIR__));
 
 // ====================================================================
+// FUSO HORÁRIO OFICIAL BRASIL / BRASÍLIA (UTC-3 / America/Sao_Paulo)
+// ====================================================================
+$appTimezone = $_ENV['APP_TIMEZONE'] ?? $_SERVER['APP_TIMEZONE'] ?? (getenv('APP_TIMEZONE') ?: 'America/Sao_Paulo');
+date_default_timezone_set($appTimezone);
+if (!defined('APP_TIMEZONE')) {
+    define('APP_TIMEZONE', $appTimezone);
+}
+
+// ====================================================================
 // 2. IDENTIFICAÇÃO E VERSIONAMENTO DO PROJETO (SEMANTIC VERSIONING)
 // ====================================================================
 if (!defined('MRSTOCK_VERSION')) {

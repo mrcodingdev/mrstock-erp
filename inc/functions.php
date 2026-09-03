@@ -3,6 +3,10 @@
  * MrStock ERP - Camada de Funções Utilitárias e Segurança
  */
 
+if (date_default_timezone_get() !== 'America/Sao_Paulo') {
+    date_default_timezone_set('America/Sao_Paulo');
+}
+
 if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
     session_start();
 }
