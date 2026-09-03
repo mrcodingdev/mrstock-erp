@@ -24,3 +24,10 @@ GLOBAL_BRAIN_MANIFEST.md
 scripts/deploy_ftp.py
 07_Megabrain_Obsidian/
 .env
+
+# Hubs Acadêmicos e Backups do Drive
+01_TCC_Documentacao_Academica/
+02_Auditorias_e_Qualidade_QA/
+03_Backups_e_Releases/
+04_Base_de_Conhecimento_e_Obsidian/
+scripts/
