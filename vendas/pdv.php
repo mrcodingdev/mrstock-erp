@@ -255,10 +255,10 @@ require_once __DIR__ . '/../inc/header.php';
     <!-- ══ MODAL GUIA DE ATALHOS & MANUAL DO CAIXA (F1) ═══════════════════════ -->
     <div class="modal fade" id="modalGuiaAtalhos" tabindex="-1" aria-labelledby="modalGuiaAtalhosLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border shadow-sm" style="border-radius: var(--mr-radius);">
-                <div class="modal-header bg-dark text-white border-bottom py-3">
-                    <h5 class="modal-title fw-bold" id="modalGuiaAtalhosLabel"><i class="fas fa-keyboard text-primary me-2"></i> Atalhos de Teclado do Caixa</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            <div class="modal-content shadow-sm" style="border: 1px solid #cbd5e1; border-radius: 8px;">
+                <div class="modal-header bg-white border-bottom py-3 align-items-center" style="border-color: #cbd5e1 !important;">
+                    <h5 class="modal-title fw-bold text-dark" id="modalGuiaAtalhosLabel"><i class="fas fa-keyboard text-primary me-2"></i> Atalhos de Teclado do Caixa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body p-4">
                     <p class="text-muted small mb-3">Opere o PDV em alta velocidade utilizando os atalhos de teclado:</p>
@@ -303,10 +303,10 @@ require_once __DIR__ . '/../inc/header.php';
     <!-- ══ MODAL DE FINALIZAÇÃO, CÉDULAS RÁPIDAS E TROCO DINÂMICO (F4) ═════════ -->
     <div class="modal fade" id="modalFinalizarVenda" tabindex="-1" aria-labelledby="modalFinalizarVendaLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border shadow-sm" style="border-radius: var(--mr-radius);">
-                <div class="modal-header bg-primary text-white border-bottom py-3">
-                    <h5 class="modal-title fw-bold" id="modalFinalizarVendaLabel"><i class="fas fa-cash-register me-2"></i> Finalizar Venda — Frente de Caixa</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            <div class="modal-content shadow-sm" style="border: 1px solid #cbd5e1; border-radius: 8px;">
+                <div class="modal-header bg-white border-bottom py-3 align-items-center" style="border-color: #cbd5e1 !important;">
+                    <h5 class="modal-title fw-bold text-dark" id="modalFinalizarVendaLabel"><i class="fas fa-cash-register text-success me-2"></i> Finalizar Venda — Frente de Caixa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body p-4">
                     <!-- Resumo da Venda: Total em Preto Corporativo -->
@@ -371,10 +371,10 @@ require_once __DIR__ . '/../inc/header.php';
     <!-- Modal de Alerta de Estoque (Frontend) -->
     <div class="modal fade" id="modalEstoque" tabindex="-1" aria-labelledby="modalEstoqueLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border shadow-sm" style="border-radius: var(--mr-radius);">
-                <div class="modal-header bg-danger text-white border-bottom py-3">
-                    <h5 class="modal-title fw-bold" id="modalEstoqueLabel"><i class="fas fa-exclamation-triangle me-2"></i> Estoque Insuficiente</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            <div class="modal-content shadow-sm" style="border: 1px solid #cbd5e1; border-radius: 8px;">
+                <div class="modal-header bg-white border-bottom py-3 align-items-center" style="border-color: #cbd5e1 !important;">
+                    <h5 class="modal-title fw-bold text-danger" id="modalEstoqueLabel"><i class="fas fa-triangle-exclamation text-danger me-2"></i> Estoque Insuficiente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body text-center py-4">
                     <i class="fas fa-boxes-stacked fa-3x text-danger mb-3"></i>
