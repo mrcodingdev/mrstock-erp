@@ -216,17 +216,19 @@ require_once __DIR__ . '/../inc/header.php';
                                                 </a>
                                             </li>
                                             <?php endif; ?>
-                                            <li><hr class="dropdown-divider my-1"></li>
-                                            <li>
-                                                <form action="<?= BASE_URL ?>/clientes/functions.php?tipo=cliente" method="POST" onsubmit="return confirm('Deseja realmente inativar/excluir este cliente?')" class="m-0">
-                                                    <?= csrf_input() ?>
-                                                    <input type="hidden" name="acao" value="deletar">
-                                                    <input type="hidden" name="id"   value="<?= $c['id'] ?>">
-                                                    <button type="submit" class="dropdown-item text-danger py-1">
-                                                        <i class="fas fa-trash-alt me-2"></i> Excluir / Inativar
-                                                    </button>
-                                                </form>
-                                            </li>
+                                            <?php if (isset($_SESSION['user_perfil']) && $_SESSION['user_perfil'] === 'admin'): ?>
+                                                <li><hr class="dropdown-divider my-1"></li>
+                                                <li>
+                                                    <form method="POST" action="functions.php?tipo=cliente" onsubmit="return confirm('Deseja realmente excluir ou inativar este cliente?');">
+                                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+                                                        <input type="hidden" name="acao" value="deletar">
+                                                        <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
+                                                        <button type="submit" class="dropdown-item text-danger py-1">
+                                                            <i class="fas fa-trash-alt me-2"></i> Excluir / Inativar
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            <?php endif; ?>
                                         </ul>
                                     </div>
                                 </td>

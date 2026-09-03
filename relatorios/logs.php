@@ -1,7 +1,7 @@
 <?php
 /**
  * MrStock ERP - Consulta e Auditoria de Logs Operacionais
- * SalesOps v0 Design System & Camada Backend de Auditoria
+ * MrStock Design System (Papelaria Real) & Auditoria Operacional
  */
 
 $pageTitle  = 'Auditoria de Logs';
@@ -71,13 +71,13 @@ if (!empty($filtroUser)) {
 }
 
 if (!empty($dataInicio)) {
-    $whereClauses[] = "DATE(l.data_log) >= ?";
-    $params[] = $dataInicio;
+    $whereClauses[] = "l.data_log >= ?";
+    $params[] = $dataInicio . ' 00:00:00';
 }
 
 if (!empty($dataFim)) {
-    $whereClauses[] = "DATE(l.data_log) <= ?";
-    $params[] = $dataFim;
+    $whereClauses[] = "l.data_log <= ?";
+    $params[] = $dataFim . ' 23:59:59';
 }
 
 $whereSql = implode(' AND ', $whereClauses);
@@ -235,6 +235,17 @@ $getBadgeAcao = function(string $acao): array {
         'PRODUTO_REATIVADO'     => ['class' => 'bg-info text-white',          'icon' => 'fa-solid fa-rotate-left',          'label' => 'Produto Reativado'],
         'AJUSTE_ESTOQUE'        => ['class' => 'bg-warning text-dark',        'icon' => 'fa-solid fa-boxes-packing',        'label' => 'Ajuste de Estoque'],
         'COMPRA_REGISTRADA'     => ['class' => 'badge-indigo text-white',     'icon' => 'fa-solid fa-truck-ramp-box',        'label' => 'Compra Registrada'],
+        'CLIENTE_CRIADO'        => ['class' => 'badge-emerald text-white',    'icon' => 'fa-solid fa-user-plus',             'label' => 'Cliente Cadastrado'],
+        'CLIENTE_EDITADO'       => ['class' => 'badge-indigo text-white',     'icon' => 'fa-solid fa-user-pen',              'label' => 'Cliente Atualizado'],
+        'CLIENTE_EXCLUIDO'      => ['class' => 'bg-danger text-white',        'icon' => 'fa-solid fa-user-xmark',            'label' => 'Cliente Excluído'],
+        'CLIENTE_INATIVADO'     => ['class' => 'bg-warning text-dark',        'icon' => 'fa-solid fa-user-slash',           'label' => 'Cliente Inativado'],
+        'FORNECEDOR_CRIADO'     => ['class' => 'bg-info text-white',          'icon' => 'fa-solid fa-truck-ramp-box',        'label' => 'Fornecedor Cadastrado'],
+        'FORNECEDOR_EDITADO'    => ['class' => 'bg-warning text-dark',        'icon' => 'fa-solid fa-truck-arrow-right',     'label' => 'Fornecedor Atualizado'],
+        'FORNECEDOR_EXCLUIDO'   => ['class' => 'bg-danger text-white',        'icon' => 'fa-solid fa-truck-front',           'label' => 'Fornecedor Excluído'],
+        'FORNECEDOR_INATIVADO'  => ['class' => 'bg-warning text-dark',        'icon' => 'fa-solid fa-truck-droplet',        'label' => 'Fornecedor Inativado'],
+        'CATEGORIA_CRIADA'      => ['class' => 'badge-purple text-white',     'icon' => 'fa-solid fa-tags',                  'label' => 'Categoria Criada'],
+        'CATEGORIA_EDITADA'     => ['class' => 'bg-warning text-dark',        'icon' => 'fa-solid fa-pen-ruler',             'label' => 'Categoria Atualizada'],
+        'CATEGORIA_EXCLUIDA'    => ['class' => 'bg-danger text-white',        'icon' => 'fa-solid fa-tag',                   'label' => 'Categoria Excluída'],
         default                 => ['class' => 'bg-light text-dark border',   'icon' => 'fa-solid fa-shield',               'label' => $acao]
     };
 };

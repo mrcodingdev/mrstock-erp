@@ -4,6 +4,7 @@
  */
 
 require_once __DIR__ . '/../inc/database.php';
+require_once __DIR__ . '/../inc/functions.php';
 require_once __DIR__ . '/../inc/auth.php';
 
 // Proteção extra: Apenas Admin
@@ -28,15 +29,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $descricao = trim($_POST['descricao'] ?? '');
 
             if ($id) {
-                $stmt = $pdo->prepare("UPDATE categorias SET nome=?, descricao=? WHERE id=?");
-                $stmt->execute([$nome, $descricao, $id]);
+                try {
+                    $pdo->beginTransaction();
+                    $stmt = $pdo->prepare("UPDATE categorias SET nome=?, descricao=? WHERE id=?");
+                    $stmt->execute([$nome, $descricao, $id]);
 
-                // Sincroniza a coluna legada textual 'categoria' na tabela produtos
-                $stmtUpdProd = $pdo->prepare("UPDATE produtos SET categoria=? WHERE categoria_id=?");
-                $stmtUpdProd->execute([$nome, $id]);
+                    // Sincroniza a coluna legada textual 'categoria' na tabela produtos
+                    $stmtUpdProd = $pdo->prepare("UPDATE produtos SET categoria=? WHERE categoria_id=?");
+                    $stmtUpdProd->execute([$nome, $id]);
+
+                    registrar_log($pdo, 'CATEGORIA_EDITADA', "Categoria #$id ($nome) atualizada", 'categorias');
+                    $pdo->commit();
+                } catch (Exception $e) {
+                    if ($pdo->inTransaction()) {
+                        $pdo->rollBack();
+                    }
+                    error_log("Erro ao atualizar categoria ID {$id}: " . $e->getMessage());
+                    header("Location: " . BASE_URL . "/categorias/index.php?msg=erro");
+                    exit;
+                }
             } else {
                 $stmt = $pdo->prepare("INSERT INTO categorias (nome, descricao) VALUES (?, ?)");
                 $stmt->execute([$nome, $descricao]);
+                $novaCatId = (int)$pdo->lastInsertId();
+                registrar_log($pdo, 'CATEGORIA_CRIADA', "Nova categoria cadastrada: $nome (#$novaCatId)", 'categorias');
             }
             header("Location: " . BASE_URL . "/categorias/index.php?msg=sucesso");
             exit;
@@ -52,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $stmt = $pdo->prepare("DELETE FROM categorias WHERE id=?");
                     $stmt->execute([$id]);
+                    registrar_log($pdo, 'CATEGORIA_EXCLUIDA', "Categoria #$id excluída e produtos desvinculados", 'categorias');
                     $pdo->commit();
                 } catch (Exception $e) {
                     if ($pdo->inTransaction()) {

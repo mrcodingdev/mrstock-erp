@@ -4,6 +4,7 @@
  */
 
 require_once __DIR__ . '/../inc/database.php';
+require_once __DIR__ . '/../inc/functions.php';
 require_once __DIR__ . '/../inc/auth.php';
 
 // Proteção extra: Apenas Admin
@@ -52,9 +53,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($id) {
                 $stmt = $pdo->prepare("UPDATE fornecedores SET nome=?, cnpj=?, email=?, telefone=?, status=?, contato=?, endereco=?, numero=?, bairro=?, cidade=?, estado=?, cep=? WHERE id=?");
                 $stmt->execute([$nome, $cnpj, $email, $telefone, $status, $contato, $endereco, $numero, $bairro, $cidade, $estado, $cep, $id]);
+                registrar_log($pdo, 'FORNECEDOR_EDITADO', "Fornecedor #$id ($nome) atualizado. CNPJ: $cnpj, Contato: $contato", 'fornecedores');
             } else {
                 $stmt = $pdo->prepare("INSERT INTO fornecedores (nome, cnpj, email, telefone, status, contato, endereco, numero, bairro, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$nome, $cnpj, $email, $telefone, $status, $contato, $endereco, $numero, $bairro, $cidade, $estado, $cep]);
+                $novoFornId = (int)$pdo->lastInsertId();
+                registrar_log($pdo, 'FORNECEDOR_CRIADO', "Novo fornecedor cadastrado: $nome (#$novoFornId). CNPJ: $cnpj", 'fornecedores');
             }
             header("Location: " . BASE_URL . "/fornecedores/index.php?msg=sucesso");
             exit;
@@ -65,11 +69,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 try {
                     $stmt = $pdo->prepare("DELETE FROM fornecedores WHERE id=?");
                     $stmt->execute([$id]);
+                    registrar_log($pdo, 'FORNECEDOR_EXCLUIDO', "Fornecedor #$id excluído do cadastro", 'fornecedores');
                     header("Location: " . BASE_URL . "/fornecedores/index.php?msg=sucesso");
                 } catch (PDOException $e) {
                     $stmt = $pdo->prepare("UPDATE fornecedores SET status='inativo' WHERE id=?");
                     $stmt->execute([$id]);
+                    registrar_log($pdo, 'FORNECEDOR_INATIVADO', "Fornecedor #$id inativado devido a vínculos históricos com compras", 'fornecedores');
                     header("Location: " . BASE_URL . "/fornecedores/index.php?msg=inativado");
+                    exit;
                 }
             } else {
                 header("Location: " . BASE_URL . "/fornecedores/index.php");
