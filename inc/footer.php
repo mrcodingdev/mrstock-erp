@@ -5,9 +5,9 @@
                     <!-- COLUNA 1: Marca & Sistema (Enxuto com Logo Oficial) -->
                     <div class="col-lg-4 col-md-5 col-12">
                         <div class="d-flex align-items-center gap-2 mb-1">
-                            <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="MrStock Logo" style="width: 24px; height: 24px; object-fit: contain;">
+                            <img src="<?= BASE_URL ?>/assets/img/logo-mrstock.svg" alt="MrStock Logo" width="24" height="24" style="width: 24px; height: 24px; object-fit: contain;">
                             <span class="fw-bold text-white fs-6">MrStock ERP</span>
-                            <span class="badge" style="background: #284936; color: #fff; font-size: 0.7rem;">v2.1.0</span>
+                            <span class="badge" style="background: #284936; color: #fff; font-size: 0.7rem;"><?= defined('MRSTOCK_VERSION') ? MRSTOCK_VERSION : 'v2.2.0' ?></span>
                         </div>
                         <div style="color: #cbd5e1; font-size: 0.8125rem;">Papelaria Real • Sistema Integrado de Gestão & PDV</div>
                     </div>

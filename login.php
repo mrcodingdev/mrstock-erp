@@ -63,6 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MrStock ERP - Login</title>
+    <link rel="preload" href="<?= BASE_URL ?>/webfonts/inter_font_1.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?= BASE_URL ?>/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link href="<?= BASE_URL ?>/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/inter.css">
@@ -411,11 +413,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <!-- Container Principal -->
-    <div class="login-card">
+    <main class="login-card" role="main">
         <!-- Lado Esquerdo -->
         <div class="login-left">
             <div class="left-logo">
-                <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="Logo" style="height:35px; margin-right:5px; margin-bottom: 4px;"> MrStock
+                <img src="<?= BASE_URL ?>/assets/img/logo-mrstock.svg" alt="MrStock Logo" width="35" height="35" style="height:35px; width:35px; margin-right:5px; margin-bottom: 4px;"> MrStock
             </div>
             <div class="left-content">
                 <h1>Olá,<br>bem-vindo!</h1>
@@ -460,7 +462,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </button>
             </form>
         </div>
-    </div>
+    </main>
 
 </body>
 </html>

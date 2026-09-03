@@ -125,6 +125,8 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
     })();
     </script>
 
+    <link rel="preload" href="<?= BASE_URL ?>/webfonts/inter_font_1.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?= BASE_URL ?>/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link href="<?= BASE_URL ?>/css/bootstrap.min.css?v=2.2.0" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css?v=2.2.0">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/inter.css?v=2.2.0">
@@ -143,7 +145,7 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
         <div class="so-brand">
             <a href="<?= BASE_URL ?>/dashboard.php" class="d-flex align-items-center gap-2 text-decoration-none">
                 <div class="so-brand__logo">
-                    <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="MrStock Logo" style="width: 28px; height: 28px; object-fit: contain; display: block;">
+                    <img src="<?= BASE_URL ?>/assets/img/logo-mrstock.svg" alt="MrStock Logo" width="28" height="28" style="width: 28px; height: 28px; object-fit: contain; display: block;">
                 </div>
                 <span class="so-brand__name text-white fw-bold">MrStock <small class="fw-light opacity-75" style="font-size: 0.8rem;">ERP</small></span>
             </a>
