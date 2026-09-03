@@ -126,8 +126,6 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
     })();
     </script>
 
-    <link rel="preload" href="<?= BASE_URL ?>/webfonts/inter_font_1.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="<?= BASE_URL ?>/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link href="<?= BASE_URL ?>/css/bootstrap.min.css?v=2.2.0" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css?v=2.2.0">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/inter.css?v=2.2.0">
