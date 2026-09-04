@@ -1,189 +1,169 @@
-# Roteiro Estruturado de Entrevista Presencial & Homologação de Usabilidade
-## Projeto MrStock ERP v2.2.0 • Papelaria Real
+# Roteiro Estruturado de Entrevista & Homologação de Usabilidade
+## Sessão de Primeiro Contato com o Sistema • Papelaria Real
 **Instituição:** ETEC Fernando Prestes — Centro Paula Souza  
-**Equipe Mr. Coding:** Douglas Moraes Braz • Cesar Augusto • Eduardo Sugahara • Enzo Soares • Nikolas Pires  
-**Público-Alvo da Entrevista:** Proprietária e Operadora Principal da Papelaria Real  
-**Local:** Balcão de Atendimento / Caixa da Papelaria Real (Sorocaba – SP)  
-**Data Prevista:** Setembro de 2026  
+**Curso:** Técnico em Desenvolvimento de Sistemas • TCC 2026  
+**Equipe Mr. Coding:** Cesar Augusto • Douglas Moraes Braz • Eduardo Sugahara • Enzo Soares • Nikolas Pires  
+**Público Entrevistado:** Proprietária e Operadora de Caixa da Papelaria Real  
+**Ambiente Demonstrado:** Nuvem Oficial (`https://mrstock.com.br/`) e Contingência Local XAMPP  
+**Local & Data:** Balcão da Papelaria Real • Sorocaba – SP • Setembro de 2026  
 
 ---
 
-## 1. Protocolo de Condução e Divisão de Papéis da Equipe
+## 1. Diretrizes de Primeiro Contato & Divisão de Papéis
 
-Para garantir que a visita seja altamente profissional, ágil e não atrapalhe a rotina de vendas da loja, a equipe deve operar de forma sincronizada:
+Como a proprietária e os funcionários da Papelaria Real **estão vendo o MrStock ERP pela primeira vez**, a dinâmica não deve pressupor conhecimento prévio do sistema. 
 
-| Membro | Função na Sessão | Atribuição Prática |
+A abordagem ideal é:
+1. **Mostrar Primeiro:** O Sugahara opera o sistema na tela, executando uma tarefa rápida e real.
+2. **Deixar Olhar:** Dar alguns segundos para a cliente absorver o visual e a velocidade.
+3. **Perguntar:** O Cesar pergunta como ela faz aquilo hoje na loja e se a forma como o MrStock faz atende, precisa de algo a mais ou se tem algo sobrando.
+
+| Integrante Mr. Coding | Função na Sessão | Responsabilidade Prática |
 | :--- | :--- | :--- |
-| **Cesar Augusto** | **Condutor da Entrevista** | Conduz a conversa com a dona, dita o ritmo, faz as perguntas e agradece cordialmente. |
-| **Eduardo Sugahara** | **Apresentador do Sistema** | Opera o notebook com o ERP aberto (`https://mrstock.com.br/`), demonstra cada fluxo na prática na frente da cliente. |
-| **Douglas Braz** | **Diretor Técnico & Arquitetura** | Esclarece dúvidas técnicas imediatas, avalia a viabilidade das solicitações e anota impactos no código. |
-| **Nikolas Pires** | **Anotador de Regras de Negócio & DER** | Anota detalhadamente as regras de banco de dados, tributação, prazos e fornecedores citados. |
-| **Enzo Soares** | **Registrador de Evidências & QTS** | Registra fotos da visita (com permissão), anota as respostas da escala de usabilidade para compor o TCC. |
+| **Cesar Augusto** | **Condutor do Diálogo** | Abre cordialmente, contextualiza o TCC, faz as perguntas e anota as respostas. |
+| **Eduardo Sugahara** | **Navegador do Sistema** | Demonstra o sistema ao vivo no notebook (simula bipagem no PDV, troco, busca e relatórios). |
+| **Douglas Moraes Braz** | **Direção Técnica** | Esclarece dúvidas técnicas e avalia a viabilidade de pedidos de simplificação/mudança. |
+| **Nikolas Pires** | **Anotador de Negócio** | Anota fornecedores, meios de pagamento e peculiaridades de produtos citados. |
+| **Enzo Soares** | **Registrador de QTS** | Aplica a escala de usabilidade (notas 1 a 5) e registra fotos da visita com autorização. |
 
-> [!IMPORTANT]
-> **Regra de Ouro da Visita:** Não tentar "vender" o sistema nem justificar decisões de desenvolvimento caso ela aponte uma dificuldade. O objetivo é **ouvir ativamente**, observar reações espontâneas e identificar onde a vida dela pode ser facilitada.
-
----
-
-## 2. Etapa 1: Abertura e Contextualização (2 a 3 minutos)
-
-**Fala sugerida para o Cesar:**
-> *"Olá, [Nome da Proprietária]! Muito obrigado por nos receber. Como você acompanhou, desenvolvemos o MrStock ERP pensando especificamente nos desafios reais do dia a dia aqui da Papelaria Real. Hoje o sistema está 100% pronto e funcionando na nuvem. Viemos aqui não apenas para demonstrar, mas principalmente para colocar você e sua equipe como avaliadores. Queremos saber o que está perfeito, o que está sobrando e o que você gostaria que fosse mais simples ou diferente antes de fecharmos a versão final."*
+> **Fala de Abertura Sugerida (Cesar):**  
+> *"Olá! Viemos apresentar pela primeira vez o MrStock ERP, o sistema que desenvolvemos especialmente para o comércio de papelaria. Queremos mostrar como ele funciona na prática e ouvir de você o que achou: se está fácil de entender, o que você mudaria, o que achou desnecessário e o que faltou para o seu dia a dia aqui no balcão."*
 
 ---
 
-## 3. Etapa 2: Demonstração Guiada & Bateria de Perguntas Críticas
+## 2. Bloco 1: Primeira Impressão Visual & Navegação
 
-Abaixo estão as **questões que mais geram dúvidas de engenharia e trade-offs operacionais**, organizadas por módulo do sistema:
+*O Sugahara abre a tela inicial do Dashboard e a listagem de produtos.*
 
-```mermaid
-flowchart LR
-    A["1. Balcão e PDV"] --> B["2. Catálogo e Produtos"]
-    B --> C["3. Lotes e Validades"]
-    C --> D["4. Compras e Fornecedores"]
-    D --> E["5. Caixa e Financeiro"]
-    E --> F["6. Acessos e Segurança"]
-```
+1. **Legibilidade e Organização Visual:**  
+   *"Ao bater o olho no sistema pela primeira vez, as informações estão claras? O tamanho das letras e dos números está confortável para enxergar no computador do balcão?"*  
+   [ ] Resposta: ______________________________________________________________
 
----
-
-### Bateria A: Frente de Caixa (PDV) e Atendimento de Balcão
-*Objetivo: Descobrir como o caixa opera nos momentos de maior tensão (Volta às Aulas e picos).*
-
-1. **Agilidade de Entrada do Item:**
-   - *Pergunta:* "No seu dia a dia, a maioria das vendas é feita passando o leitor de código de barras físico, digitando o nome do produto ou clicando na categoria? O que é mais rápido quando a fila está grande?"
-   - *Foco de Dúvida:* O sistema hoje prioriza bipagem ótica com leitor e atalhos de teclado (F1 a F9). Ela prefere usar o teclado ou prefere usar o mouse/toque na tela?
-   - [ ] Resposta da Cliente: __________________________________________________
-
-2. **Feedback Sonoro (Bip de 880Hz):**
-   - *Pergunta:* "O sistema emite um bip sonoro ao reconhecer o produto, confirmando que ele entrou no carrinho sem precisar olhar para o monitor. No balcão barulhento, esse som ajuda a ter certeza de que o item passou ou prefere uma opção de silenciar?"
-   - [ ] Resposta da Cliente: __________________________________________________
-
-3. **Política de Descontos e Acréscimos:**
-   - *Pergunta:* "Quando um cliente pede desconto (ex: pagamento à vista ou compra de lista de material escolar completa), como vocês aplicam? Você costuma dar uma porcentagem (ex: 5% no total), um valor fixo em dinheiro (ex: tirar R$ 5,00) ou arredondar o troco?"
-   - *Foco de Dúvida:* Hoje o PDV possui campo de desconto em R$. Precisamos saber se ela sente falta de um botão de porcentagem direta (ex: `[-5%]`, `[-10%]`).
-   - [ ] Resposta da Cliente: __________________________________________________
-
-4. **Identificação do Cliente no Balcão:**
-   - *Pergunta:* "Na maioria das vendas do dia a dia, você precisa cadastrar o nome e CPF do cliente na hora, ou 90% das compras são anônimas de 'Consumidor Final'?"
-   - [ ] Resposta da Cliente: __________________________________________________
+2. **Ausência de Fotos de Produtos:**  
+   *"Você reparou que não colocamos fotos dos cadernos e canetas, apenas nome, código e preço, para o sistema abrir instantâneo e não travar. Você sente falta de fotos ou prefere assim, limpo e direto?"*  
+   [ ] Resposta: ______________________________________________________________
 
 ---
 
-### Bateria B: Catálogo de Produtos e Peculiaridades de Papelaria
-*Objetivo: Validar o formato dos produtos, etiquetas e a ausência deliberada de fotos.*
+## 3. Bloco 2: Frente de Caixa (PDV) & Operação de Balcão
 
-1. **Decisão Arquitetural: Sistema Limpo Sem Fotos de Produtos:**
-   - *Pergunta:* "Nosso sistema propositalmente não usa fotos para cada caneta ou caderno. O objetivo disso foi fazer a tela carregar instantaneamente, sem travar nem pesar no computador do caixa. Você sente falta de ver a fotinho do produto na tela, ou concorda que ver apenas o nome, código e preço deixa a operação muito mais rápida?"
-   - [ ] Resposta da Cliente: __________________________________________________
+*O Sugahara abre a tela de vendas (PDV), bipa um produto com código de barras, adiciona 3 canetas, abre o pagamento em dinheiro, digita uma nota de R$ 50,00 e mostra o cálculo do troco e a emissão do cupom.*
 
-2. **Venda a Granel / Produtos Fracionados:**
-   - *Pergunta:* "Na Papelaria Real vocês vendem itens fracionados por metro ou folha avulsa (por exemplo: plástico contact por metro, papel kraft por metro, fitas ou EVA), ou absolutamente tudo é vendido por unidade, pacote fechado ou caixa?"
-   - *Foco de Dúvida:* Hoje o sistema trabalha com quantidades inteiras. Se houver venda por metro/metro linear (ex: 1,5m), teremos que habilitar decimais na quantidade do carrinho.
-   - [ ] Resposta da Cliente: __________________________________________________
+3. **Rotina de Entrada no Caixa (Leitor vs. Digitação):**  
+   *"Hoje vocês usam leitor de código de barras físico no caixa? Quando o código não lê ou o produto não tem código, você acha fácil buscar digitando o nome do produto no campo de busca como mostramos agora?"*  
+   [ ] Resposta: ______________________________________________________________
 
-3. **Etiquetagem e Produtos Sem Código de Fábrica:**
-   - *Pergunta:* "Muitos itens pequenos chegam sem código de barras (canetas soltas, borrachas avulsas, cartolinas). O gerador de etiquetas que criamos imprime códigos de barras em folhas comuns A4. Você costuma colar etiquetas de código de barras nos produtos da loja? Qual o tamanho ou papel que você usa?"
-   - [ ] Resposta da Cliente: __________________________________________________
+4. **Cálculo Automático de Troco e Cédulas Rápidas:**  
+   *"Mostramos os botões de notas rápidas (R$ 20, R$ 50, R$ 100) e o cálculo automático do troco na tela. Isso no dia a dia ajudaria a evitar erros ou a conferência mental já basta?"*  
+   [ ] Resposta: ______________________________________________________________
 
----
+5. **Formas de Pagamento e Descontos:**  
+   *"Vocês costumam dar desconto quando o cliente pede (ex: compra da lista de material completa ou pagamento em dinheiro/Pix)? Vocês dão desconto em porcentagem (ex: 5%) ou tiram um valor em reais (ex: tirar R$ 5,00)?"*  
+   [ ] Resposta: ______________________________________________________________
 
-### Bateria C: Gestão de Lotes, Validades e Shelf-Life
-*Objetivo: Definir se a rastreabilidade de validade deve ser opcional ou obrigatória.*
-
-1. **Itens Perecíveis vs. Itens Não Perecíveis:**
-   - *Pergunta:* "Implementamos um controle avançado de validade que avisa no painel quando um lote vai vencer em 30 dias (para produtos como tintas guache, colas líquidas, massinhas de modelar e corretivos). Para cadernos e pastas, isso obviamente não vence. No cadastro de novos produtos, você prefere que a data de validade seja um campo **totalmente opcional** (preenche só se o produto estragar) ou você quer ter que cadastrar lote para tudo?"
-   - [ ] Resposta da Cliente: __________________________________________________
-
-2. **Ação com Lotes Próximos do Vencimento:**
-   - *Pergunta:* "Quando um produto está para vencer em 30 dias, o que você costuma fazer na loja? Colocar em promoção no balcão, devolver para o fornecedor ou descartar?"
-   - [ ] Resposta da Cliente: __________________________________________________
+6. **Identificação do Consumidor:**  
+   *"No balcão de vocês, a maioria dos clientes compra e vai embora rápido sem passar CPF, ou vocês precisam cadastrar o cliente na hora da venda?"*  
+   [ ] Resposta: ______________________________________________________________
 
 ---
 
-### Bateria D: Compras, Fornecedores e Entrada de Estoque
-*Objetivo: Mapear o processo de reposição de estoque com distribuidores.*
+## 4. Bloco 3: Particularidades da Papelaria (Fracionados, Validades e Etiquetas)
 
-1. **Entrada de Mercadorias:**
-   - *Pergunta:* "Quando chegam as caixas de mercadorias dos fornecedores (como Tilibra, Faber-Castell, Chamex), como vocês dão entrada no estoque hoje? Vocês digitam item por item ou sonham em apenas subir o arquivo XML da Nota Fiscal para que os produtos entrem sozinhos?"
-   - *Foco de Dúvida:* A importação de XML de NF-e de compra pode ser o grande destaque no roadmap v3.0 / Trabalhos Futuros do TCC.
-   - [ ] Resposta da Cliente: __________________________________________________
+*O Sugahara mostra a tela de produtos, a aba de lotes com vencimento e o gerador de etiquetas.*
 
-2. **Conferência Física de Mercadorias:**
-   - *Pergunta:* "O sistema gera uma folha de 'Espelho de Conferência de Compra' que pode ser impressa para quem descarrega as caixas ir marcando com caneta o que chegou. Isso é útil para o seu almoxarifado/depósito?"
-   - [ ] Resposta da Cliente: __________________________________________________
+7. **Venda Fracionada (Itens Vendidos por Metro):**  
+   *"Vocês vendem itens cortados por metro na papelaria (como plástico contact, papel kraft, fitas ou EVA), ou absolutamente tudo que vocês vendem é por unidade inteira, folha ou caixa fechada?"*  
+   [ ] Resposta: ______________________________________________________________
 
----
+8. **Controle de Validades de Produtos Químicos:**  
+   *"Vocês costumam ter problemas com produtos vencendo na loja (tintas guache, colas líquidas, massinhas de modelar, corretivos)? O nosso alerta de validade em 30 dias é útil para vocês?"*  
+   [ ] Resposta: ______________________________________________________________
 
-### Bateria E: Gestão Financeira, Fiado e Fechamento de Caixa
-*Objetivo: Validar regras de fluxo de caixa e práticas tradicionais do comércio de bairro.*
-
-1. **Venda a Prazo ("Caderninho" / Fiado / Convênio Escolar):**
-   - *Pergunta:* "Na papelaria vocês vendem 'fiado' ou com 'anotação no caderninho' para escolas, empresas parceiras ou clientes antigos pagarem no fim do mês? Ou todo cliente paga na hora via Pix, Dinheiro ou Cartão?"
-   - *Foco de Dúvida:* Se ela fizer fiado, precisamos entender como ela controla isso hoje para avaliar se cabe incluir um módulo de Contas a Receber / Fiado na versão 3.0.
-   - [ ] Resposta da Cliente: __________________________________________________
-
-2. **Rotina de Fechamento de Caixa:**
-   - *Pergunta:* "Como é feito o fechamento de caixa no fim do expediente? O funcionário conta as notas da gaveta e você confere no sistema se o valor bateu ('Fechamento Cego'), ou ele mesmo vê o total vendido no sistema?"
-   - [ ] Resposta da Cliente: __________________________________________________
-
-3. **Retiradas de Dinheiro no Meio do Dia (Sangrias):**
-   - *Pergunta:* "Vocês costumam tirar dinheiro da gaveta durante o dia para pagar um fornecedor na porta, comprar marmita ou transporte (a chamada 'Sangria')?"
-   - [ ] Resposta da Cliente: __________________________________________________
+9. **Produtos Pequenos Sem Código de Fábrica:**  
+   *"Canetas avulsas, lápis e borrachas soltas vêm sem código. Como vocês cobram isso no caixa hoje? O gerador de etiquetas que imprime códigos de barras em folhas comuns A4 ajudaria vocês?"*  
+   [ ] Resposta: ______________________________________________________________
 
 ---
 
-### Bateria F: Perfis de Acesso e Sigilo de Informações (RBAC)
-*Objetivo: Validar se a separação entre Administrador e Caixa atende as necessidades de segurança.*
+## 5. Bloco 4: Compras, Fornecedores & Entrada de Estoque
 
-1. **Sigilo de Margem de Lucro e Custos:**
-   - *Pergunta:* "No MrStock ERP, nós blindamos o acesso: o funcionário do caixa só consegue bipar e vender; ele **não consegue ver quanto você pagou pelo produto, quanto a papelaria teve de lucro, nem relatórios financeiros**. Você aprova essa divisão de sigilo ou gostaria que o caixa tivesse acesso a mais alguma coisa?"
-   - [ ] Resposta da Cliente: __________________________________________________
+*O Sugahara abre o módulo de Ordens de Compra e mostra o espelho de conferência impresso.*
 
-2. **Cancelamento de Vendas:**
-   - *Pergunta:* "Se o operador de caixa errar e precisar cancelar uma venda passada, você prefere que ele possa cancelar sozinho ou que exija a senha da dona/gerente para estornar?"
-   - [ ] Resposta da Cliente: __________________________________________________
+10. **Rotina de Entrada de Notas:**  
+    *"Quando chegam caixas de distribuidores (Tilibra, Chamex, Faber-Castell), como vocês lançam no estoque? Vocês digitam produto por produto ou recebem o arquivo XML da Nota Fiscal?"*  
+    [ ] Resposta: ______________________________________________________________
 
----
-
-## 4. Etapa 3: Avaliação Rápida de Usabilidade (Escala SUS Simplificada)
-
-Ao final da demonstração, peça para a proprietária dar uma nota de **1 a 5** para as afirmações abaixo (onde **1 = Discordo Totalmente** e **5 = Concordo Totalmente**):
-
-| # | Afirmação Avaliada | 1 | 2 | 3 | 4 | 5 | Observações da Cliente |
-| :-: | :--- | :-: | :-: | :-: | :-: | :-: | :--- |
-| **01** | *Achei o visual do sistema limpo, profissional e fácil de entender.* | [ ] | [ ] | [ ] | [ ] | [ ] | |
-| **02** | *A tela de vendas (PDV) é rápida o suficiente para a hora do rush.* | [ ] | [ ] | [ ] | [ ] | [ ] | |
-| **03** | *Achei as cores e botões bem destacados (fácil saber onde clicar).* | [ ] | [ ] | [ ] | [ ] | [ ] | |
-| **04** | *O cálculo de troco automático facilita a rotina e evita erros humanos.* | [ ] | [ ] | [ ] | [ ] | [ ] | |
-| **05** | *A busca de produtos na hora da venda responde de forma instantânea.* | [ ] | [ ] | [ ] | [ ] | [ ] | |
-| **06** | *Os relatórios e gráficos mostram exatamente o que eu preciso saber sobre o negócio.* | [ ] | [ ] | [ ] | [ ] | [ ] | |
-| **07** | *Eu me sentiria confiante em usar esse sistema na Papelaria Real no lugar do método atual.* | [ ] | [ ] | [ ] | [ ] | [ ] | |
+11. **Conferência Física de Mercadorias:**  
+    *"O sistema gera uma folha de conferência de compra para imprimir e ir ticando as caixas que chegam do caminhão. Vocês costumam conferir no papel o que chegou antes de colocar na prateleira?"*  
+    [ ] Resposta: ______________________________________________________________
 
 ---
 
-## 5. Etapa 4: Coleta Aberta de Demandas ("Wishlist" da Cliente)
+## 6. Bloco 5: Práticas Comerciais, Fiado & Segurança RBAC
 
-Perguntas finais abertas para captar impressões sinceras:
+12. **Venda a Prazo / 'Caderninho' / Convênio Escolar:**  
+    *"Vocês vendem fiado ou anotado no caderno para escolas, escritórios ou clientes conhecidos pagarem no fim do mês? Ou todo mundo paga no ato via Pix, Dinheiro ou Cartão?"*  
+    [ ] Resposta: ______________________________________________________________
 
-1. **O que mais te chamou a atenção positivamente no MrStock ERP?**  
+13. **Sigilo de Informações dos Funcionários no Caixa:**  
+    *"No MrStock, quem opera o caixa só consegue vender: não consegue ver o preço que você pagou pelo produto, não vê seu lucro nem os relatórios. Você aprova essa segurança ou prefere que o operador veja tudo?"*  
+    [ ] Resposta: ______________________________________________________________
+
+14. **Fechamento de Caixa e Sangrias:**  
+    *"No fim do dia, vocês contam o dinheiro da gaveta para bater com o total vendido? Costumam tirar dinheiro durante o dia para pagar entregas ou despesas rápidas da loja (sangria)?"*  
+    [ ] Resposta: ______________________________________________________________
+
+---
+
+## 7. Bloco 6: Avaliação de Usabilidade (Primeiro Contato com o Sistema)
+
+*Solicite à proprietária uma nota de **1 a 5** com base nas primeiras impressões da demonstração:*
+
+| Afirmação Avaliada | 1 (DT) | 2 (D) | 3 (N) | 4 (C) | 5 (CT) | Comentário Espontâneo da Cliente |
+| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **1.** O sistema parece fácil de aprender e utilizar no dia a dia. | [ ] | [ ] | [ ] | [ ] | [ ] | |
+| **2.** A tela de venda (PDV) parece rápida para atender filas grandes. | [ ] | [ ] | [ ] | [ ] | [ ] | |
+| **3.** As informações na tela estão organizadas e sem poluição visual. | [ ] | [ ] | [ ] | [ ] | [ ] | |
+| **4.** O cálculo de troco automático facilita a rotina do operador. | [ ] | [ ] | [ ] | [ ] | [ ] | |
+| **5.** A busca por nome do produto responde com rapidez satisfatória. | [ ] | [ ] | [ ] | [ ] | [ ] | |
+| **6.** Os números e relatórios mostram o que o dono precisa saber. | [ ] | [ ] | [ ] | [ ] | [ ] | |
+| **7.** Eu utilizaria o MrStock ERP como o sistema oficial da papelaria. | [ ] | [ ] | [ ] | [ ] | [ ] | |
+
+*(Legenda: 1 = Discordo Totalmente | 2 = Discordo | 3 = Neutro | 4 = Concordo | 5 = Concordo Totalmente)*
+
+---
+
+## 8. Bloco 7: Feedback Aberto — O que Adicionar, Simplificar ou Remover?
+
+1. **Teve alguma coisa que você achou COMPLICADA ou que preferiria ver mais simples?**  
    *Anotação:* ____________________________________________________________________  
    ________________________________________________________________________________
 
-2. **Existe alguma coisa que você achou complicada ou que preferiria ver mais simples?**  
+2. **Teve alguma informação ou botão que você achou SOBRANDO (desnecessário para a sua loja)?**  
    *Anotação:* ____________________________________________________________________  
    ________________________________________________________________________________
 
-3. **Se você pudesse pedir uma funcionalidade dos seus sonhos que hoje você não tem, qual seria?**  
+3. **Faltou alguma coisa que você usa todo dia na loja e gostaria muito que tivesse aqui?**  
    *Anotação:* ____________________________________________________________________  
    ________________________________________________________________________________
 
-4. **Qual impressora térmica de cupom você tem na loja atualmente (marca/modelo)?**  
-   *Anotação:* ____________________________________________________________________  
+4. **Qual impressora vocês têm no balcão hoje para imprimir cupom ou comprovante?**  
+   [ ] Térmica Bobina 80mm (Epson / Bematech / Elgin)  
+   [ ] Impressora Comum de Folha A4  
+   [ ] Não possui impressora no caixa  
 
 ---
 
-## 6. Etapa 5: Fechamento e Próximos Passos
-- Agradecimento caloroso à proprietária pelo tempo dedicado.
-- Foto oficial da equipe com a cliente no balcão da papelaria (essencial para a documentação e apresentação na banca da ETEC).
-- Compromisso de entregar o **Manual de Operação Ilustrado** na próxima etapa.
+## 9. Termo de Participação & Homologação
+
+> *Declaramos que a equipe técnica Mr. Coding apresentou presencialmente a versão funcional do sistema MrStock ERP v2.2.0 nas dependências da Papelaria Real, colhendo feedbacks para o Trabalho de Conclusão de Curso da ETEC Fernando Prestes.*
+
+\
+__________________________________________________  
+**Representante da Papelaria Real**  
+Proprietária / Gerente Geral  
+
+\
+__________________________________________________  
+**Equipe Mr. Coding**  
+ETEC Fernando Prestes — Sorocaba/SP  
