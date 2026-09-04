@@ -20,7 +20,7 @@
                         <div style="color: #cbd5e1; font-size: 0.8125rem; font-weight: 500;">Douglas • Nikolas • Cesar • Enzo • Sugahara</div>
                     </div>
 
-                    <!-- COLUNA 3: Precisando de Suporte? (3 botões circulares compactos + telefone) -->
+                    <!-- COLUNA 3: Precisando de Suporte? (2 botões circulares compactos + telefone) -->
                     <div class="col-lg-4 col-md-3 col-12 text-md-end text-center">
                         <div class="fw-bold text-white fs-6 mb-2">Precisando de suporte?</div>
                         <div class="d-inline-flex align-items-center justify-content-md-end justify-content-center gap-3">
@@ -30,13 +30,6 @@
                                     <i class="fab fa-whatsapp"></i>
                                 </div>
                                 <span>WhatsApp</span>
-                            </a>
-                            <!-- Atendimento -->
-                            <a href="mailto:contato@mrstock.com.br" class="so-footer-gestaoclick__support-item" title="Enviar E-mail">
-                                <div class="so-footer-gestaoclick__support-circle so-footer-gestaoclick__support-circle--help">
-                                    <i class="fas fa-headset"></i>
-                                </div>
-                                <span>Atendimento</span>
                             </a>
                             <!-- Central de Ajuda -->
                             <a href="<?= BASE_URL ?>/ajuda.php" class="so-footer-gestaoclick__support-item" title="Acessar FAQ">

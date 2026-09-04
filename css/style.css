@@ -2177,18 +2177,6 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
   box-shadow: 0 3px 8px rgba(37, 211, 102, 0.25);
 }
 
-.so-footer-gestaoclick__support-circle--help {
-  border: 1.5px solid #38bdf8;
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.08);
-}
-
-.so-footer-gestaoclick__support-circle--help:hover,
-.so-footer-gestaoclick__support-item:hover .so-footer-gestaoclick__support-circle--help {
-  background: #38bdf8;
-  color: #222d31;
-}
-
 .so-footer-gestaoclick__support-circle--faq {
   border: 1.5px solid #a78bfa;
   color: #a78bfa;
