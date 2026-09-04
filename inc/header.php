@@ -152,7 +152,7 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
         <div class="so-brand">
             <a href="<?= BASE_URL ?>/dashboard.php" class="d-flex align-items-center gap-2 text-decoration-none">
                 <div class="so-brand__logo">
-                    <img src="<?= BASE_URL ?>/assets/img/logo-mrstock.svg" alt="MrStock Logo" width="28" height="28" style="width: 28px; height: 28px; object-fit: contain; display: block;">
+                    <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="MrStock Logo" width="28" height="28" style="width: 28px; height: 28px; object-fit: contain; display: block;">
                 </div>
                 <span class="so-brand__name text-white fw-bold">MrStock <small class="fw-light opacity-75" style="font-size: 0.8rem;">ERP</small></span>
             </a>

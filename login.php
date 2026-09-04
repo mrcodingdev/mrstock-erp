@@ -416,7 +416,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Lado Esquerdo -->
         <div class="login-left">
             <div class="left-logo">
-                <img src="<?= BASE_URL ?>/assets/img/logo-mrstock.svg" alt="MrStock Logo" width="35" height="35" style="height:35px; width:35px; margin-right:5px; margin-bottom: 4px;"> MrStock
+                <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="Logo MrStock" width="32" height="32" style="height:32px; width:32px; margin-right:5px; margin-bottom: 4px;"> MrStock
             </div>
             <div class="left-content">
                 <h1>Olá,<br>bem-vindo!</h1>
