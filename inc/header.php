@@ -137,7 +137,7 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
     <link href="<?= BASE_URL ?>/css/bootstrap.min.css?v=2.2.0" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css?v=2.2.0">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/inter.css?v=2.2.0">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.min.css?v=2.2.2">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.min.css?v=2.2.3">
     <link rel="icon" href="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" type="image/x-icon">
     <?php if (!empty($extraHead)) echo $extraHead; ?>
 </head>

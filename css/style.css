@@ -20,12 +20,22 @@
   --mr-transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+html {
+  height: 100%;
+  background-color: #222d31; /* Fundo idêntico ao rodapé escuro para erradicar clarões brancos em sobre-rolagem/overscroll elástico no mobile */
+  overscroll-behavior-y: none; /* Impede o rubber-banding de descolar a página do viewport no mobile */
+}
+
 body {
+  min-height: 100%;
+  min-height: 100dvh;
   background-color: #f1f5f9;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   margin: 0;
   color: #334155;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ===== Anti-FOUC Preload States ===== */
@@ -395,8 +405,11 @@ body.sidebar-collapsed .so-collapse-btn .so-label,
 .main-panel {
   margin-left: var(--mr-w-open);
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  flex: 1 0 auto;
+  background-color: #f1f5f9;
   transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: margin-left;
 }
@@ -1307,37 +1320,74 @@ canvas,
 }
 
 /* ===== SETTINGS TABS & RESPONSIVIDADE ===== */
-.settings-tabs-wrapper {
+.settings-tabs-container {
+  background: #ffffff;
+  border: 1px solid var(--mr-border-color, #cbd5e1);
+  border-radius: var(--mr-radius, 8px);
+  padding: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  background: #f8fafc;
-  padding: 6px;
+  scrollbar-width: none;
+}
+.settings-tabs-container::-webkit-scrollbar {
+  display: none;
 }
 .settings-nav-tabs {
   display: flex;
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  gap: 6px;
   flex-wrap: nowrap;
-  gap: 4px;
-  border: 0;
-  min-width: max-content;
+}
+.settings-nav-tabs .nav-item {
+  flex: 1 1 0;
+  min-width: 130px;
 }
 .settings-nav-tabs .nav-link {
-  border-radius: 8px;
-  color: #64748b;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
   font-weight: 600;
-  font-size: 0.875rem;
-  padding: 8px 16px;
-  border: 0;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  text-align: center;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
 .settings-nav-tabs .nav-link:hover {
-  background: rgba(40, 73, 54, 0.06);
-  color: var(--mr-bg-primary);
+  background: #e2e8f0;
+  color: #0f172a;
+  border-color: #cbd5e1;
 }
 .settings-nav-tabs .nav-link.active {
-  background: var(--mr-bg-primary);
+  background: var(--mr-bg-primary, #284936) !important;
   color: #ffffff !important;
-  box-shadow: 0 2px 6px rgba(40, 73, 54, 0.2);
+  border-color: var(--mr-bg-primary, #284936) !important;
+  box-shadow: 0 2px 6px rgba(40, 73, 54, 0.25);
+}
+@media (max-width: 768px) {
+  .settings-nav-tabs .nav-item {
+    flex: 0 0 auto;
+    min-width: auto;
+  }
+  .settings-nav-tabs .nav-link {
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+    gap: 6px;
+  }
 }
 
 /* ===== BADGE LIVE PULSE (STATUS EM TEMPO REAL) ===== */
@@ -2038,6 +2088,8 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
    ========================================================================== */
 .so-footer-gestaoclick {
   margin-top: auto;
+  width: 100%;
+  flex-shrink: 0;
   padding: 1.25rem 1.5rem 0.6rem 1.5rem;
   background: #222d31 !important;
   border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -2282,6 +2334,7 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
    PADRONIZAÇÃO GLOBAL DE ACESSIBILIDADE E LAYOUT SEMÂNTICO (WCAG 2.1 AAA)
    ========================================================================== */
 .main-content {
+  flex: 1 0 auto;
   min-width: 0;
   width: 100%;
 }

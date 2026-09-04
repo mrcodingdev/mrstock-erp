@@ -299,82 +299,7 @@ try {
 
 $extraHead = '
 <style>
-/* Estilização Full-Width Segmentada das Abas de Configurações */
-.settings-tabs-container {
-    background: #ffffff;
-    border: 1px solid var(--mr-border-color, #cbd5e1);
-    border-radius: var(--mr-radius, 8px);
-    padding: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-}
-
-.settings-nav-tabs {
-    display: flex;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    gap: 6px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-}
-
-.settings-nav-tabs .nav-item {
-    flex: 1 1 0;
-    min-width: 130px;
-}
-
-.settings-nav-tabs .nav-link {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 14px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #475569;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    text-align: center;
-    white-space: nowrap;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-}
-
-.settings-nav-tabs .nav-link:hover {
-    background: #e2e8f0;
-    color: #0f172a;
-    border-color: #cbd5e1;
-}
-
-.settings-nav-tabs .nav-link.active {
-    background: var(--mr-bg-primary, #284936) !important;
-    color: #ffffff !important;
-    border-color: var(--mr-bg-primary, #284936) !important;
-    box-shadow: 0 2px 6px rgba(40, 73, 54, 0.25);
-}
-
-.settings-nav-tabs .nav-link i {
-    font-size: 0.95rem;
-}
-
-.so-profile-avatar-lg {
-    width: 64px;
-    height: 64px;
-    border-radius: 12px;
-    background: var(--mr-bg-primary, #284936);
-    color: #6ae49b;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: 800;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-
+/* Regras exclusivas de configuracoes.php (Abas migradas para css/style.css) */
 .version-badge-pill {
     font-size: 0.75rem;
     font-weight: 700;
@@ -395,9 +320,9 @@ require_once __DIR__ . '/inc/header.php';
         <h2 class="fw-bold text-dark m-0"><i class="fas fa-gear text-primary me-2"></i>Configurações</h2>
         <p class="text-muted m-0">Gerencie preferências da conta, parâmetros fiscais da loja, regras do PDV e diagnósticos de versão.</p>
     </div>
-    <div class="d-flex align-items-center gap-2">
+    <div class="d-flex align-items-center gap-2 flex-wrap">
         <span class="version-badge-pill tabular-nums">
-            <i class="fas fa-code-branch me-1"></i> <?= defined('MRSTOCK_VERSION') ? MRSTOCK_VERSION : 'v2.1.0' ?>
+            <i class="fas fa-code-branch me-1"></i> <?= defined('MRSTOCK_VERSION') ? MRSTOCK_VERSION : 'v2.2.0' ?>
         </span>
         <span class="badge bg-secondary text-white small">
             Papelaria Real
