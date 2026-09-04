@@ -109,6 +109,11 @@ require_once __DIR__ . '/inc/header.php';
     disponível: <strong class="tabular-nums"><?= $disp ?></strong> <?= ($disp === 1 ? 'unidade' : 'unidades') ?>.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar alerta"></button>
 </div>
+<?php elseif (isset($_GET['erro']) && $_GET['erro'] === 'lote_vencido'): ?>
+<div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+    <i class="fas fa-triangle-exclamation me-2 text-danger"></i> <strong>Bloqueio Sanitário (CDC Art. 18):</strong> O produto '<?= htmlspecialchars($_GET['produto'] ?? '') ?>' não possui saldo em lotes válidos (venceu ou está esgotado).
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+</div>
 <?php endif; ?>
 
 <div class="content-header d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">

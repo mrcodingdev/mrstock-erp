@@ -137,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header('Location: ' . BASE_URL . '/lotes/index.php');
                 exit;
 
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 if ($pdo->inTransaction()) {
                     $pdo->rollBack();
                 }
@@ -194,7 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header('Location: ' . BASE_URL . '/lotes/index.php');
                 exit;
 
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 if ($pdo->inTransaction()) {
                     $pdo->rollBack();
                 }

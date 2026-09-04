@@ -103,7 +103,7 @@ require_once __DIR__ . '/../inc/header.php';
 
 <div class="content-body">
     <!-- Card Master: Informações Gerais da Nota -->
-    <div class="card shadow-sm border-0 mb-4">
+    <div class="card shadow-sm border mb-4" style="border-color: #cbd5e1 !important; border-radius: 8px;">
         <div class="card-header bg-light py-3 border-0">
             <div class="d-flex justify-content-between align-items-center">
                 <span class="fw-bold text-secondary text-uppercase" style="font-size:12px; letter-spacing:0.5px;">
@@ -142,7 +142,7 @@ require_once __DIR__ . '/../inc/header.php';
                 </div>
                 <div class="col-md-2 text-md-end">
                     <small class="text-muted text-uppercase fw-bold d-block mb-1">Valor Total</small>
-                    <h4 class="text-success fw-bold m-0">
+                    <h4 class="text-dark fw-bold m-0 tabular-nums">
                         R$ <?= number_format((float)$compra['valor_total'], 2, ',', '.') ?>
                     </h4>
                 </div>
@@ -151,10 +151,10 @@ require_once __DIR__ . '/../inc/header.php';
     </div>
 
     <!-- Card Detail: Itens da Ordem de Compra -->
-    <div class="card shadow-sm border-0 overflow-hidden">
+    <div class="card shadow-sm border overflow-hidden" style="border-color: #cbd5e1 !important; border-radius: 8px;">
         <div class="card-header bg-dark text-white py-3 border-0 d-flex justify-content-between align-items-center">
             <h6 class="m-0 fw-bold"><i class="fas fa-boxes me-2"></i> Itens Inclusos na Compra</h6>
-            <span class="badge bg-primary rounded-pill"><?= count($itens) ?> item(ns)</span>
+            <span class="text-white-50 small fw-semibold tabular-nums"><?= count($itens) === 1 ? '1 item' : count($itens) . ' itens' ?></span>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -181,13 +181,13 @@ require_once __DIR__ . '/../inc/header.php';
                                         <small class="text-muted"><i class="fas fa-barcode me-1"></i><?= htmlspecialchars($it['codigo_de_barra']) ?></small>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-center fw-bold">
+                                <td class="text-center fw-bold tabular-nums">
                                     <?= (float)$it['quantidade'] == (int)$it['quantidade'] ? (int)$it['quantidade'] : number_format((float)$it['quantidade'], 3, ',', '.') ?>
                                 </td>
-                                <td class="text-end">
+                                <td class="text-end tabular-nums">
                                     R$ <?= number_format((float)$it['preco_unitario'], 2, ',', '.') ?>
                                 </td>
-                                <td class="text-end pe-4 fw-bold text-primary">
+                                <td class="text-end pe-4 fw-bold text-primary tabular-nums">
                                     R$ <?= number_format((float)$it['subtotal'], 2, ',', '.') ?>
                                 </td>
                             </tr>
@@ -203,7 +203,7 @@ require_once __DIR__ . '/../inc/header.php';
                     <tfoot class="table-light">
                         <tr>
                             <td colspan="4" class="text-end fw-bold text-dark fs-6">TOTAL DA NOTA:</td>
-                            <td class="text-end pe-4 fw-bold text-success fs-5">
+                            <td class="text-end pe-4 fw-bold text-dark fs-5 tabular-nums">
                                 R$ <?= number_format((float)$compra['valor_total'], 2, ',', '.') ?>
                             </td>
                         </tr>

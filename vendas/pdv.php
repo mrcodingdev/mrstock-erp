@@ -10,12 +10,24 @@ $cfgPdvDescMax     = (float)get_app_config($pdo, 'pdv_desconto_maximo', '15.0');
 $cfgPdvTravaMargem = get_app_config($pdo, 'pdv_trava_margem', 'aviso');
 $cfgPdvImpressora  = get_app_config($pdo, 'pdv_impressora', '80mm');
 
-// Consulta de produtos ativos com saldo em estoque
-$stmt = $pdo->query("SELECT p.id, p.nome, p.preco_venda as preco, p.preco_compra, p.quantidade, p.codigo_de_barra, p.categoria_id, c.nome as categoria 
-                     FROM produtos p 
-                     LEFT JOIN categorias c ON p.categoria_id = c.id 
-                     WHERE p.quantidade > 0 AND p.status = 'ativo' 
-                     ORDER BY p.nome ASC");
+// Consulta de produtos ativos com saldo em estoque considerando lotes válidos
+$stmt = $pdo->query("
+    SELECT p.id, p.nome, p.codigo_de_barra, p.categoria, p.preco_venda AS preco, 
+           p.preco_compra,
+           CASE 
+               WHEN (SELECT COUNT(*) FROM lotes WHERE produto_id = p.id) > 0 
+               THEN (SELECT COALESCE(SUM(quantidade), 0) FROM lotes WHERE produto_id = p.id AND quantidade > 0 AND data_validade >= CURDATE())
+               ELSE p.quantidade 
+           END AS quantidade,
+           p.estoque_minimo, p.categoria_id 
+    FROM produtos p 
+    WHERE p.quantidade > 0 AND p.status = 'ativo' 
+      AND (
+          (SELECT COUNT(*) FROM lotes WHERE produto_id = p.id) = 0
+          OR (SELECT COALESCE(SUM(quantidade), 0) FROM lotes WHERE produto_id = p.id AND quantidade > 0 AND data_validade >= CURDATE()) > 0
+      )
+    ORDER BY p.nome ASC
+");
 $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Consulta de categorias de produtos
@@ -66,6 +78,49 @@ require_once __DIR__ . '/../inc/header.php';
         <?php elseif ($_GET['erro'] === 'venda_nao_encontrada'): ?>
         <div class="alert alert-danger alert-dismissible fade show mx-3 mt-3 shadow-sm border border-danger-subtle" role="alert">
             <i class="fas fa-circle-xmark me-2"></i> <strong>Erro:</strong> Venda não localizada no banco de dados.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+        </div>
+        <?php elseif ($_GET['erro'] === 'dados_invalidos'): ?>
+        <div class="alert alert-warning alert-dismissible fade show mx-3 mt-3 shadow-sm border border-warning-subtle" role="alert">
+            <i class="fas fa-triangle-exclamation me-2"></i> <strong>Aviso:</strong> Parâmetros de venda inválidos ou quantidade incorreta.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+        </div>
+        <?php elseif ($_GET['erro'] === 'processamento'): ?>
+        <div class="alert alert-danger alert-dismissible fade show mx-3 mt-3 shadow-sm border border-danger-subtle" role="alert">
+            <i class="fas fa-circle-xmark me-2"></i> <strong>Erro na Transação:</strong> Não foi possível processar a venda. Nenhuma alteração foi salva no banco de dados e o estoque foi preservado.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+        </div>
+        <?php elseif ($_GET['erro'] === 'lote_vencido'): ?>
+        <div class="alert alert-danger alert-dismissible fade show mx-3 mt-3 shadow-sm border border-danger-subtle" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-triangle-exclamation fa-2x me-3 text-danger"></i>
+                <div>
+                    <h6 class="mb-1 fw-bold"><i class="fas fa-ban text-danger me-1"></i> Bloqueio Sanitário (CDC Art. 18)</h6>
+                    <span>O produto '<strong><?= htmlspecialchars($_GET['produto'] ?? '') ?></strong>' não possui lotes válidos em estoque suficiente para atender a quantidade solicitada (Disponível em lotes vigentes: <strong class="tabular-nums"><?= (int)($_GET['disponivel'] ?? 0) ?></strong> un.).</span>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+        </div>
+        <?php elseif ($_GET['erro'] === 'desconto_excedido'): ?>
+        <div class="alert alert-warning alert-dismissible fade show mx-3 mt-3 shadow-sm border border-warning-subtle" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-percent fa-2x me-3 text-warning"></i>
+                <div>
+                    <h6 class="mb-1 fw-bold text-dark"><i class="fas fa-lock text-warning me-1"></i> Desconto Não Autorizado</h6>
+                    <span>O valor de R$ <strong class="tabular-nums"><?= htmlspecialchars($_GET['tentado'] ?? '') ?></strong> excede o teto máximo permitido de R$ <strong class="tabular-nums"><?= htmlspecialchars($_GET['max'] ?? '') ?></strong> para esta venda.</span>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+        </div>
+        <?php elseif ($_GET['erro'] === 'margem_negativa'): ?>
+        <div class="alert alert-danger alert-dismissible fade show mx-3 mt-3 shadow-sm border border-danger-subtle" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-arrow-trend-down fa-2x me-3 text-danger"></i>
+                <div>
+                    <h6 class="mb-1 fw-bold"><i class="fas fa-ban text-danger me-1"></i> Venda com Prejuízo Bloqueada</h6>
+                    <span>O valor total líquido da venda (R$ <strong class="tabular-nums"><?= htmlspecialchars($_GET['total'] ?? '') ?></strong>) é inferior ao custo total dos produtos (R$ <strong class="tabular-nums"><?= htmlspecialchars($_GET['custo'] ?? '') ?></strong>).</span>
+                </div>
+            </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
         </div>
         <?php endif; ?>
@@ -183,7 +238,7 @@ require_once __DIR__ . '/../inc/header.php';
                         </label>
                         <div class="input-group input-group-lg shadow-sm">
                             <span class="input-group-text bg-light border"><i class="fas fa-barcode text-muted"></i></span>
-                            <input type="text" id="barcode_input" class="form-control form-control-lg border bg-white fw-bold" placeholder="Bipe o código ou digite o nome e [Enter]..." autocomplete="off" autofocus aria-label="Código de barras ou busca de produto">
+                            <input type="text" id="barcode_input" class="form-control form-control-lg border bg-white fw-bold" placeholder="Bipe o código de barras ou digite o ID e [Enter]..." autocomplete="off" autofocus aria-label="Código de barras ou busca de produto">
                         </div>
                         <small class="text-muted mt-1 d-block" style="font-size:0.75rem;">
                             Bipagem automática: o item é inserido instantaneamente no cupom digital.
@@ -811,9 +866,9 @@ document.getElementById('barcode_input').addEventListener('keydown', function(e)
         // 1. Busca exata por código de barras
         let produto = catalogoProdutos.find(p => p.codigo_de_barra && p.codigo_de_barra.trim() === val);
 
-        // 2. Fallback: busca por ID ou nome
+        // 2. Fallback: correspondência estrita apenas por código de barras ou ID numérico direto
         if (!produto) {
-            produto = catalogoProdutos.find(p => String(p.id) === val || p.nome.toLowerCase().includes(val.toLowerCase()));
+            produto = catalogoProdutos.find(p => String(p.id) === val);
         }
 
         if (produto) {

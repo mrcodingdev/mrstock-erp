@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
+require_once __DIR__ . '/../inc/functions.php';
 
 // Proteção extra: Apenas Admin
 require_admin();
@@ -101,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $pdo->commit();
                 header("Location: " . BASE_URL . "/compras/index.php?msg=sucesso");
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 if ($pdo->inTransaction()) {
                     $pdo->rollBack();
                 }
@@ -158,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $pdo->commit();
                 header("Location: " . BASE_URL . "/compras/index.php?msg=status_atualizado");
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 if ($pdo->inTransaction()) {
                     $pdo->rollBack();
                 }

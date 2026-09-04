@@ -43,7 +43,7 @@ require_once __DIR__ . '/../inc/header.php';
             <div class="row">
                 <!-- COLUNA ESQUERDA: Dados da Nota -->
                 <div class="col-lg-4 col-12 mb-4 mb-lg-0">
-                    <div class="card shadow-sm border-0 mb-4">
+                    <div class="card shadow-sm border mb-4" style="border-color: #cbd5e1 !important; border-radius: 8px;">
                         <div class="card-header bg-dark text-white fw-bold"><i class="fas fa-info-circle me-1"></i> 1. Dados da Nota</div>
                         <div class="card-body bg-light">
                             <div class="mb-3">
@@ -76,14 +76,14 @@ require_once __DIR__ . '/../inc/header.php';
                     <div class="card shadow-sm border-0 border-primary">
                         <div class="card-body text-center bg-primary text-white" style="border-radius: 6px;">
                             <h5 class="mb-1">Valor Total da Compra</h5>
-                            <h2 class="fw-bold mb-0" id="display_total">R$ 0,00</h2>
+                            <h2 class="fw-bold mb-0 tabular-nums" id="display_total">R$ 0,00</h2>
                         </div>
                     </div>
                 </div>
 
                 <!-- COLUNA DIREITA: Itens da Compra -->
                 <div class="col-lg-8 col-12">
-                    <div class="card shadow-sm border-0 mb-4">
+                    <div class="card shadow-sm border mb-4" style="border-color: #cbd5e1 !important; border-radius: 8px;">
                         <div class="card-header bg-dark text-white fw-bold"><i class="fas fa-boxes me-1"></i> 2. Adicionar Produtos</div>
                         <div class="card-body bg-light">
                             <div class="row g-2 align-items-end mb-2">
@@ -119,7 +119,7 @@ require_once __DIR__ . '/../inc/header.php';
                         </div>
                     </div>
 
-                    <div class="card shadow-sm border-0">
+                    <div class="card shadow-sm border" style="border-color: #cbd5e1 !important; border-radius: 8px;">
                         <div class="card-header bg-white fw-bold border-bottom"><i class="fas fa-list me-1"></i> 3. Lista de Itens (O estoque subirá imediatamente)</div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
@@ -212,6 +212,12 @@ function removerItem(index) {
     renderizarTabela();
 }
 
+function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, function(m) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+    });
+}
+
 function renderizarTabela() {
     const tbody = document.querySelector('#tabela_itens tbody');
     tbody.innerHTML = '';
@@ -225,15 +231,16 @@ function renderizarTabela() {
         document.getElementById('btnFinalizar').disabled = false;
         itensCarrinho.forEach((item, index) => {
             totalCompra += item.subtotal;
-            const loteBadge = item.numero_lote ? ` <span class="badge bg-light text-dark border font-monospace">${item.numero_lote}</span>` : '';
+            const numLoteSanitizado = escapeHtml(item.numero_lote || '-');
+            const loteBadge = item.numero_lote ? ` <span class="badge bg-light text-dark border font-monospace tabular-nums">${numLoteSanitizado}</span>` : '';
             tbody.innerHTML += `
                 <tr>
-                    <td class="text-start ps-3 fw-bold">${item.nome}${loteBadge}</td>
-                    <td>${item.quantidade}</td>
-                    <td>R$ ${item.preco_unitario.toFixed(2).replace('.', ',')}</td>
-                    <td class="text-primary fw-bold">R$ ${item.subtotal.toFixed(2).replace('.', ',')}</td>
+                    <td class="text-start ps-3 fw-bold">${escapeHtml(item.nome)}${loteBadge}</td>
+                    <td class="tabular-nums">${item.quantidade}</td>
+                    <td class="tabular-nums">R$ ${item.preco_unitario.toFixed(2).replace('.', ',')}</td>
+                    <td class="text-primary fw-bold tabular-nums">R$ ${item.subtotal.toFixed(2).replace('.', ',')}</td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-danger py-0" onclick="removerItem(${index})"><i class="fas fa-times"></i></button>
+                        <button type="button" class="btn btn-sm btn-danger py-0 text-white" onclick="removerItem(${index})" aria-label="Remover item"><i class="fas fa-times"></i></button>
                     </td>
                 </tr>
             `;

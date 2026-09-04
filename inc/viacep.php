@@ -3,6 +3,8 @@
  * MrStock ERP - Proxy de Consulta de CEP (ViaCEP / BrasilAPI)
  * Fornece consulta de CEP resiliente e com fallback automático para o frontend.
  */
+require_once __DIR__ . '/auth.php';
+
 header('Content-Type: application/json; charset=utf-8');
 
 $cep = preg_replace('/\D/', '', $_GET['cep'] ?? '');
@@ -19,8 +21,8 @@ $ctx = stream_context_create([
         'header'  => "User-Agent: MrStockERP/2.0\r\n"
     ],
     'ssl' => [
-        'verify_peer'      => false,
-        'verify_peer_name' => false
+        'verify_peer'      => true,
+        'verify_peer_name' => true
     ]
 ]);
 

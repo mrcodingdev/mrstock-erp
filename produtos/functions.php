@@ -5,6 +5,48 @@
 
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
+require_once __DIR__ . '/../inc/functions.php';
+
+/**
+ * [G-04] Abate manual de lotes sequencialmente via estratégia PEPS / FIFO.
+ * Debita sequencialmente dos lotes mais antigos com lock pessimista.
+ */
+if (!function_exists('abater_lotes_manual_fifo')) {
+    function abater_lotes_manual_fifo(PDO $pdo, int $produto_id, int $qtd_solicitada): void {
+        if ($qtd_solicitada <= 0 || $produto_id <= 0) {
+            return;
+        }
+
+        $stmtLotes = $pdo->prepare("
+            SELECT id, quantidade 
+            FROM lotes 
+            WHERE produto_id = ? AND quantidade > 0 
+            ORDER BY data_validade ASC, id ASC 
+            FOR UPDATE
+        ");
+        $stmtLotes->execute([$produto_id]);
+        $lotes = $stmtLotes->fetchAll(PDO::FETCH_ASSOC);
+
+        $restante = $qtd_solicitada;
+        $stmtUpdateLote = $pdo->prepare("UPDATE lotes SET quantidade = ? WHERE id = ?");
+
+        foreach ($lotes as $lote) {
+            if ($restante <= 0) {
+                break;
+            }
+
+            $saldoLote = (int)$lote['quantidade'];
+            if ($saldoLote <= $restante) {
+                $stmtUpdateLote->execute([0, $lote['id']]);
+                $restante -= $saldoLote;
+            } else {
+                $novoSaldo = $saldoLote - $restante;
+                $stmtUpdateLote->execute([$novoSaldo, $lote['id']]);
+                $restante = 0;
+            }
+        }
+    }
+}
 
 // Proteção RBAC: Apenas Administradores podem cadastrar, alterar produtos ou lançar movimentações manuais
 $userPerfil = $_SESSION['user_perfil'] ?? $_SESSION['usuario_nivel'] ?? $_SESSION['perfil'] ?? '';
@@ -93,13 +135,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($diff_quantidade > 0) {
                     $stmtMov = $pdo->prepare("INSERT INTO movimentacoes (produto_id, tipo, quantidade, observacao) VALUES (?, 'entrada_compra', ?, 'Ajuste Manual via Cadastro')");
                     $stmtMov->execute([$prod_id, $diff_quantidade]);
+
+                    $loteVal = !empty($validade) ? $validade : date('Y-m-d', strtotime('+1 year'));
+                    $stmtInitLote = $pdo->prepare("INSERT INTO lotes (produto_id, numero_lote, data_fabricacao, data_validade, quantidade, preco_compra, fornecedor_id, data_entrada) VALUES (?, ?, CURDATE(), ?, ?, ?, ?, NOW())");
+                    $stmtInitLote->execute([$prod_id, 'L-INIT-' . date('Ymd') . '-' . $prod_id, $loteVal, $diff_quantidade, $preco_compra, $fornecedor_id]);
                 } elseif ($diff_quantidade < 0) {
                     $stmtMov = $pdo->prepare("INSERT INTO movimentacoes (produto_id, tipo, quantidade, observacao) VALUES (?, 'perda', ?, 'Ajuste Manual via Cadastro')");
                     $stmtMov->execute([$prod_id, abs($diff_quantidade)]);
+                    // [G-04] Abate sequencial de lotes FIFO no decréscimo manual
+                    abater_lotes_manual_fifo($pdo, (int)$prod_id, abs($diff_quantidade));
                 }
 
                 $pdo->commit();
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 if ($pdo->inTransaction()) {
                     $pdo->rollBack();
                 }
@@ -198,15 +246,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 $stmtUpd->execute([$quantidade, $produto_id]);
 
+                // [G-04] Abate sequencial de lotes FIFO nas movimentações de saída/perda (perda, saida_outros, saida_ajuste)
+                if (!in_array($tipo_mov, ['entrada_compra', 'devolucao_cliente'])) {
+                    abater_lotes_manual_fifo($pdo, (int)$produto_id, (int)$quantidade);
+                }
+
                 $motivo = !empty($observacao) ? $observacao : 'Ajuste manual';
                 registrar_log($pdo, 'AJUSTE_ESTOQUE', "Movimentação manual ($tipo_mov): $quantidade unidades no Produto #$produto_id. Motivo: $motivo", 'movimentacoes');
 
                 $pdo->commit();
                 header("Location: " . BASE_URL . "/produtos/movimentacoes.php?msg=sucesso");
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 if ($pdo->inTransaction()) {
                     $pdo->rollBack();
                 }
+                error_log("Erro em movimentacao manual de produtos: " . $e->getMessage());
                 header("Location: " . BASE_URL . "/produtos/movimentacoes.php?msg=erro_banco");
             }
             exit;
