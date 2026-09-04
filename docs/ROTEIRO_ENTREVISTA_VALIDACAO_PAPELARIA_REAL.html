@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Roteiro Estruturado de Entrevista & Homologação — Papelaria Real (MrStock ERP)</title>
+<style>
+  @page {
+    size: A4;
+    margin: 14mm 12mm 14mm 12mm;
+    @bottom-right {
+      content: "Página " counter(page);
+    }
+  }
+  *, *:before, *:after { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1e293b;
+    background: #ffffff;
+    line-height: 1.4;
+    font-size: 9pt;
+    margin: 0;
+    padding: 0;
+  }
+  .capa-container {
+    border: 2px solid #284936;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    background: #f8fafc;
+  }
+  .instituicao-header {
+    text-align: center;
+    border-bottom: 1.5px solid #cbd5e1;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+  .inst-sub { font-size: 8.5pt; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; }
+  .inst-main { font-size: 13pt; font-weight: 800; color: #284936; margin: 2px 0; }
+  .inst-curso { font-size: 9pt; font-weight: 600; color: #334155; margin: 0; }
+  
+  .doc-title-box {
+    text-align: center;
+    margin: 12px 0 10px 0;
+  }
+  .doc-title {
+    font-size: 14pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.3px;
+  }
+  .doc-subtitle {
+    font-size: 10pt;
+    font-weight: 600;
+    color: #284936;
+    margin: 0;
+  }
+  
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed #cbd5e1;
+    font-size: 8pt;
+    color: #334155;
+  }
+  .meta-item strong { color: #0f172a; }
+
+  .section-block {
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }
+  .section-title {
+    font-size: 10.5pt;
+    font-weight: 800;
+    color: #ffffff;
+    background: #284936;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-title span.badge {
+    background: #ffffff;
+    color: #284936;
+    font-size: 7.5pt;
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  
+  .instruction-alert {
+    background: #ecfdf5;
+    border-left: 3.5px solid #10b981;
+    padding: 6px 10px;
+    font-size: 8pt;
+    color: #065f46;
+    margin-bottom: 10px;
+    border-radius: 0 4px 4px 0;
+  }
+  
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+    font-size: 8pt;
+  }
+  table.data-table th, table.data-table td {
+    border: 1px solid #cbd5e1;
+    padding: 5px 8px;
+    text-align: left;
+    vertical-align: middle;
+  }
+  table.data-table th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+  }
+  table.data-table tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+  
+  .pergunta-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    page-break-inside: avoid;
+  }
+  .pergunta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .pergunta-num {
+    font-size: 8.5pt;
+    font-weight: 800;
+    color: #284936;
+  }
+  .pergunta-foco {
+    font-size: 7.5pt;
+    color: #64748b;
+    font-weight: 600;
+    font-style: italic;
+  }
+  .pergunta-texto {
+    font-size: 8.5pt;
+    color: #0f172a;
+    font-weight: 600;
+    margin-bottom: 4px;
+    line-height: 1.35;
+  }
+  .pergunta-motivo {
+    font-size: 7.8pt;
+    color: #475569;
+    background: #f1f5f9;
+    padding: 4px 6px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+  .resposta-campo {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .checkbox-box {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid #64748b;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .resposta-linhas {
+    flex: 1;
+    border-bottom: 1px dotted #94a3b8;
+    height: 18px;
+    margin-bottom: 2px;
+  }
+  .linha-extra {
+    border-bottom: 1px dotted #94a3b8;
+    height: 16px;
+    width: 100%;
+    margin-top: 3px;
+  }
+
+  .sus-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 7.8pt;
+    margin-top: 6px;
+  }
+  .sus-table th, .sus-table td {
+    border: 1px solid #cbd5e1;
+    padding: 5px 6px;
+    text-align: center;
+  }
+  .sus-table th.col-afirmacao {
+    text-align: left;
+    width: 50%;
+  }
+  .sus-table td.col-afirmacao {
+    text-align: left;
+    font-weight: 500;
+    color: #1e293b;
+  }
+  .sus-table th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+  }
+  .check-circle {
+    width: 13px;
+    height: 13px;
+    border: 1.5px solid #94a3b8;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .footer-meta {
+    margin-top: 14px;
+    padding-top: 6px;
+    border-top: 1.5px solid #cbd5e1;
+    font-size: 7.5pt;
+    color: #64748b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+  <!-- CAPA COMPACTA INSTITUCIONAL -->
+  <div class="capa-container">
+    <div class="instituicao-header">
+      <div class="inst-sub">Centro Estadual de Educação Tecnológica Paula Souza</div>
+      <div class="inst-main">ETEC Fernando Prestes — Sorocaba/SP</div>
+      <div class="inst-curso">Curso Técnico em Desenvolvimento de Sistemas • Trabalho de Conclusão de Curso (TCC)</div>
+    </div>
+    <div class="doc-title-box">
+      <h1 class="doc-title">ROTEIRO DE ENTREVISTA & HOMOLOGAÇÃO DE USABILIDADE</h1>
+      <div class="doc-subtitle">MrStock ERP v2.2.0 • Estudo de Caso: Papelaria Real</div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-item"><strong>Equipe Técnica:</strong> Cesar Augusto • Douglas Moraes • Eduardo Sugahara • Enzo Soares • Nikolas Pires</div>
+      <div class="meta-item"><strong>Ambiente de Homologação:</strong> Nuvem Oficial (https://mrstock.com.br/) / Local XAMPP</div>
+      <div class="meta-item"><strong>Entrevistada:</strong> Proprietária / Gerente da Papelaria Real</div>
+      <div class="meta-item"><strong>Local & Data:</strong> Balcão da Papelaria Real • Sorocaba/SP • Setembro de 2026</div>
+    </div>
+  </div>
+
+  <div class="instruction-alert">
+    <strong>Instrução aos Entrevistadores (Mr. Coding):</strong> O objetivo da sessão é a escuta ativa e validação empírica. Registre as respostas com caneta nos campos pontilhados. Não interrompa as críticas da cliente; cada sugestão servirá como insumo para o capítulo de <em>Testes com Usuário</em> e <em>Trabalhos Futuros</em> do TCC.
+  </div>
+
+  <!-- SEÇÃO 1: PROTOCOLO DA EQUIPE -->
+  <div class="section-block">
+    <div class="section-title">
+      1. PROTOCOLO OPERACIONAL E DIVISÃO DE FUNÇÕES NA VISITA
+      <span class="badge">Equipe 100% Sincronizada</span>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Integrando Mr. Coding</th>
+          <th style="width: 25%;">Papel na Sessão</th>
+          <th>Responsabilidade Durante a Demonstração</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cesar Augusto</strong></td>
+          <td>Condutor da Entrevista</td>
+          <td>Abre a conversa cordial, faz as perguntas à proprietária e modera o tempo da visita.</td>
+        </tr>
+        <tr>
+          <td><strong>Eduardo Sugahara</strong></td>
+          <td>Apresentador do Sistema</td>
+          <td>Opera o notebook com o ERP em produção, demonstrando cada tela conforme a pergunta.</td>
+        </tr>
+        <tr>
+          <td><strong>Douglas Moraes Braz</strong></td>
+          <td>Direção Técnica & Arquitetura</td>
+          <td>Esclarece pontos técnicos imediatos e avalia a viabilidade das alterações solicitadas.</td>
+        </tr>
+        <tr>
+          <td><strong>Nikolas Pires</strong></td>
+          <td>Anotador de Negócio & Banco</td>
+          <td>Anota fornecedores, formas de recebimento e regras de tributação citadas pela cliente.</td>
+        </tr>
+        <tr>
+          <td><strong>Enzo Soares</strong></td>
+          <td>Registrador de QTS & Métricas</td>
+          <td>Coleta as notas da escala de usabilidade SUS e fotos da sessão (com autorização).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SEÇÃO 2: BATERIA A - FRENTE DE CAIXA -->
+  <div class="section-block">
+    <div class="section-title">
+      2. BATERIA A: FRENTE DE CAIXA (PDV) & OPERAÇÃO DE BALCÃO
+      <span class="badge">Módulo Crítico #1</span>
+    </div>
+
+    <!-- P1 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão A.1 — Entrada do Produto no Caixa (Bipagem vs. Busca)</span>
+        <span class="pergunta-foco">Dilema: Teclado vs. Mouse vs. Leitor Ótico</span>
+      </div>
+      <div class="pergunta-texto">"No dia a dia, a maioria das vendas é feita com leitor de código de barras, digitando o nome do produto ou clicando na categoria? O que é mais ágil na hora da fila cheia?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> O MrStock prioriza leitura ótica e atalhos F1-F9. Avaliar se a operadora prefere teclado ou toques de mouse.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <!-- P2 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão A.2 — Feedback Sonoro da Bipagem (Bip 880Hz)</span>
+        <span class="pergunta-foco">Dilema: Usabilidade e Cansaço Auditivo</span>
+      </div>
+      <div class="pergunta-texto">"O sistema emite um bip sonoro ao reconhecer o produto, confirmando que entrou no carrinho sem precisar olhar para o monitor. No balcão, esse som ajuda ou prefere um botão para silenciar?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Som senoidal via Web Audio API. Precisamos saber se mantemos ligado direto ou se criamos toggle nas Configurações.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <!-- P3 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão A.3 — Concessão de Desconto no Balcão</span>
+        <span class="pergunta-foco">Dilema: Desconto Monetário (R$) vs. Percentual (%)</span>
+      </div>
+      <div class="pergunta-texto">"Quando um cliente pede desconto (compra grande ou pagamento à vista), como você aplica? Prefere digitar o valor em dinheiro que vai tirar (R$) ou clicar em botões de porcentagem (ex: -5%, -10%)?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> O sistema hoje tem campo em R$. Avaliar se botões rápidos de % devem ser adicionados na interface.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <!-- P4 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão A.4 — Identificação do Consumidor no Caixa</span>
+        <span class="pergunta-foco">Dilema: CPF Obrigatório vs. Consumidor Anônimo</span>
+      </div>
+      <div class="pergunta-texto">"Na maioria das vendas diárias de balcão, você precisa pedir e cadastrar o CPF do cliente, ou 90% das vendas são rápidas para 'Consumidor Final'?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Avaliar se o campo de cliente deve vir pré-preenchido como 'Consumidor Final' padrão para agilizar o checkout.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- SEÇÃO 3: BATERIA B - CATÁLOGO & PECULIARIDADES -->
+  <div class="section-block">
+    <div class="section-title">
+      3. BATERIA B: CATÁLOGO DE PRODUTOS & PECULIARIDADES DA PAPELARIA
+      <span class="badge">Módulo de Estoque</span>
+    </div>
+
+    <!-- P5 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão B.1 — Validação da Interface Sem Fotos de Produtos</span>
+        <span class="pergunta-foco">Decisão de Arquitetura: Velocidade vs. Apelo Visual</span>
+      </div>
+      <div class="pergunta-texto">"Nosso sistema propositalmente não usa fotos de cada caneta ou caderno, permitindo que a tela carregue em milissegundos sem pesar na internet da loja. Você sente falta de ver a foto, ou concorda que apenas nome e preço é mais rápido?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Consenso do grupo ETEC. Chancelar com a cliente a decisão de não sobrecarregar o banco com imagens pesadas.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <!-- P6 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão B.2 — Venda Fracionada / Por Metro</span>
+        <span class="pergunta-foco">Dilema: Quantidades Inteiras vs. Fracionadas (Decimais)</span>
+      </div>
+      <div class="pergunta-texto">"Na Papelaria Real vocês vendem produtos fracionados por metro (ex: plástico contact, papel kraft, fitas ou EVA), ou absolutamente tudo é vendido por unidade, pacote fechado ou caixa?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Se vender por metro (ex: 1,5m), o PDV precisará suportar casas decimais no campo de quantidade.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <!-- P7 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão B.3 — Etiquetas para Produtos Sem Código de Fábrica</span>
+        <span class="pergunta-foco">Dilema: Impressão em Folha A4 vs. Bobina Adesiva Térmica</span>
+      </div>
+      <div class="pergunta-texto">"Itens como canetas avulsas, cartolinas e borrachas soltas vêm sem código de barras. Nosso gerador imprime etiquetas com código em folhas A4 comuns. Você costuma colar etiquetas nos produtos? Qual impressora/papel usa?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Verificar se o modelo A4 atende ou se ela possui impressora térmica de etiquetas (Argox/Zebra).</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 4: BATERIA C - LOTES & VALIDADES -->
+  <div class="section-block">
+    <div class="section-title">
+      4. BATERIA C: GESTÃO DE LOTES, VALIDADES & SHELF-LIFE
+      <span class="badge">Diferencial Inovador</span>
+    </div>
+
+    <!-- P8 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão C.1 — Validade Opcional vs. Obrigatória no Cadastro</span>
+        <span class="pergunta-foco">Dilema: Rastreabilidade Rigorosa vs. Fricção de Cadastro</span>
+      </div>
+      <div class="pergunta-texto">"Temos alerta de validade para itens químicos (tintas, colas, corretivos, massinhas). Para cadernos e pastas, isso não se aplica. No cadastro, você prefere que a data de validade seja totalmente opcional (só preenche se o produto estragar)?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Evitar obrigar o cadastro de lote para produtos permanentes, agilizando a rotina da loja.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 5: BATERIA D - COMPRAS & ENTRADA DE NOTAS -->
+  <div class="section-block">
+    <div class="section-title">
+      5. BATERIA D: COMPRAS, FORNECEDORES & ENTRADA DE NOTAS
+      <span class="badge">Abastecimento</span>
+    </div>
+
+    <!-- P9 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão D.1 — Entrada de Notas: Manual vs. Importação de XML</span>
+        <span class="pergunta-foco">Dilema: Digitação de Pedido vs. XML da Distribuidora</span>
+      </div>
+      <div class="pergunta-texto">"Quando chegam as caixas das distribuidoras (Tilibra, Chamex, Faber-Castell), como dão entrada no estoque hoje? Digitam item a item ou gostariam de apenas importar o arquivo XML da Nota Fiscal para cadastrar tudo sozinho?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Grande oportunidade de mapeamento de requisito para os Trabalhos Futuros da versão 3.0 no TCC.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <!-- P10 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão D.2 — Espelho de Conferência Cega no Almoxarifado</span>
+        <span class="pergunta-foco">Dilema: Conferência Física de Caixas</span>
+      </div>
+      <div class="pergunta-texto">"O sistema gera uma folha impressa de 'Conferência de Compra' para ir ticando com a caneta na doca de descarga. Essa folha impressa é útil para a sua rotina de conferência de caixas?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Validar se o módulo /compras/visualizar.php atende a equipe física do depósito da papelaria.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- SEÇÃO 6: BATERIA E - FINANCEIRO & FECHAMENTO -->
+  <div class="section-block">
+    <div class="section-title">
+      6. BATERIA E: GESTÃO FINANCEIRA, FIADO & FECHAMENTO DE CAIXA
+      <span class="badge">Controle Operacional</span>
+    </div>
+
+    <!-- P11 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão E.1 — Venda a Prazo / 'Caderninho' / Fiado Escolar</span>
+        <span class="pergunta-foco">Dilema: Pagamento Imediato vs. Contas a Receber</span>
+      </div>
+      <div class="pergunta-texto">"Vocês vendem 'fiado' ou anotam em caderno para escolas, escritórios parceiros ou clientes antigos pagarem no fim do mês? Ou todo mundo paga no ato via Pix, Dinheiro ou Cartão?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Se houver fiado, precisamos justificar na monografia do TCC o escopo de crediário futuro.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <!-- P12 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão E.2 — Rotina de Fechamento de Caixa e Sangrias</span>
+        <span class="pergunta-foco">Dilema: Fechamento Cego vs. Retiradas de Dinheiro</span>
+      </div>
+      <div class="pergunta-texto">"Como é feito o fechamento no fim do dia? O funcionário conta as cédulas e você confere se bate com o sistema ('Fechamento Cego')? Costumam retirar dinheiro da gaveta durante o dia para pagar entregas/despesas (sangria)?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Validar se a proprietária sente falta de registro formal de Sangria e Suprimento no PDV.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 7: BATERIA F - ACESSOS & SEGURANÇA -->
+  <div class="section-block">
+    <div class="section-title">
+      7. BATERIA F: PERFIS DE ACESSO, SIGILO & CANCELAMENTO (RBAC)
+      <span class="badge">Governança & Segurança</span>
+    </div>
+
+    <!-- P13 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão F.1 — Sigilo de Custos e Margem de Lucro</span>
+        <span class="pergunta-foco">Dilema: Caixa Operacional vs. Gestor Administrador</span>
+      </div>
+      <div class="pergunta-texto">"Blindamos o sistema para que o funcionário do caixa só consiga vender: ele NÃO vê quanto você pagou pelo produto, NÃO vê seu lucro e NÃO acessa relatórios. Você aprova esse isolamento total ou gostaria que ele visse algo a mais?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Homologação formal da política de privilégios RBAC com o cliente real.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <!-- P14 -->
+    <div class="pergunta-card">
+      <div class="pergunta-header">
+        <span class="pergunta-num">Questão F.2 — Permissão de Cancelamento de Venda</span>
+        <span class="pergunta-foco">Dilema: Cancelamento Livre vs. Senha de Gerente</span>
+      </div>
+      <div class="pergunta-texto">"Se o operador registrar um item errado ou o cliente desistir após o cupom emitido, o funcionário do caixa deve poder cancelar a venda sozinho ou deve exigir a sua senha/permissão de gerente?"</div>
+      <div class="pergunta-motivo"><em>Contexto Técnico:</em> Avaliar necessidade de modal de confirmação com credencial administrativa para estornos.</div>
+      <div class="resposta-campo">
+        <div class="checkbox-box"></div>
+        <div class="resposta-linhas"></div>
+      </div>
+      <div class="linha-extra"></div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 8: ESCALA SUS DE USABILIDADE -->
+  <div class="section-block">
+    <div class="section-title">
+      8. AVALIAÇÃO DE USABILIDADE DO SISTEMA (ESCALA SUS SIMPLIFICADA)
+      <span class="badge">Métricas Científicas TCC</span>
+    </div>
+    <div style="font-size: 7.8pt; color: #475569; margin-bottom: 4px;">
+      <em>Peça para a proprietária pontuar de 1 a 5 (onde 1 = Discordo Totalmente e 5 = Concordo Totalmente):</em>
+    </div>
+    <table class="sus-table">
+      <thead>
+        <tr>
+          <th class="col-afirmacao">Afirmação de Usabilidade & Experiência</th>
+          <th style="width: 7%;">1 (DT)</th>
+          <th style="width: 7%;">2 (D)</th>
+          <th style="width: 7%;">3 (N)</th>
+          <th style="width: 7%;">4 (C)</th>
+          <th style="width: 7%;">5 (CT)</th>
+          <th style="width: 25%;">Observação Verbal da Cliente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-afirmacao">1. O visual do sistema é limpo, profissional e fácil de entender.</td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-afirmacao">2. A tela do PDV é rápida o suficiente para a hora do rush escolar.</td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-afirmacao">3. As cores dos botões facilitam saber onde clicar sem confusão.</td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-afirmacao">4. O cálculo automático do troco evita erros e prejuízos no caixa.</td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-afirmacao">5. A busca por nome/código de barras responde instantaneamente.</td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-afirmacao">6. Os relatórios mostram o que preciso sem complicação ou excesso.</td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-afirmacao">7. Eu usaria o MrStock na Papelaria Real no lugar do método atual.</td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td><span class="check-circle"></span></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- SEÇÃO 9: COLETA ABERTA (WISHLIST) -->
+  <div class="section-block">
+    <div class="section-title">
+      9. PARECER QUALITATIVO & REIVINDICAÇÕES DA CLIENTE (WISHLIST)
+      <span class="badge">Insumos Diretos para TCC</span>
+    </div>
+
+    <div class="pergunta-card">
+      <div class="pergunta-texto">1. O que mais te chamou a atenção de forma POSITIVA no MrStock ERP?</div>
+      <div class="linha-extra" style="margin-top: 8px;"></div>
+      <div class="linha-extra"></div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <div class="pergunta-card">
+      <div class="pergunta-texto">2. Houve algo que achou COMPLICADO ou que gostaria que fosse mais SIMPLES?</div>
+      <div class="linha-extra" style="margin-top: 8px;"></div>
+      <div class="linha-extra"></div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <div class="pergunta-card">
+      <div class="pergunta-texto">3. Se pudesse pedir UMA função dos sonhos para o caixa da papelaria, qual seria?</div>
+      <div class="linha-extra" style="margin-top: 8px;"></div>
+      <div class="linha-extra"></div>
+      <div class="linha-extra"></div>
+    </div>
+
+    <div class="pergunta-card">
+      <div class="pergunta-texto">4. Qual modelo de impressora térmica de cupom vocês utilizam na loja física?</div>
+      <div style="display: flex; gap: 16px; margin-top: 6px; font-size: 8.5pt;">
+        <div>[ &nbsp; ] Epson TM-T20</div>
+        <div>[ &nbsp; ] Bematech MP-4200</div>
+        <div>[ &nbsp; ] Daruma</div>
+        <div>[ &nbsp; ] Elgin</div>
+        <div>[ &nbsp; ] Não possui / Impressora Comum A4</div>
+      </div>
+      <div class="linha-extra" style="margin-top: 6px;"></div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 10: ASSINATURA E ENCERRAMENTO -->
+  <div class="section-block">
+    <div class="section-title">
+      10. HOMOLOGAÇÃO & REGISTRO DE PRESENÇA
+      <span class="badge">Comprovação Oficial</span>
+    </div>
+
+    <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px 16px; margin-top: 8px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; text-align: center; margin-top: 18px;">
+        <div>
+          <div style="border-bottom: 1.5px solid #334155; width: 85%; margin: 0 auto 6px auto;"></div>
+          <div style="font-size: 8.5pt; font-weight: 700; color: #0f172a;">Representante da Papelaria Real</div>
+          <div style="font-size: 7.5pt; color: #64748b;">Proprietária / Gerente Geral</div>
+        </div>
+        <div>
+          <div style="border-bottom: 1.5px solid #334155; width: 85%; margin: 0 auto 6px auto;"></div>
+          <div style="font-size: 8.5pt; font-weight: 700; color: #0f172a;">Equipe Técnica Mr. Coding</div>
+          <div style="font-size: 7.5pt; color: #64748b;">ETEC Fernando Prestes — Centro Paula Souza</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RODAPÉ DE PÁGINA -->
+  <div class="footer-meta">
+    <span>MrStock ERP v2.2.0 • Documento de Homologação Presencial de Usabilidade (Papelaria Real)</span>
+    <span>Compilado via Microsoft Edge Headless (Regra #6) • Sorocaba/SP</span>
+  </div>
+
+</body>
+</html>
