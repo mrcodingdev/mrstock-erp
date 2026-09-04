@@ -2,7 +2,7 @@
 /**
  * MrStock ERP - Dashboard Operacional com Design System SalesOps (v0)
  */
-$pageTitle  = 'Dashboard Operacional';
+$pageTitle  = 'Dashboard';
 $activePage = 'dashboard';
 require_once __DIR__ . '/inc/database.php';
 require_once __DIR__ . '/inc/auth.php';

@@ -4,7 +4,7 @@
  * Design System SalesOps v0 (Bento Grid, PEPS / FIFO e Badges de Shelf-Life)
  */
 
-$pageTitle  = 'Lotes e Validades';
+$pageTitle  = 'Lotes & Validades';
 $activePage = 'lotes';
 
 require_once __DIR__ . '/../inc/database.php';

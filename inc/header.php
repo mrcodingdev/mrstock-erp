@@ -23,7 +23,7 @@ $_menuGroups = [
     [
         'type'     => 'link',
         'id'       => 'dashboard',
-        'title'    => 'Visão Geral',
+        'title'    => 'Dashboard',
         'href'     => BASE_URL . '/dashboard.php',
         'icon'     => 'fa-solid fa-gauge-high',
         'active'   => ($_ap === 'dashboard'),
@@ -37,7 +37,7 @@ $_menuGroups = [
         'active'   => in_array($_ap, ['pdv', 'historico', 'fiscal']),
         'rbac'     => null,
         'items'    => [
-            ['id' => 'pdv',       'href' => BASE_URL . '/vendas/pdv.php',       'icon' => 'fa-solid fa-barcode',         'label' => 'Ponto de Venda (PDV)', 'rbac' => null],
+            ['id' => 'pdv',       'href' => BASE_URL . '/vendas/pdv.php',       'icon' => 'fa-solid fa-barcode',         'label' => 'PDV (Frente de Caixa)', 'rbac' => null],
             ['id' => 'historico', 'href' => BASE_URL . '/vendas/historico.php', 'icon' => 'fa-solid fa-clock-rotate-left', 'label' => 'Histórico de Vendas',  'rbac' => 'admin'],
             ['id' => 'fiscal',    'href' => BASE_URL . '/vendas/nfce.php',      'icon' => 'fa-solid fa-receipt',           'label' => 'Consulta Fiscal NFC-e', 'rbac' => null],
         ]
@@ -50,7 +50,7 @@ $_menuGroups = [
         'active'   => in_array($_ap, ['produtos', 'categorias', 'movimentacoes', 'etiquetas', 'lotes']),
         'rbac'     => null,
         'items'    => [
-            ['id' => 'produtos',      'href' => BASE_URL . '/produtos/index.php',         'icon' => 'fa-solid fa-box-open',           'label' => 'Produtos & Saldos',         'rbac' => null],
+            ['id' => 'produtos',      'href' => BASE_URL . '/produtos/index.php',         'icon' => 'fa-solid fa-box-open',           'label' => 'Estoque & Produtos',         'rbac' => null],
             ['id' => 'lotes',         'href' => BASE_URL . '/lotes/index.php',            'icon' => 'fa-solid fa-calendar-days',       'label' => 'Lotes & Validades',         'rbac' => 'admin'],
             ['id' => 'etiquetas',     'href' => BASE_URL . '/produtos/etiquetas.php',     'icon' => 'fa-solid fa-barcode',            'label' => 'Gerador de Etiquetas',      'rbac' => 'admin'],
             ['id' => 'categorias',    'href' => BASE_URL . '/categorias/index.php',       'icon' => 'fa-solid fa-tags',               'label' => 'Categorias',                'rbac' => 'admin'],
@@ -79,7 +79,7 @@ $_menuGroups = [
         'rbac'     => 'admin', // Grupo inteiro exclusivo Admin
         'items'    => [
             ['id' => 'analise',    'href' => BASE_URL . '/relatorios/analise.php', 'icon' => 'fa-solid fa-chart-line',     'label' => 'Centro de Análise',     'rbac' => 'admin'],
-            ['id' => 'relatorios', 'href' => BASE_URL . '/relatorios/index.php',   'icon' => 'fa-solid fa-print',          'label' => 'Relatórios PDF / Excel', 'rbac' => 'admin'],
+            ['id' => 'relatorios', 'href' => BASE_URL . '/relatorios/index.php',   'icon' => 'fa-solid fa-print',          'label' => 'Central de Relatórios', 'rbac' => 'admin'],
             ['id' => 'logs',       'href' => BASE_URL . '/relatorios/logs.php',    'icon' => 'fa-solid fa-clipboard-list', 'label' => 'Auditoria & Logs',       'rbac' => 'admin'],
         ]
     ],
@@ -106,6 +106,14 @@ if (($_SESSION['cfg_linhas_zebradas'] ?? '') === '1') {
     $_bodyClasses[] = 'table-striped-on';
 }
 $_bodyClassStr = implode(' ', $_bodyClasses);
+
+// Normalização Universal de Título (Browser Tab e Topbar)
+$_rawTitle = $pageTitle ?? 'Dashboard';
+$_pageTitleClean = trim(str_ireplace(['MrStock ERP - ', 'MrStock ERP — ', 'MrStock ERP'], '', $_rawTitle));
+if (empty($_pageTitleClean)) {
+    $_pageTitleClean = 'Dashboard';
+}
+$_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -113,7 +121,7 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MrStock ERP - Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades e PDV Ágil para Papelaria Real.">
-    <title><?= htmlspecialchars($pageTitle ?? 'MrStock ERP', ENT_QUOTES, 'UTF-8') ?></title>
+    <title><?= htmlspecialchars($_browserTitle, ENT_QUOTES, 'UTF-8') ?></title>
     
     <!-- Script Anti-FOUC para Restauração Instantânea do Estado da Sidebar -->
     <script>
@@ -240,7 +248,7 @@ $_bodyClassStr = implode(' ', $_bodyClasses);
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <div class="d-flex align-items-center gap-2">
-                    <span class="fw-bold text-dark fs-6"><?= htmlspecialchars(str_replace('MrStock ERP - ', '', $pageTitle ?? ''), ENT_QUOTES, 'UTF-8') ?></span>
+                    <span class="fw-bold text-dark fs-6"><?= htmlspecialchars($_pageTitleClean, ENT_QUOTES, 'UTF-8') ?></span>
                 </div>
             </div>
 

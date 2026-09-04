@@ -2,7 +2,7 @@
 /**
  * MrStock ERP - Histórico de Vendas com Filtros Avançados, KPIs e Design System SalesOps
  */
-$pageTitle  = 'MrStock ERP - Histórico de Vendas';
+$pageTitle  = 'Histórico de Vendas';
 $activePage = 'historico';
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';

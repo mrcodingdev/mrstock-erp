@@ -1,5 +1,5 @@
 <?php
-$pageTitle  = 'MrStock ERP - PDV (Frente de Caixa)';
+$pageTitle  = 'PDV (Frente de Caixa)';
 $activePage = 'pdv';
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';

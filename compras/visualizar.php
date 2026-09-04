@@ -2,7 +2,7 @@
 /**
  * MrStock ERP - Visualização Detalhada de Ordem de Compra
  */
-$pageTitle  = 'MrStock ERP - Detalhes da Compra';
+$pageTitle  = 'Detalhes da Compra';
 $activePage = 'compras';
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';

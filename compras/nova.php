@@ -1,5 +1,5 @@
 <?php
-$pageTitle  = 'MrStock ERP - Nova Compra';
+$pageTitle  = 'Nova Compra';
 $activePage = 'compras';
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
