@@ -64,6 +64,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MrStock ERP - Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades e PDV Ágil para Papelaria Real.">
     <title>MrStock ERP - Login</title>
+    
+    <!-- Metadados OpenGraph & Tema Institucional -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MrStock ERP - Login | Papelaria Real">
+    <meta property="og:description" content="Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades PEPS/FIFO e PDV Ágil para Papelaria Real.">
+    <meta property="og:url" content="https://mrstock.com.br/">
+    <meta property="og:image" content="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="MrStock ERP">
+    <meta name="theme-color" content="#284936">
     <link href="<?= BASE_URL ?>/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/inter.css">
@@ -136,8 +146,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             max-width: 900px;
             min-height: 520px;
             background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
             z-index: 1;
             overflow: hidden;
             margin: auto;
@@ -297,6 +308,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         .btn-login:active {
             transform: translateY(0);
+        }
+        .btn-login:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(44, 110, 83, 0.35);
         }
 
         .error-msg {
@@ -460,8 +475,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     Entrar <i class="fas fa-arrow-right"></i>
                 </button>
             </form>
+
+            <!-- Rodapé Jurídico de Acesso -->
+            <div class="text-center mt-3 pt-2">
+                <small style="color: var(--text-muted); font-size: 0.8125rem;">
+                    Ao autenticar-se, você concorda com os 
+                    <a href="<?= BASE_URL ?>/termos.php" class="fw-semibold text-decoration-none" style="color: var(--brand-secondary);">Termos de Uso</a> e a 
+                    <a href="<?= BASE_URL ?>/privacidade.php" class="fw-semibold text-decoration-none" style="color: var(--brand-secondary);">Política de Privacidade</a>.
+                </small>
+            </div>
         </div>
     </main>
 
+    <?php require_once __DIR__ . '/inc/cookie_banner.php'; ?>
 </body>
 </html>

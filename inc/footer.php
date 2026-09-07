@@ -42,10 +42,15 @@
                     </div>
                 </div>
 
-                <!-- SUB-BARRA INFERIOR (1 Linha Compacta) -->
+                <!-- SUB-BARRA INFERIOR (1 Linha Compacta com Links Jurídicos) -->
                 <div class="so-footer-gestaoclick__bottom mt-2 pt-2" style="border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.75rem; color: #94a3b8;">
-                    <div class="d-flex flex-wrap justify-content-between align-items-center">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                         <span>MrStock ERP © 2026 Papelaria Real</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="<?= BASE_URL ?>/termos.php" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">Termos de Uso</a>
+                            <span>•</span>
+                            <a href="<?= BASE_URL ?>/privacidade.php" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">Política de Privacidade &amp; LGPD</a>
+                        </div>
                         <span>(11) 98765-4321 • contato@mrstock.com.br</span>
                     </div>
                 </div>
@@ -178,5 +183,6 @@
         });
     });
     </script>
+    <?php require_once __DIR__ . '/cookie_banner.php'; ?>
 </body>
 </html>

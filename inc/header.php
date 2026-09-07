@@ -121,6 +121,17 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MrStock ERP - Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades e PDV Ágil para Papelaria Real.">
+    
+    <!-- Metadados OpenGraph & Tema Institucional -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?= htmlspecialchars($_browserTitle, ENT_QUOTES, 'UTF-8') ?>">
+    <meta property="og:description" content="Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades PEPS/FIFO e PDV Ágil para Papelaria Real.">
+    <meta property="og:url" content="https://mrstock.com.br/">
+    <meta property="og:image" content="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:site_name" content="MrStock ERP">
+    <meta name="theme-color" content="#284936">
+
     <title><?= htmlspecialchars($_browserTitle, ENT_QUOTES, 'UTF-8') ?></title>
     
     <!-- Script Anti-FOUC para Restauração Instantânea do Estado da Sidebar -->

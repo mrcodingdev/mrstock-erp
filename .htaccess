@@ -1,6 +1,9 @@
 # MrStock ERP - Hardening de Producao Apache (Hostinger / cPanel)
 Options -Indexes
 
+# Pagina 404 Customizada Institucional
+ErrorDocument 404 /404.php
+
 # Bloqueia acesso direto a arquivos de configuracao, ambiente, logs, documentacao e dumps SQL
 <FilesMatch "^(\.env|\.git|\.htaccess|.*\.sql|.*\.log|.*\.md)$">
     Order Allow,Deny
