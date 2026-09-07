@@ -22,6 +22,7 @@
 - GOTCHA 7: Preservar intacta a pasta `C:\xampp\htdocs\MrStockBackup\` como save-point estável.
 - GOTCHA 8: Deploy contínuo em produção na nuvem (`https://mrstock.com.br/`) via webhook automático a partir de `git push origin main`.
 - GOTCHA 9: Validação sintática compulsória (`php -l`) antes de qualquer entrega ou commit.
+- GOTCHA 10: Ao compilar relatórios ou PDFs (Edge Headless/Python), PROIBIDO deixar restos de arquivos HTML temporários ou scripts intermediários espalhados na raiz ou em docs/. Manter temporários em scratch/ e realizar limpeza imediata.
 
 === PRÓXIMAS HISTÓRIAS PRIORITÁRIAS (BACKLOG ATIVO) ===
 [ ] TAREFA-01: Realizar a Entrevista Presencial na Papelaria Real utilizando o Roteiro Oficial em PDF (Sugahara + Cesar + Douglas).
