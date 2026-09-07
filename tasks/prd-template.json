@@ -1,0 +1,20 @@
+{
+  "project": "MrStock ERP v2.2.0",
+  "branchName": "main",
+  "description": "Template de PRD estruturado para execução autônoma atômica (Padrão Ralph)",
+  "userStories": [
+    {
+      "id": "STORY-001",
+      "title": "Nome da História / Funcionalidade Atômica",
+      "description": "Descrição detalhada do que deve ser implementado ou ajustado.",
+      "priority": 1,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Critério 1: Validação de sintaxe PHP com php -l sem warnings ou erros.",
+        "Critério 2: Cumprimento estrito do Design System de botões sólidos e cores de fábrica.",
+        "Critério 3: Validação de permissões e segurança RBAC contra IDOR.",
+        "Critério 4: Verificação empírica no navegador ou terminal com evidência durável."
+      ]
+    }
+  ]
+}

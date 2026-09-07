@@ -1,0 +1,30 @@
+# MRSTOCK ERP — PROGRESS LOG & HISTORICAL LEARNINGS (RALPH PATTERN)
+# Repositório Oficial: mrcodingdev/mrstock-erp (Branch: main)
+# Sistema Oficial: PHP 8.2 Nativo / PDO / MySQL (mrstock_db)
+# Última Atualização: 07 de Setembro de 2026
+
+=== HISTÓRICO DE ENTREGAS CONSOLIDADAS ===
+[PASS] v2.0.0 — Arquitetura de Design System Sólido (1.300 linhas no css/style.css, botões sólidos, topbar limpa).
+[PASS] v2.1.0 — Módulo de Lotes e Controle de Shelf-Life PEPS/FIFO para produtos perecíveis da Papelaria Real.
+[PASS] v2.2.0 — Central de Auditoria Transacional (Logs com IP, data e operador), Bento Grid e otimizações de performance.
+[PASS] v2.2.1 — Remoção cirúrgica de botão inoperante de atendimento no rodapé e padronização de suporte.
+[PASS] v2.2.2 — Roteiro oficial de validação presencial para os proprietários da Papelaria Real diagramado em PDF A4.
+[PASS] v2.2.3 — Análise de 47 Repositórios de Elite (Leva 1 a 4) catalogados e indexados.
+[PASS] v2.2.4 — Configuração de Observabilidade Local: Rungraph (Grafo de 150 ações recentes) e AgentsView (SQLite com 177 sessões).
+
+=== CATÁLOGO DE GOTCHAS E PREVENÇÃO DE REGRESSÕES (APRENDIZADOS CRÍTICOS) ===
+- GOTCHA 1: Animações globais fluida `@keyframes mrStockSlideInLeft` NUNCA podem ser bloqueadas por `prefers-reduced-motion` com `!important`.
+- GOTCHA 2: Botões principais e perigo (`.btn-danger`, `.btn-success`, etc.) NUNCA devem ter outline (`btn-outline-*`), apenas preenchimento sólido de fábrica e escurecimento suave no `:hover`.
+- GOTCHA 3: Topbar (`inc/header.php`) deve exibir exclusivamente o nome limpo da página atual, sem prefixos (`MrStock ERP - `) ou badges (`[• ERP Ativo]`).
+- GOTCHA 4: Botão de WhatsApp em tabelas deve ser estritamente circular verde oficial (22x22px), posicionado ao lado do número em texto limpo.
+- GOTCHA 5: Todo botão interativo deve ter rota real, modal ativo ou ação JS. Proibido botões com `href="#"` inoperantes.
+- GOTCHA 6: Manter estritamente as 10 famílias funcionais de produtos da Papelaria Real no `mrstock_db`.
+- GOTCHA 7: Preservar intacta a pasta `C:\xampp\htdocs\MrStockBackup\` como save-point estável.
+- GOTCHA 8: Deploy contínuo em produção na nuvem (`https://mrstock.com.br/`) via webhook automático a partir de `git push origin main`.
+- GOTCHA 9: Validação sintática compulsória (`php -l`) antes de qualquer entrega ou commit.
+
+=== PRÓXIMAS HISTÓRIAS PRIORITÁRIAS (BACKLOG ATIVO) ===
+[ ] TAREFA-01: Realizar a Entrevista Presencial na Papelaria Real utilizando o Roteiro Oficial em PDF (Sugahara + Cesar + Douglas).
+[ ] TAREFA-02: Consolidar os feedbacks da proprietária em melhorias diretas na usabilidade do PDV e Catálogo.
+[ ] TAREFA-03: Finalizar a documentação escrita da monografia do TCC da ETEC (Enzo + Douglas).
+[ ] TAREFA-04: Preparar o laudo de segurança automatizado final com Strix / Shannon antes do ensaio da banca examinadora.
