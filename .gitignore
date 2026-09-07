@@ -30,4 +30,5 @@ scripts/deploy_ftp.py
 02_Auditorias_e_Qualidade_QA/
 03_Backups_e_Releases/
 04_Base_de_Conhecimento_e_Obsidian/
-scripts/
+scripts/*
+!scripts/backup_restore_tester.php

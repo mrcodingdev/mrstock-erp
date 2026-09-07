@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/inc/database.php';
+require_once __DIR__ . '/inc/rate_limiter.php';
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -9,51 +11,79 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
+$ip = get_client_ip();
+$statusRate = check_rate_limit($pdo, $ip);
+$bloqueado = $statusRate['bloqueado'];
+$erroBloqueio = '';
+
+if ($bloqueado) {
+    http_response_code(429);
+    $erroBloqueio = "Muitas tentativas incorretas. Por segurança, o acesso deste IP foi bloqueado temporariamente por mais {$statusRate['minutos_restantes']} minuto(s).";
+}
+
 $erro = '';
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    csrf_verify(); // Proteção contra ataques CSRF
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($bloqueado) {
+        // Bloqueio rigoroso: impede qualquer processamento de autenticação sob força bruta
+        http_response_code(429);
+    } else {
+        csrf_verify(); // Proteção contra ataques CSRF
 
-    $username = trim($_POST['username'] ?? '');
-    $password = trim($_POST['password'] ?? '');
-    $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch();
-    
-    if ($user) {
-        $autenticado = false;
+        $username = trim($_POST['username'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE username = ?");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
         
-        if (password_verify($password, $user['password'])) {
-            $autenticado = true;
-        } elseif ($user['password'] === $password) {
-            // Senha legado em texto plano coincide: migra automaticamente para hash Bcrypt
-            $novoHash = password_hash($password, PASSWORD_DEFAULT);
-            $stmtUpd = $pdo->prepare("UPDATE usuarios SET password = ? WHERE id = ?");
-            $stmtUpd->execute([$novoHash, $user['id']]);
-            $autenticado = true;
-        }
+        if ($user) {
+            $autenticado = false;
+            
+            if (password_verify($password, $user['password'])) {
+                $autenticado = true;
+            } elseif ($user['password'] === $password) {
+                // Senha legado em texto plano coincide: migra automaticamente para hash Bcrypt
+                $novoHash = password_hash($password, PASSWORD_DEFAULT);
+                $stmtUpd = $pdo->prepare("UPDATE usuarios SET password = ? WHERE id = ?");
+                $stmtUpd->execute([$novoHash, $user['id']]);
+                $autenticado = true;
+            }
 
-        if ($autenticado) {
-            session_regenerate_id(true); // Proteção contra Session Fixation
-            $_SESSION['user_id']       = $user['id'];
-            $_SESSION['user_name']     = $user['username'];
-            $_SESSION['username']      = $user['username'];
-            $_SESSION['user_perfil']   = $user['perfil'];
-            $_SESSION['usuario_nivel'] = $user['perfil'];
-            $_SESSION['perfil']        = $user['perfil'];
+            if ($autenticado) {
+                session_regenerate_id(true); // Proteção contra Session Fixation
+                $_SESSION['user_id']       = $user['id'];
+                $_SESSION['user_name']     = $user['username'];
+                $_SESSION['username']      = $user['username'];
+                $_SESSION['user_perfil']   = $user['perfil'];
+                $_SESSION['usuario_nivel'] = $user['perfil'];
+                $_SESSION['perfil']        = $user['perfil'];
 
-            registrar_log($pdo, 'LOGIN_SUCESSO', "Usuário {$user['username']} ({$user['perfil']}) autenticou-se no sistema", 'usuarios', (int)$user['id']);
+                // Limpa histórico de tentativas de força bruta após login com sucesso
+                limpar_tentativas_ip($pdo, $ip, $username);
 
-            header("Location: " . BASE_URL . ($user['perfil'] == 'caixa' ? "/vendas/pdv.php" : "/dashboard.php"));
-            exit;
+                registrar_log($pdo, 'LOGIN_SUCESSO', "Usuário {$user['username']} ({$user['perfil']}) autenticou-se no sistema", 'usuarios', (int)$user['id']);
+
+                header("Location: " . BASE_URL . ($user['perfil'] == 'caixa' ? "/vendas/pdv.php" : "/dashboard.php"));
+                exit;
+            } else {
+                $erro = "Credenciais inválidas. Tente novamente.";
+                registrar_tentativa_falha($pdo, $ip, $username);
+                $statusRate = check_rate_limit($pdo, $ip);
+                if ($statusRate['bloqueado']) {
+                    $bloqueado = true;
+                    http_response_code(429);
+                    $erroBloqueio = "Muitas tentativas incorretas. Por segurança, o acesso deste IP foi bloqueado temporariamente por mais {$statusRate['minutos_restantes']} minuto(s).";
+                }
+            }
         } else {
             $erro = "Credenciais inválidas. Tente novamente.";
-            $uidFallback = ($user && !empty($user['id'])) ? (int)$user['id'] : 1;
-            registrar_log($pdo, 'FALHA_LOGIN', "Tentativa de login rejeitada para o usuário '$username' (Senha incorreta ou inexistente)", 'usuarios', $uidFallback);
+            registrar_tentativa_falha($pdo, $ip, $username);
+            $statusRate = check_rate_limit($pdo, $ip);
+            if ($statusRate['bloqueado']) {
+                $bloqueado = true;
+                http_response_code(429);
+                $erroBloqueio = "Muitas tentativas incorretas. Por segurança, o acesso deste IP foi bloqueado temporariamente por mais {$statusRate['minutos_restantes']} minuto(s).";
+            }
         }
-    } else {
-        $erro = "Credenciais inválidas. Tente novamente.";
-        $uidFallback = ($user && !empty($user['id'])) ? (int)$user['id'] : 1;
-        registrar_log($pdo, 'FALHA_LOGIN', "Tentativa de login rejeitada para o usuário '$username' (Senha incorreta ou inexistente)", 'usuarios', $uidFallback);
     }
 }
 ?>
@@ -446,7 +476,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <p>Faça o login com a sua conta.</p>
             </div>
 
-            <?php if ($erro): ?>
+            <?php if (!empty($erroBloqueio)): ?>
+                <div class="rate-limit-card" style="background: #fef2f2; border: 1.5px solid #ef4444; border-left: 5px solid #dc2626; border-radius: 8px; padding: 16px; margin-bottom: 24px; color: #991b1b; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.1);">
+                    <div style="display: flex; align-items: flex-start; gap: 14px;">
+                        <i class="fas fa-shield-alt" style="font-size: 1.8rem; color: #dc2626; margin-top: 2px; flex-shrink: 0;"></i>
+                        <div>
+                            <strong style="display: block; font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: #7f1d1d;">
+                                Bloqueio de Segurança Ativo
+                            </strong>
+                            <p style="margin: 0 0 8px 0; font-size: 0.92rem; line-height: 1.45; color: #991b1b;">
+                                <?= htmlspecialchars($erroBloqueio) ?>
+                            </p>
+                            <small style="display: block; font-size: 0.8rem; color: #b91c1c; font-weight: 500;">
+                                <i class="fas fa-shield-virus" style="margin-right: 4px;"></i> Proteção contra ataques de força bruta. Endereço IP: <code><?= htmlspecialchars($ip) ?></code>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            <?php elseif (!empty($erro)): ?>
                 <div class="error-msg">
                     <i class="fas fa-exclamation-triangle"></i>
                     <span><?= htmlspecialchars($erro) ?></span>
@@ -458,7 +505,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="form-group">
                     <label for="username">Usuário</label>
                     <div class="input-wrapper">
-                        <input type="text" id="username" name="username" class="form-control-custom" placeholder="Digite seu usuário" required autofocus>
+                        <input type="text" id="username" name="username" class="form-control-custom" placeholder="Digite seu usuário" <?= $bloqueado ? 'disabled' : 'required autofocus' ?>>
                         <i class="fas fa-user"></i>
                     </div>
                 </div>
@@ -466,13 +513,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="form-group">
                     <label for="password">Senha</label>
                     <div class="input-wrapper">
-                        <input type="password" id="password" name="password" class="form-control-custom" placeholder="Digite sua senha" required>
+                        <input type="password" id="password" name="password" class="form-control-custom" placeholder="Digite sua senha" <?= $bloqueado ? 'disabled' : 'required' ?>>
                         <i class="fas fa-lock"></i>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-login">
-                    Entrar <i class="fas fa-arrow-right"></i>
+                <button type="submit" class="btn-login" <?= $bloqueado ? 'disabled style="background: #94a3b8; cursor: not-allowed; opacity: 0.75;"' : '' ?>>
+                    <?= $bloqueado ? '<i class="fas fa-lock"></i> Acesso Bloqueado' : 'Entrar <i class="fas fa-arrow-right"></i>' ?>
                 </button>
             </form>
 
