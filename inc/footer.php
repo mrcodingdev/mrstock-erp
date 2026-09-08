@@ -51,7 +51,11 @@
                             <span>•</span>
                             <a href="<?= BASE_URL ?>/privacidade.php" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">Política de Privacidade &amp; LGPD</a>
                         </div>
-                        <span>(11) 98765-4321 • contato@mrstock.com.br</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="tel:+5511987654321" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'" aria-label="Ligar para Papelaria Real no número (11) 98765-4321"><i class="fas fa-phone-alt me-1" style="font-size: 0.7rem;"></i>(11) 98765-4321</a>
+                            <span>•</span>
+                            <a href="mailto:contato@mrstock.com.br" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'" aria-label="Enviar e-mail para contato@mrstock.com.br"><i class="fas fa-envelope me-1" style="font-size: 0.7rem;"></i>contato@mrstock.com.br</a>
+                        </div>
                     </div>
                 </div>
             </div>
