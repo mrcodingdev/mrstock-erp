@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Antigravity Office 2D — Command Center Papelaria Real</title>
+  
+  <!-- Fontes Retrô Pixel Art Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  
+  <!-- Estilos Pixel Art Corporativos -->
+  <link rel="stylesheet" href="css/office.css">
+</head>
+<body>
+
+  <!-- HUD Superior Retrô -->
+  <header id="top-hud">
+    <!-- Marca & LED de Conexão -->
+    <div class="hud-brand">
+      <div class="server-led online" id="server-led" title="SSE Stream Ativo"></div>
+      <div class="brand-text">
+        <span class="brand-title">PAPELARIA REAL × ANTIGRAVITY 2.0</span>
+        <span class="brand-sub">SUBAGENT COMMAND CENTER — MRSTOCK ERP</span>
+      </div>
+    </div>
+
+    <!-- Indicador dos 5 Vértices do Pentágono -->
+    <div class="hud-pentagon" title="Pentágono Sagrado de Governança">
+      <div class="pentagon-tag">PENTÁGONO:</div>
+      <div class="vertex active" id="v-gov" title="Governança & Arquitetura">🏛️ GOV</div>
+      <div class="vertex active" id="v-sec" title="Bunker de Segurança">🛡️ SEC</div>
+      <div class="vertex active" id="v-dev" title="Engenharia Frontline">⚡ DEV</div>
+      <div class="vertex active" id="v-qa" title="QA & Performance">🧪 QA</div>
+      <div class="vertex active" id="v-orch" title="Orquestração Central">🛸 ORCH</div>
+    </div>
+
+    <!-- Placar de Auditorias e Agentes Ativos -->
+    <div class="hud-metrics">
+      <div class="metric-box active-agents-box">
+        <span class="metric-label">AGENTES ATIVOS:</span>
+        <span class="metric-value" id="active-agents-count">0 / 10</span>
+      </div>
+      <div class="metric-box pass-box">
+        <span class="metric-badge pass-badge">PASS:</span>
+        <span class="metric-value" id="pass-count">0</span>
+      </div>
+      <div class="metric-box revise-box">
+        <span class="metric-badge revise-badge">REVISE:</span>
+        <span class="metric-value" id="revise-count">0</span>
+      </div>
+    </div>
+
+    <!-- Botões de Controle da Câmera e Áudio -->
+    <div class="hud-controls">
+      <button class="btn-retro" id="btn-audio-toggle" title="Alternar Áudio 8-Bit (SFX)">
+        <span id="audio-icon">🔊</span> SFX: LIGADO
+      </button>
+      <button class="btn-retro" id="btn-zoom-in" title="Aproximar Câmera">+</button>
+      <button class="btn-retro" id="btn-zoom-out" title="Afastar Câmera">-</button>
+      <button class="btn-retro" id="btn-reset-cam" title="Resetar Câmera">RESET</button>
+      <button class="btn-retro btn-primary-retro" id="btn-focus-active" title="Focar Agente Ativo">
+        🎯 FOCAR ATIVO
+      </button>
+    </div>
+  </header>
+
+  <!-- Container Principal do Canvas -->
+  <main id="canvas-container">
+    <canvas id="office-canvas"></canvas>
+    
+    <!-- Tooltip Flutuante no Hover do Mouse -->
+    <div id="agent-hover-tooltip" class="hidden">
+      <div class="tooltip-name" id="tooltip-name">Nome do Agente</div>
+      <div class="tooltip-role" id="tooltip-role">Cargo Oficial</div>
+      <div class="tooltip-status" id="tooltip-status">STATUS: IDLE</div>
+    </div>
+  </main>
+
+  <!-- Cockpit RPG — Drawer Lateral Deslizante -->
+  <aside id="agent-drawer" class="closed">
+    <!-- Cabeçalho do Drawer -->
+    <div class="drawer-header">
+      <div class="drawer-header-info">
+        <span class="drawer-sub">COCKPIT DE SUBAGENTE</span>
+        <h2 class="drawer-title" id="drawer-agent-name">@software-engineer</h2>
+      </div>
+      <button class="btn-retro btn-close-drawer" id="btn-close-drawer" title="Fechar Cockpit">✕</button>
+    </div>
+
+    <!-- Ficha RPG do Agente -->
+    <div class="drawer-body">
+      <!-- Card Superior do Personagem -->
+      <div class="rpg-card">
+        <div class="avatar-preview-box">
+          <canvas id="drawer-avatar-canvas" width="64" height="64"></canvas>
+        </div>
+        <div class="rpg-meta">
+          <div class="rpg-role" id="drawer-agent-role">Engenheiro Full-Stack Frontline</div>
+          <div class="rpg-level" id="drawer-agent-level">LVL 82 • SENIOR WORKER</div>
+          <div class="rpg-room" id="drawer-agent-room">SALA: Desenvolvimento & Engenharia</div>
+          
+          <!-- Barra de Estamina / HP -->
+          <div class="stamina-wrapper">
+            <div class="stamina-label">ESTAMINA DE ENGENHARIA:</div>
+            <div class="stamina-bar-bg">
+              <div class="stamina-bar-fill" id="drawer-stamina-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badge de Status Atual -->
+      <div class="status-badge-container">
+        <div class="status-badge-large" id="drawer-status-badge">🟢 STATUS: IDLE</div>
+        <div class="tool-action-box" id="drawer-tool-action">Aguardando novo despacho de código</div>
+      </div>
+
+      <!-- Métricas de Produtividade do Agente -->
+      <div class="agent-stats-grid">
+        <div class="stat-card">
+          <span class="stat-num" id="drawer-stat-tools">0</span>
+          <span class="stat-lbl">Tools Usadas</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num text-pass" id="drawer-stat-pass">0</span>
+          <span class="stat-lbl">Pass Aprovados</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num text-revise" id="drawer-stat-revise">0</span>
+          <span class="stat-lbl">Revisa Pedidos</span>
+        </div>
+      </div>
+
+      <!-- Streaming de Transcript ao Vivo -->
+      <div class="transcript-section">
+        <div class="section-header">
+          <span class="section-title">📜 TRANSCRIPT & LOGS DE EXECUÇÃO:</span>
+          <button class="btn-retro btn-mini" id="btn-refresh-transcript">ATUALIZAR</button>
+        </div>
+        <div class="transcript-terminal" id="drawer-transcript-terminal">
+          <div class="log-line">[SISTEMA] Conectado ao stream de observabilidade.</div>
+        </div>
+      </div>
+
+      <!-- Campo de Interação Rápida -->
+      <div class="interaction-section">
+        <div class="section-title">💬 TRANSMITIR INSTRUÇÃO AO AGENTE:</div>
+        <form id="interaction-form">
+          <textarea id="interaction-input" placeholder="Digite comando ou ajuste cirúrgico..." rows="3"></textarea>
+          <button type="submit" class="btn-retro btn-submit-interaction">
+            🚀 TRANSMITIR INSTRUÇÃO
+          </button>
+        </form>
+        <div class="interaction-feedback hidden" id="interaction-feedback"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Scripts da Aplicação em Ordem de Dependência -->
+  <script src="js/audio-fx.js"></script>
+  <script src="js/office-sprites.js"></script>
+  <script src="js/agent-bridge.js"></script>
+  <script src="js/office-engine.js"></script>
+  <script src="js/office-ui.js"></script>
+</body>
+</html>

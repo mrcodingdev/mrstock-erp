@@ -32,3 +32,11 @@ scripts/deploy_ftp.py
 04_Base_de_Conhecimento_e_Obsidian/
 scripts/*
 !scripts/backup_restore_tester.php
+
+# Dependências e Logs Locais de Ferramentas de Desenvolvimento
+node_modules/
+tools/**/node_modules/
+tools/**/interactions.jsonl
+graphify-out/
+SESSION_HANDOFF.md
+

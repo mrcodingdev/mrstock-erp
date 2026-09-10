@@ -1,0 +1,558 @@
+/**
+ * ANTIGRAVITY OFFICE 2D PIXEL ART — DESIGN SYSTEM RETRÔ
+ * Paleta Institucional Papelaria Real & Cyberpunk Terminal
+ */
+
+:root {
+  --real-green-dark: #1a4231;
+  --real-green-medium: #284936;
+  --real-green-light: #3a6b4f;
+  --real-green-neon: #6ae49b;
+  --real-green-accent: #a3f7bf;
+
+  --bg-space: #070b12;
+  --bg-panel: #0f172a;
+  --bg-terminal: #020617;
+  
+  --border-light: #475569;
+  --border-dark: #000000;
+  --border-neon: #6ae49b;
+
+  --text-main: #f8fafc;
+  --text-dim: #94a3b8;
+  --text-pass: #4ade80;
+  --text-revise: #f87171;
+  --text-gold: #facc15;
+
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-terminal: 'VT323', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-space);
+  font-family: var(--font-pixel);
+  color: var(--text-main);
+  image-rendering: pixelated;
+}
+
+/* ==========================================================================
+   HUD SUPERIOR RETRÔ
+   ========================================================================== */
+#top-hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: var(--real-green-dark);
+  border-bottom: 4px solid var(--border-dark);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4), inset 0 2px 0 var(--real-green-neon);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+/* Marca & LED */
+.hud-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.server-led {
+  width: 14px;
+  height: 14px;
+  border-radius: 0;
+  background-color: #ef4444;
+  border: 2px solid var(--border-dark);
+  box-shadow: inset -1px -1px #000, inset 1px 1px #fff;
+}
+
+.server-led.online {
+  background-color: var(--real-green-neon);
+  animation: ledPulse 1.2s infinite alternate;
+}
+
+@keyframes ledPulse {
+  0% { box-shadow: 0 0 4px var(--real-green-neon), inset -1px -1px #000, inset 1px 1px #fff; }
+  100% { box-shadow: 0 0 14px var(--real-green-neon), inset -1px -1px #000, inset 1px 1px #fff; }
+}
+
+.brand-title {
+  display: block;
+  font-size: 11px;
+  color: var(--real-green-neon);
+  letter-spacing: 0.5px;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.brand-sub {
+  display: block;
+  font-size: 7px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* Pentágono Sagrado HUD */
+.hud-pentagon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 6px 10px;
+  border: 2px solid var(--real-green-medium);
+}
+
+.pentagon-tag {
+  font-size: 8px;
+  color: var(--text-gold);
+}
+
+.vertex {
+  font-size: 7px;
+  padding: 3px 6px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  color: var(--text-dim);
+  border-radius: 0;
+}
+
+.vertex.active {
+  background-color: var(--real-green-medium);
+  border-color: var(--real-green-neon);
+  color: var(--real-green-accent);
+}
+
+/* Placar de Métricas */
+.hud-metrics {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.metric-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #0b1320;
+  border: 2px solid var(--border-dark);
+  padding: 5px 10px;
+  box-shadow: inset -2px -2px #000, inset 2px 2px #334155;
+}
+
+.metric-label {
+  font-size: 7px;
+  color: var(--text-dim);
+}
+
+.metric-value {
+  font-size: 9px;
+  color: var(--real-green-neon);
+}
+
+.pass-badge {
+  font-size: 8px;
+  color: var(--text-pass);
+}
+
+.revise-badge {
+  font-size: 8px;
+  color: var(--text-revise);
+}
+
+/* Botões de Controle Retrô */
+.hud-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-retro {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  padding: 6px 10px;
+  background-color: #334155;
+  color: #fff;
+  border: 2px solid var(--border-dark);
+  box-shadow: inset -2px -2px #0f172a, inset 2px 2px #64748b;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.05s ease;
+}
+
+.btn-retro:hover {
+  background-color: #475569;
+}
+
+.btn-retro:active {
+  box-shadow: inset 2px 2px #0f172a, inset -2px -2px #64748b;
+  transform: translate(1px, 1px);
+}
+
+.btn-primary-retro {
+  background-color: var(--real-green-medium);
+  border-color: var(--border-dark);
+  color: var(--real-green-neon);
+  box-shadow: inset -2px -2px #14281e, inset 2px 2px var(--real-green-light);
+}
+
+.btn-primary-retro:hover {
+  background-color: var(--real-green-light);
+}
+
+/* ==========================================================================
+   CANVAS PRINCIPAL
+   ========================================================================== */
+#canvas-container {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  background-color: #0a0e17;
+  overflow: hidden;
+}
+
+#office-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+#office-canvas:active {
+  cursor: grabbing;
+}
+
+/* Tooltip Hover */
+#agent-hover-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background-color: rgba(15, 23, 42, 0.95);
+  border: 2px solid var(--real-green-neon);
+  padding: 8px 12px;
+  box-shadow: 4px 4px 0 #000;
+  z-index: 200;
+  max-width: 260px;
+}
+
+#agent-hover-tooltip.hidden {
+  display: none;
+}
+
+.tooltip-name {
+  font-size: 9px;
+  color: var(--real-green-neon);
+  margin-bottom: 3px;
+}
+
+.tooltip-role {
+  font-size: 7px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.tooltip-status {
+  font-size: 8px;
+  color: var(--text-pass);
+}
+
+/* ==========================================================================
+   COCKPIT RPG — DRAWER LATERAL
+   ========================================================================== */
+#agent-drawer {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 440px;
+  height: calc(100% - 60px);
+  background-color: var(--bg-panel);
+  border-left: 4px solid var(--border-dark);
+  box-shadow: -6px 0 0 rgba(0, 0, 0, 0.6), inset 2px 0 0 var(--real-green-medium);
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(0);
+  transition: transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+#agent-drawer.closed {
+  transform: translateX(105%);
+}
+
+.drawer-header {
+  height: 60px;
+  background-color: var(--real-green-dark);
+  border-bottom: 3px solid var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  box-shadow: inset 0 -2px 0 var(--real-green-medium);
+}
+
+.drawer-sub {
+  display: block;
+  font-size: 7px;
+  color: var(--real-green-neon);
+  margin-bottom: 2px;
+}
+
+.drawer-title {
+  font-size: 11px;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.btn-close-drawer {
+  font-size: 11px;
+  padding: 4px 8px;
+  background-color: #ef4444;
+  color: #fff;
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Card RPG */
+.rpg-card {
+  display: flex;
+  gap: 14px;
+  background-color: #0b1320;
+  border: 3px solid var(--border-dark);
+  padding: 12px;
+  box-shadow: inset -2px -2px #000, inset 2px 2px #334155;
+}
+
+.avatar-preview-box {
+  width: 72px;
+  height: 72px;
+  background-color: #1e293b;
+  border: 2px solid var(--real-green-neon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.avatar-preview-box canvas {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+}
+
+.rpg-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rpg-role {
+  font-size: 8px;
+  color: var(--real-green-accent);
+  line-height: 1.4;
+}
+
+.rpg-level {
+  font-size: 7px;
+  color: var(--text-gold);
+}
+
+.rpg-room {
+  font-size: 7px;
+  color: var(--text-dim);
+}
+
+/* Barra de Estamina */
+.stamina-wrapper {
+  margin-top: 4px;
+}
+
+.stamina-label {
+  font-size: 6px;
+  color: var(--text-dim);
+  margin-bottom: 3px;
+}
+
+.stamina-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: #000;
+  border: 1px solid #475569;
+}
+
+.stamina-bar-fill {
+  width: 100%;
+  height: 100%;
+  background-color: var(--real-green-neon);
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+/* Status Badge */
+.status-badge-container {
+  background-color: #020617;
+  border: 2px solid var(--border-dark);
+  padding: 10px;
+}
+
+.status-badge-large {
+  font-size: 9px;
+  color: var(--real-green-neon);
+  margin-bottom: 4px;
+}
+
+.tool-action-box {
+  font-size: 8px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* Grid de Estatísticas */
+.agent-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.stat-card {
+  background-color: #0b1320;
+  border: 2px solid var(--border-dark);
+  padding: 8px 4px;
+  text-align: center;
+  box-shadow: inset -1px -1px #000, inset 1px 1px #334155;
+}
+
+.stat-num {
+  display: block;
+  font-size: 13px;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.stat-lbl {
+  display: block;
+  font-size: 6px;
+  color: var(--text-dim);
+}
+
+.text-pass { color: var(--text-pass); }
+.text-revise { color: var(--text-revise); }
+
+/* Transcript Terminal */
+.transcript-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-title {
+  font-size: 8px;
+  color: var(--text-gold);
+}
+
+.btn-mini {
+  font-size: 6px;
+  padding: 3px 6px;
+}
+
+.transcript-terminal {
+  height: 140px;
+  background-color: var(--bg-terminal);
+  border: 2px solid var(--border-dark);
+  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.8);
+  padding: 8px;
+  font-family: var(--font-terminal);
+  font-size: 14px;
+  color: #a3f7bf;
+  overflow-y: auto;
+  line-height: 1.3;
+}
+
+.log-line {
+  margin-bottom: 3px;
+  word-break: break-all;
+}
+
+/* Interação com o Agente */
+.interaction-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#interaction-input {
+  width: 100%;
+  background-color: var(--bg-terminal);
+  border: 2px solid var(--border-dark);
+  color: #fff;
+  font-family: var(--font-terminal);
+  font-size: 15px;
+  padding: 8px;
+  resize: none;
+  outline: none;
+}
+
+#interaction-input:focus {
+  border-color: var(--real-green-neon);
+}
+
+.btn-submit-interaction {
+  width: 100%;
+  padding: 10px;
+  font-size: 9px;
+  background-color: var(--real-green-medium);
+  color: var(--real-green-accent);
+}
+
+.interaction-feedback {
+  font-size: 7px;
+  padding: 6px;
+  background-color: #1e3a2b;
+  border: 1px solid var(--real-green-neon);
+  color: var(--real-green-accent);
+}
+
+.interaction-feedback.hidden {
+  display: none;
+}
+
+/* Scrollbar Retrô */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border: 1px solid #000;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--real-green-light);
+}
