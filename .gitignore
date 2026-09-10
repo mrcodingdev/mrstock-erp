@@ -37,6 +37,7 @@ scripts/*
 node_modules/
 tools/**/node_modules/
 tools/**/interactions.jsonl
+tools/**/orchestrator_inbox.jsonl
 graphify-out/
 SESSION_HANDOFF.md
 
