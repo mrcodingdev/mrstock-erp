@@ -57,6 +57,7 @@
       <button class="btn-retro" id="btn-audio-toggle" title="Alternar Áudio 8-Bit (SFX)">
         <span id="audio-icon">🔊</span> SFX: LIGADO
       </button>
+      <button class="btn-retro btn-fit-retro" id="btn-fit-screen" title="Ajustar Enquadramento à Tela (Atalho: F)">📐 FIT</button>
       <button class="btn-retro" id="btn-zoom-in" title="Aproximar Câmera">+</button>
       <button class="btn-retro" id="btn-zoom-out" title="Afastar Câmera">-</button>
       <button class="btn-retro" id="btn-reset-cam" title="Resetar Câmera">RESET</button>
@@ -77,6 +78,23 @@
       <div class="tooltip-status" id="tooltip-status">STATUS: IDLE</div>
     </div>
   </main>
+
+  <!-- Rodapé de Telemetria ao Vivo & Chips Setoriais (Estilo Munder Difflin) -->
+  <footer id="bottom-ticker">
+    <div class="ticker-left">
+      <span class="ticker-pulse-icon">⚡</span>
+      <span class="ticker-time" id="ticker-time">[00:00:00]</span>
+      <span class="ticker-feed" id="ticker-feed">Sistema de agentes pronto e sincronizado.</span>
+    </div>
+    <div class="ticker-sectors">
+      <span class="ticker-sectors-lbl">SETORES:</span>
+      <button type="button" class="chip-sector" data-sector="governance" title="Ir para Governança & Arquitetura (Atalho: 1)">🏛️ GOV</button>
+      <button type="button" class="chip-sector" data-sector="orchestration" title="Ir para Comando Antigravity (Atalho: 2)">🛸 CMD</button>
+      <button type="button" class="chip-sector" data-sector="bunker" title="Ir para Bunker de Segurança (Atalho: 3)">🛡️ SEC</button>
+      <button type="button" class="chip-sector" data-sector="development" title="Ir para Engenharia Frontline (Atalho: 4)">⚡ DEV</button>
+      <button type="button" class="chip-sector" data-sector="qa_lab" title="Ir para Laboratório QA & Design (Atalho: 5)">🧪 QA</button>
+    </div>
+  </footer>
 
   <!-- Cockpit RPG — Drawer Lateral Deslizante -->
   <aside id="agent-drawer" class="closed">
@@ -147,6 +165,12 @@
       <!-- Campo de Interação Rápida -->
       <div class="interaction-section">
         <div class="section-title">💬 TRANSMITIR INSTRUÇÃO AO AGENTE:</div>
+        <div class="quick-prompts-bar">
+          <button type="button" class="btn-quick-prompt" data-prompt="Solicitar status atual e relatório de progresso da tarefa.">⚡ Status</button>
+          <button type="button" class="btn-quick-prompt" data-prompt="Auditar código recente sob as 4 Leis de Karpathy e Clean Code.">🔍 Auditar</button>
+          <button type="button" class="btn-quick-prompt" data-prompt="Verificar alinhamento com a Memória Global e Pentágono Sagrado.">📋 Memória</button>
+          <button type="button" class="btn-quick-prompt" data-prompt="Executar varredura de segurança contra vulnerabilidades OWASP.">🛡️ Hardening</button>
+        </div>
         <form id="interaction-form">
           <textarea id="interaction-input" placeholder="Digite comando ou ajuste cirúrgico..." rows="3"></textarea>
           <button type="submit" class="btn-retro btn-submit-interaction">

@@ -213,6 +213,18 @@ body, html {
   background-color: var(--real-green-light);
 }
 
+.btn-fit-retro {
+  background-color: #1e3a5f;
+  color: #38bdf8;
+  border-color: #0284c7;
+  box-shadow: inset -2px -2px #0f172a, inset 2px 2px #0284c7;
+}
+
+.btn-fit-retro:hover {
+  background-color: #0284c7;
+  color: #ffffff;
+}
+
 #btn-audio-toggle.muted {
   background-color: #1e293b;
   color: #94a3b8;
@@ -229,7 +241,7 @@ body, html {
   top: 60px;
   left: 0;
   width: 100%;
-  height: calc(100% - 60px);
+  height: calc(100% - 60px - 36px);
   background-color: #0a0e17;
   overflow: hidden;
 }
@@ -563,4 +575,152 @@ body, html {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--real-green-light);
+}
+
+/* Quick Prompts Bar */
+.quick-prompts-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.btn-quick-prompt {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  padding: 4px 6px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  color: var(--real-green-accent);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.btn-quick-prompt:hover {
+  background-color: #284936;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   RODAPÉ DE TELEMETRIA AO VIVO & CHIPS SETORIAIS (BOTTOM TICKER)
+   ========================================================================== */
+#bottom-ticker {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 36px;
+  background-color: #0b1320;
+  border-top: 2px solid var(--border-dark);
+  box-shadow: inset 0 2px 0 #1e293b;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 14px;
+  z-index: 90;
+}
+.ticker-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-terminal);
+  font-size: 15px;
+  color: #a3f7bf;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+.ticker-pulse-icon {
+  color: var(--text-gold);
+  animation: ledPulse 1s infinite alternate;
+}
+.ticker-time {
+  color: #64748b;
+  font-size: 13px;
+}
+.ticker-feed {
+  color: var(--real-green-neon);
+}
+.ticker-sectors {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.ticker-sectors-lbl {
+  font-size: 7px;
+  color: var(--text-gold);
+}
+.chip-sector {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  padding: 4px 7px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.chip-sector:hover {
+  background-color: #284936;
+  border-color: var(--real-green-neon);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   MEDIA QUERIES RESPONSIVAS
+   ========================================================================== */
+/* Telas Médias / Laptops Compactos */
+@media (max-width: 1200px) {
+  #top-hud { padding: 0 10px; }
+  .brand-sub { display: none; }
+  .btn-retro { font-size: 7px; padding: 5px 8px; }
+  .metric-box { padding: 4px 8px; }
+}
+
+/* Tablets / Telas Estreitas */
+@media (max-width: 900px) {
+  .hud-pentagon .pentagon-tag { display: none; }
+  .ticker-sectors-lbl { display: none; }
+  #agent-drawer { width: 320px; }
+  .ticker-left { max-width: 50%; font-size: 13px; }
+}
+
+/* Mobile / Telas Pequenas (<600px) */
+@media (max-width: 600px) {
+  #top-hud {
+    height: auto;
+    min-height: 54px;
+    padding: 6px 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  #canvas-container {
+    top: 86px;
+    height: calc(100% - 86px - 36px);
+  }
+  #agent-drawer {
+    width: 100% !important;
+    max-width: 100vw;
+    top: 0;
+    height: 100%;
+    z-index: 200;
+  }
+  .drawer-header {
+    padding: 12px 14px;
+  }
+  .hud-controls {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .btn-retro {
+    min-height: 34px;
+  }
+  .ticker-sectors {
+    display: none; /* No mobile estreito foca no ticker de texto */
+  }
+  .ticker-left {
+    max-width: 100%;
+    font-size: 12px;
+  }
 }

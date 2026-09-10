@@ -26,8 +26,10 @@ class OfficeEngine {
 
     // Agentes sincronizados
     this.agents = [];
+    this.hasInitialFitted = false;
 
     this.setupListeners();
+    this.setupTouchListeners();
     this.resize();
     window.addEventListener('resize', () => this.resize());
   }
@@ -73,10 +75,115 @@ class OfficeEngine {
     });
   }
 
+  setupTouchListeners() {
+    let touchStartDist = 0;
+    let initialTouchZoom = 1.0;
+    let lastTouchX = 0;
+    let lastTouchY = 0;
+    let isTouching = false;
+    let touchStartTime = 0;
+
+    this.canvas.addEventListener('touchstart', (e) => {
+      touchStartTime = Date.now();
+      if (e.touches.length === 1) {
+        isTouching = true;
+        lastTouchX = e.touches[0].clientX;
+        lastTouchY = e.touches[0].clientY;
+        const rect = this.canvas.getBoundingClientRect();
+        this.mouseWorld = this.screenToWorld(lastTouchX - rect.left, lastTouchY - rect.top);
+        this.checkHover();
+      } else if (e.touches.length === 2) {
+        isTouching = false;
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        touchStartDist = Math.hypot(dx, dy);
+        initialTouchZoom = this.camera.targetZoom;
+      }
+    }, { passive: false });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1 && isTouching) {
+        e.preventDefault();
+        const curX = e.touches[0].clientX;
+        const curY = e.touches[0].clientY;
+        const dx = (curX - lastTouchX) / this.camera.zoom;
+        const dy = (curY - lastTouchY) / this.camera.zoom;
+        this.camera.x -= dx;
+        this.camera.y -= dy;
+        this.camera.targetX = this.camera.x;
+        this.camera.targetY = this.camera.y;
+        lastTouchX = curX;
+        lastTouchY = curY;
+        const rect = this.canvas.getBoundingClientRect();
+        this.mouseWorld = this.screenToWorld(curX - rect.left, curY - rect.top);
+        this.checkHover();
+      } else if (e.touches.length === 2 && touchStartDist > 0) {
+        e.preventDefault();
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const currentDist = Math.hypot(dx, dy);
+        const scale = currentDist / touchStartDist;
+        this.camera.targetZoom = Math.max(0.35, Math.min(2.5, initialTouchZoom * scale));
+      }
+    }, { passive: false });
+
+    window.addEventListener('touchend', (e) => {
+      if (e.touches.length < 2) {
+        touchStartDist = 0;
+      }
+      if (e.touches.length === 0) {
+        isTouching = false;
+        if (Date.now() - touchStartTime < 300 && this.hoveredAgent && window.officeUI) {
+          window.officeUI.openAgentCockpit(this.hoveredAgent);
+        }
+      }
+    });
+  }
+
   resize() {
     this.canvas.width = this.canvas.parentElement.clientWidth;
     this.canvas.height = this.canvas.parentElement.clientHeight;
     this.ctx.imageSmoothingEnabled = false;
+
+    const worldCenterX = (this.mapCols * this.tileSize) / 2;
+    const worldCenterY = (this.mapRows * this.tileSize) / 2;
+    const distToCenter = Math.hypot(this.camera.x - worldCenterX, this.camera.y - worldCenterY);
+
+    if (!this.hasInitialFitted || distToCenter < 100) {
+      this.fitToScreen();
+      this.hasInitialFitted = true;
+    }
+  }
+
+  fitToScreen(padding = 24) {
+    const worldW = this.mapCols * this.tileSize;
+    const worldH = this.mapRows * this.tileSize;
+    const availW = Math.max(200, this.canvas.width - padding * 2);
+    const availH = Math.max(200, this.canvas.height - padding * 2);
+    const scaleX = availW / worldW;
+    const scaleY = availH / worldH;
+    const bestZoom = Math.max(0.35, Math.min(2.0, Math.min(scaleX, scaleY)));
+
+    this.camera.targetX = worldW / 2;
+    this.camera.targetY = worldH / 2;
+    this.camera.targetZoom = bestZoom;
+  }
+
+  panToSector(sectorId) {
+    const sectors = {
+      governance: { x: 9 * 32, y: 6 * 32, zoom: 1.35 },
+      orchestration: { x: 23 * 32, y: 6 * 32, zoom: 1.35 },
+      bunker: { x: 36 * 32, y: 6 * 32, zoom: 1.35 },
+      development: { x: 12 * 32, y: 19 * 32, zoom: 1.35 },
+      qa_lab: { x: 34 * 32, y: 19 * 32, zoom: 1.35 }
+    };
+
+    const target = sectors[sectorId];
+    if (target) {
+      this.camera.targetX = target.x;
+      this.camera.targetY = target.y;
+      this.camera.targetZoom = target.zoom;
+    }
   }
 
   screenToWorld(sx, sy) {

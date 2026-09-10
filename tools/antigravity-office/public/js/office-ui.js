@@ -12,6 +12,8 @@ class OfficeUI {
 
     this.initHUD();
     this.initDrawer();
+    this.initTicker();
+    this.initKeyboardShortcuts();
     this.initBridgeEvents();
 
     this.engine.start();
@@ -38,6 +40,14 @@ class OfficeUI {
       });
     }
 
+    // Botão FIT
+    const btnFit = document.getElementById('btn-fit-screen');
+    if (btnFit) {
+      btnFit.addEventListener('click', () => {
+        this.engine.fitToScreen();
+      });
+    }
+
     // Zoom e Câmera
     document.getElementById('btn-zoom-in').addEventListener('click', () => {
       this.engine.camera.targetZoom = Math.min(2.5, this.engine.camera.targetZoom + 0.25);
@@ -55,6 +65,71 @@ class OfficeUI {
     });
   }
 
+  initKeyboardShortcuts() {
+    window.addEventListener('keydown', (e) => {
+      const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+      if (activeTag === 'input' || activeTag === 'textarea') {
+        return;
+      }
+
+      if (e.code === 'KeyF') {
+        e.preventDefault();
+        this.engine.fitToScreen();
+      } else if (e.code === 'KeyM') {
+        e.preventDefault();
+        const btnAudio = document.getElementById('btn-audio-toggle');
+        if (btnAudio) btnAudio.click();
+      } else if (e.code === 'Space') {
+        e.preventDefault();
+        this.focusActiveAgent();
+      } else if (e.code === 'Escape') {
+        const drawer = document.getElementById('agent-drawer');
+        if (drawer && !drawer.classList.contains('closed')) {
+          drawer.classList.add('closed');
+        }
+      } else if (e.code === 'Digit1') {
+        e.preventDefault();
+        this.engine.panToSector('governance');
+      } else if (e.code === 'Digit2') {
+        e.preventDefault();
+        this.engine.panToSector('orchestration');
+      } else if (e.code === 'Digit3') {
+        e.preventDefault();
+        this.engine.panToSector('bunker');
+      } else if (e.code === 'Digit4') {
+        e.preventDefault();
+        this.engine.panToSector('development');
+      } else if (e.code === 'Digit5') {
+        e.preventDefault();
+        this.engine.panToSector('qa_lab');
+      }
+    });
+  }
+
+  initTicker() {
+    const timeEl = document.getElementById('ticker-time');
+    const updateTime = () => {
+      if (!timeEl) return;
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      timeEl.textContent = `[${hh}:${mm}:${ss}]`;
+    };
+    updateTime();
+    setInterval(updateTime, 1000);
+
+    const sectorChips = document.querySelectorAll('.chip-sector');
+    sectorChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const sector = chip.getAttribute('data-sector');
+        if (sector) {
+          this.engine.panToSector(sector);
+        }
+      });
+    });
+  }
+
   initDrawer() {
     const drawer = document.getElementById('agent-drawer');
     const btnClose = document.getElementById('btn-close-drawer');
@@ -65,6 +140,19 @@ class OfficeUI {
         drawer.classList.add('closed');
       });
     }
+
+    // Botões de Prompts Rápidos em 1 Clique
+    const quickButtons = document.querySelectorAll('.btn-quick-prompt');
+    quickButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const prompt = btn.getAttribute('data-prompt');
+        const input = document.getElementById('interaction-input');
+        if (input && prompt) {
+          input.value = prompt;
+          input.focus();
+        }
+      });
+    });
 
     if (form) {
       form.addEventListener('submit', async (e) => {
@@ -91,10 +179,21 @@ class OfficeUI {
   }
 
   initBridgeEvents() {
+    const tickerFeed = document.getElementById('ticker-feed');
+    const setTickerFeed = (msg) => {
+      if (tickerFeed) tickerFeed.textContent = msg;
+    };
+
     this.bridge.onState((state) => {
       document.getElementById('active-agents-count').textContent = `${state.activeCount} / ${state.totalAgents}`;
       document.getElementById('pass-count').textContent = state.auditCounters.pass;
       document.getElementById('revise-count').textContent = state.auditCounters.revise;
+
+      if (state.activeCount > 0) {
+        setTickerFeed(`Atividade detectada: ${state.activeCount} agente(s) em execução paralela.`);
+      } else {
+        setTickerFeed('Sistema em repouso. Todos os agentes prontos para despacho.');
+      }
 
       this.engine.updateAgents(state.agents);
 
@@ -107,14 +206,17 @@ class OfficeUI {
 
     this.bridge.onHandoff((handoff) => {
       this.engine.triggerHandoff(handoff);
+      setTickerFeed(`Handoff em trânsito: @${handoff.from} ➔ @${handoff.to} (${handoff.task || 'despacho de tarefa'})`);
     });
 
     this.bridge.onAudit((audit) => {
       if (audit.type === 'PASS') {
         this.audio.playPassFanfare();
         this.engine.spawnConfetti(this.engine.camera.x, this.engine.camera.y - 100);
+        setTickerFeed(`Auditoria PASS aprovada para @${audit.agentId || 'agente'}! Parabéns pelo Clean Code.`);
       } else {
         this.audio.playReviseAlert();
+        setTickerFeed(`Alerta REVISE disparado para @${audit.agentId || 'agente'}. Correções solicitadas.`);
       }
     });
 
