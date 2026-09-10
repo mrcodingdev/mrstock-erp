@@ -40,7 +40,7 @@ echo [INFO] Iniciando servidor Express na porta 4444...
 start "Antigravity Office Server [Porta 4444]" cmd /k "title Antigravity Office Server [4444] && cd /d "%~dp0" && node server.js"
 
 :: Aguarda o servidor subir
-timeout /t 2 /nobreak >nul
+ping 127.0.0.1 -n 3 >nul
 
 :: Abre o navegador padrao no Command Center
 echo [INFO] Abrindo o Command Center no navegador padrao...
