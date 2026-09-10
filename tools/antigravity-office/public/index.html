@@ -38,6 +38,7 @@
 
     <!-- Placar de Auditorias e Agentes Ativos -->
     <div class="hud-metrics">
+      <div class="hud-box metric-global-steps"><span class="lbl">STEPS GLOBAIS:</span> <span class="val text-amber" id="global-steps-count">---</span></div>
       <div class="metric-box active-agents-box">
         <span class="metric-label">AGENTES ATIVOS:</span>
         <span class="metric-value" id="active-agents-count">0 / 10</span>
@@ -151,20 +152,64 @@
         </div>
       </div>
 
-      <!-- Streaming de Transcript ao Vivo -->
-      <div class="transcript-section">
-        <div class="section-header">
-          <span class="section-title">📜 TRANSCRIPT & LOGS DE EXECUÇÃO:</span>
-          <button class="btn-retro btn-mini" id="btn-refresh-transcript">ATUALIZAR</button>
-        </div>
-        <div class="transcript-terminal" id="drawer-transcript-terminal">
-          <div class="log-line">[SISTEMA] Conectado ao stream de observabilidade.</div>
+      <!-- Barra de Abas do Cockpit -->
+      <div class="cockpit-tabs-bar">
+        <button type="button" class="cockpit-tab-btn active" data-tab="tab-transcripts">📜 TRANSCRIPTS</button>
+        <button type="button" class="cockpit-tab-btn" data-tab="tab-thinking">🧠 PENSAMENTO (CHAIN-OF-THOUGHT)</button>
+        <button type="button" class="cockpit-tab-btn" data-tab="tab-metrics">📊 COTAS &amp; ESTAMINA</button>
+      </div>
+
+      <!-- Aba 1: Transcripts & Logs -->
+      <div id="tab-transcripts" class="tab-pane active">
+        <div class="transcript-section">
+          <div class="section-header">
+            <span class="section-title">📜 TRANSCRIPT &amp; LOGS DE EXECUÇÃO:</span>
+            <button type="button" class="btn-retro btn-mini" id="btn-refresh-transcript">ATUALIZAR</button>
+          </div>
+          <div class="transcript-terminal" id="drawer-transcript-terminal">
+            <div class="log-line">[SISTEMA] Conectado ao stream de observabilidade.</div>
+          </div>
         </div>
       </div>
 
-      <!-- Campo de Interação Rápida -->
+      <!-- Aba 2: Pensamento (Chain-of-Thought) -->
+      <div id="tab-thinking" class="tab-pane hidden">
+        <div class="thinking-stream-header">
+          <span>🧠 LOGS DE PENSAMENTO &amp; TOMADA DE DECISÃO EM TEMPO REAL</span>
+          <button type="button" class="btn-retro btn-refresh-tab" id="btn-refresh-thinking">🔄 ATUALIZAR</button>
+        </div>
+        <div id="thinking-stream-content" class="thinking-stream-body">
+          <div class="thinking-placeholder">Selecione um agente para inspecionar seus pensamentos...</div>
+        </div>
+      </div>
+
+      <!-- Aba 3: Cotas & Estamina -->
+      <div id="tab-metrics" class="tab-pane hidden">
+        <div class="metrics-grid-cockpit">
+          <div class="metric-card-retro">
+            <span class="m-lbl">PASSOS EXECUTADOS (STEPS):</span>
+            <span class="m-val" id="metric-agent-steps">0</span>
+          </div>
+          <div class="metric-card-retro">
+            <span class="m-lbl">FERRAMENTAS ACIONADAS:</span>
+            <span class="m-val" id="metric-agent-tools">0</span>
+          </div>
+          <div class="metric-card-retro">
+            <span class="m-lbl">ESTAMINA DE ENGENHARIA:</span>
+            <div class="stamina-track"><div class="stamina-bar-fill" id="metric-stamina-fill" style="width: 100%;"></div></div>
+            <span class="m-val-sub" id="metric-stamina-text">100% OPERACIONAL</span>
+          </div>
+          <div class="metric-card-retro">
+            <span class="m-lbl">ÚLTIMA ESCRITA NO LOG:</span>
+            <span class="m-val-sub" id="metric-last-activity">Recentemente</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campo de Interação Rápida / Transmissão de Comandos -->
       <div class="interaction-section">
-        <div class="section-title">💬 TRANSMITIR INSTRUÇÃO AO AGENTE:</div>
+        <div class="section-title" id="drawer-transmission-title">📡 TRANSMITIR COMANDO AO AGENTE PAI (MAESTRO)</div>
+        <div class="governance-badge-notice">ℹ️ Regra de Governança: Você conversa com o Agente Pai, que orquestra a esteira e despacha para os subagentes.</div>
         <div class="quick-prompts-bar">
           <button type="button" class="btn-quick-prompt" data-prompt="Solicitar status atual e relatório de progresso da tarefa.">⚡ Status</button>
           <button type="button" class="btn-quick-prompt" data-prompt="Auditar código recente sob as 4 Leis de Karpathy e Clean Code.">🔍 Auditar</button>
@@ -172,9 +217,9 @@
           <button type="button" class="btn-quick-prompt" data-prompt="Executar varredura de segurança contra vulnerabilidades OWASP.">🛡️ Hardening</button>
         </div>
         <form id="interaction-form">
-          <textarea id="interaction-input" placeholder="Digite comando ou ajuste cirúrgico..." rows="3"></textarea>
-          <button type="submit" class="btn-retro btn-submit-interaction">
-            🚀 TRANSMITIR INSTRUÇÃO
+          <textarea id="interaction-input" placeholder="Digite comando ou ajuste cirúrgico para o Agente Pai orquestrar..." rows="3"></textarea>
+          <button type="submit" class="btn-retro btn-send-instruction" id="btn-send-instruction">
+            🚀 TRANSMITIR AO AGENTE PAI
           </button>
         </form>
         <div class="interaction-feedback hidden" id="interaction-feedback"></div>

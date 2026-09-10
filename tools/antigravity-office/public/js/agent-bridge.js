@@ -66,6 +66,25 @@ class AgentBridge {
     return await res.json();
   }
 
+  async fetchThinking(agentName) {
+    const res = await fetch(`/api/agent/${encodeURIComponent(agentName)}/thinking`);
+    return await res.json();
+  }
+
+  async fetchGlobalMetrics() {
+    const res = await fetch('/api/system/metrics');
+    return await res.json();
+  }
+
+  async sendOrchestratorCommand(message, targetAgent = 'antigravity-orchestrator') {
+    const res = await fetch('/api/orchestrator/command', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, targetAgent, sender: 'Douglas (Operador)' })
+    });
+    return await res.json();
+  }
+
   async sendInteraction(agentName, message) {
     const res = await fetch(`/api/agent/${encodeURIComponent(agentName)}/interact`, {
       method: 'POST',

@@ -143,7 +143,8 @@ body, html {
   gap: 12px;
 }
 
-.metric-box {
+.metric-box,
+.hud-box {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -153,14 +154,26 @@ body, html {
   box-shadow: inset -2px -2px #000, inset 2px 2px #334155;
 }
 
-.metric-label {
+.metric-label,
+.hud-box .lbl {
   font-size: 7px;
   color: var(--text-dim);
 }
 
-.metric-value {
+.metric-value,
+.hud-box .val {
   font-size: 9px;
   color: var(--real-green-neon);
+}
+
+.text-amber {
+  color: #f59e0b !important;
+  text-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+}
+
+.metric-global-steps {
+  border-color: #f59e0b;
+  box-shadow: inset -2px -2px #000, inset 2px 2px #78350f, 0 0 8px rgba(245, 158, 11, 0.2);
 }
 
 .pass-badge {
@@ -596,6 +609,214 @@ body, html {
 }
 .btn-quick-prompt:hover {
   background-color: #284936;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   COCKPIT TELEMETRY TABS & THINKING STREAM
+   ========================================================================== */
+.cockpit-tabs-bar {
+  display: flex;
+  background-color: #020617;
+  border: 2px solid var(--border-dark);
+  padding: 3px;
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+.cockpit-tab-btn {
+  flex: 1;
+  font-family: var(--font-pixel);
+  font-size: 6px;
+  padding: 5px 4px;
+  background-color: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.cockpit-tab-btn:hover {
+  background-color: #334155;
+  color: #ffffff;
+}
+
+.cockpit-tab-btn.active {
+  background-color: var(--real-green-medium);
+  color: var(--real-green-neon);
+  border-color: var(--real-green-neon);
+  box-shadow: 0 0 6px rgba(106, 228, 155, 0.3);
+  font-weight: bold;
+}
+
+.tab-pane {
+  display: block;
+}
+
+.tab-pane.hidden {
+  display: none !important;
+}
+
+/* Visor de Pensamento (Chain-of-Thought) */
+.thinking-stream-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 7px;
+  color: var(--real-green-accent);
+  background-color: #0b1320;
+  padding: 6px 8px;
+  border: 2px solid var(--border-dark);
+  border-bottom: none;
+}
+
+.btn-refresh-tab {
+  font-size: 6px;
+  padding: 3px 6px;
+}
+
+.thinking-stream-body {
+  background-color: #060b13;
+  border: 2px solid #1e3a5f;
+  height: 240px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.thinking-placeholder {
+  font-family: var(--font-terminal);
+  font-size: 15px;
+  color: #64748b;
+  text-align: center;
+  padding: 30px 10px;
+  font-style: italic;
+}
+
+.thinking-card {
+  background-color: #0b1320;
+  border: 1px solid #1e293b;
+  padding: 8px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.thinking-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 7px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.thinking-step-badge {
+  background-color: #0f172a;
+  color: #facc15;
+  padding: 2px 5px;
+  border: 1px solid #334155;
+  font-size: 6px;
+}
+
+.thinking-time {
+  font-size: 6px;
+  color: #64748b;
+}
+
+.thinking-tools-planned {
+  font-size: 7px;
+  color: #38bdf8;
+  margin-bottom: 4px;
+}
+
+.thinking-card-text {
+  font-family: var(--font-terminal);
+  font-size: 14px;
+  color: #4ade80;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  background-color: #020617;
+  padding: 6px;
+  border: 1px solid #0f172a;
+  user-select: text;
+}
+
+/* Grid de Métricas do Cockpit */
+.metrics-grid-cockpit {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.metric-card-retro {
+  background-color: #0b1320;
+  border: 2px solid var(--border-dark);
+  padding: 8px;
+  box-shadow: inset -2px -2px #000, inset 2px 2px #334155;
+}
+
+.metric-card-retro .m-lbl {
+  font-size: 7px;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.metric-card-retro .m-val {
+  font-size: 15px;
+  color: #facc15;
+  font-weight: bold;
+  display: block;
+}
+
+.metric-card-retro .m-val-sub {
+  font-size: 7px;
+  color: var(--real-green-neon);
+  display: block;
+  margin-top: 4px;
+}
+
+/* Barra de Estamina Retro */
+.stamina-track {
+  width: 100%;
+  height: 8px;
+  background-color: #000;
+  border: 1px solid #475569;
+  margin-top: 4px;
+}
+
+/* Aviso de Governança Corporativa */
+.governance-badge-notice {
+  font-size: 7px;
+  color: #7dd3fc;
+  background-color: rgba(56, 189, 248, 0.08);
+  border-left: 3px solid #38bdf8;
+  border-right: 1px solid #1e293b;
+  border-top: 1px solid #1e293b;
+  border-bottom: 1px solid #1e293b;
+  padding: 6px 8px;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.btn-send-instruction {
+  width: 100%;
+  padding: 10px;
+  font-size: 8px;
+  background-color: var(--real-green-medium);
+  color: var(--real-green-accent);
+  border: 2px solid var(--border-dark);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-send-instruction:hover {
+  background-color: var(--real-green-light);
   color: #ffffff;
 }
 

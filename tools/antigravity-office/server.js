@@ -78,6 +78,59 @@ app.get('/api/agent/:name/transcript', (req, res) => {
 });
 
 /**
+ * Endpoint JSON: Thinking Logs (Chain-of-Thought) do agente
+ */
+app.get('/api/agent/:name/thinking', (req, res) => {
+  try {
+    const agentName = req.params.name;
+    const thinking = scanner.getAgentThinking(agentName);
+    res.json({
+      success: true,
+      agent: agentName,
+      thinking
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * Endpoint JSON: Métricas Globais de Cotas e Consumo do Sistema
+ */
+app.get('/api/system/metrics', (req, res) => {
+  try {
+    const metrics = scanner.getGlobalMetrics();
+    res.json({
+      success: true,
+      metrics
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * Endpoint POST: Transmitir comando oficial ao Agente Pai (Antigravity Orchestrator)
+ */
+app.post('/api/orchestrator/command', (req, res) => {
+  try {
+    const { message, sender = 'Douglas (Operador)' } = req.body;
+    if (!message || typeof message !== 'string' || !message.trim()) {
+      return res.status(400).json({ success: false, error: 'Comando vazio ou inválido.' });
+    }
+
+    const record = scanner.registerOrchestratorCommand({ message: message.trim(), sender });
+    res.json({
+      success: true,
+      message: 'Comando transmitido ao Agente Pai (Maestro).',
+      record
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
  * Endpoint POST: Interagir com o agente (enviar mensagem/comando)
  */
 app.post('/api/agent/:name/interact', (req, res) => {
