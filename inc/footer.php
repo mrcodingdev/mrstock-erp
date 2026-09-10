@@ -39,6 +39,7 @@
                                 <span>Ajuda</span>
                             </a>
                         </div>
+                        <div class="so-footer-gestaoclick__sla mt-2" style="color: #cbd5e1; font-size: 0.75rem;"><i class="fas fa-clock me-1 text-success"></i>Atendimento operacional em até 2h úteis</div>
                     </div>
                 </div>
 

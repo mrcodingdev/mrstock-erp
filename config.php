@@ -64,6 +64,17 @@ $isLocal = empty($httpHost)
 
 define('ENVIRONMENT', getenv('APP_ENV') ?: ($isLocal ? 'development' : 'production'));
 
+// Supressão estrita de exibição de erros técnicos em produção (CWE-209 / OWASP A05)
+if (defined('ENVIRONMENT') && ENVIRONMENT === 'production') {
+    @ini_set('display_errors', '0');
+    @ini_set('display_startup_errors', '0');
+    error_reporting(0);
+} else {
+    @ini_set('display_errors', '1');
+    @ini_set('display_startup_errors', '1');
+    error_reporting(E_ALL);
+}
+
 // Rota base (BASE_URL)
 if (getenv('APP_URL')) {
     define('BASE_URL', rtrim(getenv('APP_URL'), '/'));

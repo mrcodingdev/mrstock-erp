@@ -115,7 +115,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 
             $senhaAtualCorreta = false;
             if ($hashBanco) {
-                if (password_verify($senhaAtual, $hashBanco) || $hashBanco === $senhaAtual) {
+                if (password_verify($senhaAtual, $hashBanco)) {
                     $senhaAtualCorreta = true;
                 }
             }

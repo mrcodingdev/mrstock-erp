@@ -31,7 +31,9 @@ if ($isLoggedIn) {
     <meta property="og:title" content="MrStock ERP - Termos de Uso &amp; Regulamento do Sistema">
     <meta property="og:description" content="Regulamento operacional e termos de utilização do MrStock ERP para a Papelaria Real.">
     <meta property="og:url" content="https://mrstock.com.br/termos.php">
-    <meta property="og:image" content="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico">
+    <meta property="og:image" content="https://mrstock.com.br/assets/img/mrstock_og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:site_name" content="MrStock ERP">
     <meta name="theme-color" content="#284936">

@@ -127,7 +127,9 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
     <meta property="og:title" content="<?= htmlspecialchars($_browserTitle, ENT_QUOTES, 'UTF-8') ?>">
     <meta property="og:description" content="Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades PEPS/FIFO e PDV Ágil para Papelaria Real.">
     <meta property="og:url" content="https://mrstock.com.br/">
-    <meta property="og:image" content="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico">
+    <meta property="og:image" content="https://mrstock.com.br/assets/img/mrstock_og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:site_name" content="MrStock ERP">
     <meta name="theme-color" content="#284936">

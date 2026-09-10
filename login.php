@@ -100,7 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta property="og:title" content="MrStock ERP - Login | Papelaria Real">
     <meta property="og:description" content="Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades PEPS/FIFO e PDV Ágil para Papelaria Real.">
     <meta property="og:url" content="https://mrstock.com.br/">
-    <meta property="og:image" content="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico">
+    <meta property="og:image" content="https://mrstock.com.br/assets/img/mrstock_og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:site_name" content="MrStock ERP">
     <meta name="theme-color" content="#284936">
@@ -444,6 +446,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     </style>
+
+    <!-- Dados Estruturados Schema.org (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "SoftwareApplication",
+                "name": "MrStock ERP",
+                "operatingSystem": "Web, Windows, Linux",
+                "applicationCategory": "BusinessApplication",
+                "description": "Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades PEPS/FIFO e PDV Ágil para a Papelaria Real.",
+                "softwareVersion": "2.2.0",
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "BRL"
+                }
+            },
+            {
+                "@type": "LocalBusiness",
+                "name": "Papelaria Real Ltda",
+                "description": "Papelaria, materiais escolares e de escritório em Sorocaba/SP.",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Rua XV de Novembro, 250 - Centro",
+                    "addressLocality": "Sorocaba",
+                    "addressRegion": "SP",
+                    "addressCountry": "BR"
+                },
+                "telephone": "+5511987654321",
+                "email": "contato@mrstock.com.br"
+            }
+        ]
+    }
+    </script>
 </head>
 <body>
 

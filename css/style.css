@@ -1923,8 +1923,9 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 }
 
 .ajuda-item .accordion-button:focus {
-  box-shadow: none;
-  border-color: rgba(40, 73, 54, 0.2);
+  box-shadow: 0 0 0 3px rgba(40, 73, 54, 0.25) !important;
+  border-color: var(--mr-bg-primary) !important;
+  outline: none;
 }
 
 .ajuda-section {
@@ -2178,15 +2179,14 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 }
 
 .so-footer-gestaoclick__support-circle--faq {
-  border: 1.5px solid #a78bfa;
-  color: #a78bfa;
-  background: rgba(167, 139, 250, 0.08);
+  border: 1.5px solid #6ae49b;
+  color: #6ae49b;
+  background: rgba(106, 228, 155, 0.08);
 }
-
 .so-footer-gestaoclick__support-circle--faq:hover,
 .so-footer-gestaoclick__support-item:hover .so-footer-gestaoclick__support-circle--faq {
-  background: #a78bfa;
-  color: #222d31;
+  background: #284936;
+  color: #ffffff;
 }
 
 .so-footer-gestaoclick__contact-direct {

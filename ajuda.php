@@ -369,49 +369,42 @@ $modulosAjuda = [
     ],
 ];
 
-// 5. Perguntas Frequentes (FAQ)
+// 5. Perguntas Frequentes (FAQ Operacional)
 $faqItems = [
     [
         'id'        => 'F1',
-        'categoria' => 'suporte',
-        'keywords'  => 'faq internet queda offline contingencia funcionamento local xampp rede',
-        'pergunta'  => 'O que fazer se a conexão com a internet cair durante o expediente?',
-        'resposta'  => 'O MrStock ERP opera em arquitetura local e híbrida. As operações de venda, registro de itens e cupom continuam funcionando normalmente no servidor XAMPP local sem qualquer interrupção no balcão da loja.'
+        'categoria' => 'vendas',
+        'keywords'  => 'faq nfce nfc-e fiscal sefaz cupom qr code chave 44 digitos tributos lei 12741 impostos etec termico 80mm 58mm simulacao academica',
+        'pergunta'  => 'Como funciona a simulação acadêmica de NFC-e com QR Code no PDV?',
+        'resposta'  => 'A emissão de NFC-e no MrStock ERP é uma simulação fiscal completa desenvolvida para fins acadêmicos na ETEC Fernando Prestes. O sistema gera a chave de acesso padrão nacional de 44 dígitos, protocolo de autorização e QR Code vetorial escaneável para conferência do cupom fiscal em conformidade com o Manual de Padrões Técnicos da SEFAZ/SP. Inclui o cálculo discriminado de tributos incidentes conforme a Lei Federal 12.741/2012 (De Olho no Imposto) e renderiza cupons térmicos de 80mm e 58mm sem transmissão aos servidores fazendários de produção.'
     ],
     [
         'id'        => 'F2',
-        'categoria' => 'gestao',
-        'keywords'  => 'faq operador caixa permissoes usuario criar senha admin rbac seguranca',
-        'pergunta'  => 'Como cadastrar novos operadores de caixa e definir permissões de acesso?',
-        'resposta'  => 'Acesse o menu <em>Configurações > Sistema & Backup</em> (disponível para o perfil Administrador). O perfil "Operador de Caixa" possui acesso restrito ao PDV e Vendas, sem permissão para visualização de custos de compra, margens de lucro ou relatórios estratégicos.'
+        'categoria' => 'suporte',
+        'keywords'  => 'faq internet queda offline contingencia funcionamento local xampp rede conexao estabilidade balcao',
+        'pergunta'  => 'Como o sistema opera em caso de instabilidade de internet (Modo Offline / Local)?',
+        'resposta'  => 'O MrStock ERP foi concebido sob uma arquitetura híbrida e resiliente. Caso ocorra queda ou instabilidade na conexão externa de internet, o sistema continua plenamente operacional no ambiente local (servidor XAMPP/Apache/MySQL). Todas as operações do Frente de Caixa (PDV), consultas de produtos por leitor de código de barras, baixas de estoque PEPS/FIFO e fechamento de vendas permanecem 100% ativas sem perda de integridade dos dados.'
     ],
     [
         'id'        => 'F3',
-        'categoria' => 'pdv',
-        'keywords'  => 'faq troco calculo dinheiro cedulas rapidez balcao pagamento f4',
-        'pergunta'  => 'Como funciona o cálculo automático de troco no balcão?',
-        'resposta'  => 'No modal de pagamento (<kbd class="so-kbd so-kbd-sm">F4</kbd>), ao selecionar a opção Dinheiro, digite o valor recebido ou clique nos botões rápidos de cédulas (R$ 10, 20, 50, 100). O valor do troco é calculado e exibido em destaque instantaneamente.'
+        'categoria' => 'vendas',
+        'keywords'  => 'faq estorno cancelamento devolucao estoque retorno auditoria historico vendas operador',
+        'pergunta'  => 'Qual o procedimento para estorno de venda e devolução ao estoque?',
+        'resposta'  => 'Para realizar o cancelamento ou estorno de uma venda concluída, o operador acessa o menu <em>Operação de Vendas > Histórico</em>, localiza o registro da venda e aciona a opção de estorno. O sistema devolve automaticamente as unidades físicas dos itens ao estoque e gera um registro inviolável no log forense de auditoria com data, hora, motivo e identificação do usuário responsável.'
     ],
     [
         'id'        => 'F4',
         'categoria' => 'estoque',
-        'keywords'  => 'faq etiqueta impressao gondola code 128 codigo de barras termica',
-        'pergunta'  => 'Como gerar e imprimir etiquetas de gôndola para os produtos?',
-        'resposta'  => 'Acesse <em>Catálogo & Estoque > Gerador de Etiquetas</em>. Selecione os produtos desejados e clique no botão de impressão para obter o documento padronizado em código de barras Code 128 Vetorial para impressoras térmicas e convencionais.'
+        'keywords'  => 'faq familias funcionais categorias genericas papelaria curva abc pareto gestao organizacao sortimento cadernos canetas',
+        'pergunta'  => 'Por que os produtos são organizados em 10 Famílias Funcionais em vez de categorias genéricas?',
+        'resposta'  => 'A Papelaria Real opera com alta densidade de itens (SKUs) e características operacionais heterogêneas. A adoção de micro-categorias especializadas (Cadernos & Blocos, Canetas & Marcadores, Papéis Especiais, etc.) garante acurácia na Curva ABC (Princípio de Pareto) e evita distorções clássicas na apuração da rentabilidade e do CMV, permitindo gestão precisa de validade, shelf-life e reposição inteligente.'
     ],
     [
         'id'        => 'F5',
-        'categoria' => 'vendas',
-        'keywords'  => 'faq diferenca cancelar item cancelar venda f9 lixeira estorno',
-        'pergunta'  => 'Qual a diferença entre cancelar um item do carrinho e cancelar a venda inteira?',
-        'resposta'  => 'Para cancelar um item avulso, clique no ícone de lixeira na linha correspondente antes do fechamento. Para cancelar a venda inteira, pressione <kbd class="so-kbd so-kbd-sm">F9</kbd> no teclado ou o botão vermelho de cancelamento no PDV.'
-    ],
-    [
-        'id'        => 'F6',
         'categoria' => 'gestao',
-        'keywords'  => 'faq dre lucro real cmv receita faturamento resultado analise financeiro',
-        'pergunta'  => 'Onde consultar o lucro bruto real obtido em determinado período?',
-        'resposta'  => 'Acesse <em>Relatórios > Análise & DRE Gerencial</em>. O sistema calcula a Receita Líquida deduzida do Custo das Mercadorias Vendidas (CMV), exibindo o lucro bruto exato com precisão centesimal e margem percentual.'
+        'keywords'  => 'faq senha redefinicao operadores caixa administradores rbac perfis seguranca bcrypt configuracoes',
+        'pergunta'  => 'Como solicitar redefinição de senha ou gerenciar operadores de caixa?',
+        'resposta'  => 'O gerenciamento de acessos e credenciais é centralizado no módulo <em>Configurações > Operadores</em>, sendo restrito exclusivamente a usuários com perfil de Administrador (RBAC). O administrador pode cadastrar operadores, conceder permissões limitadas (Administrador vs. Operador de Caixa) e redefinir credenciais com criptografia defensiva BCrypt de alto custo computacional, assegurando as diretrizes de segurança da LGPD.'
     ],
 ];
 
@@ -708,10 +701,10 @@ require_once __DIR__ . '/inc/header.php';
     </div>
 
     <!-- ══ SEÇÃO 3: PERGUNTAS FREQUENTES (FAQ OPERACIONAL) ══════════════════════ -->
-    <div class="so-card mb-4 border ajuda-section" data-categoria="suporte gestao pdv estoque vendas" data-keywords="faq perguntas frequentes duvidas respostas cancelamento internet troco etiqueta lucro dre">
+    <div class="so-card mb-4 border ajuda-section" data-categoria="suporte gestao pdv estoque vendas" data-keywords="faq perguntas frequentes duvidas respostas nfce nfc-e qr code fiscal offline internet local estorno cancelamento devolucao estoque familias rbac senha operadores">
         <div class="so-card-header bg-light d-flex justify-content-between align-items-center">
             <h5 class="so-card-title text-dark m-0">
-                <i class="fas fa-comments-question text-primary me-2"></i>Perguntas Frequentes (FAQ Operacional)
+                <i class="fas fa-circle-question text-primary me-2"></i>Perguntas Frequentes (FAQ Operacional)
             </h5>
             <span class="badge bg-secondary text-white tabular-nums"><?= count($faqItems) ?> Perguntas</span>
         </div>
@@ -721,21 +714,24 @@ require_once __DIR__ . '/inc/header.php';
                     <div class="accordion-item ajuda-item" 
                          data-categoria="<?= htmlspecialchars($faq['categoria']) ?>" 
                          data-keywords="<?= htmlspecialchars($faq['keywords']) ?>">
-                        <h2 class="accordion-header" id="headingFaq<?= htmlspecialchars($faq['id']) ?>">
+                        <h2 class="accordion-header">
                             <button class="accordion-button collapsed fw-bold text-dark" 
                                     type="button" 
+                                    id="headingFaq<?= $faq['id'] ?>"
                                     data-bs-toggle="collapse" 
-                                    data-bs-target="#collapseFaq<?= htmlspecialchars($faq['id']) ?>" 
-                                    aria-expanded="false">
+                                    data-bs-target="#collapseFaq<?= $faq['id'] ?>" 
+                                    aria-expanded="false"
+                                    aria-controls="collapseFaq<?= $faq['id'] ?>">
                                 <i class="fas fa-circle-question text-muted me-2"></i>
                                 <?= htmlspecialchars($faq['pergunta']) ?>
                             </button>
                         </h2>
-                        <div id="collapseFaq<?= htmlspecialchars($faq['id']) ?>" 
+                        <div id="collapseFaq<?= $faq['id'] ?>" 
                              class="accordion-collapse collapse" 
+                             aria-labelledby="headingFaq<?= $faq['id'] ?>"
                              data-bs-parent="#accordionFaq">
                             <div class="accordion-body p-4 bg-light">
-                                <p class="text-muted small m-0 leading-relaxed">
+                                <p class="mb-0 text-muted lh-base">
                                     <?= $faq['resposta'] ?>
                                 </p>
                             </div>
@@ -756,7 +752,7 @@ require_once __DIR__ . '/inc/header.php';
         <div class="so-card-body p-4">
             <div class="row g-4 align-items-center">
                 <div class="col-lg-7 col-12">
-                    <h6 class="fw-bold text-dark mb-2">Projeto de Conclusão de Curso (TCC) — ETEC Fernando Prestes (Sorocaba/SP)</h6>
+                    <h6 class="fw-bold text-dark mb-2">Projeto de Conclusão de Curso (TCC) | ETEC Fernando Prestes (Sorocaba/SP)</h6>
                     <p class="text-muted small mb-3">
                         O <strong>MrStock ERP</strong> foi arquitetado e implementado pela equipe de engenharia de software <strong>Mr. Coding</strong>:
                     </p>

@@ -31,7 +31,9 @@ if ($isLoggedIn) {
     <meta property="og:title" content="MrStock ERP - 404 Página Não Encontrada">
     <meta property="og:description" content="O recurso solicitado não existe ou foi movido no MrStock ERP.">
     <meta property="og:url" content="https://mrstock.com.br/404.php">
-    <meta property="og:image" content="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico">
+    <meta property="og:image" content="https://mrstock.com.br/assets/img/mrstock_og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:site_name" content="MrStock ERP">
     <meta name="theme-color" content="#284936">

@@ -4,11 +4,17 @@ Options -Indexes
 # Pagina 404 Customizada Institucional
 ErrorDocument 404 /404.php
 
-# Bloqueia acesso direto a arquivos de configuracao, ambiente, logs, documentacao e dumps SQL
-<FilesMatch "^(\.env|\.git|\.htaccess|.*\.sql|.*\.log|.*\.md)$">
+# Bloqueia acesso direto a configuracoes, ambiente, logs, documentacao, sql, json e txt internos
+<FilesMatch "^(\.env|\.git|\.htaccess|.*\.sql|.*\.log|.*\.md|.*\.json|.*\.txt)$">
     Order Allow,Deny
     Deny from all
 </FilesMatch>
+
+# Excecao para permitir o robots.txt
+<Files "robots.txt">
+    Order Allow,Deny
+    Allow from all
+</Files>
 
 # Headers de Seguranca Defensivos (SecurityHeaders A+ Compliance)
 <IfModule mod_headers.c>
