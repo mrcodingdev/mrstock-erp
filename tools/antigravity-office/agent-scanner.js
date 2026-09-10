@@ -9,6 +9,49 @@
 const fs = require('fs');
 const path = require('path');
 const EventEmitter = require('events');
+const https = require('https');
+
+function dispatchN8nTelemetry(agentName, action, status, verdict, details = {}) {
+  try {
+    const payload = JSON.stringify({
+      timestamp: new Date().toISOString(),
+      agentName,
+      action,
+      status,
+      verdict,
+      details
+    });
+
+    const options = {
+      hostname: 'dgzin.app.n8n.cloud',
+      port: 443,
+      path: '/webhook/antigravity-telemetry',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload)
+      },
+      timeout: 1500
+    };
+
+    const req = https.request(options, (res) => {
+      res.resume();
+    });
+
+    req.on('timeout', () => {
+      req.destroy();
+    });
+
+    req.on('error', () => {
+      // Ignora erro silenciosamente
+    });
+
+    req.write(payload);
+    req.end();
+  } catch (err) {
+    // Blindagem estrita contra falhas de rede
+  }
+}
 
 class AgentScanner extends EventEmitter {
   constructor() {
@@ -396,6 +439,11 @@ class AgentScanner extends EventEmitter {
               this.auditCounters.total++;
               if (!this.isInitialScan) {
                 this.emit('audit', { type: 'PASS', agentId: agentDef.id, timestamp: Date.now() });
+                dispatchN8nTelemetry(agentDef.id, 'audit_verdict', agentState.status, 'PASS', {
+                  steps: session.steps,
+                  tools: session.tools,
+                  sessionDir: bestMatch.dirName
+                });
               }
             } else if (session.lastVerdict === 'REVISE') {
               agentState.stats.reviseCount++;
@@ -403,6 +451,11 @@ class AgentScanner extends EventEmitter {
               this.auditCounters.total++;
               if (!this.isInitialScan) {
                 this.emit('audit', { type: 'REVISE', agentId: agentDef.id, timestamp: Date.now() });
+                dispatchN8nTelemetry(agentDef.id, 'audit_verdict', agentState.status, 'REVISE', {
+                  steps: session.steps,
+                  tools: session.tools,
+                  sessionDir: bestMatch.dirName
+                });
               }
             }
           }
@@ -411,18 +464,33 @@ class AgentScanner extends EventEmitter {
           // Se o arquivo não foi alterado nos últimos 15 segundos, o status É OBRIGATORIAMENTE 'IDLE'
           const timeSinceModified = Date.now() - bestMatch.mtime;
           const isCurrentlyActive = timeSinceModified < 15000;
+          const previousStatus = agentState.status;
 
           if (isCurrentlyActive) {
             agentState.status = 'RUNNING';
             agentState.currentTool = session.latestTool || 'run_command';
             agentState.toolAction = session.latestAction || 'Executando tarefa no workspace';
             agentState.toolSummary = 'Em atividade';
+            if (previousStatus !== 'RUNNING' && !this.isInitialScan) {
+              dispatchN8nTelemetry(agentDef.id, 'status_change', 'RUNNING', agentState.lastVerdict, {
+                steps: session.steps,
+                tools: session.tools,
+                sessionDir: bestMatch.dirName
+              });
+            }
           } else {
             // NUNCA manter status RUNNING se o arquivo não foi alterado há mais de 15 segundos
             agentState.status = 'IDLE';
             agentState.currentTool = null;
             agentState.toolAction = 'Aguardando novas demandas / Em repouso';
             agentState.toolSummary = 'Ocioso';
+            if (previousStatus !== 'IDLE' && !this.isInitialScan) {
+              dispatchN8nTelemetry(agentDef.id, 'status_change', 'IDLE', agentState.lastVerdict, {
+                steps: session.steps,
+                tools: session.tools,
+                sessionDir: bestMatch.dirName
+              });
+            }
           }
           agentState.lastUpdated = bestMatch.mtime;
 

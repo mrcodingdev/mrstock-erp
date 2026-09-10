@@ -186,6 +186,36 @@ body, html {
   color: var(--text-revise);
 }
 
+/* n8n Automation Hub Status Indicator */
+.n8n-status-box {
+  border-color: #ff6d5a !important;
+  box-shadow: inset -2px -2px #000, inset 2px 2px #5c1810, 0 0 8px rgba(255, 109, 90, 0.25) !important;
+  background-color: #120b0e !important;
+}
+
+.n8n-led-pulse {
+  width: 8px;
+  height: 8px;
+  background-color: #ff6d5a;
+  border: 1px solid #000;
+  display: inline-block;
+  box-shadow: 0 0 6px #ff6d5a;
+  animation: n8nPulse 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes n8nPulse {
+  0% {
+    opacity: 0.6;
+    box-shadow: 0 0 3px #ff6d5a;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 10px #ff6d5a, 0 0 16px rgba(255, 109, 90, 0.7);
+    transform: scale(1.05);
+  }
+}
+
 /* Botões de Controle Retrô */
 .hud-controls {
   display: flex;
