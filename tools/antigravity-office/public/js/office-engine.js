@@ -215,40 +215,71 @@ class OfficeEngine {
     this.ctx.scale(this.camera.zoom, this.camera.zoom);
     this.ctx.translate(-this.camera.x, -this.camera.y);
 
-    // 1. Renderiza os Pisos das 5 Salas
+    // 1. Base Unificada de Carvalho e Carpetes Temáticos por Setor
     this.renderFloors();
 
-    // 2. Paredes e Divisórias
+    // 2. Paredes Perimetrais e Divisórias de Vidro/Metal
     this.renderWalls();
 
-    // 3. Mobília e Estações
+    // 3. Placas de Identificação dos Setores em Pixel Art
+    this.renderSectorSigns();
+
+    // 4. Mobília, Estações e Área de Café/Bebedouro
     this.renderFurniture();
 
-    // 4. Avatares dos Agentes
+    // 5. Avatares dos Agentes
     this.renderAgents();
 
-    // 5. Partículas e Handoffs
+    // 6. Partículas e Handoffs Voadores
     this.renderEffects();
 
     this.ctx.restore();
   }
 
   renderFloors() {
+    const floorWood = this.sprites.get('floor_wood');
+    const carpetGov = this.sprites.get('carpet_governance');
+    const carpetOrch = this.sprites.get('carpet_orchestration');
+    const floorBunker = this.sprites.get('floor_bunker');
+    const floorCaution = this.sprites.get('floor_caution');
+    const carpetFront = this.sprites.get('carpet_frontline');
+    const floorQA = this.sprites.get('floor_qa');
+    const carpetLounge = this.sprites.get('carpet_lounge');
+
     for (let c = 0; c < this.mapCols; c++) {
       for (let r = 0; r < this.mapRows; r++) {
         const x = c * this.tileSize;
         const y = r * this.tileSize;
 
-        let tile = this.sprites.get('floor_wood');
-        // Lounge Central com Carpete Verde Papelaria Real
-        if (c >= 18 && c <= 26 && r >= 10 && r <= 16) {
-          tile = this.sprites.get('floor_carpet');
-        } else if (c >= 26 && r >= 14) {
-          // Lab de QA
-          tile = this.sprites.get('floor_lab');
-        } else if (c >= 28 && r <= 10) {
-          // Bunker
-          tile = this.sprites.get('floor_bunker');
+        let tile = floorWood; // Piso base de madeira executiva acolhedora
+
+        // Sala 1 (Noroeste): Governança & Arquitetura
+        if (c >= 2 && c <= 16 && r >= 2 && r <= 9) {
+          tile = carpetGov;
+        }
+        // Sala 2 (Norte Central): Comando & Orquestração
+        else if (c >= 18 && c <= 27 && r >= 2 && r <= 9) {
+          tile = carpetOrch;
+        }
+        // Sala 3 (Nordeste): Bunker de Segurança OWASP
+        else if (c >= 29 && c <= 43 && r >= 2 && r <= 9) {
+          tile = floorBunker;
+        }
+        // Faixa de advertência na entrada do Bunker
+        else if ((c === 35 || c === 36) && r === 10) {
+          tile = floorCaution;
+        }
+        // Lounge Central
+        else if (c >= 19 && c <= 26 && r >= 11 && r <= 12) {
+          tile = carpetLounge;
+        }
+        // Sala 4 (Sudoeste): Engenharia Frontline
+        else if (c >= 2 && c <= 21 && r >= 14 && r <= 23) {
+          tile = carpetFront;
+        }
+        // Sala 5 (Sudeste): Laboratório QA & Performance
+        else if (c >= 24 && c <= 43 && r >= 14 && r <= 23) {
+          tile = floorQA;
         }
 
         if (tile) this.ctx.drawImage(tile, x, y);
@@ -257,12 +288,137 @@ class OfficeEngine {
   }
 
   renderWalls() {
-    this.ctx.fillStyle = '#0f172a';
-    // Paredes externas
-    this.ctx.fillRect(0, 0, this.mapCols * this.tileSize, 8);
-    this.ctx.fillRect(0, 0, 8, this.mapRows * this.tileSize);
-    this.ctx.fillRect(this.mapCols * this.tileSize - 8, 0, 8, this.mapRows * this.tileSize);
-    this.ctx.fillRect(0, this.mapRows * this.tileSize - 8, this.mapCols * this.tileSize, 8);
+    const partition = this.sprites.get('wall_partition');
+
+    // 1. Paredes Externas Estruturais
+    this.ctx.fillStyle = '#0b0f19';
+    this.ctx.fillRect(0, 0, this.mapCols * this.tileSize, 10);
+    this.ctx.fillRect(0, 0, 10, this.mapRows * this.tileSize);
+    this.ctx.fillRect(this.mapCols * this.tileSize - 10, 0, 10, this.mapRows * this.tileSize);
+    this.ctx.fillRect(0, this.mapRows * this.tileSize - 10, this.mapCols * this.tileSize, 10);
+
+    // 2. Divisórias de Vidro Fumê e Metal (1 tile de altura com aberturas de portas)
+    const isPartitionTile = (c, r) => {
+      // Divisória horizontal Norte (row 10): portas em (9,10), (22,23), (35,36)
+      if (r === 10) {
+        if (c >= 1 && c <= 8) return true;
+        if (c >= 11 && c <= 16) return true;
+        if (c === 17) return true; // pilar
+        if (c >= 18 && c <= 21) return true;
+        if (c >= 24 && c <= 27) return true;
+        if (c === 28) return true; // pilar
+        if (c >= 29 && c <= 34) return true;
+        if (c >= 37 && c <= 44) return true;
+        return false;
+      }
+
+      // Divisória vertical Norte (Governança | Comando): col 17, rows 1-9
+      if (c === 17 && r >= 1 && r <= 9) return true;
+
+      // Divisória vertical Norte (Comando | Bunker): col 28, rows 1-9
+      if (c === 28 && r >= 1 && r <= 9) return true;
+
+      // Divisória horizontal Sul (row 13): portas em (11,12), (33,34)
+      if (r === 13) {
+        if (c >= 1 && c <= 10) return true;
+        if (c >= 13 && c <= 21) return true;
+        if (c === 22 || c === 23) return true; // pilar
+        if (c >= 24 && c <= 32) return true;
+        if (c >= 35 && c <= 44) return true;
+        return false;
+      }
+
+      // Divisória vertical Sul (Engenharia | QA Lab): col 22-23, rows 14-24
+      if ((c === 22 || c === 23) && r >= 14 && r <= 24) return true;
+
+      return false;
+    };
+
+    if (partition) {
+      for (let c = 0; c < this.mapCols; c++) {
+        for (let r = 0; r < this.mapRows; r++) {
+          if (isPartitionTile(c, r)) {
+            this.ctx.drawImage(partition, c * this.tileSize, r * this.tileSize);
+          }
+        }
+      }
+    }
+  }
+
+  renderSectorSigns() {
+    const signs = [
+      {
+        text: '🏛️ GOVERNANÇA & ARQUITETURA',
+        x: 9 * this.tileSize,
+        y: 1.5 * this.tileSize,
+        borderColor: '#10b981',
+        textColor: '#6ee7b7'
+      },
+      {
+        text: '🛸 COMANDO ANTIGRAVITY',
+        x: 22.5 * this.tileSize,
+        y: 1.5 * this.tileSize,
+        borderColor: '#a855f7',
+        textColor: '#d8b4fe'
+      },
+      {
+        text: '🛡️ BUNKER DE SEGURANÇA',
+        x: 36 * this.tileSize,
+        y: 1.5 * this.tileSize,
+        borderColor: '#ef4444',
+        textColor: '#fca5a5'
+      },
+      {
+        text: '⚡ ENGENHARIA FRONTLINE',
+        x: 11.5 * this.tileSize,
+        y: 14.5 * this.tileSize,
+        borderColor: '#3b82f6',
+        textColor: '#93c5fd'
+      },
+      {
+        text: '🧪 LABORATÓRIO QA & DESIGN',
+        x: 34 * this.tileSize,
+        y: 14.5 * this.tileSize,
+        borderColor: '#14b8a6',
+        textColor: '#5eead4'
+      }
+    ];
+
+    signs.forEach(sign => {
+      this.ctx.font = 'bold 8px "Press Start 2P", monospace';
+      const textMetrics = this.ctx.measureText(sign.text);
+      const padX = 8;
+      const boxW = textMetrics.width + padX * 2;
+      const boxH = 18;
+      const startX = Math.round(sign.x - boxW / 2);
+      const startY = Math.round(sign.y - boxH / 2);
+
+      // Sombra
+      this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      this.ctx.fillRect(startX + 2, startY + 2, boxW, boxH);
+
+      // Fundo escuro com leve translucidez
+      this.ctx.fillStyle = '#0f172a';
+      this.ctx.fillRect(startX, startY, boxW, boxH);
+
+      // Moldura temática
+      this.ctx.strokeStyle = sign.borderColor;
+      this.ctx.lineWidth = 1;
+      this.ctx.strokeRect(startX + 0.5, startY + 0.5, boxW - 1, boxH - 1);
+
+      // Rebites de canto
+      this.ctx.fillStyle = sign.borderColor;
+      this.ctx.fillRect(startX + 1, startY + 1, 2, 2);
+      this.ctx.fillRect(startX + boxW - 3, startY + 1, 2, 2);
+      this.ctx.fillRect(startX + 1, startY + boxH - 3, 2, 2);
+      this.ctx.fillRect(startX + boxW - 3, startY + boxH - 3, 2, 2);
+
+      // Texto renderizado
+      this.ctx.fillStyle = sign.textColor;
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.fillText(sign.text, sign.x, sign.y + 1);
+    });
   }
 
   renderFurniture() {
@@ -271,25 +427,38 @@ class OfficeEngine {
     const rack = this.sprites.get('server_rack');
     const plant = this.sprites.get('plant');
     const bookshelf = this.sprites.get('bookshelf');
+    const coffee = this.sprites.get('coffee_machine');
+    const water = this.sprites.get('water_cooler');
 
-    // Racks no Bunker de Segurança
+    // 1. Racks de Servidores no Bunker de Segurança
     if (rack) {
       this.ctx.drawImage(rack, 30 * this.tileSize, 2 * this.tileSize);
-      this.ctx.drawImage(rack, 38 * this.tileSize, 2 * this.tileSize);
+      this.ctx.drawImage(rack, 41 * this.tileSize, 2 * this.tileSize);
     }
 
-    // Estantes na Governança
+    // 2. Estantes na Governança
     if (bookshelf) {
       this.ctx.drawImage(bookshelf, 2 * this.tileSize, 2 * this.tileSize);
+      this.ctx.drawImage(bookshelf, 15 * this.tileSize, 2 * this.tileSize);
     }
 
-    // Plantas nos cantos do lounge
+    // 3. Área de Convivência / Lounge Central
+    if (water) {
+      this.ctx.drawImage(water, 18 * this.tileSize, 11 * this.tileSize);
+    }
+    if (coffee) {
+      this.ctx.drawImage(coffee, 21 * this.tileSize, 11 * this.tileSize);
+    }
+
+    // 4. Plantas Ornamentais nos cantos dos setores
     if (plant) {
-      this.ctx.drawImage(plant, 17 * this.tileSize, 10 * this.tileSize);
-      this.ctx.drawImage(plant, 27 * this.tileSize, 10 * this.tileSize);
+      this.ctx.drawImage(plant, 3 * this.tileSize, 9 * this.tileSize); // Governança
+      this.ctx.drawImage(plant, 26 * this.tileSize, 11 * this.tileSize); // Lounge
+      this.ctx.drawImage(plant, 3 * this.tileSize, 22 * this.tileSize); // Engenharia
+      this.ctx.drawImage(plant, 42 * this.tileSize, 22 * this.tileSize); // QA Lab
     }
 
-    // Mesas de cada agente
+    // 5. Mesas de Trabalho de Cada Agente
     this.agents.forEach(agent => {
       const x = agent.deskCoord.x * this.tileSize;
       const y = agent.deskCoord.y * this.tileSize;

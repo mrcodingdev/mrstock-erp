@@ -11,11 +11,16 @@ class OfficeSprites {
   }
 
   init() {
-    // 1. Gera Pisos
-    this.createFloorCarpet();
+    // 1. Gera Pisos Harmoniosos e Carpetes Setoriais
     this.createFloorWood();
-    this.createFloorLab();
+    this.createCarpetGovernance();
+    this.createCarpetOrchestration();
     this.createFloorBunker();
+    this.createFloorCaution();
+    this.createCarpetFrontline();
+    this.createFloorQA();
+    this.createCarpetLounge();
+    this.createWallPartition();
 
     // 2. Mobília
     this.createDesk();
@@ -23,6 +28,7 @@ class OfficeSprites {
     this.createServerRack();
     this.createOfficeChair();
     this.createCoffeeMachine();
+    this.createWaterCooler();
     this.createPottedPlant();
     this.createBookshelf();
 
@@ -42,65 +48,223 @@ class OfficeSprites {
     return { canvas: c, ctx };
   }
 
-  /* ================= PISOS (32x32) ================= */
-  createFloorCarpet() {
-    const { canvas, ctx } = this.createCanvas(32, 32);
-    ctx.fillStyle = '#1e3f2d';
-    ctx.fillRect(0, 0, 32, 32);
-    ctx.fillStyle = '#244b36';
-    for (let x = 0; x < 32; x += 4) {
-      for (let y = 0; y < 32; y += 4) {
-        if ((x + y) % 8 === 0) ctx.fillRect(x, y, 2, 2);
-      }
-    }
-    ctx.strokeStyle = '#162e21';
-    ctx.strokeRect(0, 0, 32, 32);
-    this.cache.set('floor_carpet', canvas);
-  }
-
+  /* ================= PISOS & DIVISÓRIAS (32x32) ================= */
   createFloorWood() {
     const { canvas, ctx } = this.createCanvas(32, 32);
-    ctx.fillStyle = '#78350f';
+    // Base de carvalho nobre executivo acolhedor e sóbrio (#43302b / #543d37)
+    ctx.fillStyle = '#43302b';
     ctx.fillRect(0, 0, 32, 32);
-    ctx.fillStyle = '#92400e';
-    ctx.fillRect(0, 0, 32, 7);
-    ctx.fillRect(0, 8, 32, 7);
-    ctx.fillRect(0, 16, 32, 7);
-    ctx.fillRect(0, 24, 32, 7);
-    ctx.fillStyle = '#451a03';
-    ctx.fillRect(0, 7, 32, 1);
-    ctx.fillRect(0, 15, 32, 1);
-    ctx.fillRect(0, 23, 32, 1);
-    ctx.fillRect(0, 31, 32, 1);
+
+    // Pranchas de madeira em faixas
+    ctx.fillStyle = '#543d37';
+    ctx.fillRect(0, 1, 32, 7);
+    ctx.fillRect(0, 9, 32, 7);
+    ctx.fillRect(0, 17, 32, 7);
+    ctx.fillRect(0, 25, 32, 7);
+
+    // Linhas de chanfro escuro entre pranchas
+    ctx.fillStyle = '#2d1f1c';
+    ctx.fillRect(0, 0, 32, 1);
+    ctx.fillRect(0, 8, 32, 1);
+    ctx.fillRect(0, 16, 32, 1);
+    ctx.fillRect(0, 24, 32, 1);
+
+    // Emendas verticais desencontradas
+    ctx.fillRect(14, 1, 1, 7);
+    ctx.fillRect(28, 9, 1, 7);
+    ctx.fillRect(6, 17, 1, 7);
+    ctx.fillRect(22, 25, 1, 7);
+
+    // Textura sutil de veios da madeira
+    ctx.fillStyle = '#3c2925';
+    ctx.fillRect(4, 3, 3, 1);
+    ctx.fillRect(20, 11, 4, 1);
+    ctx.fillRect(10, 19, 2, 1);
+    ctx.fillRect(15, 27, 3, 1);
+
     this.cache.set('floor_wood', canvas);
   }
 
-  createFloorLab() {
+  createCarpetGovernance() {
     const { canvas, ctx } = this.createCanvas(32, 32);
-    ctx.fillStyle = '#e2e8f0';
+    // Carpete Verde Nobre Papelaria Real (#152e22 com borda #284936)
+    ctx.fillStyle = '#152e22';
     ctx.fillRect(0, 0, 32, 32);
-    ctx.fillStyle = '#cbd5e1';
-    ctx.fillRect(1, 1, 30, 30);
-    ctx.fillStyle = '#f8fafc';
-    ctx.fillRect(2, 2, 28, 28);
-    ctx.fillStyle = '#94a3b8';
-    ctx.strokeRect(0, 0, 32, 32);
-    this.cache.set('floor_lab', canvas);
+
+    ctx.fillStyle = '#1b3a2b';
+    for (let x = 2; x < 32; x += 4) {
+      for (let y = 2; y < 32; y += 4) {
+        if ((x + y) % 8 === 0) ctx.fillRect(x, y, 2, 2);
+      }
+    }
+    ctx.strokeStyle = '#284936';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(0.5, 0.5, 31, 31);
+    this.cache.set('carpet_governance', canvas);
+  }
+
+  createCarpetOrchestration() {
+    const { canvas, ctx } = this.createCanvas(32, 32);
+    // Carpete Real Violeta Tech (#221533 com borda #581c87)
+    ctx.fillStyle = '#221533';
+    ctx.fillRect(0, 0, 32, 32);
+
+    ctx.fillStyle = '#2c1b42';
+    for (let x = 2; x < 32; x += 4) {
+      for (let y = 2; y < 32; y += 4) {
+        if ((x + y) % 8 === 0) ctx.fillRect(x, y, 2, 2);
+      }
+    }
+    ctx.strokeStyle = '#581c87';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(0.5, 0.5, 31, 31);
+    this.cache.set('carpet_orchestration', canvas);
   }
 
   createFloorBunker() {
     const { canvas, ctx } = this.createCanvas(32, 32);
-    ctx.fillStyle = '#1e293b';
+    // Aço escovado Cyber com rebites (#141a24)
+    ctx.fillStyle = '#141a24';
     ctx.fillRect(0, 0, 32, 32);
-    ctx.fillStyle = '#334155';
+
+    ctx.fillStyle = '#1c2432';
     ctx.fillRect(2, 2, 28, 28);
+
+    ctx.fillStyle = '#222d3d';
+    ctx.fillRect(4, 8, 24, 1);
+    ctx.fillRect(4, 16, 24, 1);
+    ctx.fillRect(4, 24, 24, 1);
+
     // Rebites nos 4 cantos
-    ctx.fillStyle = '#0f172a';
+    ctx.fillStyle = '#38495f';
     ctx.fillRect(4, 4, 2, 2);
     ctx.fillRect(26, 4, 2, 2);
     ctx.fillRect(4, 26, 2, 2);
     ctx.fillRect(26, 26, 2, 2);
+    ctx.fillStyle = '#080b0f';
+    ctx.fillRect(5, 5, 1, 1);
+    ctx.fillRect(27, 5, 1, 1);
+    ctx.fillRect(5, 27, 1, 1);
+    ctx.fillRect(27, 27, 1, 1);
+
     this.cache.set('floor_bunker', canvas);
+  }
+
+  createFloorCaution() {
+    const { canvas, ctx } = this.createCanvas(32, 32);
+    // Faixa diagonal amarela/preta de advertência para a entrada do Bunker
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, 32, 32);
+
+    ctx.fillStyle = '#eab308';
+    for (let i = -32; i < 64; i += 12) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i + 6, 0);
+      ctx.lineTo(i + 6 + 32, 32);
+      ctx.lineTo(i + 32, 32);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(0.5, 0.5, 31, 31);
+    this.cache.set('floor_caution', canvas);
+  }
+
+  createCarpetFrontline() {
+    const { canvas, ctx } = this.createCanvas(32, 32);
+    // Carpete Azul Marinho Tech (#122338 com borda #1e3a5f)
+    ctx.fillStyle = '#122338';
+    ctx.fillRect(0, 0, 32, 32);
+
+    ctx.fillStyle = '#172c46';
+    for (let x = 2; x < 32; x += 4) {
+      for (let y = 2; y < 32; y += 4) {
+        if ((x + y) % 8 === 0) ctx.fillRect(x, y, 2, 2);
+      }
+    }
+    ctx.strokeStyle = '#1e3a5f';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(0.5, 0.5, 31, 31);
+    this.cache.set('carpet_frontline', canvas);
+  }
+
+  createFloorQA() {
+    const { canvas, ctx } = this.createCanvas(32, 32);
+    // Piso Técnico Ardósia/Ciano suave (#1f2d36 com detalhe #0e7490, sem branco ofuscante)
+    ctx.fillStyle = '#1f2d36';
+    ctx.fillRect(0, 0, 32, 32);
+
+    ctx.fillStyle = '#263742';
+    ctx.fillRect(2, 2, 28, 28);
+
+    ctx.fillStyle = '#0e7490';
+    ctx.fillRect(2, 2, 4, 1);
+    ctx.fillRect(2, 2, 1, 4);
+    ctx.fillRect(26, 2, 4, 1);
+    ctx.fillRect(29, 2, 1, 4);
+    ctx.fillRect(2, 29, 4, 1);
+    ctx.fillRect(2, 26, 1, 4);
+    ctx.fillRect(26, 29, 4, 1);
+    ctx.fillRect(29, 26, 1, 4);
+    ctx.fillRect(15, 15, 2, 2);
+
+    this.cache.set('floor_qa', canvas);
+  }
+
+  createCarpetLounge() {
+    const { canvas, ctx } = this.createCanvas(32, 32);
+    // Tapete Mocha para o lounge central
+    ctx.fillStyle = '#2e221c';
+    ctx.fillRect(0, 0, 32, 32);
+
+    ctx.fillStyle = '#3a2b24';
+    for (let x = 2; x < 32; x += 4) {
+      for (let y = 2; y < 32; y += 4) {
+        if ((x + y) % 8 === 0) ctx.fillRect(x, y, 2, 2);
+      }
+    }
+    ctx.strokeStyle = '#523c32';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(0.5, 0.5, 31, 31);
+    this.cache.set('carpet_lounge', canvas);
+  }
+
+  createWallPartition() {
+    const { canvas, ctx } = this.createCanvas(32, 32);
+    // Divisória de vidro fumê com moldura metálica escura
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 26, 32, 6);
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(0, 26, 32, 2);
+
+    // Vidro fumê translúcido
+    ctx.fillStyle = 'rgba(23, 37, 54, 0.88)';
+    ctx.fillRect(2, 4, 28, 22);
+
+    // Montantes verticais
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(0, 4, 2, 22);
+    ctx.fillRect(30, 4, 2, 22);
+
+    // Reflexo especular
+    ctx.fillStyle = 'rgba(186, 230, 253, 0.18)';
+    ctx.beginPath();
+    ctx.moveTo(6, 24);
+    ctx.lineTo(14, 6);
+    ctx.lineTo(17, 6);
+    ctx.lineTo(9, 24);
+    ctx.closePath();
+    ctx.fill();
+
+    // Trilho superior metálico
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, 32, 4);
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(0, 0, 32, 1);
+
+    this.cache.set('wall_partition', canvas);
   }
 
   /* ================= MOBÍLIA ================= */
@@ -185,15 +349,54 @@ class OfficeSprites {
   }
 
   createCoffeeMachine() {
-    const { canvas, ctx } = this.createCanvas(20, 24);
-    ctx.fillStyle = '#334155';
-    ctx.fillRect(2, 4, 16, 18);
-    // Jarra de vidro com café
-    ctx.fillStyle = '#e2e8f0';
-    ctx.fillRect(4, 10, 12, 10);
+    const { canvas, ctx } = this.createCanvas(24, 28);
+    // Balcão de apoio
     ctx.fillStyle = '#451a03';
-    ctx.fillRect(5, 12, 10, 7);
+    ctx.fillRect(0, 14, 24, 14);
+    ctx.fillStyle = '#78350f';
+    ctx.fillRect(1, 15, 22, 12);
+    // Cafeteira expresso inox
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(3, 2, 18, 14);
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillRect(5, 4, 14, 10);
+    // LED e Jarra
+    ctx.fillStyle = '#22c55e';
+    ctx.fillRect(6, 5, 2, 2);
+    ctx.fillStyle = '#38bdf8';
+    ctx.fillRect(7, 8, 10, 6);
+    ctx.fillStyle = '#3b1c09';
+    ctx.fillRect(8, 9, 8, 4);
     this.cache.set('coffee_machine', canvas);
+  }
+
+  createWaterCooler() {
+    const { canvas, ctx } = this.createCanvas(24, 34);
+    // Garrafão de água azul translúcido
+    ctx.fillStyle = '#0284c7';
+    ctx.fillRect(4, 2, 16, 12);
+    ctx.fillStyle = '#38bdf8';
+    ctx.fillRect(6, 3, 4, 10);
+    ctx.fillStyle = '#0369a1';
+    ctx.fillRect(8, 14, 8, 2);
+
+    // Gabinete vertical
+    ctx.fillStyle = '#cbd5e1';
+    ctx.fillRect(3, 16, 18, 18);
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(5, 17, 14, 16);
+
+    // Nicho das torneiras
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(7, 19, 10, 6);
+    ctx.fillStyle = '#38bdf8'; // fria
+    ctx.fillRect(8, 20, 2, 3);
+    ctx.fillStyle = '#ef4444'; // quente
+    ctx.fillRect(14, 20, 2, 3);
+    ctx.fillStyle = '#64748b'; // pingadeira
+    ctx.fillRect(7, 24, 10, 1);
+
+    this.cache.set('water_cooler', canvas);
   }
 
   createPottedPlant() {

@@ -21,10 +21,20 @@ class OfficeUI {
     // Alternar áudio
     const btnAudio = document.getElementById('btn-audio-toggle');
     if (btnAudio) {
+      const updateAudioBtn = (muted) => {
+        btnAudio.innerHTML = `<span id="audio-icon">${muted ? '🔇' : '🔊'}</span> SFX: ${muted ? 'MUDO' : 'LIGADO'}`;
+        if (muted) {
+          btnAudio.classList.add('muted');
+        } else {
+          btnAudio.classList.remove('muted');
+        }
+      };
+      // Inicializa o botão no carregamento com o estado real persistido
+      updateAudioBtn(this.audio.isMuted);
+
       btnAudio.addEventListener('click', () => {
         const isMuted = this.audio.toggleMute();
-        document.getElementById('audio-icon').textContent = isMuted ? '🔇' : '🔊';
-        btnAudio.innerHTML = `<span id="audio-icon">${isMuted ? '🔇' : '🔊'}</span> SFX: ${isMuted ? 'MUDO' : 'LIGADO'}`;
+        updateAudioBtn(isMuted);
       });
     }
 

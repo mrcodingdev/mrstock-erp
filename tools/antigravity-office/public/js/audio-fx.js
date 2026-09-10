@@ -32,7 +32,9 @@ class AudioFx {
 
   toggleMute() {
     this.isMuted = !this.isMuted;
-    localStorage.setItem('antigravity_office_muted', this.isMuted);
+    try {
+      localStorage.setItem('antigravity_office_muted', this.isMuted ? 'true' : 'false');
+    } catch (e) {}
     if (this.masterGain && this.ctx) {
       this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 0.15, this.ctx.currentTime);
     }

@@ -213,6 +213,14 @@ body, html {
   background-color: var(--real-green-light);
 }
 
+#btn-audio-toggle.muted {
+  background-color: #1e293b;
+  color: #94a3b8;
+  border-color: #475569;
+  box-shadow: inset -2px -2px #0f172a, inset 2px 2px #334155;
+}
+
+
 /* ==========================================================================
    CANVAS PRINCIPAL
    ========================================================================== */

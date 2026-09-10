@@ -17,6 +17,8 @@ class AgentScanner extends EventEmitter {
     this.auditCounters = { pass: 0, revise: 0, total: 0 };
     this.recentHandoffs = [];
     this.recentInteractions = [];
+    this.processedFiles = new Map(); // filePath -> { mtime, passCount, reviseCount }
+    this.isInitialScan = true;
 
     // Os 10 agentes oficiais com metadados de RPG e sala temática
     this.agentDefinitions = [
@@ -206,13 +208,17 @@ class AgentScanner extends EventEmitter {
             latestActivityTime = stat.mtimeMs;
           }
 
-          // Se for markdown ou json recente, analisa o conteúdo
+          // Se for markdown ou json recente, analisa o conteúdo para vereditos via delta
           if (file.endsWith('.md') || file.endsWith('.json') || file.endsWith('.jsonl')) {
-            const content = fs.readFileSync(filePath, 'utf8');
-            this.parseContentForVerdicts(content);
+            this.processFileVerdicts(filePath, stat);
           }
         } catch (e) {}
       });
+
+      // Primeiro ciclo finalizado: desativa flag de boot para permitir emissão de deltas reais
+      if (this.isInitialScan) {
+        this.isInitialScan = false;
+      }
 
       // Se houve atividade recente nos últimos 30 segundos, marca software-engineer e orchestrator
       const isRecentlyActive = (Date.now() - latestActivityTime) < 30000;
@@ -247,27 +253,58 @@ class AgentScanner extends EventEmitter {
   }
 
   /**
-   * Analisa texto em busca de vereditos PASS ou REVISE
+   * Processa um arquivo para contagem e detecção de deltas em vereditos
    */
-  parseContentForVerdicts(content) {
-    if (!content) return;
+  processFileVerdicts(filePath, stat) {
+    const cached = this.processedFiles.get(filePath);
 
-    const passRegex = /\[\s*(?:🟢\s*)?PASS\s*\]/gi;
-    const reviseRegex = /\[\s*(?:🔴\s*)?REVISE\s*\]/gi;
-
-    let passMatch = passRegex.exec(content);
-    if (passMatch) {
-      this.auditCounters.pass++;
-      this.auditCounters.total++;
-      this.emit('audit', { type: 'PASS', timestamp: Date.now() });
+    // Se o arquivo não foi alterado desde o último scan, ignora para evitar releituras desnecessárias
+    if (cached && cached.mtime === stat.mtimeMs) {
+      return;
     }
 
-    let reviseMatch = reviseRegex.exec(content);
-    if (reviseMatch) {
-      this.auditCounters.revise++;
-      this.auditCounters.total++;
-      this.emit('audit', { type: 'REVISE', timestamp: Date.now() });
-    }
+    try {
+      const content = fs.readFileSync(filePath, 'utf8');
+      const passMatches = (content.match(/\[\s*(?:🟢\s*)?PASS\s*\]/gi) || []).length;
+      const reviseMatches = (content.match(/\[\s*(?:🔴\s*)?REVISE\s*\]/gi) || []).length;
+
+      if (this.isInitialScan) {
+        // Carga inicial: apenas acumula contadores sem emitir eventos
+        this.auditCounters.pass += passMatches;
+        this.auditCounters.revise += reviseMatches;
+        this.auditCounters.total = this.auditCounters.pass + this.auditCounters.revise;
+        this.processedFiles.set(filePath, {
+          mtime: stat.mtimeMs,
+          passCount: passMatches,
+          reviseCount: reviseMatches
+        });
+      } else {
+        // Scans subsequentes: emite eventos somente se houver novos vereditos reais
+        const oldPass = cached ? cached.passCount : 0;
+        const oldRevise = cached ? cached.reviseCount : 0;
+
+        const deltaPass = passMatches - oldPass;
+        const deltaRevise = reviseMatches - oldRevise;
+
+        if (deltaPass > 0) {
+          this.auditCounters.pass += deltaPass;
+          this.auditCounters.total += deltaPass;
+          this.emit('audit', { type: 'PASS', count: deltaPass, timestamp: Date.now() });
+        }
+
+        if (deltaRevise > 0) {
+          this.auditCounters.revise += deltaRevise;
+          this.auditCounters.total += deltaRevise;
+          this.emit('audit', { type: 'REVISE', count: deltaRevise, timestamp: Date.now() });
+        }
+
+        this.processedFiles.set(filePath, {
+          mtime: stat.mtimeMs,
+          passCount: passMatches,
+          reviseCount: reviseMatches
+        });
+      }
+    } catch (e) {}
   }
 
   /**
