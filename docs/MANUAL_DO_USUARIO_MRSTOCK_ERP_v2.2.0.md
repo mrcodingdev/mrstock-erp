@@ -48,12 +48,14 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 
 ## SUMÁRIO DAS 24 TELAS HOMOLOGADAS (ROTEIRO DE TESTES QTS)
 
+> ℹ️ **Nota de Organização Editorial:** As telas estão identificadas e numeradas conforme o Roteiro de Testes QTS oficial (1 a 24), porém foram agrupadas neste manual por afinidade temática para proporcionar uma leitura fluida e coerente (ex: a Tela 24 aparece no Capítulo 1 por tratar da navegação global; as Telas 22 e 23 figuram nos capítulos finais por tratarem de administração e suporte operacional).
+
 | Código | Tela / Módulo | Rota / Arquivo Físico | Perfil de Acesso |
 | :---: | :--- | :--- | :--- |
 | **Tela 01** | Autenticação & Login de Usuários | `/login.php` | Todos (Administrador e Operador de Caixa) |
 | **Tela 02** | Encerramento Seguro de Sessão (Logout) | `/logout.php` | Todos os operadores autenticados |
 | **Tela 24** | Topbar & Sidebar Retrátil (Navegação Ergonômica) | `inc/header.php` | Todos (Itens condicionados ao perfil RBAC) |
-| **Tela 03** | Dashboard Executivo & Venda Rápida | `/dashboard.php` | Administrador (Acesso pleno) | Caixa (Atalhos operacionais) |
+| **Tela 03** | Dashboard Executivo & Venda Rápida | `/dashboard.php` | Administrador |
 | **Tela 04** | Ponto de Venda (PDV Ágil de Balcão) | `/vendas/pdv.php` | Operador de Caixa e Administrador |
 | **Tela 05** | Histórico de Vendas & Estorno Gerencial | `/vendas/historico.php` | Administrador (Estorno pleno) | Caixa (Consulta) |
 | **Tela 06** | Comprovante de Venda / Cupom Térmico 80mm | `/vendas/cupom.php` | Administrador e Operador de Caixa |
@@ -164,7 +166,7 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 
 📋 **RESUMO RÁPIDO — Dashboard Executivo & Venda Rápida**
 - **Para que serve:** Centraliza os 4 KPIs vitais do negócio, monitoramento de produtos vencendo em 30 dias (PEPS/FIFO), gráficos e checkout expresso.
-- **Quem pode acessar:** Administrador (visão total de lucro) e Caixa (visão restrita sem custos).
+- **Quem pode acessar:** Administrador (acesso pleno a lucratividade, custos e alertas de validade).
 - **Onde encontrar:** Menu Lateral > Dashboard (/dashboard.php).
 
 #### Passo a Passo Operacional
@@ -177,8 +179,8 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 > ⚠️ **Ponto de Atenção:** O Lucro Bruto Real no Dashboard calcula a margem sobre o custo de compra exato do lote físico consumido no atendimento.
 
 #### ❌ Erros Comuns e Soluções (Casos de Teste QTS)
-> ❌ **Erro:** Operador de caixa tenta acessar /dashboard.php e é redirecionado para /vendas/pdv.php (CT102 / UC001)  
-> 💡 **Solução:** Comportamento previsto no RBAC: caixas não possuem privilégios de visualização de margens financeiras e faturamento global.
+> ❌ **Erro:** Tentativa de acesso direto ao Dashboard por operador com perfil Caixa  
+> 💡 **Solução:** Comportamento previsto no RBAC: caixas não possuem privilégios de visualização de margens financeiras e faturamento global, sendo redirecionados compulsoriamente para o PDV (/vendas/pdv.php).
 
 > ❌ **Erro:** Card de Venda Rápida acusa 'Estoque insuficiente para a quantidade solicitada'  
 > 💡 **Solução:** O produto está com saldo zerado ou abaixo da quantidade informada. Efetue entrada de mercadorias via Compras.
@@ -320,7 +322,7 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 > ⚠️ **Ponto de Atenção:** O sistema utiliza soft-delete (marcação como Inativo): produtos já vendidos não podem ser excluídos fisicamente para preservar a integridade contábil.
 
 #### ❌ Erros Comuns e Soluções (Casos de Teste QTS)
-> ❌ **Erro:** Tentativa de excluir produto com histórico de vendas no caixa (CT103 / UC006)  
+> ❌ **Erro:** Tentativa de excluir produto com histórico de vendas no caixa (CT201 / UC008)  
 > 💡 **Solução:** O sistema bloqueia a remoção física e altera o status para 'Inativo', mantendo o histórico de vendas passado 100% íntegro.
 
 > ❌ **Erro:** Código de barras duplicado: 'EAN-13 já cadastrado para outro produto'  
@@ -719,21 +721,26 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 
 ## TABELA OFICIAL DE ATALHOS DE TECLADO DO PDV
 
-| Tecla / Atalho | Função Operacional | Comportamento no Sistema (Homologado QTS) |
+| Tecla / Atalho | Função Operacional | Comportamento no Sistema (Homologado QTS & PDV) |
 | :---: | :--- | :--- |
 | **`F1`** | Ajuda de Teclado | Abre pop-up na tela com o resumo de todos os comandos rápidos do PDV. |
 | **`F2`** | Foco no Leitor / Busca | Posiciona o cursor no campo de código de barras ou busca de itens. |
 | **`F4`** | Finalizar Venda | Abre a janela de fechamento financeiro, cálculo de troco e formas de pagamento. |
-| **`F7`** | Conceder Desconto | Abre campo para aplicar desconto em % ou R$ (sujeito à trava de margem). |
+| **`F7 *`** | Focar Campo de Desconto | Move o cursor diretamente para o campo de desconto (sujeito à trava de margem). |
+| **`F8 *`** | Alternar Forma de Pagamento | Alterna ciclicamente entre Dinheiro, Pix, Cartão de Débito e Cartão de Crédito. |
 | **`F9`** | Cancelar / Limpar Carrinho | Limpa todos os itens do cupom aberto mediante confirmação rápida. |
 | **`Esc`** | Fechar Janelas / Voltar | Fecha qualquer modal ativo e retorna o foco à bipagem de compras. |
 | **`Ctrl + P`** | Imprimir Cupom | Dispara o comando de impressão do cupom térmico ou DANFE NFC-e. |
+
+*Os atalhos F7 e F8 foram confirmados por inspeção direta do código-fonte do PDV (vendas/pdv.php, linhas 1028–1048), integrados ativamente à rotina de balcão.
 
 ---
 
 ## FECHAMENTO DE CAIXA CEGO E CONCILIAÇÃO DE GAVETA
 
 O operador de caixa efetua a contagem física de todo o dinheiro, comprovantes de cartão e comprovantes de Pix presentes na gaveta sem visualizar o saldo esperado pelo sistema. Em seguida, digita os valores contados. O sistema confronta as informações com os registros de vendas da sessão e aponta eventuais sobras ou quebras na tela do Administrador, garantindo lisura absoluta e prevenindo apropriações indébitas.
+
+> ℹ️ **Nota de Rastreabilidade QTS & Roadmap:** Este procedimento descreve uma rotina operacional/manual de conferência física de gaveta da Papelaria Real. Não constitui uma tela de software isolada no Roteiro de Testes QTS da versão 2.2.0, estando o módulo automatizado de gestão de turnos, suprimentos e sangrias posicionado como evolução arquitetural no Roadmap da Versão 3.0.
 
 ---
 
@@ -787,5 +794,5 @@ O Administrador acessa o menu Configurações > Gestão de Usuários (/configura
 O presente Manual do Usuário (Versão 2.2.0) consolida as 24 telas homologadas no Roteiro de Testes de Software (QTS), atestando a plena prontidão do sistema para implantação na **Papelaria Real Ltda** e avaliação pela banca examinadora da **ETEC Fernando Prestes**.
 
 **Equipe Técnica Mr. Coding — ETEC Fernando Prestes**  
-Douglas Moraes Braz • Cesar Augusto • Eduardo Sugahara • Enzo Soares • Nikolas Pires  
+Douglas Moraes Braz • Cesar Augusto da Silva Junior • Eduardo Sugahara Neto • Enzo de Oliveira Soares • Nikolas Pires Brandão  
 *Orientadores: Prof. Luiz Flávio & Prof. Vinicius*  
