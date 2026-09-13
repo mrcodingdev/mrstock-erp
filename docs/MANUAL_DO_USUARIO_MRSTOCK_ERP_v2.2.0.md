@@ -152,7 +152,7 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 > ⚠️ **Ponto de Atenção:** A barra superior exibe estritamente o título limpo da página atual (ex: Ponto de Venda ou Histórico de Vendas), sem poluição visual.
 
 #### ❌ Erros Comuns e Soluções (Casos de Teste QTS)
-> ❌ **Erro:** Operador Caixa não localiza o menu de Configurações na sidebar (CN003 / UC020)  
+> ❌ **Erro:** Operador Caixa não localiza o menu de Configurações na sidebar  
 > 💡 **Solução:** Comportamento nativo de segurança: usuários Caixa visualizam apenas módulos de balcão (PDV, Catálogo e Ajuda).
 
 [REFERÊNCIA DE PRINT: `24_topbar_sidebar.png`]
@@ -212,7 +212,7 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 > ⚠️ **Ponto de Atenção:** Trava de Margem Negativa: O sistema impede concessão de descontos que rebaixem o preço de venda abaixo do custo do lote.
 
 #### ❌ Erros Comuns e Soluções (Casos de Teste QTS)
-> ❌ **Erro:** Pop-up ao teclar F4: 'É necessário ao menos 1 produto no carrinho para finalizar' (CT104 / UC004)  
+> ❌ **Erro:** Pop-up ao teclar F4: 'É necessário ao menos 1 produto no carrinho para finalizar' (CT201 / UC004)  
 > 💡 **Solução:** Bipe ao menos uma mercadoria válida antes de disparar o fechamento da compra.
 
 > ❌ **Erro:** Trava de desconto: 'Operação não permitida: Preço de venda abaixo do custo do lote' (UC004)  
@@ -732,7 +732,7 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 | **`Esc`** | Fechar Janelas / Voltar | Fecha qualquer modal ativo e retorna o foco à bipagem de compras. |
 | **`Ctrl + P`** | Imprimir Cupom | Dispara o comando de impressão do cupom térmico ou DANFE NFC-e. |
 
-*Os atalhos F7 e F8 foram confirmados por inspeção direta do código-fonte do PDV (vendas/pdv.php, linhas 1028–1048), integrados ativamente à rotina de balcão.
+*Os atalhos F7 (focar campo de desconto) e F8 (alternar forma de pagamento) foram confirmados por inspeção direta do código-fonte do PDV em vendas/pdv.php: linhas 1028–1047 (event listener global de teclado) e linhas 334–339 (interface do modal de atalhos do caixa).
 
 ---
 
