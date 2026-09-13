@@ -14,65 +14,64 @@
 
 ### FICHA TÉCNICA E CRÉDITOS DO PROJETO
 
-- **Sistema:** MrStock ERP — Versão 2.2.0 (Build Homologada 2026)
+- **Sistema:** MrStock ERP — Versão 2.2.0 (SalesOps & QTS Edition — 100% Homologado)
 - **Cliente Homologado:** Papelaria Real Ltda (Rua XV de Novembro, 250 - Centro, Sorocaba/SP)
-- **Instituição:** Escola Técnica Estadual Fernando Prestes (ETEC Fernando Prestes)
-- **Órgão Mantenedor:** Centro Paula Souza (CPS) / Governo do Estado de São Paulo
-- **Eixo Tecnológico:** Informação e Comunicação
-- **Orientador Acadêmico Oficial:** Prof. Vinicius
+- **Instituição de Ensino:** Escola Técnica Estadual Fernando Prestes (ETEC Fernando Prestes)
+- **Mantenedora:** Centro Estadual de Educação Tecnológica Paula Souza (CPS) / Governo do Estado de São Paulo
+- **Componente Curricular:** Trabalho de Conclusão de Curso (TCC) & Qualidade e Teste de Software (QTS) — Ano 2026
+- **Orientadores Oficiais:** Prof. Luiz Flávio & Prof. Vinicius
 
-#### Equipe de Engenharia e Desenvolvimento (Alunos):
-1. **Douglas Moraes:** Líder Técnico, Direção de Arquitetura de Software e Engenharia de Soluções.
-2. **Nikolas:** Modelagem de Banco de Dados Relacional, Diagrama DER e Otimização SQL.
-3. **Cesar:** Engenharia de Requisitos, Interface com o Cliente e Validação Comercial.
-4. **Enzo:** Redação Técnica, Compilação Documental e Adequação às Normas ABNT/CPS.
-5. **Sugahara:** Apresentador Oficial do Sistema e Demonstração de Navegação na Banca.
+#### Equipe Mr. Coding (Autores & Desenvolvedores):
+1. **Douglas Moraes Braz:** Líder Técnico, Arquiteto de Software e Engenheiro Full-Stack.
+2. **Nikolas Pires Brandão:** Modelagem de Banco de Dados Relacional, Diagrama DER e DBA MySQL.
+3. **Cesar Augusto da Silva Junior:** Engenharia de Requisitos, Interface com o Cliente e Validação Comercial.
+4. **Enzo de Oliveira Soares:** Redação Técnica, Documentação Acadêmica e Normas ABNT/CPS.
+5. **Eduardo Sugahara Neto:** Navegação Operacional, Apresentação e Demonstração Prática na Banca.
 
 ---
 
 ## SUMÁRIO EXECUTIVO
 
 - [Termo de Responsabilidade e Sigilo Operacional](#termo-de-responsabilidade-e-sigilo-operacional)
-- [Capítulo 1 — Primeiros Passos e Acesso ao Sistema](#capítulo-1--primeiros-passos-e-acesso-ao-sistema)
-  - [1.1 Requisitos Mínimos de Funcionamento](#11-requisitos-mínimos-de-funcionamento)
-  - [1.2 Procedimento de Login no Sistema](#12-procedimento-de-login-no-sistema)
-  - [1.3 Recuperação de Senha de Acesso](#13-recuperação-de-senha-de-acesso)
-  - [1.4 Boas Práticas de Segurança e Encerramento de Sessão](#14-boas-práticas-de-segurança-e-encerramento-de-sessão)
-- [Capítulo 2 — Visão Geral e Navegação do Dashboard](#capítulo-2--visão-geral-e-navegação-do-dashboard)
-  - [2.1 Indicadores Chave de Desempenho (KPIs do Dia)](#21-indicadores-chave-de-desempenho-kpis-do-dia)
-  - [2.2 Painel de Alertas de Validade PEPS/FIFO (Janela de 30 Dias)](#22-painel-de-alertas-de-validade-pepsfifo-janela-de-30-dias)
-  - [2.3 Gráfico de Tendência de Vendas e Acesso Rápido](#23-gráfico-de-tendência-de-vendas-e-acesso-rápido)
-- [Capítulo 3 — Cadastros Fundamentais da Papelaria](#capítulo-3--cadastros-fundamentais-da-papelaria)
-  - [3.1 Gestão do Catálogo de Produtos](#31-gestão-do-catálogo-de-produtos)
-  - [3.2 Gestão de Lotes Físicos e Controle de Validades](#32-gestão-de-lotes-físicos-e-controle-de-validades)
-  - [3.3 Cadastro e Gestão de Clientes](#33-cadastro-e-gestão-de-clientes)
-  - [3.4 Cadastro e Gestão de Fornecedores Homologados](#34-cadastro-e-gestão-de-fornecedores-homologados)
-- [Capítulo 4 — Operação de Frente de Caixa (PDV Ágil) — O Guia do Operador](#capítulo-4--operação-de-frente-de-caixa-pdv-ágil--o-guia-do-operador)
-  - [4.1 Fluxo Operacional Completo de Venda](#41-fluxo-operacional-completo-de-venda)
-  - [4.2 Tabela Oficial de Atalhos de Teclado do PDV](#42-tabela-oficial-de-atalhos-de-teclado-do-pdv)
-  - [4.3 Formas de Pagamento e Cálculo de Troco](#43-formas-de-pagamento-e-cálculo-de-troco)
-  - [4.4 Emissão da Simulação Acadêmica de Cupom Fiscal NFC-e](#44-emissão-da-simulação-acadêmica-de-cupom-fiscal-nfc-e)
-  - [4.5 Trava de Segurança Contra Margem Negativa (Prejuízo)](#45-trava-de-segurança-contra-margem-negativa-prejuízo)
-- [Capítulo 5 — Operações Pós-Venda, Reimpressão e Estorno](#capítulo-5--operações-pós-venda-reimpressão-e-estorno)
-  - [5.1 Consulta ao Histórico de Vendas Realizadas](#51-consulta-ao-histórico-de-vendas-realizadas)
-  - [5.2 Reimpressão de Cupom Fiscal](#52-reimpressão-de-cupom-fiscal)
-  - [5.3 Procedimento Gerencial de Estorno e Devolução ao Estoque](#53-procedimento-gerencial-de-estorno-e-devolução-ao-estoque)
-- [Capítulo 6 — Entrada de Mercadorias e Gestão de Compras](#capítulo-6--entrada-de-mercadorias-e-gestão-de-compras)
-  - [6.1 Passo a Passo para Lançamento de Nota de Compra](#61-passo-a-passo-para-lançamento-de-nota-de-compra)
-  - [6.2 Associação Obrigatória de Lote e Data de Validade](#62-associação-obrigatória-de-lote-e-data-de-validade)
-- [Capítulo 7 — Relatórios Estratégicos e Análise Financeira (Guia do Gerente)](#capítulo-7--relatórios-estratégicos-e-análise-financeira-guia-do-gerente)
-  - [7.1 Análise de Giro por Curva ABC (Princípio de Pareto 80/20)](#71-análise-de-giro-por-curva-abc-princípio-de-pareto-8020)
-  - [7.2 Demonstrativo do Resultado do Exercício (DRE Gerencial)](#72-demonstrativo-do-resultado-do-exercício-dre-gerencial)
-  - [7.3 Relatório de Giro de Estoque e Produtos Parados](#73-relatório-de-giro-de-estoque-e-produtos-parados)
-  - [7.4 Trilha de Auditoria Forense e Logs do Sistema](#74-trilha-de-auditoria-forense-e-logs-do-sistema)
-- [Capítulo 8 — Fechamento de Caixa Cego e Prestação de Contas](#capítulo-8--fechamento-de-caixa-cego-e-prestação-de-contas)
-  - [8.1 O Conceito e a Importância da Conferência Cega](#81-o-conceito-e-a-importância-da-conferência-cega)
-  - [8.2 Roteiro Prático de Fechamento de Turno](#82-roteiro-prático-de-fechamento-de-turno)
-  - [8.3 Tratamento de Divergências (Sobras e Faltas de Caixa)](#83-tratamento-de-divergências-sobras-e-faltas-de-caixa)
-- [Capítulo 9 — Solução de Dúvidas, FAQ Operacional e Suporte Técnico](#capítulo-9--solução-de-dúvidas-faq-operacional-e-suporte-técnico)
-  - [9.1 As 5 Perguntas Mais Frequentes da Operação](#91-as-5-perguntas-mais-frequentes-da-operação)
-  - [9.2 Protocolo de Contingência Offline (Modo Local XAMPP)](#92-protocolo-de-contingência-offline-modo-local-xampp)
-  - [9.3 Canais de Atendimento e SLA de Suporte](#93-canais-de-atendimento-e-sla-de-suporte)
+- [Tutorial "Comece Aqui" (Guia Rápido de 10 Minutos)](#tutorial-comece-aqui-guia-rápido-de-10-minutos)
+- [Capítulo 1 — Acesso, Navegação Global e Segurança](#capítulo-1--acesso-navegação-global-e-segurança)
+  - [1.1 Tela 01: Autenticação & Login (/login.php)](#11-tela-01-autenticação--login-loginphp)
+  - [1.2 Tela 02: Encerramento Seguro de Sessão (/logout.php)](#12-tela-02-encerramento-seguro-de-sessão-logoutphp)
+  - [1.3 Tela 24: Topbar & Sidebar Retrátil (inc/header.php)](#13-tela-24-topbar--sidebar-retrátil-incheaderphp)
+- [Capítulo 2 — Gestão Estratégica e Dashboard Executivo](#capítulo-2--gestão-estratégica-e-dashboard-executivo)
+  - [2.1 Tela 03: Dashboard Executivo & Venda Rápida (/dashboard.php)](#21-tela-03-dashboard-executivo--venda-rápida-dashboardphp)
+- [Capítulo 3 — Frente de Caixa, Vendas e Operações Fiscais](#capítulo-3--frente-de-caixa-vendas-e-operações-fiscais)
+  - [3.1 Tela 04: Ponto de Venda (PDV Ágil) (/vendas/pdv.php)](#31-tela-04-ponto-de-venda-pdv-ágil-vendaspdvphp)
+  - [3.2 Tabela Oficial de Atalhos de Teclado do PDV](#32-tabela-oficial-de-atalhos-de-teclado-do-pdv)
+  - [3.3 Tela 05: Histórico de Vendas (/vendas/historico.php)](#33-tela-05-histórico-de-vendas-vendashistoricophp)
+  - [3.4 Tela 06: Cupom Térmico Não-Fiscal 80mm/58mm (/vendas/cupom.php)](#34-tela-06-cupom-térmico-não-fiscal-80mm58mm-vendascupomphp)
+  - [3.5 Tela 07: Painel Fiscal e Simulação Acadêmica de NFC-e (/vendas/nfce.php)](#35-tela-07-painel-fiscal-e-simulação-acadêmica-de-nfc-e-vendasnfcephp)
+- [Capítulo 4 — Gestão de Estoque, Produtos e Catalogação](#capítulo-4--gestão-de-estoque-produtos-e-catalogação)
+  - [4.1 Tela 08: Catálogo & Gestão de Produtos (/produtos/index.php)](#41-tela-08-catálogo--gestão-de-produtos-produtosindexphp)
+  - [4.2 Tela 09: Lotes Físicos & Controle de Validades PEPS/FIFO (/lotes/index.php)](#42-tela-09-lotes-físicos--controle-de-validades-pepsfifo-lotesindexphp)
+  - [4.3 Tela 10: Gerador & Impressão de Etiquetas SVG (/produtos/etiquetas.php)](#43-tela-10-gerador--impressão-de-etiquetas-svg-produtosetiquetasphp)
+  - [4.4 Tela 11: Categorias & as 10 Famílias Funcionais (/categorias/index.php)](#44-tela-11-categorias--as-10-famílias-funcionais-categoriasindexphp)
+  - [4.5 Tela 12: Movimentações de Estoque & Kardex (/produtos/movimentacoes.php)](#45-tela-12-movimentações-de-estoque--kardex-produtosmovimentacoesphp)
+- [Capítulo 5 — Relacionamento Comercial: Clientes e Fornecedores](#capítulo-5--relacionamento-comercial-clientes-e-fornecedores)
+  - [5.1 Tela 13: Gestão de Clientes & Busca ViaCEP (/clientes/index.php)](#51-tela-13-gestão-de-clientes--busca-viacep-clientesindexphp)
+  - [5.2 Tela 14: Gestão de Fornecedores & WhatsApp Direto (/fornecedores/index.php)](#52-tela-14-gestão-de-fornecedores--whatsapp-direto-fornecedoresindexphp)
+- [Capítulo 6 — Abastecimento e Gestão de Compras](#capítulo-6--abastecimento-e-gestão-de-compras)
+  - [6.1 Tela 15: Ordens de Compra & Histórico (/compras/index.php)](#61-tela-15-ordens-de-compra--histórico-comprasindexphp)
+  - [6.2 Tela 16: Nova Ordem de Compra & Entrada de Mercadorias (/compras/nova.php)](#62-tela-16-nova-ordem-de-compra--entrada-de-mercadorias-comprasnovaphp)
+  - [6.3 Tela 17: Conferência de Compra / Espelho do Pedido (/compras/visualizar.php)](#63-tela-17-conferência-de-compra--espelho-do-pedido-comprasvisualizarphp)
+- [Capítulo 7 — Centro de Inteligência, BI e Relatórios Estratégicos](#capítulo-7--centro-de-inteligência-bi-e-relatórios-estratégicos)
+  - [7.1 Tela 18: Central de Relatórios Gerenciais (/relatorios/index.php)](#71-tela-18-central-de-relatórios-gerenciais-relatoriosindexphp)
+  - [7.2 Tela 19: Centro de Inteligência Comercial (BI / Chart.js) (/relatorios/analise.php)](#72-tela-19-centro-de-inteligência-comercial-bi--chartjs-relatoriosanalisephp)
+  - [7.3 Tela 20: Trilha de Auditoria Forense & Logs (/relatorios/logs.php)](#73-tela-20-trilha-de-auditoria-forense--logs-relatorioslogsphp)
+  - [7.4 Tela 21: Exportação de Relatórios para Excel XLSX (/relatorios/excel.php)](#74-tela-21-exportação-de-relatórios-para-excel-xlsx-relatoriosexcelphp)
+- [Capítulo 8 — Administração do Sistema e Governança RBAC](#capítulo-8--administração-do-sistema-e-governança-rbac)
+  - [8.1 Tela 23: Configurações da Empresa & Perfis de Acesso (/configuracoes.php)](#81-tela-23-configurações-da-empresa--perfis-de-acesso-configuracoesphp)
+  - [8.2 Fechamento de Caixa Cego e Conciliação de Gaveta](#82-fechamento-de-caixa-cego-e-conciliação-de-gaveta)
+- [Capítulo 9 — Suporte Operacional, FAQ e Protocolos de Contingência](#capítulo-9--suporte-operacional-faq-e-protocolos-de-contingência)
+  - [9.1 Tela 22: Central de Ajuda & FAQ Interativo (/ajuda.php)](#91-tela-22-central-de-ajuda--faq-interativo-ajudaphp)
+  - [9.2 As 5 Perguntas Mais Frequentes da Operação (FAQ Oficial)](#92-as-5-perguntas-mais-frequentes-da-operação-faq-oficial)
+  - [9.3 Protocolo de Contingência Offline (Modo Local XAMPP)](#93-protocolo-de-contingência-offline-modo-local-xampp)
+  - [9.4 Canais de Atendimento e SLA de Suporte (2 Horas Úteis)](#94-canais-de-atendimento-e-sla-de-suporte-2-horas-úteis)
 - [Glossário de Termos Técnicos e Comerciais](#glossário-de-termos-técnicos-e-comerciais)
 - [Notas para Revisão Acadêmica (Enzo e Nikolas)](#notas-para-revisão-acadêmica-enzo-e-nikolas)
 
@@ -80,436 +79,566 @@
 
 ## TERMO DE RESPONSABILIDADE E SIGILO OPERACIONAL
 
-O **MrStock ERP v2.2.0** é um instrumento de gestão comercial e controle patrimonial da **Papelaria Real Ltda**. Cada operador de caixa e administrador cadastrado recebe uma credencial individual intransferível (composta por e-mail institucional e senha privativa criptografada). 
+O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltda**. Cada operador de caixa e gestor possui credencial privativa intransferível. 
 
-Todas as ações executadas no sistema — incluindo abertura de caixa, registro de itens, cancelamentos, descontos concedidos, estornos e consultas a relatórios — são carimbadas digitalmente na base de dados com identificação unívoca de data, horário, operador e endereço IP. É expressamente proibido o compartilhamento de senhas entre colaboradores. Qualquer divergência de caixa ou operação indevida será de responsabilidade legal e funcional do titular da conta autenticada no momento da ocorrência.
-
----
-
-# CAPÍTULO 1 — PRIMEIROS PASSOS E ACESSO AO SISTEMA
-
-Este capítulo orienta o colaborador sobre como inicializar o MrStock ERP, verificar a compatibilidade de seu computador e realizar a autenticação segura no ambiente de trabalho.
-
-[INSERIR PRINT DE TELA: login-tela-inicial.png]
-
-### 1.1 Requisitos Mínimos de Funcionamento
-O MrStock ERP foi concebido para ser extremamente leve e rápido, dispensando a instalação de softwares pesados na máquina do operador:
-* **Computador:** Desktop ou notebook com processador dual-core (ou superior), 2 GB de memória RAM e resolução de tela mínima de 1024x768 pixels.
-* **Navegador de Internet:** Google Chrome, Microsoft Edge, Mozilla Firefox ou Opera em versões atualizadas com suporte a JavaScript e cookies habilitados.
-* **Periféricos Recomendados no Caixa:** Leitor óptico de código de barras (USB ou Bluetooth) padrão 1D/2D e impressora térmica não-fiscal de cupom (bobinas de 58mm ou 80mm).
-* **Conexão:** Acesso à internet banda larga (mínimo 2 Mbps estável) para operação em nuvem, ou rede local para contingência offline.
-
-### 1.2 Procedimento de Login no Sistema
-Para entrar no sistema, siga rigorosamente os passos abaixo:
-1. Abra o navegador de internet e digite o endereço oficial na nuvem: `https://mrstock.com.br/login.php` (ou o endereço local de contingência `http://localhost/MrStock/login.php`).
-2. No campo **E-mail**, digite seu endereço de e-mail corporativo cadastrado (exemplo: `operador@papelariareal.com.br`).
-3. No campo **Senha**, digite sua senha pessoal secreta.
-4. Clique no botão sólido verde **Acessar Sistema**.
-5. Caso as credenciais estejam corretas, o sistema inicializará a sessão segura e redirecionará automaticamente:
-   - Administradores: para o **Dashboard Gerencial** (`dashboard.php`).
-   - Caixas/Operadores: diretamente para a **Frente de Caixa (PDV)** (`vendas/pdv.php`).
-
-> 💡 **Dica:** Você pode salvar a página de login na barra de favoritos do navegador (pressione `Ctrl + D`) para agilizar a abertura do sistema no início do seu turno de trabalho.
-
-> ⚠️ **Atenção:** Nunca compartilhe sua senha com outro funcionário, mesmo que seja por poucos minutos. O sistema registra cada venda e estorno no seu nome na trilha de auditoria. Caso precise se ausentar do caixa, encerre sua sessão clicando no botão **Sair** no menu superior direito.
-
-> ❌ **Erro comum:** O sistema exibe a mensagem *"Credenciais inválidas ou usuário inativo"*.  
-> **Solução:** Verifique se a tecla `Caps Lock` (Fixa) do teclado está acionada por engano. Se o erro persistir, solicite ao Administrador que verifique se seu cadastro está ativo no menu de configurações.
-
-### 1.3 Recuperação de Senha de Acesso
-Caso tenha esquecido sua senha:
-1. Na tela de login, clique no link **Esqueceu sua senha?**.
-2. Digite seu e-mail corporativo cadastrado e clique em **Solicitar Redefinição**.
-3. Uma notificação será enviada ao administrador do sistema para que uma nova senha temporária seja gerada de forma segura com criptografia BCrypt.
-
-### 1.4 Boas Práticas de Segurança e Encerramento de Sessão
-* **Bloqueio Automático:** Por diretriz de segurança bancária e comercial, a sessão será encerrada automaticamente após período prolongado de inatividade.
-* **Desconexão Segura:** Ao encerrar o expediente ou trocar de operador no caixa, clique sempre no seu nome no canto superior direito e selecione a opção **Sair do Sistema** (`logout.php`).
+Todas as operações efetuadas — incluindo autenticação, abertura de venda, aplicação de desconto, cancelamento de itens, estorno de cupom e exportação de relatórios — são registradas com carimbo de data, horário, operador autenticado e IP de rede na tabela `logs_auditoria`. É terminantemente vedado o empréstimo de senhas. Divergências financeiras e operacionais serão imputadas diretamente ao operador cuja sessão estiver ativa no instante do evento.
 
 ---
 
-# CAPÍTULO 2 — VISÃO GERAL E NAVEGAÇÃO DO DASHBOARD (`dashboard.php`)
+## TUTORIAL "COMECE AQUI" (GUIA RÁPIDO DE 10 MINUTOS)
 
-O Dashboard é o painel de instrumentos executivo da Papelaria Real. Ele consolida em tempo real o ritmo de vendas da loja, a saúde financeira diária e os alertas preventivos de estoque.
+Se este é o seu primeiro dia de trabalho na Papelaria Real, execute este roteiro prático para dominar a rotina de vendas em 10 minutos:
 
-[INSERIR PRINT DE TELA: dashboard-visao-geral.png]
+1. **Acesse o Sistema:** Abra o navegador Google Chrome e digite `https://mrstock.com.br/login.php`. Digite seu usuário (`caixa` ou seu e-mail corporativo) e senha pessoal.
+2. **Entenda a Sua Tela Inicial:** Se você for operador de caixa, o sistema abrirá diretamente na **Frente de Caixa (PDV)** (`/vendas/pdv.php`). Se for administrador, abrirá no **Dashboard** (`/dashboard.php`).
+3. **Simule uma Venda no Balcão:**
+   - No PDV, pressione a tecla **`F2`** do teclado. O cursor irá para o campo de código de barras.
+   - Digite o código `7891027111223` (ou use o leitor de código de barras em um caderno) e pressione **`Enter`**.
+   - O sistema emitirá um sinal sonoro de confirmação e inserirá o item no cupom.
+4. **Finalize a Venda:**
+   - Pressione **`F4`** para abrir o modal de pagamento.
+   - Digite o valor em dinheiro entregue pelo cliente e confira o troco calculado na tela.
+   - Pressione **`Enter`** para confirmar e **`Ctrl + P`** para imprimir a Simulação de Cupom Fiscal NFC-e.
+5. **Consulte a Venda Realizada:**
+   - Acesse o **Histórico de Vendas** em `/vendas/historico.php`. Sua venda recém-concluída estará listada no topo com status "Concluída".
+---
 
-### 2.1 Indicadores Chave de Desempenho (KPIs do Dia)
-No topo do painel, quatro cartões estratégicos sintetizam o dia da loja:
-1. **Faturamento do Dia (R$):** Exibe a soma de todas as vendas concluídas hoje na loja física. Permite à gerência saber instantaneamente se a meta diária foi atingida.
-2. **Vendas Realizadas:** Quantidade absoluta de clientes atendidos e compras finalizadas no caixa no dia corrente.
-3. **Ticket Médio (R$):** Valor médio gasto por cliente em cada compra (`Faturamento Total ÷ Número de Vendas`). Um ticket médio em elevação sinaliza que a equipe de balcão está obtendo sucesso em vendas agregadas (ex: oferecer borracha e apontador a quem compra lápis).
-4. **Estoque Crítico (Itens em Alerta):** Número de produtos cujo saldo físico atingiu ou caiu abaixo da margem de segurança configurada. Requer reposição imediata junto aos fornecedores homologados.
+# CAPÍTULO 1 — ACESSO, NAVEGAÇÃO GLOBAL E SEGURANÇA
 
-### 2.2 Painel de Alertas de Validade PEPS/FIFO (Janela de 30 Dias)
-A Papelaria Real comercializa dezenas de itens que possuem shelf-life restrito e degradam com o tempo (tintas líquidas, colas bastão, colas brancas, canetas em gel e fitas adesivas). O MrStock ERP varre permanentemente todos os lotes cadastrados e apresenta um painel de alerta cromático:
+### 1.1 Tela 01: Autenticação & Login (`/login.php`)
 
-| Indicador Visual | Status do Lote | Prazo de Validade | Ação Operacional Recomendada |
-| :---: | :---: | :---: | :--- |
-| 🟢 **Verde** | Regular | Superior a 30 dias | Manter no fluxo normal de vendas das prateleiras. |
-| 🟡 **Amarelo** | Atenção Crítica | Vencimento em até 30 dias | **Ação Imediata:** Posicionar na gôndola frontal ou criar queima de estoque/promoção relâmpago. |
-| 🔴 **Vermelho** | Vencido / Expirado | Prazo de validade esgotado | **Bloqueio de Venda:** Recolher o produto físico da área de vendas e acionar o fornecedor para troca ou descarte. |
+📋 RESUMO RÁPIDO — Tela de Login
+- **Para que serve:** Permite aos operadores autenticarem-se com segurança no sistema via hash BCrypt, aplicando isolamento de perfil RBAC e proteção contra ataques CSRF e Session Fixation.
+- **Quem pode acessar:** Todos os usuários (Administrador e Operador de Caixa).
+- **Onde encontrar:** Página Inicial > Tela de Login (`/login.php`).
 
-> ⚠️ **Atenção:** Vender produtos com prazo de validade vencido é infração grave prevista no Código de Defesa do Consumidor (art. 18, § 6º, I). Consulte este painel todas as manhãs antes da abertura das portas.
+[INSERIR PRINT DE TELA: 01_login_autenticacao.png]
 
-### 2.3 Gráfico de Tendência de Vendas e Acesso Rápido
-- **Gráfico de Evolução (Últimos 7 Dias):** Mostra a curva de faturamento diário da semana, facilitando a visualização dos dias de maior movimento (sextas-feiras e sábados).
-- **Últimas Transações:** Tabela na parte inferior que lista as últimas 5 vendas processadas no balcão, permitindo conferência rápida de valores recebidos pelo operador.
+#### Passo a Passo Operacional
+1. Acesse o endereço oficial no navegador: `https://mrstock.com.br/login.php` (ou `http://localhost/MrStock/login.php` em modo offline).
+2. No campo **Usuário**, digite seu identificador ou e-mail corporativo (ex: `admin` ou `caixa`).
+3. No campo **Senha**, digite sua senha de acesso.
+4. Clique no botão sólido verde **Entrar** (ou pressione `Enter`).
+5. O sistema validará a assinatura criptográfica e redirecionará automaticamente: Administrador para o Dashboard e Caixa diretamente para o PDV.
+
+> 💡 **Dica:** Você pode pressionar `Tab` após digitar o usuário para pular diretamente ao campo de senha sem usar o mouse.
+
+> ⚠️ **Atenção:** Cinco tentativas consecutivas de senha incorreta disparam bloqueio preventivo temporário por proteção contra força bruta.
+
+#### ❌ Erros Comuns e Soluções
+> ❌ **Erro comum:** A tela exibe alerta em vermelho: *"Usuário ou senha incorretos."* (CT202 / UC001).  
+> **Solução:** Certifique-se de que a tecla `Caps Lock` não está ativada. Digite a senha com calma. Se persistir, contate o Administrador para redefinição.
+
+> ❌ **Erro comum:** O formulário não é enviado e os campos ficam com contorno vermelho (CT201 / UC001).  
+> **Solução:** Os campos de usuário e senha são de preenchimento estritamente obrigatório. Preencha ambos antes de clicar em Entrar.
 
 ---
 
-# CAPÍTULO 3 — CADASTROS FUNDAMENTAIS DA PAPELARIA
+### 1.2 Tela 02: Encerramento Seguro de Sessão (`/logout.php`)
 
-Para que o estoque funcione de forma automatizada e o caixa opere com velocidade máxima, os cadastros da loja devem ser mantidos completos e padronizados.
+📋 RESUMO RÁPIDO — Logout do Sistema
+- **Para que serve:** Destrói a sessão ativa em memória, revoga cookies de autenticação e blinda o terminal contra acessos retroativos via botão 'Voltar' do navegador.
+- **Quem pode acessar:** Todos os usuários autenticados.
+- **Onde encontrar:** Topbar > Menu do Usuário no canto superior direito > **Sair** (`/logout.php`).
 
-[INSERIR PRINT DE TELA: produtos-cadastro-formulario.png]
+[INSERIR PRINT DE TELA: 02_logout_encerramento.png]
 
-### 3.1 Gestão do Catálogo de Produtos (`produtos/`)
-O cadastro de produtos reúne os dados comerciais de cada artigo comercializado na loja.
+#### Passo a Passo Operacional
+1. No canto superior direito da tela, clique sobre seu nome/avatar.
+2. No menu suspenso, clique na opção **Sair do Sistema**.
+3. O sistema encerrará os tokens de sessão e redirecionará a página para a tela limpa de login com mensagem de sessão finalizada.
 
-#### Passo a Passo para Cadastrar um Novo Produto:
-1. No menu lateral, clique em **Estoque & Produtos** e selecione **Cadastrar Novo Produto** (`produtos/novo.php`).
-2. Aponte o leitor de código de barras para a embalagem ou digite manualmente o código no campo **Código de Barras (EAN-13)**.
-3. Preencha a **Descrição do Produto** de forma completa e clara (Exemplo correto: `Caderno Espiral Universitário 10 Matérias 200 Fls Tilibra Happy`).
-4. Selecione a **Família Funcional** correspondente no menu suspenso (veja a relação das 10 famílias abaixo).
-5. Defina a **Unidade de Medida** (UN para unidade, CX para caixa, PCT para pacote, RL para rolo).
-6. Informe o **Preço de Venda** praticado no balcão.
-7. Defina o **Estoque Mínimo de Alerta** (quantidade mínima que deve haver na gaveta antes de soar o alerta de reposição).
-8. Indique a **Localização Física** na loja (exemplo: `Corredor 1, Prateleira B`).
-9. Clique no botão sólido verde **Salvar Produto**.
+> 💡 **Dica:** Ao sair, o histórico de formulários em cache é limpo para evitar que outro colaborador veja dados da sua operação.
 
-#### Tabela de Campos Obrigatórios — Cadastro de Produtos:
-| Campo | Tipo / Formato | Obrigatório? | Finalidade no Sistema |
-| :--- | :--- | :---: | :--- |
-| **Código de Barras** | Numérico (EAN-13) | Sim | Identificação rápida no leitor óptico do PDV. |
-| **Nome / Descrição** | Texto (até 150 caracteres) | Sim | Descrição impressa no cupom e visível no caixa. |
-| **Família Funcional** | Seleção (1 das 10 opções) | Sim | Agrupamento correto para Curva ABC e filtros. |
-| **Unidade de Medida** | Sigla (UN, CX, PCT, RL) | Sim | Padronização de estoque e fracionamento. |
-| **Preço de Venda (R$)** | Decimal (ex: 24,90) | Sim | Valor cobrado do consumidor final no PDV. |
-| **Preço de Custo (R$)** | Decimal (ex: 14,50) | Sim | Base para cálculo de lucro (visível apenas ao Administrador). |
-| **Estoque Mínimo** | Inteiro (ex: 5) | Sim | Gatilho para emissão de alertas no Dashboard. |
-| **Localização Física** | Texto livre | Não | Auxilia atendentes novatos a acharem o item na loja. |
+> ⚠️ **Atenção:** Sempre clique em "Sair" ao afastar-se do balcão. Fechar simplesmente a aba do navegador mantém a sessão temporariamente ativa.
 
-#### As 10 Famílias Funcionais da Papelaria Real:
-O catálogo do MrStock ERP adota 10 Famílias Funcionais especializadas:
-1. `Cadernos & Blocos` (cadernos universitários, brochuras, blocos autoadesivos, refis, agendas).
-2. `Canetas & Marcadores` (esferográficas, hidrográficas, marcadores de texto, canetas em gel, permanentes).
-3. `Lápis & Apontadores` (lápis grafite, caixas de lápis de cor, lapiseiras técnicas, grafites, apontadores).
-4. `Borrachas & Correção` (borrachas brancas escolares, ponteiras, fitas corretivas, corretivos líquidos).
-5. `Colas & Fitas Adesivas` (colas brancas escolares, colas bastão, colas de silicone, fitas crepe e transparentes).
-6. `Papéis & Folhas` (resmas sulfite A4/A3, cartolinas, papel cartão, papel vegetal, papel crepom, folhas com pauta).
-7. `Pastas & Organização` (pastas catálogo, pastas sanfonadas, pastas aba elástico, arquivos de mesa).
-8. `Corte & Medição` (tesouras escolares e profissionais, estiletes, réguas plásticas e de aço, transferidores).
-9. `Tintas & Pintura` (tintas guache escolares, tintas acrílicas para artesanato, godês, pincéis chatos e redondos).
-10. `Grampeadores & Fixação` (grampeadores manuais, caixas de grampos 26/6, perfuradores, clipes de papel).
-
-> 💡 **Dica:** Nunca cadastre produtos com nomes genéricos como apenas "Caneta" ou "Caderno". Sempre inclua a marca, modelo e cor (ex: `Caneta Esferográfica BIC Cristal 1.0mm Azul`). Isso evita confusão no balcão e divergências no inventário.
+#### ❌ Erros Comuns e Soluções
+> ❌ **Erro comum:** O operador clica na seta 'Voltar' do navegador após sair e teme que a sessão continue aberta (CT102 / UC002).  
+> **Solução:** O sistema MrStock ERP possui barreira de segurança em `inc/auth.php`. Ao tentar avançar em página protegida sem sessão ativa, o sistema bloqueia o acesso e força o redirecionamento imediato para `/login.php`.
 
 ---
 
-### 3.2 Gestão de Lotes Físicos e Controle de Validades (`lotes/`)
-O módulo de lotes é o pilar que garante a saúde financeira e a conformidade legal da Papelaria Real, aplicando a metodologia **PEPS/FIFO**.
+### 1.3 Tela 24: Topbar & Sidebar Retrátil (`inc/header.php`)
 
-[INSERIR PRINT DE TELA: lotes-listagem-validade.png]
+📋 RESUMO RÁPIDO — Navegação Global
+- **Para que serve:** Estrutura a navegação ergonômica em todo o ERP, oferecendo menu lateral retrátil, breadcrumbs limpos e acesso direto ao perfil do operador.
+- **Quem pode acessar:** Todos os usuários (com itens adaptados dinamicamente ao perfil RBAC).
+- **Onde encontrar:** Presente de forma fixa no topo e na lateral esquerda de todas as telas internas do sistema.
 
-#### Passo a Passo para Cadastrar um Lote Manualmente:
-1. No menu lateral, acesse **Lotes & Validades** (`lotes/index.php`) e clique em **Novo Lote**.
-2. Selecione o produto correspondente.
-3. Digite o **Código do Lote** (conforme impresso na embalagem do fabricante, ex: `LOT-2026-TNB`).
-4. Selecione o **Fornecedor** de onde a mercadoria foi adquirida.
-5. Digite a **Data de Fabricação** e a **Data de Validade** impressas na caixa ou tubo.
-6. Informe a **Quantidade Recebida** e o **Custo Unitário de Compra** deste lote específico.
-7. Clique em **Salvar Lote**.
+[INSERIR PRINT DE TELA: 24_topbar_sidebar.png]
 
-#### Tabela de Campos Obrigatórios — Cadastro de Lotes:
-| Campo | Tipo / Formato | Obrigatório? | Finalidade no Sistema |
-| :--- | :--- | :---: | :--- |
-| **Produto Vinculado** | Seleção de Catálogo | Sim | Associa a remessa física ao item do sistema. |
-| **Número / Código do Lote** | Alfanumérico | Sim | Rastreabilidade do fabricante na embalagem. |
-| **Fornecedor** | Seleção de Parceiro | Sim | Identifica a distribuidora responsável pela remessa. |
-| **Data de Fabricação** | Data (`DD/MM/AAAA`) | Sim | Histórico de shelf-life e tempo de armazenagem. |
-| **Data de Validade** | Data (`DD/MM/AAAA`) | Sim | Critério prioritário de consumo automático no PDV. |
-| **Quantidade Inicial** | Numérico inteiro | Sim | Volume total recebido da distribuidora. |
-| **Custo Unitário (R$)** | Decimal (ex: 8,50) | Sim | Base para o cálculo do Lucro Bruto Real na venda. |
+#### Passo a Passo Operacional
+1. **Recolher o Menu Lateral:** No canto inferior esquerdo da barra lateral, clique no botão **Recolher Menu**. A barra contrairá para o modo ícones, liberando até 20% mais espaço útil na tela para tabelas longas.
+2. **Expandir o Menu Lateral:** Clique em qualquer ícone da barra contraída ou clique na seta de expansão para restaurar os rótulos de texto completos.
+3. **Voltar ao Dashboard:** Clique sobre o logotipo oficial da Papelaria Real no topo da barra lateral para regressar instantaneamente à tela principal.
+4. **Topbar Limpa:** A barra superior exibe exclusivamente o título da tela atual (ex: *Estoque & Produtos* ou *Ponto de Venda (PDV)*), sem poluição visual.
 
-> ⚠️ **Atenção:** Se um mesmo produto tiver lotes com custos diferentes (exemplo: comprou um lote a R$ 10,00 e outro lote a R$ 12,00), **nunca misture em um único lote**. Cadastre cada remessa em seu lote próprio para que o sistema consiga aplicar o custo exato quando o item for vendido.
+> 💡 **Dica:** Em computadores com telas compactas (laptops de 14 polegadas), mantenha a sidebar recolhida para visualizar todas as colunas de relatórios sem necessidade de rolagem horizontal.
+
+#### ❌ Erros Comuns e Soluções
+> ❌ **Erro comum:** O operador com perfil "Caixa" procura o botão de Configurações na sidebar e não o encontra (CN003 / UC020).  
+> **Solução:** O menu do perfil Caixa oculta propositalmente os módulos administrativos e financeiros para segurança patrimonial da loja.
+---
+
+# CAPÍTULO 2 — GESTÃO ESTRATÉGICA E DASHBOARD EXECUTIVO
+
+### 2.1 Tela 03: Dashboard Executivo & Venda Rápida (`/dashboard.php`)
+
+📋 RESUMO RÁPIDO — Dashboard Executivo
+- **Para que serve:** Centraliza os 4 KPIs vitais da Papelaria Real, o painel de alerta de validade em 30 dias (PEPS/FIFO), gráficos de tendência de vendas e o widget de venda expressa.
+- **Quem pode acessar:** Administrador (acesso completo a faturamento e lucro); Operador de Caixa visualiza apenas atalhos operacionais.
+- **Onde encontrar:** Menu Lateral > **Dashboard** (`/dashboard.php`).
+
+[INSERIR PRINT DE TELA: 03_dashboard_executivo.png]
+
+#### Passo a Passo Operacional
+1. Acesse o menu **Dashboard**.
+2. Inspecione os 4 cartões de indicadores no topo:
+   - **Faturamento Hoje (R$):** Total faturado em vendas concluídas no dia.
+   - **Total de Vendas:** Quantidade de clientes atendidos no caixa.
+   - **Lucro Bruto Real (R$):** Lucro apurado com base no custo exato do lote físico vendido.
+   - **Estoque Crítico:** Quantidade de produtos que atingiram a quantidade mínima de alerta.
+3. Inspecione a tabela **Alertas de Vencimento**: itens vencendo em até 30 dias aparecem destacados com badge amarelo; itens vencidos em vermelho.
+4. **Realizar Venda Rápida sem Abrir o PDV Completo:**
+   - No card "Venda Rápida", selecione o produto no menu suspenso.
+   - Informe a quantidade e a forma de pagamento (Dinheiro ou Pix).
+   - Clique em **Lançar Venda**. O estoque é baixado na hora e os indicadores recalculam automaticamente.
+
+> 💡 **Dica:** Clique no botão **Gerenciar Vencimentos** dentro do card de alerta para ser levado diretamente à tela de lotes filtrada apenas pelos produtos que exigem queima promocional de estoque.
+
+> ⚠️ **Atenção:** O cálculo de Lucro Bruto Real no Dashboard reflete o custo real de cada lote (PEPS/FIFO). Se um item for vendido sem lote cadastrado, o sistema usará o custo de referência do produto.
+
+#### ❌ Erros Comuns e Soluções
+> ❌ **Erro comum:** O operador de caixa tenta acessar o Dashboard e é redirecionado diretamente para `/vendas/pdv.php` (CT102 / UC001).  
+> **Solução:** Comportamento normal do sistema. Caixas não possuem permissão para ver dados de lucratividade global e faturamento da empresa.
+
+> ❌ **Erro comum:** O card de Venda Rápida exibe mensagem *"Estoque insuficiente para a quantidade solicitada."*.  
+> **Solução:** O produto escolhido está zerado ou o saldo atual é inferior à quantidade digitada. Lance uma nova ordem de compra ou ajuste o inventário.
+---
+
+# CAPÍTULO 3 — FRENTE DE CAIXA, VENDAS E OPERAÇÕES FISCAIS
+
+### 3.1 Tela 04: Ponto de Venda (PDV Ágil) (`/vendas/pdv.php`)
+
+📋 RESUMO RÁPIDO — Ponto de Venda (PDV)
+- **Para que serve:** Interface ergonômica de alta velocidade para bipagem de itens por código de barras, cálculo automático de troco, atalhos de teclado e baixa física de estoque por PEPS/FIFO.
+- **Quem pode acessar:** Operador de Caixa e Administrador.
+- **Onde encontrar:** Menu Lateral > Vendas > **Ponto de Venda** (`/vendas/pdv.php`).
+
+[INSERIR PRINT DE TELA: 04_pdv_frente_caixa.png]
+
+#### Passo a Passo Operacional
+1. Ao abrir o PDV, o cursor estará posicionado no campo de bipagem.
+2. Bipe o código EAN-13 com o leitor óptico (ou tecle **`F2`** e digite o código). Pressione **`Enter`**.
+3. O sistema emite sinal sonoro senoidal de 880Hz e insere o produto no carrinho com animação suave.
+4. Para vender quantidade múltipla (ex: 10 cartolinas), digite `10*` antes do código ou use o seletor de quantidade.
+5. Pressione **`F4`** para abrir o modal de pagamento.
+6. Selecione a forma de pagamento (Dinheiro, Pix, Cartão de Débito ou Crédito).
+7. Se o pagamento for em dinheiro, informe o valor recebido e confira o troco calculado na tela.
+8. Pressione **`Enter`** para confirmar a venda. A tela do cupom fiscal simulado é aberta instantaneamente.
 
 ---
 
-### 3.3 Cadastro e Gestão de Clientes (`clientes/`)
-O cadastro de clientes permite manter histórico de consumo, fidelização e identificação na emissão do cupom fiscal.
+### 3.2 Tabela Oficial de Atalhos de Teclado do PDV
 
-#### Passo a Passo:
-1. Acesse o menu **Clientes** e clique em **Cadastrar Cliente** (`clientes/novo.php`).
-2. Digite o **Nome Completo** ou Razão Social.
-3. Preencha o **CPF ou CNPJ** (o sistema valida automaticamente os dígitos verificadores).
-4. Informe o **Celular com DDD**.
-5. No campo **CEP**, digite os 8 números do CEP do cliente: o sistema busca o endereço automaticamente na base dos Correios via API ViaCEP e preenche Rua, Bairro, Cidade e Estado. Digite apenas o número da residência e complemento.
-6. Clique em **Salvar Cliente**.
+Esta tabela reúne os atalhos homologados nos Casos de Teste (CT101–CT105 do Caso de Uso UC004):
 
-> 💡 **Dica:** Na tabela de clientes, clique no **botão circular verde do WhatsApp** ao lado do número do cliente para abrir imediatamente uma conversa direta no WhatsApp Web sem precisar salvar o contato na agenda do aparelho.
-
----
-
-### 3.4 Cadastro e Gestão de Fornecedores Homologados (`fornecedores/`)
-Permite registrar as distribuidoras parceiras da papelaria (ex: Tilibra, BIC, Faber-Castell, Chamex, Acrilex).
-
-#### Tabela de Campos Obrigatórios — Fornecedores:
-| Campo | Tipo / Formato | Obrigatório? | Finalidade no Sistema |
-| :--- | :--- | :---: | :--- |
-| **Razão Social** | Texto | Sim | Nome empresarial que consta na Nota Fiscal. |
-| **Nome Fantasia** | Texto | Sim | Nome popular pelo qual a marca é conhecida. |
-| **CNPJ** | 14 dígitos formatados | Sim | Identificação fiscal e emissão de pedidos. |
-| **Telefone / WhatsApp** | Numérico com DDD | Sim | Canal ágil de reposição de estoque. |
-| **E-mail de Pedidos** | E-mail corporativo | Sim | Envio formal de ordens de compra. |
-
----
-
-# CAPÍTULO 4 — OPERAÇÃO DE FRENTE DE CAIXA (PDV ÁGIL) — O GUIA DO OPERADOR
-
-O módulo de Frente de Caixa (`vendas/pdv.php`) é a tela onde o operador de caixa passa a maior parte do seu turno. Ela foi construída com foco em agilidade, ergonomia e eliminação de cliques desnecessários.
-
-[INSERIR PRINT DE TELA: pdv-frente-de-caixa.png]
-
-### 4.1 Fluxo Operacional Completo de Venda
-Siga este roteiro de 7 etapas simples para atender cada cliente no balcão:
-
-1. **Localizar o Produto:**
-   - Com o cliente no balcão, aponte o leitor de código de barras para o produto (ou pressione `F2` e digite o código ou nome do item).
-   - O item aparecerá destacado na tela com quantidade padrão `1`.
-2. **Adicionar Item ao Cupom:**
-   - Pressione `Enter` para adicionar o produto à lista de compras do lado direito da tela.
-   - Para lançar múltiplos itens do mesmo produto (ex: 5 canetas azuis), digite `5*` antes do código ou ajuste o campo quantidade e tecle `Enter`.
-3. **Conferir Totais:**
-   - O painel exibirá automaticamente o **Subtotal**, eventuais descontos autorizados e o **Total a Pagar** em números grandes e de fácil visualização pelo cliente.
-4. **Identificação do Consumidor (Opcional):**
-   - Pergunte amigavelmente ao cliente: *"Deseja incluir CPF na nota fiscal?"*.
-   - Se o cliente desejar, pressione `F8`, digite o CPF (apenas números) e tecle `Enter`. Se o cliente recusar, basta prosseguir.
-5. **Abrir a Tela de Pagamento:**
-   - Pressione a tecla de atalho **`F4`** (ou clique no grande botão sólido verde **Finalizar Venda**).
-6. **Registrar o Pagamento:**
-   - Escolha a forma de pagamento informada pelo cliente (Dinheiro, Pix, Cartão de Débito, Cartão de Crédito ou Múltiplos).
-   - Se for em **Dinheiro**, digite o valor que o cliente entregou em mãos: o sistema calcula na hora e exibe o **Troco** em destaque.
-7. **Concluir a Venda e Emitir a NFC-e:**
-   - Clique em **Confirmar Venda** (ou tecle `Enter`).
-   - A venda é gravada, as unidades são baixadas automaticamente do lote mais antigo (PEPS/FIFO) e uma janela apresenta o Cupom Fiscal Simulado na tela.
-   - Pressione **`Ctrl + P`** para disparar a impressão na impressora térmica do balcão e entregue o cupom ao cliente com um agradecimento.
-
----
-
-### 4.2 Tabela Oficial de Atalhos de Teclado do PDV
-Para que você não precise tirar as mãos do teclado e ganhe segundos preciosos em cada atendimento, memorize estes atalhos:
-
-| Tecla / Atalho | Função Operacional no PDV | Comportamento Exato no Sistema |
+| Tecla / Atalho | Função Operacional | Comportamento Exato no Sistema |
 | :---: | :--- | :--- |
-| **`F2`** | Buscar Produto / Ativar Leitor | Move o cursor diretamente para o campo de busca de código de barras ou nome. |
-| **`Enter`** | Inserir Item no Cupom | Confirma a inclusão do produto e quantidade na lista de compras. |
-| **`F4`** | Abrir Pagamento / Fechar Venda | Abre a janela modal de escolha da forma de pagamento e cálculo de troco. |
-| **`F7`** | Limpar / Cancelar Cupom Aberto | Cancela a venda inteira em andamento antes de receber o pagamento (requer confirmação). |
-| **`F8`** | Inserir CPF do Consumidor | Foca imediatamente no campo de CPF para registro do cliente. |
-| **`Esc`** | Fechar Janelas / Voltar | Fecha qualquer janela de confirmação ou modal aberta e retorna ao cupom. |
-| **`Tab`** | Alternar Campos de Pagamento | Navega ágilmente entre as opções de Dinheiro, Pix, Cartão e Valor Recebido. |
-| **`Ctrl + P`** | Imprimir Cupom Fiscal | Dispara o comando nativo de impressão da NFC-e em bobina térmica ou papel A4. |
+| **`F1`** | Ajuda de Teclado | Abre modal na tela listando todos os atalhos rápidos disponíveis. |
+| **`F2`** | Focar no Leitor / Busca | Move o foco para o campo de código de barras ou busca de produto. |
+| **`F4`** | Finalizar Compra / Pagamento | Abre a janela modal de formas de pagamento e cálculo de troco. |
+| **`F7`** | Conceder Desconto | Permite aplicar desconto percentual ou em reais (sujeito à trava de margem). |
+| **`F9`** | Cancelar / Limpar Carrinho | Remove todos os itens do cupom aberto (requer confirmação rápida). |
+| **`Esc`** | Voltar / Fechar Janelas | Fecha qualquer modal aberto e retorna o foco à lista de compras. |
+| **`Ctrl + P`** | Imprimir Cupom Fiscal | Dispara o comando de impressão do cupom térmico ou folha A4. |
 
-> 💡 **Dica:** Treine operar o caixa utilizando exclusivamente o teclado numérico e as teclas de atalho (`F2`, `F4`, `Enter`). Operadores treinados atendem clientes até três vezes mais rápido do que usando o mouse.
+> 💡 **Dica:** Pressionar `F1` a qualquer momento no caixa exibe a colinha de atalhos sem interromper o atendimento.
 
----
+> ⚠️ **Atenção (Trava de Margem Negativa):** Se um desconto concedido no PDV fizer o preço de venda unitário ficar menor que o custo de compra do lote correspondente, o sistema bloqueará a finalização exibindo aviso de margem negativa, protegendo a papelaria contra prejuízos involuntários.
 
-### 4.3 Formas de Pagamento e Cálculo de Troco
-O MrStock ERP aceita as seguintes modalidades comerciais:
-* **Dinheiro:** Ao digitar o valor entregue pelo cliente (ex: compra deu R$ 37,00 e o cliente deu uma nota de R$ 50,00), o sistema calcula automaticamente `Troco: R$ 13,00` em fonte destacada.
-* **Pix:** O sistema exibe na tela o QR Code oficial e a chave Pix da Papelaria Real. Aguarde a confirmação de recebimento no aplicativo do banco da loja antes de clicar em confirmar.
-* **Cartão de Débito / Crédito:** Insira o valor na maquininha física de cartão do balcão. Após a emissão do comprovante impresso pela maquininha ("Aprovada"), confirme a transação no sistema.
-* **Múltiplos Pagamentos:** Permite fracionar o total (ex: R$ 50,00 em Dinheiro e o restante de R$ 35,00 no Cartão de Débito).
+#### ❌ Erros Comuns e Soluções
+> ❌ **Erro comum:** O operador pressiona `F4` e surge um pop-up vermelho: *"É necessário ao menos 1 produto no carrinho para finalizar a compra."* (CT104 / UC004).  
+> **Solução:** Bipe ao menos uma mercadoria antes de abrir a tela de fechamento financeiro.
 
----
-
-### 4.4 Emissão da Simulação Acadêmica de Cupom Fiscal NFC-e
-Ao término de cada venda, o sistema gera a **Simulação Acadêmica da Nota Fiscal de Consumidor Eletrônica (NFC-e)**:
-* **Chave de Acesso Oficial (44 Dígitos):** Gerada segundo a fórmula padrão da Receita Estadual da SEFAZ SP:
-  `[UF: 35] [AAMM: Ano/Mês] [CNPJ Papelaria Real] [Mod: 65] [Série: 001] [Número NFe] [Tipo: 1] [Código Aleatório] [DV]`.
-* **Protocolo de Autorização:** Código de autenticação simulado para validação didática.
-* **Carga Tributária Estimada:** Discrimina o percentual de impostos aproximados incidentes sobre a compra (em estrito cumprimento à Lei Federal nº 12.741/2012 — *De Olho no Imposto*).
-* **QR Code Vetorial:** Código bidimensional escaneável por câmeras de celular para demonstração prática.
-* **Formatação de Saída:** O cupom pode ser impresso em bobinas térmicas de 58mm, 80mm ou em meia folha A4.
-
-> 💡 **Nota Didática:** A simulação de NFC-e foi chancelada pelo orientador Prof. Vinicius como solução de engenharia para o TCC, simulando com precisão de 100% o layout e a matemática fiscal exigidos pelo Fisco Paulista sem incorrer em custos com certificados digitais de pessoas jurídicas reais.
+> ❌ **Erro comum:** Ao tentar conceder desconto de R$ 10,00, o sistema impede a gravação informando *"Operação não permitida: Preço de venda abaixo do custo de aquisição do lote (R$ 15,20)."*.  
+> **Solução:** O desconto solicitado viola a política de sustentabilidade financeira da Papelaria Real. Reduza o valor do desconto para manter margem positiva.
 
 ---
 
-### 4.5 Trava de Segurança Contra Margem Negativa (Prejuízo)
-Se um operador tentar aplicar um desconto excessivo na venda que faça o preço final ficar abaixo do custo que a Papelaria Real pagou pelo lote do produto, o MrStock ERP acionará a **Trava de Margem Negativa**:
-- O sistema emitirá um aviso visual informando: *"Desconto não permitido: O valor de venda (R$ X) é inferior ao custo de aquisição (R$ Y). Margem de lucro negativa."*
-- Essa trava impede que a loja tenha prejuízos operacionais causados por erros de digitação ou concessão indevida de descontos no balcão.
+### 3.3 Tela 05: Histórico de Vendas (`/vendas/historico.php`)
+
+📋 RESUMO RÁPIDO — Histórico de Vendas
+- **Para que serve:** Consulta cronológica de todas as vendas processadas, filtros por operador e forma de pagamento, reimpressão de comprovantes e estorno gerencial de vendas.
+- **Quem pode acessar:** Administrador (acesso pleno com botão de estorno); Caixa (consulta de suas próprias vendas).
+- **Onde encontrar:** Menu Lateral > Vendas > **Histórico de Vendas** (`/vendas/historico.php`).
+
+[INSERIR PRINT DE TELA: 05_historico_vendas.png]
+
+#### Passo a Passo Operacional
+1. Acesse `/vendas/historico.php`.
+2. Utilize os filtros de cabeçalho: informe **Data Inicial**, **Data Final**, **Cliente** ou **Forma de Pagamento**.
+3. A tabela filtra instantaneamente os resultados.
+4. Para reimprimir, clique no botão **Imprimir Cupom 80mm**.
+5. Para consultar a chave fiscal, clique no botão **Painel Fiscal NFC-e**.
+6. Para estornar (apenas Administrador), clique no botão vermelho **Estornar Venda**, informe o motivo formal e confirme.
+
+> 💡 **Dica:** Ao estornar uma venda, o estoque dos produtos vendidos é imediatamente devolvido aos seus respectivos lotes de origem (PEPS/FIFO), sem necessidade de ajuste manual no inventário.
+
+#### ❌ Erros Comuns e Soluções
+> ❌ **Erro comum:** O operador de caixa tenta clicar no botão de Estornar e recebe mensagem *"Acesso negado. Apenas o perfil Administrador pode autorizar o cancelamento de cupons já finalizados."*.  
+> **Solução:** Chame a gerente/proprietária para autenticar e confirmar a devolução do dinheiro e o estorno da venda.
 
 ---
 
-# CAPÍTULO 5 — OPERAÇÕES PÓS-VENDA, REIMPRESSÃO E ESTORNO (`vendas/`)
+### 3.4 Tela 06: Cupom Térmico Não-Fiscal 80mm/58mm (`/vendas/cupom.php`)
 
-Este capítulo detalha como localizar transações já finalizadas, reimprimir comprovantes e executar cancelamentos controlados.
+📋 RESUMO RÁPIDO — Emissão de Cupom Térmico
+- **Para que serve:** Gera o documento impresso de conferência para o cliente com layout limpo otimizado para bobinas térmicas de 80mm e 58mm (@media print).
+- **Quem pode acessar:** Administrador e Operador de Caixa.
+- **Onde encontrar:** Disparado automaticamente ao término da venda ou via Histórico > **Imprimir Cupom** (`/vendas/cupom.php?id=...`).
 
-[INSERIR PRINT DE TELA: vendas-historico-listagem.png]
+[INSERIR PRINT DE TELA: 06_cupom_termico.png]
 
-### 5.1 Consulta ao Histórico de Vendas Realizadas
-1. No menu superior ou lateral, clique em **Vendas** e selecione **Histórico de Vendas** (`vendas/index.php`).
-2. Utilize os filtros no topo da tela para refinar sua pesquisa:
-   - Filtro por **Data Inicial e Data Final** (exemplo: ver apenas as vendas de hoje).
-   - Filtro por **Operador de Caixa** responsável.
-   - Filtro por **Forma de Pagamento** (Dinheiro, Pix ou Cartão).
-3. A tabela exibirá: Número da Venda, Horário, Cliente, Total da Venda, Forma de Pagamento e Status (Concluída ou Estornada).
+#### Passo a Passo Operacional
+1. A tela abre com o cupom formatado contendo cabeçalho da Papelaria Real, CNPJ, itens com quantidade e valores, total e troco.
+2. Pressione **`Ctrl + P`** (ou clique no botão **Imprimir Agora**).
+3. Na janela de impressão do navegador, certifique-se de que o destino é a impressora térmica não-fiscal.
+4. Clique em Imprimir e entregue o comprovante ao cliente.
 
-### 5.2 Reimpressão de Cupom Fiscal
-Se a bobina de papel da impressora tiver acabado durante a emissão ou se o cliente retornar à loja solicitando uma segunda via de seu comprovante:
-1. Localize a venda no **Histórico de Vendas**.
-2. Na coluna de ações, clique no botão azul com o ícone de impressora **Reimprimir Cupom**.
-3. A janela modal da NFC-e será aberta com todos os dados idênticos aos da emissão original.
-4. Pressione `Ctrl + P` e imprima a segunda via.
-
-### 5.3 Procedimento Gerencial de Estorno e Devolução ao Estoque
-O estorno de venda é uma operação de exceção (permitida apenas a usuários com perfil de Administrador/Gerente), utilizada em casos de desistência imediata do cliente ou troca de mercadoria.
-
-#### Passo a Passo para Estornar uma Venda:
-1. Faça login com conta de Administrador.
-2. Acesse o **Histórico de Vendas** e localize o registro da venda a ser cancelada.
-3. Clique no botão sólido vermelho **Estornar Venda**.
-4. Uma tela de confirmação exigirá a justificativa do cancelamento (exemplo: *"Cliente desistiu da compra antes de retirar a mercadoria"*).
-5. Digite o motivo e clique em **Confirmar Estorno**.
-
-#### O que o Sistema Faz Automaticamente ao Estornar:
-- O status da venda muda imediatamente para **Cancelada / Estornada**.
-- **Retorno Físico ao Estoque:** O sistema repõe automaticamente as unidades vendidas nos exatos lotes de onde elas haviam saído, mantendo o controle PEPS/FIFO intacto.
-- **Registro no Log Forense:** A ação é gravada na tabela `logs_auditoria` com data, horário, operador que solicitou e a justificativa preenchida.
-
-> ⚠️ **Atenção:** O estorno é uma operação definitiva e não pode ser revertido. Certifique-se de que o dinheiro físico foi devolvido ao cliente ou que a transação no cartão foi cancelada na maquininha antes de confirmar no sistema.
+> 💡 **Dica:** O cupom possui regras CSS limpas que removem automaticamente cabeçalhos e rodapés do navegador na impressão.
 
 ---
 
-# CAPÍTULO 6 — ENTRADA DE MERCADORIAS E GESTÃO DE COMPRAS (`compras/`)
+### 3.5 Tela 07: Painel Fiscal e Simulação Acadêmica de NFC-e (`/vendas/nfce.php`)
 
-A entrada de mercadorias é a porta de entrada de novos produtos e novos lotes no MrStock ERP. Uma conferência bem-feita evita furos no inventário e garante o controle de validade dos produtos.
+📋 RESUMO RÁPIDO — Painel Fiscal NFC-e
+- **Para que serve:** Apresenta a simulação didática homologada de Nota Fiscal de Consumidor Eletrônica com Chave de Acesso de 44 dígitos, QR Code SEFAZ e discriminação de tributos (Lei 12.741/2012).
+- **Quem pode acessar:** Administrador e Operador de Caixa.
+- **Onde encontrar:** Histórico de Vendas > Botão **Painel Fiscal NFC-e** (`/vendas/nfce.php?id=...`).
 
-[INSERIR PRINT DE TELA: compras-entrada-mercadorias.png]
+[INSERIR PRINT DE TELA: 07_painel_fiscal_nfce.png]
 
-### 6.1 Passo a Passo para Lançamento de Nota de Compra
-1. Acesse o menu **Compras** e clique em **Nova Entrada de Mercadoria** (`compras/nova.php`).
-2. Selecione o **Fornecedor** emitente da Nota Fiscal de Compra.
-3. No campo **Número da Nota Fiscal**, digite o número do documento fiscal recebido.
-4. Adicione os itens comprados:
-   - Selecione o produto no catálogo.
-   - Informe a **Quantidade de Unidades** compradas.
-   - Digite o **Custo Unitário de Compra** (valor líquido que constou na nota por unidade).
-5. Clique em **Adicionar Item**. Repita o procedimento para todos os produtos da nota.
-6. Confira o valor total da nota no sistema com o total da nota de papel.
-7. Clique no botão sólido verde **Confirmar Entrada de Mercadorias**.
+#### Passo a Passo Operacional
+1. Acesse o painel da venda desejada.
+2. Inspecione a **Chave de Acesso de 44 Dígitos** formatada com máscara oficial: `35-2609-12345678000190-65-001-000001042-1-12345678-9`.
+3. Verifique o **QR Code vetorial** gerado para leitura por câmera de smartphone.
+4. Confira o cálculo de tributos aproximados destacado na base do documento fiscal.
+5. Clique em **Voltar para o PDV** ou **Imprimir DANFE NFC-e**.
 
-### 6.2 Associação Obrigatória de Lote e Data de Validade
-Para produtos das famílias de químicos, colas e tintas, uma janela solicitará os dados de rastreio:
-- **Código do Lote do Fabricante** (gravado na caixa ou carimbado no frasco).
-- **Data de Validade** (mês e ano de expiração).
-- Ao confirmar, o estoque é alimentado imediatamente e o novo lote entra na fila prioritária de consumo do PDV.
+> 💡 **Dica Acadêmica:** Este painel foi criado para a avaliação da banca da ETEC, demonstrando a perfeita conformidade com as regras fiscais do Estado de São Paulo sem dependência de certificados A1 pagos.
+---
 
-> 💡 **Dica:** Sempre confira fisicamente a data de validade impressa nos tubos e frascos antes de guardá-los no estoque. Se o fornecedor entregou um lote com menos de 60 dias para o vencimento, recuse o recebimento ou solicite a troca antes de dar entrada no sistema.
+# CAPÍTULO 4 — GESTÃO DE ESTOQUE, PRODUTOS E CATALOGAÇÃO
+
+### 4.1 Tela 08: Catálogo & Gestão de Produtos (`/produtos/index.php`)
+
+📋 RESUMO RÁPIDO — Gestão de Produtos
+- **Para que serve:** Cadastro central de mercadorias, controle de código EAN-13, cálculo automático de markup/margem de lucro e busca reativa (Live Search).
+- **Quem pode acessar:** Administrador (cadastro/edição plena); Caixa (consulta de saldos).
+- **Onde encontrar:** Menu Lateral > Estoque > **Catálogo de Produtos** (`/produtos/index.php`).
+
+[INSERIR PRINT DE TELA: 08_produtos_catalogo.png]
+
+#### Passo a Passo Operacional
+1. Clique no botão **+ Adicionar Produto**.
+2. Preencha o Nome Completo (ex: `Caneta Esferográfica BIC Cristal 1.0mm Azul`).
+3. Informe o código de barras no campo EAN-13 (use o leitor ou digite).
+4. Selecione a Família Funcional correspondente.
+5. Preencha o **Preço de Custo** (ex: `R$ 1,20`) e o **Preço de Venda** (ex: `R$ 2,50`). O sistema calcula automaticamente a margem de lucro (`108,3%`).
+6. Defina o Estoque Mínimo de Alerta e clique em **Salvar**.
+
+#### ❌ Erros Comuns e Soluções
+> ❌ **Erro comum:** O usuário tenta excluir um produto que já teve vendas registradas no caixa (CT103 / UC006).  
+> **Solução:** O MrStock ERP adota soft-delete para garantir a integridade referencial ACID do banco de dados. O produto não é apagado fisicamente; ele é marcado como **Inativo**, preservando o histórico das vendas passadas e das auditorias contábeis.
 
 ---
 
-# CAPÍTULO 7 — RELATÓRIOS ESTRATÉGICOS E ANÁLISE FINANCEIRA (GUIA DO GERENTE)
+### 4.2 Tela 09: Lotes Físicos & Controle de Validades PEPS/FIFO (`/lotes/index.php`)
 
-Os relatórios do MrStock ERP transformam os dados brutos de vendas em inteligência comercial para a proprietária da Papelaria Real tomar decisões com base em números.
+📋 RESUMO RÁPIDO — Gestão de Lotes
+- **Para que serve:** Rastreamento do shelf-life e custo de cada remessa de produtos químicos/perecíveis, aplicando o princípio PEPS/FIFO.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Menu Lateral > Estoque > **Lotes & Validades** (`/lotes/index.php`).
 
-[INSERIR PRINT DE TELA: relatorios-curva-abc.png]
+[INSERIR PRINT DE TELA: 09_lotes_validades.png]
 
-### 7.1 Análise de Giro por Curva ABC (Princípio de Pareto 80/20)
-A Curva ABC agrupa os produtos da papelaria em três faixas de importância financeira sobre o faturamento global da loja:
+#### Passo a Passo Operacional
+1. Clique em **Novo Lote**.
+2. Selecione o produto (ex: `Cola Branca Cascola 90g`).
+3. Digite o número do lote gravado pelo fabricante (ex: `LOT-2026-CB`).
+4. Informe a **Data de Validade** impressa no rótulo.
+5. Digite a quantidade recebida e o custo unitário daquele lote.
+6. Clique em **Salvar Lote**. O sistema passa a monitorar a janela de 30 dias automaticamente.
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       DISTRIBUIÇÃO DA CURVA ABC                             │
-├────────┬─────────────────┬─────────────────┬────────────────────────────────┤
-│ Classe │ % do Faturamento│ % dos Produtos  │ Estratégia Comercial           │
-├────────┼─────────────────┼─────────────────┼────────────────────────────────┤
-│ **A**  │ **~ 80%**       │ **~ 20%**       │ **Vital:** Nunca pode faltar!  │
-│ **B**  │ **~ 15%**       │ **~ 30%**       │ **Intermediário:** Repor regular│
-│ **C**  │ **~ 5%**        │ **~ 50%**       │ **Cauda Longa:** Cuidado!      │
-└────────┴─────────────────┴─────────────────┴────────────────────────────────┘
-```
-
-- **Classe A (Produtos Estrela):** Representam 80% do dinheiro que entra no caixa da Papelaria Real, embora correspondam a apenas 20% do catálogo (exemplo: resmas de sulfite Chamex A4, cadernos universitários 10 matérias e canetas esferográficas azuis e pretas). **Regra de Ouro:** O estoque de produtos da Classe A deve ser monitorado diariamente; a falta desses itens representa perda direta e imediata de vendas.
-- **Classe B (Produtos de Apoio):** Representam 15% do faturamento da loja (ex: lápis de cor 12 cores, pastas sanfonadas, tesouras escolares). Requerem compras semanais ou quinzenais programadas.
-- **Classe C (Produtos de Baixo Giro):** Representam apenas 5% da receita, ocupando cerca de metade do espaço físico da loja (ex: tintas a óleo profissionais, réguas técnicas sofisticadas, compassos caros). **Regra de Ouro:** Compre em lotes mínimos para não imobilizar dinheiro parado na prateleira.
+> ⚠️ **Atenção:** Produtos com lotes vencidos são sinalizados com badge vermelho e são bloqueados para inclusão no carrinho do PDV.
 
 ---
 
-### 7.2 Demonstrativo do Resultado do Exercício (DRE Gerencial)
-O DRE consolida o resultado econômico da Papelaria Real em determinado período (mês, trimestre ou ano), demonstrando se a operação deu lucro ou prejuízo:
+### 4.3 Tela 10: Gerador & Impressão de Etiquetas SVG (`/produtos/etiquetas.php`)
 
-```
-   ESTRUTURA DO DRE GERENCIAL — PAPELARIA REAL LTDA
-   (+) Receita Bruta de Vendas ...................... R$ 45.800,00
-   (-) Devoluções e Vendas Estornadas ............... R$    650,00
-   (=) Receita Líquida de Vendas .................... R$ 45.150,00
-   (-) Custo das Mercadorias Vendidas (CMV Real) .... R$ 24.832,50  (Custo dos lotes PEPS)
-   (=) LUCRO BRUTO OPERACIONAL ...................... R$ 20.317,50
-   ================================================================
-   MARGEM BRUTA PERCENTUAL (%) ......................        45,00 %
-```
+📋 RESUMO RÁPIDO — Gerador de Etiquetas SVG
+- **Para que serve:** Gera folhas de etiquetas de gôndola e código de barras Code-128/EAN-13 em SVG vetorial puro com nitidez milimétrica para impressoras térmicas ou folhas A4 Pimaco.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Menu > Estoque > Produtos > Botão **Imprimir Etiquetas** (`/produtos/etiquetas.php`).
 
-- **Como Interpretar o Lucro Bruto:** No exemplo acima, a cada R$ 100,00 que entram na loja, sobram R$ 45,00 brutos para pagar as contas fixas (aluguel, salários, energia) e gerar o lucro líquido da proprietária.
-- **Acurácia Máxima com PEPS:** Como o MrStock ERP utiliza o custo exato do lote físico que saiu na venda, o valor do CMV e do Lucro Bruto não é uma estimativa fantasiosa, mas sim um dado financeiro auditável.
+[INSERIR PRINT DE TELA: 10_gerador_etiquetas.png]
 
----
+#### Passo a Passo Operacional
+1. Na tela de etiquetas, selecione a **Categoria / Família** desejada ou escolha produtos individuais.
+2. Defina o número de cópias de cada etiqueta (ex: 20 cópias para colar na prateleira de canetas).
+3. Clique em **Visualizar Impressão**. A grade vetorial SVG de etiquetas é renderizada com código de barras, nome do item e preço em reais.
+4. Pressione **`Ctrl + P`** (ou clique em **Imprimir Folha**). As margens são calibradas automaticamente para impressão limpa.
 
-### 7.3 Relatório de Giro de Estoque e Produtos Parados
-Lista os produtos que estão sem nenhuma venda registrada há mais de 60 ou 90 dias. Permite à gerência identificar mercadorias "encalhadas" e planejar kits promocionais antes que percam o valor de mercado ou vençam.
-
-### 7.4 Trilha de Auditoria Forense e Logs do Sistema
-Permite ao Administrador auditar todas as ações operacionais da loja com filtros por data e usuário. Revela quem deu desconto, quem alterou preços, quem estornou cupons e quem alterou cadastros, assegurando integridade e transparência na empresa.
+> 💡 **Dica:** Como as etiquetas são geradas em SVG puro, o código de barras não distorce nem borra, garantindo 100% de leitura pelo leitor óptico.
 
 ---
 
-# CAPÍTULO 8 — FECHAMENTO DE CAIXA CEGO E PRESTAÇÃO DE CONTAS
+### 4.4 Tela 11: Categorias & as 10 Famílias Funcionais (`/categorias/index.php`)
 
-O fechamento de caixa é o momento de conciliar os valores físicos da gaveta com os registros do sistema.
+📋 RESUMO RÁPIDO — Categorias & Famílias
+- **Para que serve:** Organização taxonômica da Papelaria Real nas 10 Famílias Funcionais, garantindo acurácia na Curva ABC e facilitando filtros rápidos.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Menu Lateral > Estoque > **Categorias** (`/categorias/index.php`).
 
-[INSERIR PRINT DE TELA: caixa-fechamento-cego.png]
+[INSERIR PRINT DE TELA: 11_categorias_familias.png]
 
-### 8.1 O Conceito e a Importância da Conferência Cega
-Tradicionalmente, sistemas antigos mostram na tela quanto dinheiro o operador "deveria" ter na gaveta antes de fechar o caixa. Esse modelo facilita acomodação e omissão de pequenas faltas ou sobras.
+#### Passo a Passo Operacional
+1. Visualize as 10 famílias oficiais cadastradas no sistema.
+2. Para adicionar uma subdivisão, clique em **Nova Categoria**, preencha Nome e Descrição e clique em Salvar.
+3. Na listagem, clique no botão **Ver Produtos Vinculados** para abrir o catálogo filtrado apenas pelos itens daquela família.
 
-O **MrStock ERP adota o Fechamento Cego:**
-- O sistema **NÃO** exibe ao operador o total esperado em dinheiro.
-- O operador é instruído a abrir a gaveta, contar todas as notas e moedas físicas presentes, e digitar no sistema exatamente o valor contado em espécie.
-- Somente após a confirmação da contagem é que o sistema compara o valor digitado com o total calculado nas vendas e emite o demonstrativo de conciliação.
-
-### 8.2 Roteiro Prático de Fechamento de Turno
-Siga estes 5 passos no encerramento do expediente:
-1. No menu superior da Frente de Caixa, clique no botão **Encerrar Turno / Fechar Caixa**.
-2. Abra a gaveta física e organize o dinheiro por cédulas (R$ 100, R$ 50, R$ 20, R$ 10, R$ 5, R$ 2) e moedas.
-3. Conte o valor total em dinheiro vivo existente na gaveta.
-4. Digite o valor apurado no campo **Valor Apurado em Dinheiro (R$)**.
-5. Clique em **Confirmar Fechamento de Caixa**.
-6. O sistema emitirá o **Relatório de Fechamento de Turno**, dividindo as vendas do dia por:
-   - Total em Dinheiro (apurado vs esperado).
-   - Total em Pix (conferido via extrato bancário).
-   - Total em Cartões de Débito e Crédito (conferido pelas filipetas da maquininha).
-7. Assine o relatório impresso e guarde-o junto aos valores no malote da gerência.
-
-### 8.3 Tratamento de Divergências (Sobras e Faltas de Caixa)
-Ao fechar o caixa, três cenários podem ocorrer:
-* **Caixa Correto (Divergência Zero):** O valor contado bateu exatamente com o sistema.
-* **Sobra de Caixa (Valor Positivo):** Há mais dinheiro na gaveta do que o registrado. Costuma ocorrer quando o operador esquece de registrar alguma venda de valor pequeno ou recebe valor a mais do cliente por engano.
-* **Falta de Caixa (Valor Negativo):** Há menos dinheiro na gaveta do que o esperado. Ocorre geralmente por erro ao passar troco ao cliente ou venda não recebida.
-
-> ⚠️ **Atenção:** Em caso de divergência superior a R$ 5,00 (falta ou sobra), chame imediatamente o Administrador da loja antes de fechar o malote. Nunca tente "compensar" a diferença retirando ou colocando dinheiro pessoal na gaveta.
+#### ❌ Erros Comuns e Soluções
+> ❌ **Erro comum:** O usuário tenta excluir uma Categoria que possui produtos vinculados no catálogo.  
+> **Solução:** O sistema protege a integridade referencial: transfira os produtos para outra categoria antes de inativá-la.
 
 ---
 
-# CAPÍTULO 9 — SOLUÇÃO DE DÚVIDAS, FAQ OPERACIONAL E SUPORTE TÉCNICO
+### 4.5 Tela 12: Movimentações de Estoque & Kardex (`/produtos/movimentacoes.php`)
 
-Este capítulo esclarece as dúvidas mais comuns dos colaboradores da Papelaria Real e detalha o que fazer em caso de instabilidades.
+📋 RESUMO RÁPIDO — Movimentações & Kardex (Livro-Razão)
+- **Para que serve:** Histórico auditável de todas as entradas, saídas manuais, devoluções, perdas por quebra e baixas por vencimento ocorridas no estoque.
+- **Quem pode acessar:** Administrador e Operador de Caixa.
+- **Onde encontrar:** Menu Lateral > Estoque > **Movimentações** (`/produtos/movimentacoes.php`).
 
-[INSERIR PRINT DE TELA: ajuda-faq-acordeao.png]
+[INSERIR PRINT DE TELA: 12_movimentacoes_kardex.png]
 
-### 9.1 As 5 Perguntas Mais Frequentes da Operação (FAQ Oficial)
+#### Passo a Passo Operacional
+1. Acesse a tela de movimentações para auditar o fluxo cronológico das mercadorias.
+2. Utilize a barra de filtro rápido para buscar por produto, motivo ou operador.
+3. Para registrar uma perda física (ex: frasco de tinta derramou no chão), clique em **Nova Movimentação**, selecione o produto, o tipo "Perda / Avaria", informe a quantidade, a justificativa e confirme.
+
+> ⚠️ **Atenção:** Toda movimentação manual subtrai saldo físico real e gera registro forense com seu usuário.
+---
+
+# CAPÍTULO 5 — RELACIONAMENTO COMERCIAL: CLIENTES E FORNECEDORES
+
+### 5.1 Tela 13: Gestão de Clientes & Busca ViaCEP (`/clientes/index.php`)
+
+📋 RESUMO RÁPIDO — Gestão de Clientes
+- **Para que serve:** Cadastro completo de clientes físicos e jurídicos com validação de documento, preenchimento automático de endereço via CEP e histórico de compras.
+- **Quem pode acessar:** Administrador e Operador de Caixa.
+- **Onde encontrar:** Menu Lateral > Clientes > **Listagem de Clientes** (`/clientes/index.php`).
+
+[INSERIR PRINT DE TELA: 13_clientes_cadastro.png]
+
+#### Passo a Passo Operacional
+1. Clique no botão **Cadastrar Cliente**.
+2. Digite o Nome Completo e o CPF ou CNPJ.
+3. No campo **CEP**, digite os 8 números: o sistema consulta o serviço ViaCEP e preenche automaticamente Logradouro, Bairro e Cidade. Preencha o número do imóvel.
+4. Digite o Telefone/Celular e clique em **Salvar**.
+5. Na listagem de clientes, clique no **botão circular verde do WhatsApp** para abrir contato imediato.
+
+#### ❌ Erros Comuns e Soluções
+> ❌ **Erro comum:** O sistema recusa o cadastro com o alerta *"CPF inválido. Verifique os dígitos verificadores."*.  
+> **Solução:** O MrStock ERP possui algoritmo de validação matemática de CPF. Certifique-se de digitar o documento real do cliente.
+
+---
+
+### 5.2 Tela 14: Gestão de Fornecedores & WhatsApp Direto (`/fornecedores/index.php`)
+
+📋 RESUMO RÁPIDO — Gestão de Fornecedores
+- **Para que serve:** Cadastro de distribuidoras e indústrias parceiras (Tilibra, BIC, Chamex, Acrilex), com canal direto de cotação de compras via WhatsApp em 1 clique.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Menu Lateral > Compras e Contatos > **Fornecedores** (`/fornecedores/index.php`).
+
+[INSERIR PRINT DE TELA: 14_fornecedores_whatsapp.png]
+
+#### Passo a Passo Operacional
+1. Clique em **Novo Fornecedor**.
+2. Preencha Razão Social, Nome Fantasia, CNPJ e Telefone do representante comercial.
+3. Clique em **Salvar Fornecedor**.
+4. Na listagem, clique no botão circular verde **Abrir WhatsApp** para disparar cotação de reposição com o vendedor da fábrica sem precisar cadastrar o telefone na agenda do aparelho.
+---
+
+# CAPÍTULO 6 — ABASTECIMENTO E GESTÃO DE COMPRAS
+
+### 6.1 Tela 15: Ordens de Compra & Histórico (`/compras/index.php`)
+
+📋 RESUMO RÁPIDO — Histórico de Compras
+- **Para que serve:** Acompanhamento de todas as aquisições de mercadorias efetuadas pela papelaria, status financeiro (Paga ou Pendente) e auditoria de reposição.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Menu Lateral > Compras > **Ordens de Compra** (`/compras/index.php`).
+
+[INSERIR PRINT DE TELA: 15_compras_historico.png]
+
+#### Passo a Passo Operacional
+1. Acesse a listagem para conferir os pedidos faturados pelas distribuidoras.
+2. Filtre por período ou por fornecedor.
+3. Para consultar os produtos de determinado pedido, clique em **Ver Detalhes**.
+
+---
+
+### 6.2 Tela 16: Nova Ordem de Compra & Entrada de Mercadorias (`/compras/nova.php`)
+
+📋 RESUMO RÁPIDO — Nova Ordem de Compra
+- **Para que serve:** Lançamento de notas fiscais de fornecedor, incremento automático de saldo de estoque e criação dos lotes físicos com validade e custo real.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Ordens de Compra > Botão **Registrar Nova Compra** (`/compras/nova.php`).
+
+[INSERIR PRINT DE TELA: 16_compras_nova_ordem.png]
+
+#### Passo a Passo Operacional
+1. Selecione o Fornecedor que emitiu a nota.
+2. Adicione os itens comprados informando Quantidade e Custo Unitário que consta na Nota Fiscal.
+3. Para produtos químicos/líquidos com validade, informe a Data de Validade e o número do Lote.
+4. Clique em **Finalizar Compra**. O estoque é incrementado no banco e o novo lote entra na fila PEPS/FIFO.
+
+> 💡 **Dica:** Sempre confira a quantidade física das caixas antes de confirmar a entrada no sistema.
+
+---
+
+### 6.3 Tela 17: Conferência de Compra / Espelho do Pedido (`/compras/visualizar.php`)
+
+📋 RESUMO RÁPIDO — Conferência de Compra
+- **Para que serve:** Exibe o espelho formal do pedido de compra para conferência de recebimento no almoxarifado e impressão em formato A4.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Histórico de Compras > Botão **Ver Detalhes** (`/compras/visualizar.php?id=...`).
+
+[INSERIR PRINT DE TELA: 17_compras_visualizar_espelho.png]
+
+#### Passo a Passo Operacional
+1. Abra a tela de conferência do pedido desejado.
+2. O sistema exibe o espelho com dados do fornecedor, data de recebimento, lista de itens com custos e valor total.
+3. Clique em **Imprimir Ordem/Compra** para imprimir a folha de conferência de entrega para o estoquista assinar.
+---
+
+# CAPÍTULO 7 — CENTRO DE INTELIGÊNCIA, BI E RELATÓRIOS ESTRATÉGICOS
+
+### 7.1 Tela 18: Central de Relatórios Gerenciais (`/relatorios/index.php`)
+
+📋 RESUMO RÁPIDO — Central de Relatórios
+- **Para que serve:** Ponto de comando para geração de DRE gerencial, Curva ABC de produtos, relatório de validades críticas e giro de estoque.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Menu Lateral > **Relatórios** (`/relatorios/index.php`).
+
+[INSERIR PRINT DE TELA: 18_relatorios_central.png]
+
+#### Passo a Passo Operacional
+1. Acesse `/relatorios/index.php`.
+2. Escolha o relatório desejado (DRE Gerencial, Curva ABC, Giro de Estoque ou Validades).
+3. Selecione o período de competência (Mês atual, Trimestre ou Ano).
+4. Clique em **Gerar Relatório**.
+
+---
+
+### 7.2 Tela 19: Centro de Inteligência Comercial (BI / Chart.js) (`/relatorios/analise.php`)
+
+📋 RESUMO RÁPIDO — Centro de Análise (BI)
+- **Para que serve:** Dashboard analítico interativo com gráficos visuais em tempo real via Chart.js, cruzando faturamento, margem bruta e ticket médio.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Central de Relatórios > **Centro de Análise (BI)** (`/relatorios/analise.php`).
+
+[INSERIR PRINT DE TELA: 19_relatorios_bi_graficos.png]
+
+#### Passo a Passo Operacional
+1. Alterne entre os filtros temporais: **7 Dias**, **Mês Corrente** ou **Ano Completo**.
+2. Os gráficos de barra e pizza atualizam instantaneamente de forma reativa.
+3. Inspecione o gráfico de Curva ABC para identificar os 20% de itens que geram 80% da receita da Papelaria Real.
+4. Clique em **Imprimir Relatório Analítico** para exportar em formato A4 executivo.
+
+---
+
+### 7.3 Tela 20: Trilha de Auditoria Forense & Logs (`/relatorios/logs.php`)
+
+📋 RESUMO RÁPIDO — Auditoria & Logs Forenses
+- **Para que serve:** Registro imutável de todas as transações, alterações de preço, concessões de desconto, estornos e acessos de operadores com data, hora e IP.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Menu Lateral > Relatórios > **Logs de Auditoria** (`/relatorios/logs.php`).
+
+[INSERIR PRINT DE TELA: 20_relatorios_logs_auditoria.png]
+
+#### Passo a Passo Operacional
+1. Abra a tela de logs para apurar divergências ou incidentes.
+2. Utilize o filtro por operador ou por data.
+3. Cada linha exibe o carimbo de data/hora, o operador responsável, a ação executada e os dados anteriores e posteriores.
+
+---
+
+### 7.4 Tela 21: Exportação de Relatórios para Excel XLSX (`/relatorios/excel.php`)
+
+📋 RESUMO RÁPIDO — Exportação Excel XLSX
+- **Para que serve:** Exporta dados completos de vendas, inventário e validades em planilhas padronizadas em exatamente 9 colunas reais (A-I) prontas para a contabilidade.
+- **Quem pode acessar:** Administrador.
+- **Onde encontrar:** Central de Relatórios > Botões **Baixar Excel** (`/relatorios/excel.php`).
+
+[INSERIR PRINT DE TELA: 21_relatorios_exportacao_excel.png]
+
+#### Passo a Passo Operacional
+1. Na Central de Relatórios, escolha o conjunto de dados (Inventário Completo, Estoque Baixo, Validades ou Vendas).
+2. Clique no botão verde **Baixar Excel**.
+3. O download do arquivo `.xlsx` é disparado automaticamente com células pré-formatadas para cálculo contábil.
+---
+
+# CAPÍTULO 8 — ADMINISTRAÇÃO DO SISTEMA E GOVERNANÇA RBAC
+
+### 8.1 Tela 23: Configurações da Empresa & Perfis de Acesso (`/configuracoes.php`)
+
+📋 RESUMO RÁPIDO — Painel de Configurações
+- **Para que serve:** Configuração dos dados cadastrais da Papelaria Real, mensagem de rodapé do cupom fiscal, parâmetros tributários e gestão de operadores de caixa.
+- **Quem pode acessar:** Administrador (acesso estritamente bloqueado para Caixa).
+- **Onde encontrar:** Menu Lateral > Sistema > **Configurações** (`/configuracoes.php`).
+
+[INSERIR PRINT DE TELA: 23_configuracoes_empresa.png]
+
+#### Passo a Passo Operacional
+1. Atualize a Razão Social, CNPJ, Inscrição Estadual, Telefone e Chave Pix da loja.
+2. No campo **Mensagem de Rodapé do Cupom**, defina a frase promocional ou agradecimento que sairá nas bobinas térmicas.
+3. Na aba **Operadores & Usuários**, cadastre novos operadores de caixa ou redefina senhas esquecidas.
+4. Clique em **Salvar Configurações**.
+
+#### ❌ Erros Comuns e Soluções
+> ❌ **Erro comum:** O operador com perfil "Caixa" tenta digitar diretamente a URL `/configuracoes.php` no navegador (CT102 / UC004).  
+> **Solução:** O sistema barra o acesso imediatamente via RBAC e redireciona o caixa de volta para o PDV com alerta de privilégio insuficiente.
+
+---
+
+### 8.2 Fechamento de Caixa Cego e Conciliação de Gaveta
+1. No final do expediente no PDV, o operador clica em **Fechar Caixa**.
+2. O sistema adota a **Conferência Cega:** a tela NÃO mostra o total faturado no dia, evitando indução de erro.
+3. O operador conta as cédulas e moedas físicas da gaveta e digita o valor em espécie apurado.
+4. Ao clicar em **Confirmar Fechamento**, o sistema cruza o valor digitado com o total calculado no banco e emite o demonstrativo de conciliação apontando se houve caixa exato, sobra ou falta.
+---
+
+# CAPÍTULO 9 — SUPORTE OPERACIONAL, FAQ E PROTOCOLOS DE CONTINGÊNCIA
+
+### 9.1 Tela 22: Central de Ajuda & FAQ Interativo (`/ajuda.php`)
+
+📋 RESUMO RÁPIDO — Central de Ajuda & FAQ
+- **Para que serve:** Base de conhecimento interativa com busca em tempo real (Live Search), acordeão com as dúvidas operacionais mais frequentes e mesa de atalhos.
+- **Quem pode acessar:** Administrador e Operador de Caixa.
+- **Onde encontrar:** Topbar ou Sidebar > **Ajuda & FAQ** (`/ajuda.php`).
+
+[INSERIR PRINT DE TELA: 22_central_ajuda_faq.png]
+
+#### Passo a Passo Operacional
+1. No campo *"Como podemos te ajudar hoje?"*, digite uma palavra-chave (ex: "estorno" ou "cupom"). Os tópicos correspondentes são destacados na hora.
+2. Clique no título de qualquer dúvida do acordeão para expandir a explicação detalhada.
+3. Se precisar de assistência técnica humana, clique no botão verde **Falar com Suporte** para abrir atendimento direto via WhatsApp com a equipe Mr. Coding.
+
+---
+
+### 9.2 As 5 Perguntas Mais Frequentes da Operação (FAQ Oficial)
 
 #### 1. Como funciona a simulação acadêmica de NFC-e com QR Code no PDV?
 A simulação acadêmica de NFC-e desenvolvida no MrStock ERP reproduz com exatidão técnica todas as exigências de layout e regras de negócio da Secretaria da Fazenda de São Paulo (SEFAZ SP), incluindo a formação algorítmica da Chave de Acesso de 44 dígitos com dígito verificador, número de protocolo simulado, cálculo estimado da carga tributária conforme a Lei Federal nº 12.741/2012 (*De Olho no Imposto*) e impressão de QR Code vetorial escaneável para bobinas térmicas de 80mm e 58mm. O recurso foi chancelado formalmente pelo orientador Prof. Vinicius como solução didática de engenharia para o TCC da ETEC Fernando Prestes, garantindo validação completa pela banca examinadora sem incorrer em custos com certificados digitais A1 corporativos ou burocracias de credenciamento em ambiente de produção da SEFAZ real.
@@ -518,18 +647,17 @@ A simulação acadêmica de NFC-e desenvolvida no MrStock ERP reproduz com exati
 O MrStock ERP foi arquitetado com alta disponibilidade operacional para que o atendimento de balcão da Papelaria Real nunca seja interrompido por oscilações do provedor de internet. Em condições normais, a equipe acessa o sistema na nuvem com criptografia SSL em `https://mrstock.com.br/`. Caso a internet externa caia durante o expediente, a papelaria conta com uma instância espelho idêntica configurada no servidor XAMPP local do computador do caixa: basta abrir uma nova aba no navegador e digitar `http://localhost/MrStock/`. As vendas continuam sendo realizadas normalmente na Frente de Caixa local com baixa de estoque em tempo real. Quando a conexão de internet for restabelecida, a sincronização unifica os bancos de dados, garantindo que nenhum cliente fique sem atendimento e nenhuma venda seja perdida.
 
 #### 3. Qual o procedimento correto para estorno de venda e devolução ao estoque?
-O procedimento formal de estorno deve ser executado exclusivamente por um colaborador com perfil de Administrador, por questões de segurança financeira. O gestor acessa o menu *Vendas > Histórico de Vendas*, localiza a transação pelo número do cupom ou horário, confere os itens e clica no botão sólido vermelho *Estornar Venda*. Uma janela de confirmação exige o preenchimento obrigatório da justificativa do cancelamento (ex: cliente desistiu da compra antes de retirar a mercadoria). Ao confirmar, o sistema altera o status da venda para cancelada, realiza a devolução física e automática das unidades aos seus exatos lotes de origem (preservando o controle PEPS/FIFO) e grava um registro imutável na trilha de auditoria forense do sistema com carimbo de data, horário, operador responsável e IP da máquina.
+O procedimento formal de estorno deve ser executado exclusivamente por um colaborador com perfil de Administrador, por questões de segurança financeira. O gestor acessa o menu *Vendas > Histórico de Vendas* (`/vendas/historico.php`), localiza a transação pelo número do cupom ou horário, confere os itens e clica no botão sólido vermelho *Estornar Venda*. Uma janela de confirmação exige o preenchimento obrigatório da justificativa do cancelamento (ex: cliente desistiu da compra antes de retirar a mercadoria). Ao confirmar, o sistema altera o status da venda para cancelada, realiza a devolução física e automática das unidades aos seus exatos lotes de origem (preservando o controle PEPS/FIFO) e grava um registro imutável na trilha de auditoria forense do sistema com carimbo de data, horário, operador responsável e IP da máquina.
 
 #### 4. Por que os produtos são organizados em 10 Famílias Funcionais em vez de categorias genéricas?
 A classificação do catálogo em 10 Famílias Funcionais específicas da Papelaria Real (Cadernos & Blocos, Canetas & Marcadores, Lápis & Apontadores, Borrachas & Correção, Colas & Fitas Adesivas, Papéis & Folhas, Pastas & Organização, Corte & Medição, Tintas & Pintura, Grampeadores & Fixação) foi adotada para refletir fielmente a rotina operacional do comércio varejista físico. Categorias macro genéricas (como apenas "Escolar" ou "Escritório") causam distorções graves em papelarias, pois um mesmo caderno pode atender tanto a um estudante quanto a um escritório de advocacia. A separação por famílias funcionais de produtos garante acurácia científica no cálculo da Curva ABC, organiza os relatórios de reposição de compras, facilita o inventário físico nas prateleiras e permite ao atendente localizar rapidamente qualquer item no balcão de vendas.
 
 #### 5. Como solicitar redefinição de senha ou gerenciar novos operadores de caixa?
-O gerenciamento de credenciais e operadores de caixa é restrito ao perfil de Administrador da Papelaria Real. Para cadastrar um novo funcionário ou redefinir senhas, o administrador acessa o menu *Configurações > Gestão de Operadores*, clica em *Adicionar Novo Usuário*, informa o nome completo, e-mail corporativo, define o perfil de acesso adequado (Caixa com permissões restritas de balcão ou Administrador com acesso total) e cadastra uma senha inicial, que é automaticamente criptografada pelo algoritmo seguro BCrypt (Cost 12). Caso um operador esqueça sua senha, o administrador pode acessar a mesma tela e gerar uma nova senha temporária com um clique, orientando o colaborador a alterá-la no primeiro acesso subsequente para preservar o sigilo pessoal.
+O gerenciamento de credenciais e operadores de caixa é restrito ao perfil de Administrador da Papelaria Real. Para cadastrar um novo funcionário ou redefinir senhas, o administrador acessa o menu *Configurações > Gestão de Operadores* (`/configuracoes.php`), clica em *Adicionar Novo Usuário*, informa o nome completo, e-mail corporativo, define o perfil de acesso adequado (Caixa com permissões restritas de balcão ou Administrador com acesso total) e cadastra uma senha inicial, que é automaticamente criptografada pelo algoritmo seguro BCrypt (Cost 12). Caso um operador esqueça sua senha, o administrador pode acessar a mesma tela e gerar uma nova senha temporária com um clique, orientando o colaborador a alterá-la no primeiro acesso subsequente para preservar o sigilo pessoal.
 
 ---
 
-### 9.2 Protocolo de Contingência Offline (Modo Local XAMPP)
-Em caso de interrupção da internet banda larga na loja física, siga este procedimento de emergência:
+### 9.3 Protocolo de Contingência Offline (Modo Local XAMPP)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -545,42 +673,54 @@ Em caso de interrupção da internet banda larga na loja física, siga este proc
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 9.3 Canais de Atendimento e SLA de Suporte
-Caso enfrente dúvidas operacionais não solucionadas neste manual ou identifique comportamentos anômalos no sistema:
-- **Central de Ajuda Interna:** Disponível 24/7 na barra de navegação superior (`ajuda.php`).
-- **Contato de Suporte Técnico da Equipe:** Contato via e-mail e canal de suporte dedicado.
-- **SLA de Atendimento:** Resposta e triagem operacional em até **2 horas úteis** em horário comercial (segunda a sábado, das 08h às 18h).
-
+### 9.4 Canais de Atendimento e SLA de Suporte (2 Horas Úteis)
+- **Central de Ajuda Interna:** Disponível 24/7 na barra superior (`/ajuda.php`).
+- **Suporte Técnico Equipe Mr. Coding:** Atendimento via canal direto de suporte.
+- **SLA Operacional:** Triagem e resposta técnica em até **2 horas úteis** em horário comercial (segunda a sábado, das 08h às 18h).
 ---
 
 # GLOSSÁRIO DE TERMOS TÉCNICOS E COMERCIAIS
 
-- **PEPS / FIFO (Primeiro que Entra, Primeiro que Sai):** Princípio contábil e logístico onde os produtos adquiridos primeiro (ou com validade mais próxima) são os primeiros a serem vendidos no caixa.
-- **NFC-e (Nota Fiscal de Consumidor Eletrônica):** Documento fiscal eletrônico emitido no varejo físico para registrar compras do consumidor final.
-- **EAN-13:** Padrão internacional de código de barras composto por 13 dígitos numéricos presente nas embalagens dos produtos.
-- **Curva ABC:** Metodologia de gestão de estoque baseada na regra de Pareto (80/20) que classifica itens em classes A (vitais), B (intermediários) e C (baixo giro).
-- **DRE (Demonstrativo do Resultado do Exercício):** Relatório financeiro contábil que confronta receitas e custos para evidenciar se a loja obteve lucro bruto ou prejuízo.
-- **Markup:** Índice multiplicador aplicado sobre o custo de compra do produto para formar o preço de venda e cobrir despesas e margem de lucro.
-- **Custo Médio Ponderado:** Média aritmética dos custos de aquisição ponderada pelas quantidades compradas em cada lote.
-- **RBAC (Role-Based Access Control):** Controle de acesso baseado em papéis que restringe permissões no sistema de acordo com o cargo (Administrador vs Caixa).
-- **Token CSRF:** Código criptográfico de uso único inserido nos formulários para garantir que a requisição de venda ou exclusão partiu legitimamente do operador logado.
-- **Lote:** Remessa física de determinado produto fabricada em um mesmo ciclo, compartilhando a mesma data de validade e custo de compra.
-- **Ticket Médio:** Valor médio faturado em cada atendimento (`Faturamento Total ÷ Quantidade de Vendas`).
-- **Estoque Mínimo:** Quantidade mínima estipulada de segurança que um produto deve manter na prateleira para não romper o estoque antes da chegada de um novo pedido.
+- **PEPS / FIFO (Primeiro que Entra, Primeiro que Sai):** Princípio logístico e contábil onde os produtos adquiridos primeiro (ou com validade mais próxima) são os primeiros a serem consumidos no caixa.
+- **NFC-e (Nota Fiscal de Consumidor Eletrônica):** Documento fiscal eletrônico padrão do varejo que registra a operação comercial com o consumidor final.
+- **EAN-13:** Padrão internacional de código de barras composto por 13 dígitos numéricos presente nas embalagens comerciais.
+- **Curva ABC:** Metodologia de classificação de estoque baseada na regra de Pareto (80/20) que divide produtos em vitais (A), intermediários (B) e baixo giro (C).
+- **DRE (Demonstrativo do Resultado do Exercício):** Relatório contábil gerencial que confronta receitas e custos para revelar o lucro bruto da operação.
+- **Markup:** Índice percentual ou multiplicador aplicado sobre o custo de compra para fixar o preço de venda de balcão.
+- **Custo Médio Ponderado:** Média de custos ponderada pelas quantidades compradas em cada lote de fornecedor.
+- **RBAC (Role-Based Access Control):** Mecanismo de governança que restringe o acesso aos recursos do sistema com base no cargo do colaborador (Administrador vs Caixa).
+- **Token CSRF:** Identificador criptográfico de uso único para validação de segurança em formulários web.
+- **Lote:** Conjunto homogêneo de mercadorias fabricado em um mesmo ciclo, compartilhando prazo de validade e custo de aquisição.
+- **Ticket Médio:** Indicador comercial que mede o valor médio gasto por cliente em cada venda (`Faturamento ÷ Quantidade de Vendas`).
+- **Estoque Mínimo:** Nível mínimo de mercadorias que aciona o alarme preventivo de reposição para que a loja não fique sem estoque.
 
 ---
 
 ## NOTAS PARA REVISÃO ACADÊMICA (ENZO E NIKOLAS)
 
-Esta seção lista os pontos de checagem documental e os prints de tela reais que devem ser capturados e inseridos na diagramação final do TCC:
+Esta lista cataloga os 24 prints de tela reais correspondentes a cada uma das 24 telas homologadas no Roteiro de Testes de Software (QTS), prontos para substituição na diagramação final:
 
-1. `[INSERIR PRINT DE TELA: login-tela-inicial.png]` — Capturar a tela de login limpa com o formulário centralizado e o rodapé institucional.
-2. `[INSERIR PRINT DE TELA: dashboard-visao-geral.png]` — Capturar o Dashboard com dados simulados, mostrando os 4 cards de KPIs e a tabela com badges coloridos de validade (verde, amarelo e vermelho).
-3. `[INSERIR PRINT DE TELA: produtos-cadastro-formulario.png]` — Capturar a tela de cadastro de produto aberta, destacando a seleção de uma das 10 famílias funcionais.
-4. `[INSERIR PRINT DE TELA: lotes-listagem-validade.png]` — Capturar a listagem de lotes mostrando os alertas de validade de 30 dias.
-5. `[INSERIR PRINT DE TELA: pdv-frente-de-caixa.png]` — Capturar o PDV com itens inseridos no cupom da Papelaria Real, o total destacado e o modal de NFC-e aberto com o QR Code.
-6. `[INSERIR PRINT DE TELA: vendas-historico-listagem.png]` — Capturar a listagem de histórico de vendas do dia com o botão vermelho de estorno e botão azul de reimpressão.
-7. `[INSERIR PRINT DE TELA: compras-entrada-mercadorias.png]` — Capturar a tela de entrada de notas fiscais de fornecedor.
-8. `[INSERIR PRINT DE TELA: relatorios-curva-abc.png]` — Capturar o gráfico ou tabela da Curva ABC dividida nas classes A, B e C.
-9. `[INSERIR PRINT DE TELA: caixa-fechamento-cego.png]` — Capturar a tela de fechamento de caixa cego com o campo de contagem física em branco.
-10. `[INSERIR PRINT DE TELA: ajuda-faq-acordeao.png]` — Capturar a central de ajuda com uma das perguntas da FAQ expandida no acordeão.
+1. `[INSERIR PRINT DE TELA: 01_login_autenticacao.png]` — Tela de login limpa com campos de usuário e senha.
+2. `[INSERIR PRINT DE TELA: 02_logout_encerramento.png]` — Confirmação de encerramento de sessão segura.
+3. `[INSERIR PRINT DE TELA: 03_dashboard_executivo.png]` — Dashboard com os 4 KPIs e painel de alertas de validade de 30 dias.
+4. `[INSERIR PRINT DE TELA: 04_pdv_frente_caixa.png]` — PDV com itens no carrinho, totalizador em destaque e atalhos F1-F9.
+5. `[INSERIR PRINT DE TELA: 05_historico_vendas.png]` — Tabela de vendas filtrada em `/vendas/historico.php`.
+6. `[INSERIR PRINT DE TELA: 06_cupom_termico.png]` — Modelo de cupom térmico não-fiscal formatado para 80mm.
+7. `[INSERIR PRINT DE TELA: 07_painel_fiscal_nfce.png]` — Chave de acesso de 44 dígitos e QR Code em `/vendas/nfce.php`.
+8. `[INSERIR PRINT DE TELA: 08_produtos_catalogo.png]` — Listagem do catálogo com busca reativa e cálculo de markup.
+9. `[INSERIR PRINT DE TELA: 09_lotes_validades.png]` — Controle de lotes com alertas cromáticos de 30 dias.
+10. `[INSERIR PRINT DE TELA: 10_gerador_etiquetas.png]` — Gerador de etiquetas de código de barras SVG em `/produtos/etiquetas.php`.
+11. `[INSERIR PRINT DE TELA: 11_categorias_familias.png]` — As 10 famílias funcionais em `/categorias/index.php`.
+12. `[INSERIR PRINT DE TELA: 12_movimentacoes_kardex.png]` — Livro-razão e auditoria de movimentações de estoque.
+13. `[INSERIR PRINT DE TELA: 13_clientes_cadastro.png]` — Cadastro de clientes com autopreenchimento de CEP e botão WhatsApp.
+14. `[INSERIR PRINT DE TELA: 14_fornecedores_whatsapp.png]` — Fornecedores homologados e botão WhatsApp direto.
+15. `[INSERIR PRINT DE TELA: 15_compras_historico.png]` — Histórico de ordens de compra em `/compras/index.php`.
+16. `[INSERIR PRINT DE TELA: 16_compras_nova_ordem.png]` — Formulário de entrada de nota fiscal em `/compras/nova.php`.
+17. `[INSERIR PRINT DE TELA: 17_compras_visualizar_espelho.png]` — Espelho de conferência de compra em `/compras/visualizar.php`.
+18. `[INSERIR PRINT DE TELA: 18_relatorios_central.png]` — Painel central de relatórios e DRE gerencial.
+19. `[INSERIR PRINT DE TELA: 19_relatorios_bi_graficos.png]` — Gráficos estatísticos Chart.js em `/relatorios/analise.php`.
+20. `[INSERIR PRINT DE TELA: 20_relatorios_logs_auditoria.png]` — Trilha forense de logs em `/relatorios/logs.php`.
+21. `[INSERIR PRINT DE TELA: 21_relatorios_exportacao_excel.png]` — Painel de exportação em 9 colunas em `/relatorios/excel.php`.
+22. `[INSERIR PRINT DE TELA: 22_central_ajuda_faq.png]` — Central de ajuda com acordeão em `/ajuda.php`.
+23. `[INSERIR PRINT DE TELA: 23_configuracoes_empresa.png]` — Configurações da empresa e gestão de operadores em `/configuracoes.php`.
+24. `[INSERIR PRINT DE TELA: 24_topbar_sidebar.png]` — Topbar limpa e sidebar retrátil em `inc/header.php`.
