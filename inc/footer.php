@@ -187,6 +187,62 @@
                 tableResp.classList.remove('dropdown-active');
             }
         });
+
+        // 5. Inicializador Universal de Roll-Up Suave de Métricas e KPIs (Anime.js)
+        (function() {
+            if (typeof anime !== 'function') return;
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            const kpiElements = document.querySelectorAll('[data-kpi]');
+            if (!kpiElements || kpiElements.length === 0) return;
+
+            kpiElements.forEach(function(el) {
+                const rawVal = el.getAttribute('data-kpi');
+                if (rawVal === null || rawVal === '') return;
+                const targetNum = parseFloat(rawVal);
+                if (isNaN(targetNum) || targetNum <= 0) return;
+
+                const originalHtml = el.innerHTML;
+                const isCurrency = el.hasAttribute('data-kpi-currency') || originalHtml.includes('R$');
+                const decimals = el.getAttribute('data-kpi-decimals') !== null 
+                    ? parseInt(el.getAttribute('data-kpi-decimals'), 10) 
+                    : (isCurrency ? 2 : 0);
+                
+                const subSpan = el.querySelector('span');
+                const spanHtml = subSpan ? subSpan.outerHTML : '';
+
+                const counter = { val: 0 };
+                anime({
+                    targets: counter,
+                    val: targetNum,
+                    round: decimals > 0 ? Math.pow(10, decimals) : 1,
+                    easing: 'easeOutExpo',
+                    duration: isCurrency ? 1400 : 1100,
+                    update: function() {
+                        let formatted = '';
+                        if (isCurrency) {
+                            formatted = 'R$ ' + counter.val.toLocaleString('pt-BR', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            });
+                        } else if (decimals > 0) {
+                            formatted = counter.val.toLocaleString('pt-BR', {
+                                minimumFractionDigits: decimals,
+                                maximumFractionDigits: decimals
+                            });
+                        } else {
+                            formatted = Math.round(counter.val).toLocaleString('pt-BR');
+                        }
+
+                        if (spanHtml) {
+                            el.innerHTML = formatted + ' ' + spanHtml;
+                        } else {
+                            el.textContent = formatted;
+                        }
+                    }
+                });
+            });
+        })();
     });
     </script>
     <?php require_once __DIR__ . '/cookie_banner.php'; ?>

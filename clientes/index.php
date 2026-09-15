@@ -75,7 +75,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Total de Clientes</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalClientes ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalClientes ?>"><?= $totalClientes ?></h3>
                         <small class="text-muted"><?= $totalClientes === 1 ? '1 cliente cadastrado' : "$totalClientes clientes cadastrados" ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
@@ -91,7 +91,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Clientes Ativos</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $clientesAtivos ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $clientesAtivos ?>"><?= $clientesAtivos ?></h3>
                         <small class="text-muted"><?= $clientesAtivos === 1 ? '1 cliente ativo' : "$clientesAtivos clientes ativos" ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--success">
@@ -107,7 +107,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Faturamento Total</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($faturamentoTotalClientes, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $faturamentoTotalClientes ?>">R$ <?= number_format($faturamentoTotalClientes, 2, ',', '.') ?></h3>
                         <small class="text-muted">Total em compras acumuladas</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--warning">

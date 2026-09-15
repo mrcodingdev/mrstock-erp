@@ -159,7 +159,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Lotes Ativos (Saldo > 0)</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $kpiTotalAtivos ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $kpiTotalAtivos ?>"><?= $kpiTotalAtivos ?></h3>
                         <small class="text-muted"><?= $kpiTotalAtivos === 1 ? '1 lote em estoque' : "$kpiTotalAtivos lotes em estoque" ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
@@ -175,7 +175,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vencendo em 30 Dias</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $kpiTotalVencendo ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $kpiTotalVencendo ?>"><?= $kpiTotalVencendo ?></h3>
                         <small class="text-warning fw-semibold"><i class="fa-solid fa-clock me-1"></i>Atenção ao Shelf-Life</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--warning">
@@ -191,7 +191,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Lotes Vencidos</span>
-                        <h3 class="fw-bold text-danger m-0 tabular-nums"><?= $kpiTotalVencidos ?></h3>
+                        <h3 class="fw-bold text-danger m-0 tabular-nums" data-kpi="<?= $kpiTotalVencidos ?>"><?= $kpiTotalVencidos ?></h3>
                         <small class="text-danger fw-semibold"><i class="fa-solid fa-triangle-exclamation me-1"></i>Bloqueados para venda</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--danger">
@@ -207,7 +207,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Capital Imobilizado</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($kpiCapitalImob, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $kpiCapitalImob ?>">R$ <?= number_format($kpiCapitalImob, 2, ',', '.') ?></h3>
                         <small class="text-success fw-semibold"><i class="fa-solid fa-coins me-1"></i>Custo total em estoque</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--success">

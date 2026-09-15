@@ -170,7 +170,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vendas Filtradas</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($totalVendasQtd, 0, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalVendasQtd ?>"><?= number_format($totalVendasQtd, 0, ',', '.') ?></h3>
                         <small class="text-muted"><span class="tabular-nums"><?= $totalItensVendidos ?></span> <?= ($totalItensVendidos === 1) ? 'item no total' : 'itens no total' ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
@@ -184,7 +184,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Faturamento Filtrado</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($faturamentoTotal, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $faturamentoTotal ?>">R$ <?= number_format($faturamentoTotal, 2, ',', '.') ?></h3>
                         <small class="text-muted">Total líquido realizado</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--success">
@@ -198,7 +198,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Ticket Médio</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($ticketMedio, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $ticketMedio ?>">R$ <?= number_format($ticketMedio, 2, ',', '.') ?></h3>
                         <small class="text-muted">Média por cupom fiscal</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--info">

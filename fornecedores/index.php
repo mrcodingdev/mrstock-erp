@@ -77,7 +77,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Total de Fornecedores</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalFornecedores ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalFornecedores ?>"><?= $totalFornecedores ?></h3>
                         <small class="text-muted"><?= $totalFornecedores === 1 ? '1 parceiro cadastrado' : "$totalFornecedores parceiros cadastrados" ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
@@ -93,7 +93,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Fornecedores Ativos</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $fornecedoresAtivos ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $fornecedoresAtivos ?>"><?= $fornecedoresAtivos ?></h3>
                         <small class="text-muted">Parceiros homologados</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--success">
@@ -109,7 +109,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Mix de Produtos Vinculados</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalProdutosVinculados ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalProdutosVinculados ?>"><?= $totalProdutosVinculados ?></h3>
                         <small class="text-muted">Itens catalogados</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--warning">

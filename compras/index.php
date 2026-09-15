@@ -163,7 +163,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Total de Compras</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($totalCompras, 0, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalCompras ?>"><?= number_format($totalCompras, 0, ',', '.') ?></h3>
                         <small class="text-muted"><?= $totalCompras === 1 ? '1 ordem de compra' : "$totalCompras ordens registradas" ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
@@ -179,7 +179,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Volume de Compras</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($totalValorCompras, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalValorCompras ?>">R$ <?= number_format($totalValorCompras, 2, ',', '.') ?></h3>
                         <small class="text-muted">Valor total acumulado</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--info">
@@ -195,7 +195,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Compras Pagas</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($totalComprasPagas, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalComprasPagas ?>">R$ <?= number_format($totalComprasPagas, 2, ',', '.') ?></h3>
                         <small class="text-muted">Liquidadas com fornecedor</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--success">
@@ -211,7 +211,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Compras Pendentes</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($totalComprasPendentes, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalComprasPendentes ?>">R$ <?= number_format($totalComprasPendentes, 2, ',', '.') ?></h3>
                         <small class="text-muted">Contas a liquidar</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--warning">

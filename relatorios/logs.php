@@ -313,7 +313,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Registros Hoje</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($kpiTotalHoje, 0, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $kpiTotalHoje ?>"><?= number_format($kpiTotalHoje, 0, ',', '.') ?></h3>
                         <small class="text-muted">Ações registradas hoje</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
@@ -329,7 +329,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vendas Auditadas</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($kpiVendasHoje, 0, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $kpiVendasHoje ?>"><?= number_format($kpiVendasHoje, 0, ',', '.') ?></h3>
                         <small class="text-success fw-semibold">PDV e Venda Rápida hoje</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--success">
@@ -345,7 +345,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Logins Autenticados</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($kpiLoginsHoje, 0, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $kpiLoginsHoje ?>"><?= number_format($kpiLoginsHoje, 0, ',', '.') ?></h3>
                         <small class="text-info fw-semibold">Sessões iniciadas hoje</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--info">
@@ -361,7 +361,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Ações Críticas / Estoque</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($kpiAjustesHoje, 0, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $kpiAjustesHoje ?>"><?= number_format($kpiAjustesHoje, 0, ',', '.') ?></h3>
                         <small class="text-warning fw-semibold">Falhas, Exclusões e Estoque</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--warning">

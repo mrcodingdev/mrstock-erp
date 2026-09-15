@@ -181,7 +181,7 @@ require_once __DIR__ . '/../inc/header.php';
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Total de Cupons</span>
-                            <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($totalCuponsEmitidos, 0, ',', '.') ?></h3>
+                            <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalCuponsEmitidos ?>"><?= number_format($totalCuponsEmitidos, 0, ',', '.') ?></h3>
                             <small class="text-muted"><?= ($totalCuponsEmitidos === 1) ? '1 cupom emitido' : 'Cupons emitidos no total' ?></small>
                         </div>
                         <div class="kpi-icon-box kpi-icon-box--primary">
@@ -197,7 +197,7 @@ require_once __DIR__ . '/../inc/header.php';
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Faturamento Fiscal</span>
-                            <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($totalFaturamentoFiscal, 2, ',', '.') ?></h3>
+                            <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalFaturamentoFiscal ?>">R$ <?= number_format($totalFaturamentoFiscal, 2, ',', '.') ?></h3>
                             <small class="text-muted">Total acobertado por NFC-e</small>
                         </div>
                         <div class="kpi-icon-box kpi-icon-box--success">
@@ -213,7 +213,7 @@ require_once __DIR__ . '/../inc/header.php';
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Emitidos Hoje</span>
-                            <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($cuponsHoje, 0, ',', '.') ?></h3>
+                            <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $cuponsHoje ?>"><?= number_format($cuponsHoje, 0, ',', '.') ?></h3>
                             <small class="text-muted"><span class="tabular-nums">R$ <?= number_format($faturamentoHoje, 2, ',', '.') ?></span> <?= ($cuponsHoje === 1) ? 'faturado hoje' : 'faturados hoje' ?></small>
                         </div>
                         <div class="kpi-icon-box kpi-icon-box--danger">

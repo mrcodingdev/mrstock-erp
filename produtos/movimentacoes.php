@@ -160,7 +160,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Total de Movimentações</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($totalMovimentacoes, 0, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalMovimentacoes ?>"><?= number_format($totalMovimentacoes, 0, ',', '.') ?></h3>
                         <small class="text-muted"><?= $totalMovimentacoes === 1 ? '1 registro' : "$totalMovimentacoes registros" ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
@@ -175,7 +175,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Entradas Registradas</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($totalEntradasQtd, 0, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalEntradasQtd ?>"><?= number_format($totalEntradasQtd, 0, ',', '.') ?></h3>
                         <small class="text-muted"><?= $totalEntradasQtd === 1 ? '1 unidade somada' : "$totalEntradasQtd unidades somadas" ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--success">
@@ -190,7 +190,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Saídas Registradas</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($totalSaidasQtd, 0, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalSaidasQtd ?>"><?= number_format($totalSaidasQtd, 0, ',', '.') ?></h3>
                         <small class="text-muted"><?= $totalSaidasQtd === 1 ? '1 unidade baixada' : "$totalSaidasQtd unidades baixadas" ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
@@ -205,7 +205,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Perdas &amp; Avarias</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($totalPerdasQtd, 0, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalPerdasQtd ?>"><?= number_format($totalPerdasQtd, 0, ',', '.') ?></h3>
                         <small class="text-muted"><?= $totalPerdasQtd === 1 ? '1 item descartado' : "$totalPerdasQtd itens descartados" ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--danger">

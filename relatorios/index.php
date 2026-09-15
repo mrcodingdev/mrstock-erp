@@ -95,7 +95,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Catálogo Ativo</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($totalProdutos, 0, ',', '.') ?> <span class="fs-6 fw-normal text-muted">produtos</span></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $totalProdutos ?>"><?= number_format($totalProdutos, 0, ',', '.') ?> <span class="fs-6 fw-normal text-muted">produtos</span></h3>
                         <small class="text-muted tabular-nums"><?= number_format($totalItensEstoque, 0, ',', '.') ?> unidades em estoque</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
@@ -111,7 +111,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Patrimônio em Estoque</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($patrimonioTotalEstoque, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $patrimonioTotalEstoque ?>">R$ <?= number_format($patrimonioTotalEstoque, 2, ',', '.') ?></h3>
                         <small class="text-muted tabular-nums">Lucro projetado: R$ <?= number_format($lucroProjetado, 2, ',', '.') ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--success">
@@ -127,7 +127,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Alertas de Reposição</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($produtosEstoqueBaixo, 0, ',', '.') ?> <span class="fs-6 fw-normal text-muted"><?= $produtosEstoqueBaixo === 1 ? 'crítico' : 'críticos' ?></span></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $produtosEstoqueBaixo ?>"><?= number_format($produtosEstoqueBaixo, 0, ',', '.') ?> <span class="fs-6 fw-normal text-muted"><?= $produtosEstoqueBaixo === 1 ? 'crítico' : 'críticos' ?></span></h3>
                         <small class="text-danger fw-semibold">Ruptura / abaixo do mínimo</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--danger">
@@ -143,7 +143,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Atenção de Validade</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= number_format($produtosVencendo, 0, ',', '.') ?> <span class="fs-6 fw-normal text-muted"><?= $produtosVencendo === 1 ? 'lote' : 'lotes' ?></span></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $produtosVencendo ?>"><?= number_format($produtosVencendo, 0, ',', '.') ?> <span class="fs-6 fw-normal text-muted"><?= $produtosVencendo === 1 ? 'lote' : 'lotes' ?></span></h3>
                         <small class="text-warning fw-semibold">Vencidos ou em <?= $diasAlertaVenc ?> dias</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--warning">

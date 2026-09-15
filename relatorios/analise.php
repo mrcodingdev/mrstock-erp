@@ -250,7 +250,7 @@ require_once __DIR__ . '/../inc/header.php';
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Faturamento (<?= htmlspecialchars($periodoNome, ENT_QUOTES, 'UTF-8') ?>)</span>
-                            <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($faturamentoPeriodo, 2, ',', '.') ?></h3>
+                            <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $faturamentoPeriodo ?>">R$ <?= number_format($faturamentoPeriodo, 2, ',', '.') ?></h3>
                             <small class="text-muted">
                                 <?= ($qtdVendasPeriodo === 1 ? '<span class="tabular-nums">1</span> venda registrada' : '<span class="tabular-nums">' . number_format($qtdVendasPeriodo, 0, ',', '.') . '</span> vendas registradas') ?>
                             </small>
@@ -268,7 +268,7 @@ require_once __DIR__ . '/../inc/header.php';
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Lucro Bruto Estimado</span>
-                            <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($lucroPeriodo, 2, ',', '.') ?></h3>
+                            <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $lucroPeriodo ?>">R$ <?= number_format($lucroPeriodo, 2, ',', '.') ?></h3>
                             <small class="text-muted">
                                 Margem: <span class="fw-bold tabular-nums text-success"><?= number_format($margemPercentual, 1, ',', '.') ?>%</span>
                             </small>
@@ -286,7 +286,7 @@ require_once __DIR__ . '/../inc/header.php';
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Ticket Médio</span>
-                            <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($ticketMedioPeriodo, 2, ',', '.') ?></h3>
+                            <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $ticketMedioPeriodo ?>">R$ <?= number_format($ticketMedioPeriodo, 2, ',', '.') ?></h3>
                             <small class="text-muted">Média por venda no período</small>
                         </div>
                         <div class="kpi-icon-box kpi-icon-box--info">
@@ -302,7 +302,7 @@ require_once __DIR__ . '/../inc/header.php';
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Patrimônio em Estoque</span>
-                            <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($patrimonioEstoque, 2, ',', '.') ?></h3>
+                            <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $patrimonioEstoque ?>">R$ <?= number_format($patrimonioEstoque, 2, ',', '.') ?></h3>
                             <small class="text-muted">
                                 Lucro projetado: <span class="tabular-nums">R$ <?= number_format($lucroEstoque, 2, ',', '.') ?></span>
                             </small>
