@@ -86,8 +86,6 @@
         const overlay = document.querySelector('.mobile-overlay');
         if (sidebar) sidebar.classList.toggle('mobile-open');
         if (overlay) overlay.classList.toggle('show');
-        const hamBtn = document.getElementById('mobileSidebarToggle');
-        if (hamBtn && sidebar) hamBtn.classList.toggle('is-active', sidebar.classList.contains('mobile-open'));
     }
 
     /**

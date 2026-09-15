@@ -152,8 +152,8 @@ require_once __DIR__ . '/inc/header.php';
 
         <!-- Card 2: Vendas Hoje -->
         <div class="col-12 col-sm-6 col-lg-3">
-            <div class="so-card p-3 mb-0 h-100 position-relative overflow-hidden">
-                <div class="d-flex align-items-center justify-content-between position-relative" style="z-index: 2;">
+            <div class="so-card p-3 mb-0 h-100">
+                <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vendas Hoje</span>
                         <h3 class="fw-bold text-dark m-0 tabular-nums" id="kpiVendasHoje" data-kpi="<?= $vendasHojeTotal ?>">R$ <?= number_format($vendasHojeTotal, 2, ',', '.') ?></h3>
@@ -162,18 +162,6 @@ require_once __DIR__ . '/inc/header.php';
                     <div class="kpi-icon-box kpi-icon-box--success">
                         <i class="fas fa-dollar-sign"></i>
                     </div>
-                </div>
-                <div class="so-card-sparkline-wrap">
-                    <svg class="so-card-sparkline-svg" viewBox="0 0 100 30" preserveAspectRatio="none">
-                        <defs>
-                            <linearGradient id="sparklineSalesGrad" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#284936" stop-opacity="0.28"/>
-                                <stop offset="100%" stop-color="#284936" stop-opacity="0.0"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M0,25 Q15,22 30,18 T60,12 T85,8 T100,5 L100,30 L0,30 Z" fill="url(#sparklineSalesGrad)"/>
-                        <path d="M0,25 Q15,22 30,18 T60,12 T85,8 T100,5" fill="none" stroke="#284936" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
                 </div>
             </div>
         </div>

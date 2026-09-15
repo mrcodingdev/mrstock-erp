@@ -443,98 +443,6 @@ require_once __DIR__ . '/../inc/header.php';
         </div>
     </div>
 
-    <!-- Modal Simulação de Impressora Térmica NFC-e 80mm (MrStock Realistic POS) -->
-    <div class="modal fade" id="modalImpressoraNFCe" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modalImpressoraLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 380px;">
-            <div class="modal-content border-0 shadow-lg" style="background: transparent;">
-                <!-- Ranhura / Cabeça da Impressora Térmica 80mm -->
-                <div class="printer-slot-container text-center">
-                    <div class="d-flex justify-content-between align-items-center mb-2 px-1">
-                        <span class="text-secondary small fw-bold text-uppercase" style="letter-spacing: 1px; font-size: 0.65rem;">
-                            <span class="printer-status-led"></span>MrStock 80mm ESC/POS
-                        </span>
-                        <span class="badge bg-dark border border-secondary text-success fw-bold text-xxs">ONLINE</span>
-                    </div>
-                    <div class="printer-slot-mouth"></div>
-                </div>
-
-                <!-- Papel Térmico Ejetado com Animação Física -->
-                <div class="thermal-paper" id="thermalPaperContent">
-                    <div class="text-center mb-2">
-                        <strong class="d-block text-uppercase fw-bold" style="font-size: 13px;">MRSTOCK COMÉRCIO LTDA</strong>
-                        <span class="text-muted small">CNPJ: 12.345.678/0001-90</span><br>
-                        <span class="text-muted small">Av. Paulista, 1000 - São Paulo, SP</span><br>
-                        <div class="border-bottom border-dark border-dashed my-2"></div>
-                        <strong class="d-block fw-bold" style="font-size: 11px;">DANFE NFC-e - Documento Auxiliar</strong>
-                        <span class="text-muted small" style="font-size: 9px;">Nota Fiscal de Consumidor Eletrônica</span>
-                    </div>
-
-                    <div class="border-bottom border-dark border-dashed mb-2"></div>
-
-                    <!-- Lista de Itens do Cupom -->
-                    <table class="w-100 mb-2" style="font-size: 10px;">
-                        <thead>
-                            <tr class="border-bottom border-dark">
-                                <th class="text-start pb-1">ITEM</th>
-                                <th class="text-center pb-1">QTD</th>
-                                <th class="text-end pb-1">UNIT</th>
-                                <th class="text-end pb-1">TOTAL</th>
-                            </tr>
-                        </thead>
-                        <tbody id="thermalReceiptItems">
-                            <!-- Injetado via JS -->
-                        </tbody>
-                    </table>
-
-                    <div class="border-bottom border-dark border-dashed mb-2"></div>
-
-                    <!-- Totais -->
-                    <div class="d-flex justify-content-between fw-bold mb-1" style="font-size: 11px;">
-                        <span>QTD. TOTAL DE ITENS:</span>
-                        <span id="thermalQtdTotal">0</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-1" style="font-size: 11px;">
-                        <span>SUBTOTAL:</span>
-                        <span id="thermalSubtotal">R$ 0,00</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-1" style="font-size: 11px;">
-                        <span>DESCONTO:</span>
-                        <span id="thermalDesconto">R$ 0,00</span>
-                    </div>
-                    <div class="d-flex justify-content-between fw-bold fs-6 my-2 border-top border-bottom border-dark py-1">
-                        <span>TOTAL A PAGAR:</span>
-                        <span id="thermalTotalPagar">R$ 0,00</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2" style="font-size: 10px;">
-                        <span>FORMA PAGAMENTO:</span>
-                        <span id="thermalFormaPagto" class="text-uppercase fw-bold">DINHEIRO</span>
-                    </div>
-
-                    <!-- QR Code NFC-e Simulado -->
-                    <div class="text-center my-3">
-                        <div class="d-inline-block p-1 border border-dark bg-white">
-                            <img src="<?= BASE_URL ?>/img/qrcode-mock.svg" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://fazenda.sp.gov.br/nfce/qrcode'" width="110" height="110" alt="QR Code NFC-e" class="d-block mx-auto">
-                        </div>
-                        <div class="text-muted mt-1" style="font-size: 8px;">Consulte pela Chave de Acesso em:<br>www.fazenda.sp.gov.br/nfce</div>
-                    </div>
-
-                    <div class="text-center text-muted" style="font-size: 9px;">
-                        <span>Protocolo de Autorização: 135260000000000</span><br>
-                        <span>Data/Hora: <?= date('d/m/Y H:i:s') ?></span>
-                    </div>
-                </div>
-                <!-- Picote inferior realista -->
-                <div class="thermal-tear-bottom mx-auto" style="max-width: 320px; width: 100%;"></div>
-
-                <div class="text-center mt-3">
-                    <button type="button" class="btn btn-dark btn-sm px-4 fw-bold shadow" onclick="finalizarEnvioFormulario()">
-                        <i class="fas fa-print me-1"></i> Imprimir e Fechar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 <script>
 // ══ CONFIGURAÇÕES OPERACIONAIS DINÂMICAS (INJETADAS DO BACKEND) ═══════════════
 const MRSTOCK_CONFIG = {
@@ -677,19 +585,9 @@ function mostrarAlertaEstoque(msg, detalhe) {
 }
 
 // ══ RENDERIZAÇÃO DA GRADE RÁPIDA DE PRODUTOS ══════════════════════════════════
-function renderizarGradeRapida(filtroCat = '', buscaTexto = '', usarShimmer = false) {
+function renderizarGradeRapida(filtroCat = '', buscaTexto = '') {
     const grid = document.getElementById('quickProductGrid');
     if (!grid) return;
-
-    if (usarShimmer) {
-        let shimmerHtml = '';
-        for (let i = 0; i < 6; i++) {
-            shimmerHtml += '<div class="skeleton-grid-card shimmer-placeholder"></div>';
-        }
-        grid.innerHTML = shimmerHtml;
-        setTimeout(() => renderizarGradeRapida(filtroCat, buscaTexto, false), 120);
-        return;
-    }
 
     let filtrados = catalogoProdutos;
 
@@ -750,7 +648,7 @@ function filtrarProdutosPorCategoria(catId) {
             btn.classList.remove('active');
         }
     });
-    renderizarGradeRapida(catId, document.getElementById('barcode_input').value, true);
+    renderizarGradeRapida(catId, document.getElementById('barcode_input').value);
 }
 
 // ══ ADIÇÃO E MANIPULAÇÃO DO CARRINHO ═════════════════════════════════════════
@@ -795,7 +693,7 @@ function processarAdicao(id, nome, preco, qtdMax, qtd, precoCompra = 0) {
     playBeep('success');
     const toastQtdTxt = qtd === 1 ? '1 item' : `${qtd} itens`;
     showToast(`${toastQtdTxt} (${nome}) adicionado ao cupom.`, 'success');
-    renderizarCarrinho(id);
+    renderizarCarrinho();
     renderizarGradeRapida(categoriaAtivaFiltro, document.getElementById('barcode_input').value);
     return true;
 }
@@ -825,7 +723,7 @@ function alterarQuantidadeItem(id, delta) {
     item.quantidade = novaQtd;
     item.subtotal = item.quantidade * item.preco;
     playBeep('success');
-    renderizarCarrinho(delta > 0 ? id : null);
+    renderizarCarrinho();
     renderizarGradeRapida(categoriaAtivaFiltro, document.getElementById('barcode_input').value);
 }
 
@@ -848,7 +746,7 @@ function limparCarrinho() {
 }
 
 // ══ RENDERIZAÇÃO DO CUPOM FISCAL DIGITAL ══════════════════════════════════════
-function renderizarCarrinho(lastAddedId = null) {
+function renderizarCarrinho() {
     const tbody = document.getElementById('tabela_carrinho');
     const badgeItens = document.getElementById('badge_itens_count');
     
@@ -875,10 +773,9 @@ function renderizarCarrinho(lastAddedId = null) {
     carrinho.forEach((item, index) => {
         totalQtd += item.quantidade;
         const seq = String(index + 1).padStart(2, '0');
-        const pulseClass = (lastAddedId !== null && item.id === lastAddedId) ? 'row-cart-pulse' : '';
         
         html += `
-            <tr class="align-middle ${pulseClass}">
+            <tr class="align-middle">
                 <td class="text-muted fw-bold font-monospace tabular-nums" style="font-size:0.75rem;">#${seq}</td>
                 <td>
                     <strong class="text-dark d-block" style="font-size:0.85rem;line-height:1.2;">${item.nome}</strong>
@@ -1128,68 +1025,11 @@ function calcularTroco() {
     }
 }
 
-let modalImpressoraInstancia = null;
-let impressaoTimeout = null;
-
 function confirmarVendaFinal() {
     playBeep('cash');
     const btn = document.getElementById('btnConfirmarVendaModal');
-    if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = '<span class="mr-spinner"></span> Emitindo NFC-e...';
-    }
-
-    // Fecha o modal de pagamento
-    const modalPagtoEl = document.getElementById('modalPagamento');
-    const modalPagtoInst = modalPagtoEl ? bootstrap.Modal.getInstance(modalPagtoEl) : null;
-    if (modalPagtoInst) modalPagtoInst.hide();
-
-    // Popula os dados do cupom fiscal térmico de 80mm
-    const tbodyReceipt = document.getElementById('thermalReceiptItems');
-    if (tbodyReceipt) {
-        let itemsHtml = '';
-        let totalQtd = 0;
-        carrinho.forEach((item) => {
-            totalQtd += item.quantidade;
-            itemsHtml += `
-                <tr>
-                    <td class="text-start text-truncate" style="max-width: 140px;">${item.nome}</td>
-                    <td class="text-center">${item.quantidade}</td>
-                    <td class="text-end">${formatarMoeda(item.preco)}</td>
-                    <td class="text-end fw-bold">${formatarMoeda(item.subtotal)}</td>
-                </tr>
-            `;
-        });
-        tbodyReceipt.innerHTML = itemsHtml;
-        const elQtd = document.getElementById('thermalQtdTotal');
-        if (elQtd) elQtd.textContent = totalQtd;
-        const elSub = document.getElementById('thermalSubtotal');
-        if (elSub) elSub.textContent = document.getElementById('display_subtotal')?.textContent || 'R$ 0,00';
-        const elDesc = document.getElementById('thermalDesconto');
-        if (elDesc) elDesc.textContent = 'R$ ' + formatarMoeda(parseFloat(document.getElementById('input_desconto_real')?.value) || 0);
-        const elTot = document.getElementById('thermalTotalPagar');
-        if (elTot) elTot.textContent = document.getElementById('display_total')?.textContent || 'R$ 0,00';
-        const elForma = document.getElementById('thermalFormaPagto');
-        if (elForma) elForma.textContent = document.getElementById('modal_forma_pagamento')?.value || 'DINHEIRO';
-    }
-
-    // Abre a animação realista da impressora térmica
-    const modalImpEl = document.getElementById('modalImpressoraNFCe');
-    if (modalImpEl) {
-        if (!modalImpressoraInstancia) {
-            modalImpressoraInstancia = new bootstrap.Modal(modalImpEl);
-        }
-        modalImpressoraInstancia.show();
-    }
-
-    // Submissão automática do formulário após simulação de emissão física
-    impressaoTimeout = setTimeout(function() {
-        finalizarEnvioFormulario();
-    }, 1800);
-}
-
-function finalizarEnvioFormulario() {
-    if (impressaoTimeout) clearTimeout(impressaoTimeout);
+    btn.disabled = true;
+    btn.innerHTML = '<span class="mr-spinner"></span> Emitindo NFC-e...';
     document.getElementById('formVenda').submit();
 }
 
