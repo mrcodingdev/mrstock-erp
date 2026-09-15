@@ -898,6 +898,10 @@ document.getElementById('barcode_input').addEventListener('keydown', function(e)
             this.focus();
         } else {
             playBeep('error');
+            this.classList.remove('shake-error');
+            void this.offsetWidth;
+            this.classList.add('shake-error');
+            setTimeout(() => this.classList.remove('shake-error'), 400);
             mostrarAlertaEstoque('Produto não localizado!', `Nenhum produto cadastrado com o código ou termo "${val}".`);
             this.select();
         }
@@ -1025,7 +1029,7 @@ function confirmarVendaFinal() {
     playBeep('cash');
     const btn = document.getElementById('btnConfirmarVendaModal');
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Emitindo NFC-e...';
+    btn.innerHTML = '<span class="mr-spinner"></span> Emitindo NFC-e...';
     document.getElementById('formVenda').submit();
 }
 

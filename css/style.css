@@ -2432,3 +2432,38 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
   }
 }
 
+/* ==========================================================================
+   FEEDBACK TÁTIL & MICRO-INTERAÇÕES B2B (MRSTOCK DESIGN SYSTEM)
+   ========================================================================== */
+@keyframes mrStockShake {
+  0%, 100% { transform: translateX(0); }
+  15%, 45%, 75% { transform: translateX(-6px); }
+  30%, 60%, 90% { transform: translateX(6px); }
+}
+
+.shake-error {
+  animation: mrStockShake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.mr-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: mrSpin 0.6s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.mr-spinner-dark {
+  border: 2px solid rgba(15, 23, 42, 0.2);
+  border-top-color: #0f172a;
+}
+
+@keyframes mrSpin {
+  to { transform: rotate(360deg); }
+}
