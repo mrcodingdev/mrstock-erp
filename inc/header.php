@@ -266,8 +266,10 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
         <!-- TOPBAR SUPERIOR (SALESOPS v0) -->
         <header class="so-header">
             <div class="d-flex align-items-center gap-3">
-                <button class="d-md-none border-0 bg-transparent text-secondary p-0 fs-5" onclick="toggleSidebar()" aria-label="Alternar menu lateral" title="Abrir Menu">
-                    <i class="fa-solid fa-bars"></i>
+                <button class="d-md-none border-0 bg-transparent p-0 hamburger-btn" id="mobileSidebarToggle" onclick="toggleSidebar()" aria-label="Alternar menu lateral" title="Abrir Menu">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
                 </button>
                 <div class="d-flex align-items-center gap-2">
                     <span class="fw-bold text-dark fs-6"><?= htmlspecialchars($_pageTitleClean, ENT_QUOTES, 'UTF-8') ?></span>

@@ -2467,3 +2467,196 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 @keyframes mrSpin {
   to { transform: rotate(360deg); }
 }
+
+/* ==========================================================================
+   PULSO TÁTIL DE ADIÇÃO NO CARRINHO (MRSTOCK DESIGN SYSTEM)
+   ========================================================================== */
+@keyframes cartRowPulse {
+  0% {
+    background-color: rgba(40, 73, 54, 0.25);
+    transform: scale(1.008);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
+
+.row-cart-pulse {
+  animation: cartRowPulse 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ==========================================================================
+   MENU HAMBÚRGUER COM MORFISMO FÍSICO (3 BARRAS PARA X)
+   ========================================================================== */
+.hamburger-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  outline: none;
+}
+
+.hamburger-box {
+  width: 22px;
+  height: 16px;
+  display: inline-block;
+  position: relative;
+}
+
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+  width: 22px;
+  height: 2px;
+  background-color: #475569;
+  border-radius: 2px;
+  position: absolute;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.hamburger-inner {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.hamburger-inner::before {
+  content: "";
+  top: -6px;
+}
+
+.hamburger-inner::after {
+  content: "";
+  bottom: -6px;
+}
+
+.hamburger-btn.is-active .hamburger-inner {
+  transform: rotate(45deg);
+  background-color: #284936;
+}
+
+.hamburger-btn.is-active .hamburger-inner::before {
+  top: 0;
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger-btn.is-active .hamburger-inner::after {
+  bottom: 0;
+  transform: rotate(-90deg);
+  background-color: #284936;
+}
+
+/* ==========================================================================
+   SKELETON SHIMMER LOADING (MRSTOCK DESIGN SYSTEM)
+   ========================================================================== */
+@keyframes shimmerWave {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer-placeholder {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmerWave 1.4s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+.skeleton-grid-card {
+  height: 84px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+/* ==========================================================================
+   MINI-SPARKLINE NATIVO PARA BENTO CARDS (SALESOPS)
+   ========================================================================== */
+.so-card-sparkline-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 38px;
+  overflow: hidden;
+  pointer-events: none;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.so-card-sparkline-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ==========================================================================
+   IMPRESSORA TÉRMICA DE NFC-e 80MM (SIMULAÇÃO VISUAL REALISTA)
+   ========================================================================== */
+.printer-slot-container {
+  background: #0f172a;
+  border-radius: 12px 12px 0 0;
+  padding: 16px 20px 8px 20px;
+  box-shadow: inset 0 -4px 8px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.printer-slot-mouth {
+  height: 8px;
+  background: #020617;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.1);
+  margin-bottom: 4px;
+}
+
+.printer-status-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+@keyframes printThermalReceipt {
+  0% {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    max-height: 520px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.thermal-paper {
+  background: #ffffff;
+  color: #1e293b;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  line-height: 1.35;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 16px 14px 24px 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  animation: printThermalReceipt 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow: hidden;
+  position: relative;
+}
+
+.thermal-tear-bottom {
+  height: 8px;
+  background: radial-gradient(circle, transparent, transparent 50%, #ffffff 50%, #ffffff 100%);
+  background-size: 10px 10px;
+  margin-top: -1px;
+}
+
