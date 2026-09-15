@@ -187,63 +187,129 @@
                 tableResp.classList.remove('dropdown-active');
             }
         });
+    });
 
-        // 5. Inicializador Universal de Roll-Up Suave de Métricas e KPIs (Anime.js)
-        (function() {
-            if (typeof anime !== 'function') return;
-            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // 5. Motor Universal de Roll-Up Suave de Métricas e KPIs (60-144 FPS RAF + Zero-Flicker)
+    (function() {
+        function parseKpiValue(valStr) {
+            if (typeof valStr === 'number') return valStr;
+            if (!valStr || typeof valStr !== 'string') return NaN;
+            let clean = valStr.trim();
+            if (/^-?\d+(\.\d+)?$/.test(clean)) {
+                return parseFloat(clean);
+            }
+            if (clean.includes(',')) {
+                clean = clean.replace(/[^\d,-]/g, '');
+                clean = clean.replace(/\./g, '').replace(',', '.');
+                return parseFloat(clean);
+            }
+            clean = clean.replace(/[^\d.-]/g, '');
+            return parseFloat(clean);
+        }
 
+        function formatKpiNumber(val, isCurrency, decimals) {
+            if (isCurrency) {
+                return 'R$ ' + val.toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+            if (decimals > 0) {
+                return val.toLocaleString('pt-BR', {
+                    minimumFractionDigits: decimals,
+                    maximumFractionDigits: decimals
+                });
+            }
+            return Math.round(val).toLocaleString('pt-BR');
+        }
+
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        function initUniversalKpiRollUp() {
             const kpiElements = document.querySelectorAll('[data-kpi]');
             if (!kpiElements || kpiElements.length === 0) return;
 
-            kpiElements.forEach(function(el) {
+            // Passagem 1: Validação e Reset Síncrono Imediato (Elimina 100% do Flicker)
+            const itemsToAnimate = [];
+            kpiElements.forEach(function(el, index) {
                 const rawVal = el.getAttribute('data-kpi');
-                if (rawVal === null || rawVal === '') return;
-                const targetNum = parseFloat(rawVal);
-                if (isNaN(targetNum) || targetNum <= 0) return;
+                let targetNum = parseKpiValue(rawVal);
+                if (isNaN(targetNum)) {
+                    targetNum = parseKpiValue(el.textContent);
+                }
+                if (isNaN(targetNum) || targetNum < 0) return;
 
                 const originalHtml = el.innerHTML;
                 const isCurrency = el.hasAttribute('data-kpi-currency') || originalHtml.includes('R$');
                 const decimals = el.getAttribute('data-kpi-decimals') !== null 
                     ? parseInt(el.getAttribute('data-kpi-decimals'), 10) 
-                    : (isCurrency ? 2 : 0);
+                    : (isCurrency ? 2 : (Number.isInteger(targetNum) ? 0 : 1));
                 
                 const subSpan = el.querySelector('span');
                 const spanHtml = subSpan ? subSpan.outerHTML : '';
 
-                const counter = { val: 0 };
-                anime({
-                    targets: counter,
-                    val: targetNum,
-                    round: decimals > 0 ? Math.pow(10, decimals) : 1,
-                    easing: 'easeOutExpo',
-                    duration: isCurrency ? 1400 : 1100,
-                    update: function() {
-                        let formatted = '';
-                        if (isCurrency) {
-                            formatted = 'R$ ' + counter.val.toLocaleString('pt-BR', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            });
-                        } else if (decimals > 0) {
-                            formatted = counter.val.toLocaleString('pt-BR', {
-                                minimumFractionDigits: decimals,
-                                maximumFractionDigits: decimals
-                            });
-                        } else {
-                            formatted = Math.round(counter.val).toLocaleString('pt-BR');
-                        }
+                if (targetNum === 0) {
+                    const zeroFormatted = formatKpiNumber(0, isCurrency, decimals);
+                    el.innerHTML = spanHtml ? zeroFormatted + ' ' + spanHtml : zeroFormatted;
+                    return;
+                }
 
-                        if (spanHtml) {
-                            el.innerHTML = formatted + ' ' + spanHtml;
-                        } else {
-                            el.textContent = formatted;
-                        }
-                    }
+                // Reset síncrono imediato para zero
+                const zeroFormatted = formatKpiNumber(0, isCurrency, decimals);
+                el.innerHTML = spanHtml ? zeroFormatted + ' ' + spanHtml : zeroFormatted;
+
+                itemsToAnimate.push({
+                    el: el,
+                    targetNum: targetNum,
+                    isCurrency: isCurrency,
+                    decimals: decimals,
+                    spanHtml: spanHtml,
+                    duration: isCurrency ? 1150 : 950,
+                    delay: index * 60
                 });
             });
-        })();
-    });
+
+            // Passagem 2: Animação via requestAnimationFrame sincronizada com a taxa de quadros da GPU
+            itemsToAnimate.forEach(function(item) {
+                setTimeout(function() {
+                    const startTime = performance.now();
+                    let rafId = null;
+
+                    function tick(now) {
+                        const elapsed = now - startTime;
+                        const progress = Math.min(elapsed / item.duration, 1);
+                        const currentVal = easeOutCubic(progress) * item.targetNum;
+                        const formatted = formatKpiNumber(currentVal, item.isCurrency, item.decimals);
+                        item.el.innerHTML = item.spanHtml ? formatted + ' ' + item.spanHtml : formatted;
+
+                        if (progress < 1) {
+                            rafId = requestAnimationFrame(tick);
+                        } else {
+                            const finalFormatted = formatKpiNumber(item.targetNum, item.isCurrency, item.decimals);
+                            item.el.innerHTML = item.spanHtml ? finalFormatted + ' ' + item.spanHtml : finalFormatted;
+                        }
+                    }
+
+                    rafId = requestAnimationFrame(tick);
+
+                    // Trava de segurança de convergência
+                    setTimeout(function() {
+                        if (rafId) cancelAnimationFrame(rafId);
+                        const finalFormatted = formatKpiNumber(item.targetNum, item.isCurrency, item.decimals);
+                        item.el.innerHTML = item.spanHtml ? finalFormatted + ' ' + item.spanHtml : finalFormatted;
+                    }, item.duration + 150);
+                }, item.delay);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initUniversalKpiRollUp);
+        } else {
+            initUniversalKpiRollUp();
+        }
+    })();
     </script>
     <?php require_once __DIR__ . '/cookie_banner.php'; ?>
 </body>
