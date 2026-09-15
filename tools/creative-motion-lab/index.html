@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Motion Lab | Anime.js Mastery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: #111827;
+      --bg-card-hover: #1e293b;
+      --border-color: #1f293d;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-green: #10b981;
+      --accent-emerald: #6ae49b;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --accent-amber: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(9, 13, 22, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #10b981, #047857);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-title span {
+      color: var(--accent-emerald);
+      font-weight: 500;
+      font-size: 0.85rem;
+      margin-left: 0.35rem;
+      background: rgba(106, 228, 155, 0.12);
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(106, 228, 155, 0.25);
+    }
+
+    /* TABS */
+    .tabs-nav {
+      display: flex;
+      gap: 0.5rem;
+      background: #0d131f;
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 18px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab-btn:hover { color: var(--text-main); }
+
+    .tab-btn.active {
+      background: #1f293d;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* MAIN CONTENT */
+    main {
+      flex: 1;
+      padding: 2.5rem 2rem;
+      max-width: 1300px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .section-desc {
+      margin-bottom: 2rem;
+    }
+
+    .section-desc h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .section-desc p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s ease;
+    }
+
+    .card:hover {
+      border-color: #374151;
+    }
+
+    .card-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .card-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 0.6rem;
+    }
+
+    .badge-b2b { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .badge-creative { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .card-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .card-canvas {
+      min-height: 160px;
+      background: #0a0f1d;
+      border-radius: 10px;
+      border: 1px solid #1e293b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-action {
+      background: #1f293d;
+      color: #ffffff;
+      border: 1px solid #334155;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-action:hover {
+      background: #2563eb;
+      border-color: #3b82f6;
+    }
+
+    /* DEMO SPECIFICS */
+    /* 1. Counter */
+    .metric-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--accent-emerald);
+      letter-spacing: -0.03em;
+    }
+
+    /* 2. SVG Checkmark */
+    .svg-check {
+      width: 80px;
+      height: 80px;
+    }
+    .svg-check circle {
+      stroke: #1e293b;
+      stroke-width: 4;
+      fill: none;
+    }
+    .svg-check .circle-draw {
+      stroke: var(--accent-emerald);
+      stroke-width: 4;
+      stroke-linecap: round;
+      fill: none;
+    }
+    .svg-check .check-path {
+      stroke: #ffffff;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* 3. Toast Box */
+    .toast-preview {
+      background: #1e293b;
+      border-left: 4px solid var(--accent-emerald);
+      border-radius: 8px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      width: 100%;
+      max-width: 280px;
+    }
+
+    /* 4. Kinetic Typography */
+    .kinetic-text {
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      display: flex;
+      gap: 4px;
+    }
+    .kinetic-letter {
+      display: inline-block;
+      color: var(--text-main);
+    }
+
+    /* 5. Stagger Wave Grid */
+    .wave-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 22px);
+      gap: 6px;
+    }
+    .wave-dot {
+      width: 22px;
+      height: 22px;
+      background: #1f293d;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* 6. Magnetic Button */
+    .magnetic-area {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .magnetic-btn {
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+      transition: box-shadow 0.2s ease;
+      will-change: transform;
+    }
+
+    /* 7. SVG Morph */
+    .morph-svg {
+      width: 90px;
+      height: 90px;
+    }
+
+    /* Tab Panels */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-logo">A</div>
+      <div class="brand-title">Creative Motion Lab <span>Anime.js Engine</span></div>
+    </div>
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('b2b')">💼 Enterprise B2B (MrStock)</button>
+      <button class="tab-btn" onclick="switchTab('creative')">✨ Creative / Landing Pages</button>
+    </div>
+  </header>
+
+  <main>
+    
+    <!-- ABA 1: B2B ENTERPRISE -->
+    <div id="tab-b2b" class="tab-panel active">
+      <div class="section-desc">
+        <h2>Micro-Interações Funcionais B2B (MrStock ERP)</h2>
+        <p>Animações ultra-rápidas, táteis e orientadas à produtividade. A regra de ouro é nunca atrasar o operador de balcão e gerar feedback imediato de transações monetárias e fiscais.</p>
+      </div>
+
+      <div class="grid-cards">
+        <!-- Card 1: Roll-up Financeiro -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-badge badge-b2b">Finanças / Dashboard</span>
+            <h3 class="card-title">KPI Roll-Up Suave (R$)</h3>
+            <p class="card-text">Interpolação de valores de faturamento de 0 até o total real sem bloquear o DOM ou a navegação do ERP.</p>
+          </div>
+          <div class="card-canvas">
+            <div class="metric-val" id="kpiValue">R$ 0,00</div>
+          </div>
+          <button class="btn-action" onclick="runKpiAnimation()">⚡ Animar Faturamento do Dia</button>
+        </div>
+
+        <!-- Card 2: Checkmark NFC-e SVG Draw-In -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-badge badge-b2b">Fiscal / Balcão PDV</span>
+            <h3 class="card-title">Emissão Fiscal com SVG Draw</h3>
+            <p class="card-text">O traço do ícone de sucesso da NFC-e desenha-se fluidamente em 400ms, fornecendo confirmação visual tátil.</p>
+          </div>
+          <div class="card-canvas">
+            <svg class="svg-check" viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="34" />
+              <circle class="circle-draw" id="svgCircle" cx="40" cy="40" r="34" />
+              <path class="check-path" id="svgCheck" d="M25 42 L35 52 L55 30" />
+            </svg>
+          </div>
+          <button class="btn-action" onclick="runFiscalSuccessAnimation()">🧾 Simular Emissão NFC-e (F4)</button>
+        </div>
+
+        <!-- Card 3: Toast Notification com Molas (Springs) -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-badge badge-b2b">Feedback Operacional</span>
+            <h3 class="card-title">Toast com Física de Molas</h3>
+            <p class="card-text">Alertas que entram com leve física inercial (spring damping), transmitindo suavidade sem perder a agilidade do caixa.</p>
+          </div>
+          <div class="card-canvas">
+            <div class="toast-preview" id="toastBox">
+              <span style="font-size: 1.3rem;">📦</span>
+              <div>
+                <strong style="font-size: 0.85rem; display:block; color:#ffffff;">Item Adicionado</strong>
+                <small style="font-size: 0.72rem; color: #94a3b8;">Caderno Tilibra 200 Fls</small>
+              </div>
+            </div>
+          </div>
+          <button class="btn-action" onclick="runToastSpringAnimation()">🔔 Disparar Toast de Balcão</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA 2: CREATIVE / LANDING PAGES -->
+    <div id="tab-creative" class="tab-panel">
+      <div class="section-desc">
+        <h2>Experiências Cinéticas Fora da Curva (Landing Pages & Portfólios)</h2>
+        <p>Efeitos de alto impacto visual para encantar, prender a atenção e elevar taxas de conversão. Utiliza o poder do Anime.js em matrizes 2D, cinemática e atração magnética.</p>
+      </div>
+
+      <div class="grid-cards">
+        <!-- Card 1: Wave Grid Staggering -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-badge badge-creative">Stagger 2D Grid</span>
+            <h3 class="card-title">Matriz Cinética de Ondulação</h3>
+            <p class="card-text">Propagação radial senoidal a partir do centro da grade usando a função nativa de stagger do Anime.js.</p>
+          </div>
+          <div class="card-canvas">
+            <div class="wave-grid" id="waveGrid"></div>
+          </div>
+          <button class="btn-action" onclick="runGridWave()">🌊 Disparar Onda Senoidal</button>
+        </div>
+
+        <!-- Card 2: Kinetic Typography -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-badge badge-creative">Tipografia Cinética</span>
+            <h3 class="card-title">Text Split & Spring Reveal</h3>
+            <p class="card-text">Revelação de letras individuais com defasagem elástica, criando títulos de impacto cinematográfico.</p>
+          </div>
+          <div class="card-canvas">
+            <div class="kinetic-text" id="kineticHeading">
+              <!-- Letras preenchidas via JS -->
+            </div>
+          </div>
+          <button class="btn-action" onclick="runKineticType()">✨ Animar Revelação de Tipografia</button>
+        </div>
+
+        <!-- Card 3: Magnetic Button -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-badge badge-creative">Interatividade Física</span>
+            <h3 class="card-title">Botão Magnético de Alta Precisão</h3>
+            <p class="card-text">Passe o mouse sobre a caixa para sentir o botão ser fisicamente atraído pelo cursor e retornar com mola elástica.</p>
+          </div>
+          <div class="card-canvas" id="magneticContainer">
+            <button class="magnetic-btn" id="magneticBtn">Explorar Ecossistema 🚀</button>
+          </div>
+          <button class="btn-action" onclick="pulseMagneticBtn()">💫 Efeito Pulso de Acento</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Tab Switching
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      
+      if (tab === 'b2b') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('tab-b2b').classList.add('active');
+      } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('tab-creative').classList.add('active');
+        initCreativeDemos();
+      }
+    }
+
+    // =========================================================================
+    // DEMOS B2B
+    // =========================================================================
+    function runKpiAnimation() {
+      const obj = { val: 0 };
+      const el = document.getElementById('kpiValue');
+      
+      anime({
+        targets: obj,
+        val: 28450.80,
+        round: 100,
+        easing: 'easeOutExpo',
+        duration: 1400,
+        update: function() {
+          el.textContent = 'R$ ' + obj.val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+      });
+    }
+
+    function runFiscalSuccessAnimation() {
+      const circle = document.getElementById('svgCircle');
+      const check = document.getElementById('svgCheck');
+
+      // Reset
+      circle.style.strokeDashoffset = '214';
+      circle.style.strokeDasharray = '214';
+      check.style.strokeDashoffset = '50';
+      check.style.strokeDasharray = '50';
+
+      const tl = anime.timeline({
+        easing: 'cubicBezier(0.16, 1, 0.3, 1)'
+      });
+
+      tl.add({
+        targets: circle,
+        strokeDashoffset: [214, 0],
+        duration: 500
+      }).add({
+        targets: check,
+        strokeDashoffset: [50, 0],
+        duration: 350
+      }, '-=150');
+    }
+
+    function runToastSpringAnimation() {
+      const toast = document.getElementById('toastBox');
+      anime.remove(toast);
+      
+      anime({
+        targets: toast,
+        translateY: [-30, 0],
+        scale: [0.92, 1],
+        opacity: [0, 1],
+        easing: 'spring(1, 90, 12, 0)',
+        duration: 400
+      });
+    }
+
+    // =========================================================================
+    // DEMOS CREATIVE
+    // =========================================================================
+    let creativeInitialized = false;
+
+    function initCreativeDemos() {
+      if (creativeInitialized) return;
+      creativeInitialized = true;
+
+      // 1. Setup Grid 8x8
+      const grid = document.getElementById('waveGrid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 48; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'wave-dot';
+        grid.appendChild(dot);
+      }
+
+      // 2. Setup Kinetic Text
+      const textCont = document.getElementById('kineticHeading');
+      const phrase = "CINÉTICA DIGITAL";
+      textCont.innerHTML = '';
+      phrase.split('').forEach(char => {
+        const span = document.createElement('span');
+        span.className = 'kinetic-letter';
+        span.textContent = char === ' ' ? ' ' : char;
+        textCont.appendChild(span);
+      });
+
+      // 3. Setup Magnetic Button
+      const cont = document.getElementById('magneticContainer');
+      const btn = document.getElementById('magneticBtn');
+
+      cont.addEventListener('mousemove', (e) => {
+        const rect = cont.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        anime({
+          targets: btn,
+          translateX: x * 0.45,
+          translateY: y * 0.45,
+          easing: 'easeOutQuad',
+          duration: 150
+        });
+      });
+
+      cont.addEventListener('mouseleave', () => {
+        anime({
+          targets: btn,
+          translateX: 0,
+          translateY: 0,
+          easing: 'spring(1, 80, 10, 0)',
+          duration: 600
+        });
+      });
+
+      runGridWave();
+      runKineticType();
+    }
+
+    function runGridWave() {
+      anime({
+        targets: '.wave-dot',
+        scale: [
+          { value: 0.2, easing: 'easeOutSine', duration: 250 },
+          { value: 1, easing: 'easeInOutQuad', duration: 550 }
+        ],
+        backgroundColor: [
+          { value: '#10b981', easing: 'easeOutSine', duration: 250 },
+          { value: '#1f293d', easing: 'easeInOutQuad', duration: 550 }
+        ],
+        delay: anime.stagger(40, { grid: [6, 8], from: 'center' })
+      });
+    }
+
+    function runKineticType() {
+      anime.remove('.kinetic-letter');
+      anime({
+        targets: '.kinetic-letter',
+        translateY: [40, 0],
+        opacity: [0, 1],
+        scale: [0.5, 1],
+        rotateZ: [-15, 0],
+        delay: anime.stagger(45),
+        easing: 'spring(1, 85, 11, 0)'
+      });
+    }
+
+    function pulseMagneticBtn() {
+      const btn = document.getElementById('magneticBtn');
+      anime({
+        targets: btn,
+        scale: [1, 1.15, 1],
+        boxShadow: [
+          '0 8px 20px rgba(59, 130, 246, 0.35)',
+          '0 0 35px rgba(139, 92, 246, 0.8)',
+          '0 8px 20px rgba(59, 130, 246, 0.35)'
+        ],
+        duration: 600,
+        easing: 'easeInOutQuad'
+      });
+    }
+
+    // Inicialização da primeira tela
+    window.addEventListener('DOMContentLoaded', () => {
+      runKpiAnimation();
+      runFiscalSuccessAnimation();
+    });
+  </script>
+</body>
+</html>
