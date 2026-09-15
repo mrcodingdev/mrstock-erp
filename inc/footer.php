@@ -64,6 +64,7 @@
     </div><!-- /main-panel -->
 
     <script src="<?= BASE_URL ?>/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= BASE_URL ?>/js/anime.min.js?v=3.2.2"></script>
     <?php if (!empty($extraScripts)) echo $extraScripts; ?>
     <script>
     /**

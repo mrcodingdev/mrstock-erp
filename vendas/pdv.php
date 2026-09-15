@@ -540,11 +540,32 @@ function showToast(message, type = 'success', title = 'PDV MrStock') {
     `;
 
     container.appendChild(toastEl);
-    setTimeout(() => {
-        toastEl.style.opacity = '0';
-        toastEl.style.transform = 'translateY(-8px)';
-        setTimeout(() => toastEl.remove(), 280);
-    }, 2500);
+    if (typeof anime === 'function') {
+        anime({
+            targets: toastEl,
+            translateY: [-20, 0],
+            opacity: [0, 1],
+            scale: [0.94, 1],
+            duration: 450,
+            easing: 'spring(1, 85, 12, 0)'
+        });
+        setTimeout(() => {
+            anime({
+                targets: toastEl,
+                translateY: [0, -14],
+                opacity: [1, 0],
+                duration: 250,
+                easing: 'easeInQuad',
+                complete: () => toastEl.remove()
+            });
+        }, 2500);
+    } else {
+        setTimeout(() => {
+            toastEl.style.opacity = '0';
+            toastEl.style.transform = 'translateY(-8px)';
+            setTimeout(() => toastEl.remove(), 280);
+        }, 2500);
+    }
 }
 
 function formatarMoeda(v) {

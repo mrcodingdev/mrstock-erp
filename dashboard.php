@@ -140,7 +140,7 @@ require_once __DIR__ . '/inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Produtos Ativos</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalProdutos ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" id="kpiTotalProdutos" data-kpi="<?= $totalProdutos ?>"><?= $totalProdutos ?></h3>
                         <small class="text-muted"><?= ($totalProdutos === 1) ? '1 item no catálogo' : "$totalProdutos itens no catálogo" ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--primary">
@@ -156,7 +156,7 @@ require_once __DIR__ . '/inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vendas Hoje</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums">R$ <?= number_format($vendasHojeTotal, 2, ',', '.') ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" id="kpiVendasHoje" data-kpi="<?= $vendasHojeTotal ?>">R$ <?= number_format($vendasHojeTotal, 2, ',', '.') ?></h3>
                         <small class="text-muted"><?= ($vendasHojeQtd === 1 ? '1 transação hoje' : "$vendasHojeQtd transações hoje") ?></small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--success">
@@ -172,7 +172,7 @@ require_once __DIR__ . '/inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Estoque Baixo</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalEstoqueBaixo ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" id="kpiEstoqueBaixo" data-kpi="<?= $totalEstoqueBaixo ?>"><?= $totalEstoqueBaixo ?></h3>
                         <small class="text-muted">Abaixo do mínimo</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--warning">
@@ -188,7 +188,7 @@ require_once __DIR__ . '/inc/header.php';
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vencimentos (<?= $diasAlertaVenc ?>d)</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums"><?= $totalVencimento ?></h3>
+                        <h3 class="fw-bold text-dark m-0 tabular-nums" id="kpiVencimentos" data-kpi="<?= $totalVencimento ?>"><?= $totalVencimento ?></h3>
                         <small class="text-muted">Validade próxima</small>
                     </div>
                     <div class="kpi-icon-box kpi-icon-box--danger">
@@ -424,5 +424,87 @@ require_once __DIR__ . '/inc/header.php';
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof anime !== 'function') return;
+
+    // 1. Produtos Ativos
+    const elProd = document.getElementById('kpiTotalProdutos');
+    if (elProd && elProd.dataset.kpi) {
+        const targetVal = parseInt(elProd.dataset.kpi, 10) || 0;
+        if (targetVal > 0) {
+            const obj = { val: 0 };
+            anime({
+                targets: obj,
+                val: targetVal,
+                round: 1,
+                easing: 'easeOutExpo',
+                duration: 1200,
+                update: function() {
+                    elProd.textContent = Math.round(obj.val).toLocaleString('pt-BR');
+                }
+            });
+        }
+    }
+
+    // 2. Vendas Hoje (R$)
+    const elVendas = document.getElementById('kpiVendasHoje');
+    if (elVendas && elVendas.dataset.kpi) {
+        const targetVal = parseFloat(elVendas.dataset.kpi) || 0;
+        if (targetVal > 0) {
+            const obj = { val: 0 };
+            anime({
+                targets: obj,
+                val: targetVal,
+                round: 100,
+                easing: 'easeOutExpo',
+                duration: 1400,
+                update: function() {
+                    elVendas.textContent = 'R$ ' + obj.val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+            });
+        }
+    }
+
+    // 3. Estoque Baixo
+    const elEstoque = document.getElementById('kpiEstoqueBaixo');
+    if (elEstoque && elEstoque.dataset.kpi) {
+        const targetVal = parseInt(elEstoque.dataset.kpi, 10) || 0;
+        if (targetVal > 0) {
+            const obj = { val: 0 };
+            anime({
+                targets: obj,
+                val: targetVal,
+                round: 1,
+                easing: 'easeOutExpo',
+                duration: 1000,
+                update: function() {
+                    elEstoque.textContent = Math.round(obj.val).toLocaleString('pt-BR');
+                }
+            });
+        }
+    }
+
+    // 4. Vencimentos
+    const elVenc = document.getElementById('kpiVencimentos');
+    if (elVenc && elVenc.dataset.kpi) {
+        const targetVal = parseInt(elVenc.dataset.kpi, 10) || 0;
+        if (targetVal > 0) {
+            const obj = { val: 0 };
+            anime({
+                targets: obj,
+                val: targetVal,
+                round: 1,
+                easing: 'easeOutExpo',
+                duration: 1000,
+                update: function() {
+                    elVenc.textContent = Math.round(obj.val).toLocaleString('pt-BR');
+                }
+            });
+        }
+    }
+});
+</script>
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>
