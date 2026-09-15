@@ -36,11 +36,6 @@ $produtosEstoqueBaixo = $stmtEstoqueBaixo->fetchAll();
 $stmtTotalBaixo    = $pdo->query("SELECT COUNT(*) AS total FROM produtos WHERE quantidade <= estoque_minimo AND status = 'ativo'");
 $totalEstoqueBaixo = (int)($stmtTotalBaixo->fetchColumn() ?: 0);
 
-// ── 3.1. Índice de Saúde Operacional do Estoque (Service Level / Fill Rate) ─
-$saudeEstoquePercentual = $totalProdutos > 0 
-    ? round((($totalProdutos - $totalEstoqueBaixo) / $totalProdutos) * 100, 1) 
-    : 100.0;
-
 // ── 4. Produtos Próximos ao Vencimento ───────────────────────────────────────
 $diasAlertaVenc = (int)get_app_config($pdo, 'alerta_vencimento_dias', '30');
 
@@ -137,28 +132,6 @@ require_once __DIR__ . '/inc/header.php';
 </div>
 
 <div class="content-body">
-    <!-- ══ BARRA EXECUTIVA DE NÍVEL DE SERVIÇO & SAÚDE DO ESTOQUE (PROGRESSBAR SVG B2B) ══ -->
-    <div class="so-health-card">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div class="d-flex align-items-center gap-2">
-                <span class="badge <?= ($saudeEstoquePercentual >= 90 ? 'bg-success' : ($saudeEstoquePercentual >= 75 ? 'bg-warning text-dark' : 'bg-danger')) ?> p-2 px-3 fw-bold">
-                    <i class="fas <?= ($saudeEstoquePercentual >= 90 ? 'fa-shield-halved' : 'fa-triangle-exclamation') ?> me-1"></i>
-                    Nível de Serviço: <?= number_format($saudeEstoquePercentual, 1, ',', '.') ?>%
-                </span>
-                <span class="text-dark fw-bold small">Índice de Disponibilidade Imediata do Catálogo</span>
-            </div>
-            <div class="text-muted small">
-                <span class="fw-semibold text-dark tabular-nums"><?= $totalProdutos - $totalEstoqueBaixo ?></span> de <span class="tabular-nums"><?= $totalProdutos ?></span> produtos com estoque plenamente regular
-            </div>
-        </div>
-        <div class="so-health-track">
-            <div class="so-health-bar <?= ($saudeEstoquePercentual >= 90 ? 'so-health-bar--good' : ($saudeEstoquePercentual >= 75 ? 'so-health-bar--warning' : 'so-health-bar--danger')) ?>" 
-                 style="width: 0%;" 
-                 id="healthProgressBar"
-                 data-target-width="<?= $saudeEstoquePercentual ?>%"></div>
-        </div>
-    </div>
-
     <!-- ══ CARDS DE RESUMO (BENTO GRID SALESOPS DE ELITE) ════════════════════ -->
     <div class="row g-3 mb-4">
         <!-- Card 1: Produtos Ativos -->
@@ -317,7 +290,7 @@ require_once __DIR__ . '/inc/header.php';
                                         </td>
                                         <td class="text-center tabular-nums">
                                             <?php if ((int)$p['quantidade'] <= 0): ?>
-                                                <span class="so-badge so-badge-danger tabular-nums rough-highlight"><i class="fas fa-ban me-1"></i> 0 un</span>
+                                                <span class="so-badge so-badge-danger tabular-nums"><i class="fas fa-ban me-1"></i> 0 un</span>
                                             <?php else: ?>
                                                 <span class="so-badge so-badge-warning tabular-nums"><?= (int)$p['quantidade'] ?> un</span>
                                             <?php endif; ?>
@@ -451,16 +424,5 @@ require_once __DIR__ . '/inc/header.php';
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const healthBar = document.getElementById('healthProgressBar');
-    if (healthBar) {
-        setTimeout(function() {
-            healthBar.style.width = healthBar.getAttribute('data-target-width');
-        }, 150);
-    }
-});
-</script>
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>
