@@ -138,7 +138,7 @@ try {
 <body>
     <div class="card-503">
         <div class="logo-box">
-            <img src="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/assets/img/mr_stock_logo_branca.ico" alt="MrStock ERP">
+            <img src="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/assets/img/mr_stock_logo_branca.ico" alt="MrStock ERP" width="48" height="48" style="width: 48px; height: 48px; object-fit: contain;">
         </div>
         <h1>503</h1>
         <h2>Serviço Temporariamente Indisponível</h2>

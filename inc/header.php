@@ -155,6 +155,15 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
     <?php if (!empty($extraHead)) echo $extraHead; ?>
 </head>
 <body class="<?= $_bodyClassStr ?>">
+    <!-- Skip Link de Acessibilidade (Front-End Checklist / WCAG 2.1 AA) -->
+    <a href="#mainContent" class="so-skip-link visually-hidden-focusable">Pular para o conteúdo principal</a>
+
+    <!-- Fallback Semântico para Navegadores sem JavaScript Ativo -->
+    <noscript>
+        <div class="alert alert-warning border-0 rounded-0 mb-0 text-center py-2 px-3 fw-semibold small" style="background-color: #fef08a; color: #854d0e;">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i> Atenção: O MrStock ERP requer JavaScript ativado no navegador para operação fluida do PDV, gráficos e modais.
+        </div>
+    </noscript>
 
     <!-- ===== OVERLAY PARA MOBILE ===== -->
     <div class="mobile-overlay" onclick="toggleSidebar()"></div>
@@ -316,4 +325,4 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
             <?php unset($_SESSION['flash_success']); ?>
         <?php endif; ?>
 
-        <main class="main-content flex-grow-1" role="main" id="mainContent">
+        <main class="main-content flex-grow-1" role="main" id="mainContent" tabindex="-1">

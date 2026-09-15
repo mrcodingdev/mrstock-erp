@@ -2331,3 +2331,104 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 .text-muted, .text-secondary {
   color: #475569 !important;
 }
+
+/* ==========================================================================
+   SKIP LINK DE ACESSIBILIDADE (FRONT-END CHECKLIST & WCAG 2.1 AA)
+   ========================================================================== */
+.so-skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 9999;
+  background-color: #284936;
+  color: #ffffff !important;
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  text-decoration: none;
+  transition: top 0.2s ease-in-out;
+}
+.so-skip-link:focus,
+.so-skip-link:focus-visible {
+  top: 0;
+  outline: 3px solid #6ae49b;
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   FOLHA DE IMPRESSÃO GERENCIAL LIMPA (FRONT-END CHECKLIST / @MEDIA PRINT)
+   Oculta barras de navegação, botões e controles interativos em relatórios físicos
+   ========================================================================== */
+@media print {
+  .so-sidebar,
+  .mobile-overlay,
+  .so-header,
+  .so-collapse-wrap,
+  .so-skip-link,
+  .btn,
+  .btn-group,
+  .badge-btn,
+  .alert-dismissible .btn-close,
+  .pagination,
+  .modal,
+  .so-footer-gestaoclick {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .main-panel,
+  .main-content,
+  .container-fluid,
+  .card,
+  .table-responsive {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  .table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    color: #000000 !important;
+  }
+
+  .table th,
+  .table td {
+    border: 1px solid #cbd5e1 !important;
+    padding: 4pt 6pt !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .table thead th {
+    background-color: #f1f5f9 !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page-break {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+

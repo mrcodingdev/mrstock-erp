@@ -883,9 +883,18 @@ document.getElementById('barcode_input').addEventListener('keydown', function(e)
     }
 });
 
-document.getElementById('barcode_input').addEventListener('input', function() {
+// Utilitário de Debounce para Otimização de Performance em Buscas Rápidas (Front-End Checklist)
+function mrStockDebounce(func, wait = 250) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+document.getElementById('barcode_input').addEventListener('input', mrStockDebounce(function() {
     renderizarGradeRapida(categoriaAtivaFiltro, this.value);
-});
+}, 250));
 
 // ══ MODAL DE PAGAMENTO, TROCO E FINALIZAÇÃO ══════════════════════════════════
 function abrirModalPagamento() {
