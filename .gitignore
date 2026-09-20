@@ -14,30 +14,40 @@ Thumbs.db
 *.tmp
 error_log
 
-# Configurações de IA, Agentes e Scripts Locais
+# Configurações de Ambiente e Variáveis Locais
+.env
+*.bak
+*backup*.php
+
+# Configurações de Agentes, LLMs e Manifestos Locais
 .agents/
 .gemini/
 GEMINI.md
 GLOBAL_BRAIN_MANIFEST.md
-*.bak
-*backup*.php
-scripts/deploy_ftp.py
-07_Megabrain_Obsidian/
-.env
+SESSION_HANDOFF.md
+llms.txt
+progress.txt
+tasks/
+tools/
+scripts/
+graphify-out/
+node_modules/
 
-# Hubs Acadêmicos e Backups do Drive
+# Hubs Acadêmicos e Backups Locais do Drive
 01_TCC_Documentacao_Academica/
 02_Auditorias_e_Qualidade_QA/
 03_Backups_e_Releases/
 04_Base_de_Conhecimento_e_Obsidian/
-scripts/*
-!scripts/backup_restore_tester.php
+07_Megabrain_Obsidian/
 
-# Dependências e Logs Locais de Ferramentas de Desenvolvimento
-node_modules/
-tools/**/node_modules/
-tools/**/interactions.jsonl
-tools/**/orchestrator_inbox.jsonl
-graphify-out/
-SESSION_HANDOFF.md
-
+# Documentos Internos de Pesquisa e Relatórios Intermediários
+docs/analises_detalhadas_quarta_leva/
+docs/analises_detalhadas_terceira_leva/
+docs/INDICE_QUARTA_LEVA_AUTONOMOUS_LOOPS_E_ENGINES.md
+docs/INDICE_TERCEIRA_LEVA_HARNESSES_E_SOFTWARES.md
+docs/RELATORIO_EXECUTIVO_TERCEIRA_LEVA_HARNESSES_E_SOFTWARES.pdf
+docs/PRD_CONTEXTO_COMPLETO_MRSTOCK_MANUAL_USUARIO.md
+docs/RELATORIO_AUDITORIA_GERAL_MRSTOCK_v2.2.0.md
+docs/PARECER_EDITORIAL_MANUAL_USUARIO.*
+docs/GRANDE_RELATORIO_01_09_2026_MRSTOCK_V2_1.*
+docs/figure_pages.json
