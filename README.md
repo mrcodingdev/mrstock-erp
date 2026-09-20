@@ -57,15 +57,15 @@ Em produção, o sistema opera sob certificado digital SSL/TLS na infraestrutura
 O desenvolvimento do sistema tomou como base empírica a rotina comercial da **Papelaria Real Ltda**, empresa familiar fundada em 15 de agosto de 1981 em Sorocaba/SP por Sueli Maria Castanho Albuquerque Souza e Osnir.
 
 ```
-┌──────────────────────────────────────────────────────────────────────────────────────────┐
-│                                   PAPELARIA REAL LTDA                                    │
-├──────────────────────────────────────────────────────────────────────────────────────────┤
-│ • Fundação: 15 de agosto de 1981 • Sorocaba/SP                                         │
-│ • Quadro: 5 colaboradores (3 operadores de balcão e 2 proprietários/administradores)     │
-│ • Operação: Comércio varejista de materiais escolares, técnicos e suprimentos de escrita │
-│ • Catálogo: Mais de 1.000 itens categorizados em 10 Famílias Funcionais de Produtos      │
+┌────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   PAPELARIA REAL LTDA                                      │
+├────────────────────────────────────────────────────────────────────────────────────────────┤
+│ • Fundação: 15 de agosto de 1981 • Sorocaba/SP                                             │
+│ • Quadro: 5 colaboradores (3 operadores de balcão e 2 proprietários/administradores)       │
+│ • Operação: Comércio varejista de materiais escolares, técnicos e suprimentos de escrita   │
+│ • Catálogo: Mais de 1.000 itens categorizados em 10 Famílias Funcionais de Produtos        │
 │ • Regime Operacional: Balcão físico contínuo com picos sazonais (período de volta às aulas)│
-└──────────────────────────────────────────────────────────────────────────────────────────┘
+└────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Gargalos Diagnosticados e Soluções Implementadas
