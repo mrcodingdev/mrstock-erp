@@ -1,0 +1,63 @@
+name: "Relato de Bug"
+description: "Crie um relatório de falha reproduzível para ajudar a equipe a corrigir o problema."
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por relatar o problema. Forneça o máximo de detalhes operacionais para reprodução da falha.
+  - type: textarea
+    id: description
+    attributes:
+      label: "Descrição do Problema"
+      description: "Explicação clara e concisa do comportamento inesperado."
+      placeholder: "Ao tentar finalizar a venda com desconto de 100%, o sistema retorna erro 500..."
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Passos para Reproduzir"
+      description: "Sequência exata de ações para disparar a falha."
+      placeholder: |
+        1. Acesse a tela '/vendas/pdv.php'
+        2. Adicione o item '001' ao carrinho
+        3. Clique em 'Concluir Venda' sem informar forma de pagamento
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Comportamento Esperado"
+      description: "O que deveria ter acontecido segundo as especificações do sistema."
+      placeholder: "O sistema deve exibir um aviso solicitando a seleção da forma de pagamento."
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs e Rastreamento de Erro"
+      description: "Stack trace, logs do console do navegador ou saída do terminal."
+      render: shell
+    validations:
+      required: false
+  - type: dropdown
+    id: environment
+    attributes:
+      label: "Ambiente Afetado"
+      options:
+        - "Local / Desenvolvimento (XAMPP)"
+        - "Staging / Homologação"
+        - "Produção (Hostinger)"
+    validations:
+      required: true
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Checklist de Validação"
+      options:
+        - label: "Confirmo que não incluí senhas, chaves de API ou dados sensíveis neste reporte."
+          required: true
+        - label: "Verifiquei se já não existe uma issue aberta relatando o mesmo comportamento."
+          required: true

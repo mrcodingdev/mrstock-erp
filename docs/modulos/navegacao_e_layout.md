@@ -5,15 +5,15 @@
 ---
 
 ## 1. Objetivo & Contexto de Negócio
-Define o padrão visual e ergonômico universal do MrStock ERP. Implementa as diretrizes do **SalesOps Design System** e as **14 Zonas de Blindagem Visual Anti-Slop**, garantindo uma interface profissional, ágil e livre de poluição visual.
+Define o padrão visual e ergonômico universal do MrStock ERP. Implementa as diretrizes do Design System institucional, garantindo uma interface profissional, ágil, com botões sólidos de fábrica e acessibilidade WCAG 2.1 AA.
 
 ---
 
 ## 2. Interface & Componentes Visuais
-- **Topbar Limpa (Regra #2 do GEMINI.md):** Exibe exclusivamente o título direto da página atual (ex: `Frente de Caixa`, `Estoque & Produtos`, `Dashboard`), sem prefixos redundantes ou badges decorativos.
+- **Topbar Limpa:** Exibe exclusivamente o título direto da página atual (ex: `Frente de Caixa`, `Estoque & Produtos`, `Dashboard`), sem prefixos redundantes ou badges decorativos.
 - **Sidebar Colapsável com Anti-FOUC:** Menu lateral expansível/recolhível com memória de estado em `localStorage` e script inline que previne saltos visuais no primeiro paint (CLS 0.000).
-- **Botões 100% Sólidos de Fábrica (Regra #1):** Preenchimento sólido, texto branco puro e escurecimento suave no hover.
-- **Animações Fluidas Globais (Regra #17):** `@keyframes salesOpsSlideInLeft` (0.5s) presente em todos os cards, tabelas e abas.
+- **Botões 100% Sólidos de Fábrica:** Preenchimento sólido, texto branco puro e escurecimento suave no hover.
+- **Animações Fluidas Globais:** `@keyframes mrStockSlideInLeft` (0.5s) presente em todos os cards, tabelas e abas.
 
 ---
 

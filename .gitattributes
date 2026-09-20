@@ -1,0 +1,20 @@
+# Normalização automática de quebras de linha para LF em qualquer SO
+* text=auto eol=lf
+
+# Tratamento estrito de arquivos binários
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.docx binary
+*.xlsx binary
+*.woff binary
+*.woff2 binary
+
+# Identificação de linguagens e exclusão de bibliotecas em estatísticas do repositório
+/vendor/**                  linguist-vendored
+/node_modules/**            linguist-vendored
+/docs/**                    linguist-documentation
+/tests/**                   linguist-documentation

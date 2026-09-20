@@ -36,6 +36,8 @@
     <a href="#seguranca-e-integridade">Segurança</a> •
     <a href="#controle-de-acesso-rbac">Perfis RBAC</a> •
     <a href="#instalacao-e-execucao">Instalação</a> •
+    <a href="docs/README.md">Documentação</a> •
+    <a href="SECURITY.md">Segurança</a> •
     <a href="#equipe-e-orientadores">Equipe & Orientadores</a>
   </p>
 </div>
@@ -58,7 +60,7 @@ O desenvolvimento do sistema tomou como base empírica a rotina comercial da **P
 ┌──────────────────────────────────────────────────────────────────────────────────────────┐
 │                                   PAPELARIA REAL LTDA                                    │
 ├──────────────────────────────────────────────────────────────────────────────────────────┤
-│ • Fundação: 15 de agosto de 1981 • Sorocaba – SP                                         │
+│ • Fundação: 15 de agosto de 1981 • Sorocaba/SP                                         │
 │ • Quadro: 5 colaboradores (3 operadores de balcão e 2 proprietários/administradores)     │
 │ • Operação: Comércio varejista de materiais escolares, técnicos e suprimentos de escrita │
 │ • Catálogo: Mais de 1.000 itens categorizados em 10 Famílias Funcionais de Produtos      │
@@ -384,29 +386,42 @@ O sistema implementa o princípio do menor privilégio e do sigilo comercial atr
 
 ## <a id="documentacao-academica"></a>Documentação Acadêmica & Anexos do TCC
 
-O projeto conta com documentação técnica complementar disponível no diretório [`docs/`](docs/):
+O projeto conta com documentação técnica completa indexada em [`docs/README.md`](docs/README.md) e arquivos complementares:
 
+* **Centro de Documentação Técnica:** [`docs/README.md`](docs/README.md) (catálogo de arquitetura, 18 módulos detalhados e fluxos).
 * **Manual do Usuário Oficial v2.2.0:** [`docs/MRSTOCK_MANUAL_DO_USUARIO_v2.2.0_FINAL.pdf`](docs/MRSTOCK_MANUAL_DO_USUARIO_v2.2.0_FINAL.pdf) (documento ilustrado de 71 páginas contendo sumário próprio, catálogo de 86 figuras, tutorial operacional e passo a passo de todas as telas).
-* **Anexo A — Roteiro de Entrevista com o Cliente Piloto:** [`docs/ANEXO_ENTREVISTA_LEVANTAMENTO_REQUISITOS_PAPELARIA_REAL.pdf`](docs/ANEXO_ENTREVISTA_LEVANTAMENTO_REQUISITOS_PAPELARIA_REAL.pdf) (instrumento de Engenharia de Requisitos com 24 perguntas e respostas chanceladas pelos proprietários da Papelaria Real).
+* **Anexo A: Roteiro de Entrevista com o Cliente Piloto:** [`docs/ANEXO_ENTREVISTA_LEVANTAMENTO_REQUISITOS_PAPELARIA_REAL.pdf`](docs/ANEXO_ENTREVISTA_LEVANTAMENTO_REQUISITOS_PAPELARIA_REAL.pdf) (instrumento de Engenharia de Requisitos com 24 perguntas e respostas chanceladas pelos proprietários da Papelaria Real).
 * **Relatório Técnico de Banco de Dados:** [`docs/RELATORIO_TECNICO_BANCO_DE_DADOS_NIKOLAS.pdf`](docs/RELATORIO_TECNICO_BANCO_DE_DADOS_NIKOLAS.pdf).
 * **Relatório Técnico de Lotes & Validades:** [`docs/RELATORIO_TECNICO_MODULO_LOTES_E_VALIDADES.pdf`](docs/RELATORIO_TECNICO_MODULO_LOTES_E_VALIDADES.pdf).
+* **Política de Segurança:** [`SECURITY.md`](SECURITY.md) (diretrizes de reporte responsável de vulnerabilidades e SLAs).
+
+---
+
+## <a id="governanca-e-padroes"></a>Governança do Repositório & Qualidade de Código
+
+O repositório adota padrões rígidos de engenharia de software corporativa:
+
+* **Templates Padronizados de Issues & PR:** Formulários estruturados em [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/) e checklist operacional em [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md).
+* **Normalização de Linhas & Binários:** Configuração explícita de fim de linha (LF) e tipos binários em [`.gitattributes`](.gitattributes).
+* **Padronização de Código Multi-IDE:** Diretrizes de indentação e espaçamento em [`.editorconfig`](.editorconfig).
+* **Propriedade de Código:** Mapeamento de responsáveis por módulo em [`.github/CODEOWNERS`](.github/CODEOWNERS).
 
 ---
 
 ## <a id="equipe-e-orientadores"></a>Equipe do Projeto & Orientadores
 
-Trabalho de Conclusão de Curso (TCC) apresentado ao curso Técnico em Desenvolvimento de Sistemas da **ETEC Fernando Prestes** (Centro Estadual de Educação Tecnológica Paula Souza — Sorocaba/SP):
+Trabalho de Conclusão de Curso (TCC) apresentado ao curso Técnico em Desenvolvimento de Sistemas da **ETEC Fernando Prestes** (Centro Estadual de Educação Tecnológica Paula Souza, Sorocaba/SP):
 
 ### Integrantes (Equipe Mr. Coding)
-* **Cesar Augusto da Silva Junior** — *Levantamento de Requisitos, Modelagem de Negócio e Relações Comerciais*
-* **Douglas Moraes Braz** — *Direção Técnica, Arquitetura de Software e Desenvolvimento Full-Stack*
-* **Eduardo Sugahara Neto** — *Validação de Usabilidade, Navegação do Sistema e Demonstração Executiva*
-* **Enzo de Oliveira Soares** — *Engenharia de Documentação, Casos de Uso e Roteiros de Testes QA*
-* **Nikolas Pires Brandão** — *Engenharia de Banco de Dados, Modelagem DER e Otimização SQL*
+* **Cesar Augusto da Silva Junior:** *Levantamento de Requisitos, Modelagem de Negócio e Relações Comerciais*
+* **Douglas Moraes Braz:** *Direção Técnica, Arquitetura de Software e Desenvolvimento Full-Stack*
+* **Eduardo Sugahara Neto:** *Validação de Usabilidade, Navegação do Sistema e Demonstração Executiva*
+* **Enzo de Oliveira Soares:** *Engenharia de Documentação, Casos de Uso e Roteiros de Testes QA*
+* **Nikolas Pires Brandão:** *Engenharia de Banco de Dados, Modelagem DER e Otimização SQL*
 
 ### Orientadores Acadêmicos
-* **Prof. Luiz Flávio de Almeida** — *Orientação Metodológica e Governança de TCC*
-* **Prof. Vinicius Sewaybricker** — *Orientação Técnica e Engenharia de Sistemas*
+* **Prof. Luiz Flávio de Almeida:** *Orientação Metodológica e Governança de TCC*
+* **Prof. Vinicius Sewaybricker:** *Orientação Técnica e Engenharia de Sistemas*
 
 ---
 

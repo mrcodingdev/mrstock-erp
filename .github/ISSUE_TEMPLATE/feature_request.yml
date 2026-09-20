@@ -1,0 +1,40 @@
+name: "Proposta de Nova Funcionalidade"
+description: "Sugira uma nova funcionalidade ou melhoria de arquitetura para o projeto."
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Descreva detalhadamente a necessidade de negócio ou oportunidade técnica.
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problema ou Necessidade"
+      description: "Qual problema essa funcionalidade resolve? Qual a dor do usuário?"
+      placeholder: "Atualmente, o operador precisa digitar manualmente o código de barras quando o leitor falha..."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Solução Proposta"
+      description: "Como a funcionalidade deve se comportar tecnicamente."
+      placeholder: "Adicionar busca incremental por nome do produto com debounce de 250ms na topbar do PDV..."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternativas Consideradas"
+      description: "Outras abordagens avaliadas e por que foram descartadas."
+    validations:
+      required: false
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: "Impacto Arquitetural"
+      options:
+        - label: "Esta funcionalidade exige alteração em tabelas de banco de dados (Migration necessária)."
+        - label: "Esta funcionalidade introduz nova rota de API ou endpoint público."
+        - label: "Esta funcionalidade altera contratos de UI / Design System."

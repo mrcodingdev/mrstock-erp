@@ -1,5 +1,5 @@
 # 💻 Stack Tecnológica & Decisões Arquiteturais
-**MrStock ERP v2.1.0** — Edição Papelaria Real
+**MrStock ERP v2.2.0**: Edição Papelaria Real
 
 ---
 
@@ -8,16 +8,16 @@
 | Camada | Tecnologia Adotada | Versão | Justificativa Técnica / Acadêmica |
 | :--- | :--- | :---: | :--- |
 | **Backend Runtime** | PHP Nativo | `8.2.x` | Desempenho bruto, tipagem estrita, match expressions, sem sobrecarga de frameworks para o TCC. |
-| **Persistência de Dados**| MariaDB / MySQL | `10.4.x` | Engine InnoDB transacional (ACID), integridade referencial e suporte a Lock Pessimista (`FOR UPDATE`). |
+| **Persistência de Dados**| MariaDB / MySQL | `8.0 / 10.4` | Engine InnoDB transacional (ACID), integridade referencial e suporte a Lock Pessimista (`FOR UPDATE`). |
 | **Abstração de Banco** | PHP Data Objects (PDO) | Nativo | Prepared Statements imunes a SQL Injection, transações gerenciadas e tipagem segura. |
 | **Frontend Framework** | Bootstrap (Custom Sólido)| `5.3.x` | Responsividade, grid modular e botões 100% sólidos sem dependência de temas externos. |
 | **Visualização de Dados**| Chart.js | `4.4.x` | Gráficos interativos em Canvas (Receita vs Custo, Curva ABC) com rendering acelerado por hardware. |
 | **Sonoplastia do PDV** | Web Audio API | W3C Standard | Síntese acústica em tempo real (880Hz / 280Hz) sem arquivos pesados .mp3 e 100% offline. |
 | **Geração de Códigos** | SVG Vetorial Nativo | RFC Standard | Algoritmo matemático puro em PHP para Code 128B e QR Code NFC-e em vetor ultraleve (<3.4 KB). |
-| **Tipografia Corporativa**| Inter Font Family | Auto-hospedada| `font-variant-numeric: tabular-nums` para alinhamento contábil e anti-FOUC. |
-| **Compilação de PDFs** | Microsoft Edge Headless | Chromium Engine| `--headless --print-to-pdf` de alta precisão vetorial sem dependência de extensões instáveis. |
+| **Tipografia Corporativa**| Inter & Open Sans | Auto-hospedada| `font-variant-numeric: tabular-nums` para alinhamento contábil e anti-FOUC. |
+| **Compilação de Documentos** | Microsoft Word COM | Office Automation | Exportação de alta fidelidade com paginação contínua e sumário dinâmico. |
 | **Servidor Web Local** | Apache HTTP Server | `2.4.x` (XAMPP)| Ambiente LAMP local para contingência e desenvolvimento ativo. |
-| **Hospedagem em Nuvem** | ProFreeHost / VistaPanel| Produção | Acesso web via `http://mrstock.unaux.com/` com chaveamento híbrido Zero-Config. |
+| **Hospedagem em Nuvem** | Hostinger Cloud / Business| Produção | Acesso web via `https://mrstock.com.br/` com SSL TLS 1.3 e deploy contínuo via Git Webhook. |
 
 ---
 

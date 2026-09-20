@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Documentação Oficial"
+    url: "https://github.com/mrcodingdev/mrstock-erp/tree/main/docs"
+    about: "Consulte manuais, guias e referências antes de abrir uma solicitação."
+  - name: "Suporte de Segurança"
+    url: "https://github.com/mrcodingdev/mrstock-erp/security/policy"
+    about: "Para reportar vulnerabilidades críticas de segurança, use nosso canal privado."

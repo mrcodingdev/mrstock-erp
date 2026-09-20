@@ -1,0 +1,20 @@
+# Governança de Propriedade do Código (CODEOWNERS)
+# Cada linha define um padrão de caminho e os responsáveis pela aprovação.
+
+# Responsável padrão pelo repositório
+*                   @mrcodingdev
+
+# Governança de CI/CD, Workflows e Infraestrutura GitHub
+/.github/           @mrcodingdev
+
+# Documentação Canônica e Decisões de Arquitetura
+/docs/              @mrcodingdev
+
+# Módulos Centrais (PDV, Estoque, Finanças, Banco)
+/vendas/            @mrcodingdev
+/produtos/          @mrcodingdev
+/lotes/             @mrcodingdev
+/compras/           @mrcodingdev
+/relatorios/        @mrcodingdev
+/database/          @mrcodingdev
+/inc/               @mrcodingdev
