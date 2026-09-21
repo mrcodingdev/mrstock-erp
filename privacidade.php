@@ -124,7 +124,7 @@ if ($isLoggedIn) {
             </p>
             <div class="row g-3 mt-1">
                 <div class="col-md-6">
-                    <div class="p-3 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
                         <h3 class="h6 fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-store me-2 text-success" style="color: #284936 !important;"></i>Controlador do Tratamento:</h3>
                         <p class="mb-0 small" style="color: #475569;">
                             <strong>Papelaria Real Ltda</strong><br>
@@ -135,13 +135,13 @@ if ($isLoggedIn) {
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="p-3 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
                         <h3 class="h6 fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-code me-2 text-success" style="color: #284936 !important;"></i>Operador &amp; Desenvolvedor:</h3>
                         <p class="mb-0 small" style="color: #475569;">
                             <strong>Equipe Mr. Coding</strong><br>
                             Desenvolvimento de Sistemas (TCC)<br>
                             ETEC Fernando Prestes – Centro Paula Souza<br>
-                            Orientação Técnica: Prof. Vinicius
+                            Orientação Acadêmica: Prof. Luiz Flávio de Almeida &amp; Prof. Vinicius Sewaybricker
                         </p>
                     </div>
                 </div>
@@ -212,23 +212,27 @@ if ($isLoggedIn) {
             </p>
             <div class="row g-2 mb-3">
                 <div class="col-md-6">
-                    <div class="p-2 border rounded" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
-                        <i class="fas fa-check-circle text-success me-2" style="color: #284936 !important;"></i>Confirmação da existência de tratamento e acesso aos dados;
+                    <div class="p-2 border rounded h-100 d-flex align-items-center" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
+                        <i class="fas fa-check-circle text-success me-2 flex-shrink-0" style="color: #284936 !important;"></i>
+                        <span class="flex-grow-1">Confirmação da existência de tratamento e acesso aos dados;</span>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="p-2 border rounded" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
-                        <i class="fas fa-check-circle text-success me-2" style="color: #284936 !important;"></i>Correção de dados incompletos, inexatos ou desatualizados;
+                    <div class="p-2 border rounded h-100 d-flex align-items-center" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
+                        <i class="fas fa-check-circle text-success me-2 flex-shrink-0" style="color: #284936 !important;"></i>
+                        <span class="flex-grow-1">Correção de dados incompletos, inexatos ou desatualizados;</span>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="p-2 border rounded" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
-                        <i class="fas fa-check-circle text-success me-2" style="color: #284936 !important;"></i>Anonimização, bloqueio ou eliminação de dados excessivos;
+                    <div class="p-2 border rounded h-100 d-flex align-items-center" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
+                        <i class="fas fa-check-circle text-success me-2 flex-shrink-0" style="color: #284936 !important;"></i>
+                        <span class="flex-grow-1">Anonimização, bloqueio ou eliminação de dados excessivos;</span>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="p-2 border rounded" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
-                        <i class="fas fa-check-circle text-success me-2" style="color: #284936 !important;"></i>Revogação de consentimento e eliminação conforme disposições legais.
+                    <div class="p-2 border rounded h-100 d-flex align-items-center" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
+                        <i class="fas fa-check-circle text-success me-2 flex-shrink-0" style="color: #284936 !important;"></i>
+                        <span class="flex-grow-1">Revogação de consentimento e eliminação conforme disposições legais.</span>
                     </div>
                 </div>
             </div>

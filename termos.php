@@ -137,15 +137,15 @@ if ($isLoggedIn) {
             </p>
             <div class="row g-3 mt-1">
                 <div class="col-md-6">
-                    <div class="p-3 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <div class="p-3 rounded-3 h-100 d-flex flex-column" style="background: #f8fafc; border: 1px solid #e2e8f0;">
                         <h3 class="h6 fw-bold mb-2" style="color: #1e293b;"><i class="fas fa-user-shield me-2 text-danger"></i>Perfil Administrador:</h3>
                         <p class="mb-0 small" style="color: #475569; line-height: 1.6;">
-                            Acesso irrestrito a todos os módulos, parametrizações tributárias, controle de margens financeiras, centro de análise gerencial (DRE, Curva ABC), histórico e logs de auditoria e gestão de contas de operadores.
+                            Acesso irrestrito a todos os módulos, parametrizações tributárias, controle de margens financeiras, painel de análise financeira (DRE, Curva ABC), histórico e logs de auditoria e gestão de contas de operadores.
                         </p>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="p-3 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <div class="p-3 rounded-3 h-100 d-flex flex-column" style="background: #f8fafc; border: 1px solid #e2e8f0;">
                         <h3 class="h6 fw-bold mb-2" style="color: #1e293b;"><i class="fas fa-cash-register me-2 text-success" style="color: #284936 !important;"></i>Perfil Operador de Caixa:</h3>
                         <p class="mb-0 small" style="color: #475569; line-height: 1.6;">
                             Acesso delimitado à frente de caixa (PDV), registro de itens via leitor óptico, conferência de preços, emissão de comprovantes de venda e movimentações de vendas sob seu turno de operação.
@@ -168,7 +168,7 @@ if ($isLoggedIn) {
                     Declaração de Validação Técnica e Limite Tributário:
                 </p>
                 <p class="mb-0" style="color: #334155; line-height: 1.7;">
-                    Fica expressamente cientificado aos usuários, auditores e partes interessadas que o módulo de <strong>Nota Fiscal de Consumidor Eletrônica (NFC-e)</strong> implementado no MrStock ERP possui <strong>finalidade estritamente didática e de validação acadêmica</strong> no âmbito do Trabalho de Conclusão de Curso (TCC) da ETEC Fernando Prestes. Os cupons fiscais emitidos geram uma chave de acesso estruturada de 44 dígitos com validação por Módulo 11, DANFE térmico de 80mm e QR Code homologado pelo orientador Prof. Vinicius. <strong>Não há transmissão real de dados tributários para os webservices da Secretaria da Fazenda (SEFAZ/SP)</strong> em ambiente de produção fiscal de arrecadação.
+                    Fica expressamente cientificado aos usuários, auditores e partes interessadas que o módulo de <strong>Nota Fiscal de Consumidor Eletrônica (NFC-e)</strong> implementado no MrStock ERP possui <strong>finalidade estritamente didática e de validação acadêmica</strong> no âmbito do Trabalho de Conclusão de Curso (TCC) da ETEC Fernando Prestes. Os cupons fiscais emitidos geram uma chave de acesso estruturada de 44 dígitos com validação por Módulo 11, DANFE térmico de 80mm e QR Code homologado pelos orientadores Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker. <strong>Não há transmissão real de dados tributários para os webservices da Secretaria da Fazenda (SEFAZ/SP)</strong> em ambiente de produção fiscal de arrecadação.
                 </p>
             </div>
         </section>

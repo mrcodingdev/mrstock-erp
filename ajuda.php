@@ -764,6 +764,9 @@ require_once __DIR__ . '/inc/header.php';
                             </div>
                         <?php endforeach; ?>
                     </div>
+                    <div class="mt-3 pt-2 border-top">
+                        <span class="text-muted small"><strong>Orientação Acadêmica:</strong> Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker</span>
+                    </div>
                 </div>
                 <div class="col-lg-5 col-12 text-lg-end">
                     <div class="border rounded p-3 bg-light text-center">
