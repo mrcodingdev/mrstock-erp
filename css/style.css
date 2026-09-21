@@ -2187,6 +2187,7 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 .so-footer-gestaoclick__support-circle--faq:hover,
 .so-footer-gestaoclick__support-item:hover .so-footer-gestaoclick__support-circle--faq {
   background: #0b5ed7 !important;
+  border: none !important;
   color: #ffffff !important;
 }
 

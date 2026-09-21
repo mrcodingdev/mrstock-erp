@@ -32,8 +32,8 @@
                             </a>
                             <!-- Central de Ajuda -->
                             <a href="<?= BASE_URL ?>/ajuda.php" class="so-footer-gestaoclick__support-item" title="Acessar FAQ">
-                                <div class="so-footer-gestaoclick__support-circle so-footer-gestaoclick__support-circle--faq">
-                                    <i class="fas fa-comments"></i>
+                                <div class="so-footer-gestaoclick__support-circle so-footer-gestaoclick__support-circle--faq" style="background: #0d6efd !important; border: none !important; color: #ffffff !important; box-shadow: 0 3px 8px rgba(13, 110, 253, 0.25) !important;">
+                                    <i class="fas fa-comments text-white" style="color: #ffffff !important;"></i>
                                 </div>
                                 <span>Ajuda</span>
                             </a>
