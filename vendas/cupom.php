@@ -89,7 +89,6 @@ $protocoloAut   = '13526' . str_pad((string)$venda['id'], 10, '0', STR_PAD_LEFT)
     <style>
         /* ==========================================================================
            MrStock ERP — Layout do Cupom Fiscal NFC-e (Térmica 80mm/58mm)
-           SalesOps v0 Design System & WCAG 2.1 AA Compliance
            ========================================================================== */
         
         :root {

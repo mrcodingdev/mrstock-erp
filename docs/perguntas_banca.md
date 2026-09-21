@@ -1,4 +1,4 @@
-# ❓ Matriz das 50 Perguntas & Respostas Blindadas da Banca
+# Matriz das 50 Perguntas e Respostas para a Banca Examinadora
 **MrStock ERP v2.1.0** — ETEC Fernando Prestes
 
 ---

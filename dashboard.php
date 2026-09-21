@@ -1,6 +1,6 @@
 <?php
 /**
- * MrStock ERP - Dashboard Operacional com Design System SalesOps (v0)
+ * MrStock ERP - Dashboard Operacional
  */
 $pageTitle  = 'Dashboard';
 $activePage = 'dashboard';
@@ -132,7 +132,7 @@ require_once __DIR__ . '/inc/header.php';
 </div>
 
 <div class="content-body">
-    <!-- ══ CARDS DE RESUMO (BENTO GRID SALESOPS DE ELITE) ════════════════════ -->
+    <!-- ══ CARDS DE RESUMO ═════════════════════════════════════════════════════ -->
     <div class="row g-3 mb-4">
         <!-- Card 1: Produtos Ativos -->
         <div class="col-12 col-sm-6 col-lg-3">

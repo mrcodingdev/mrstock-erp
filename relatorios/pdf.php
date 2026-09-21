@@ -1,7 +1,7 @@
 <?php
 /**
  * MrStock ERP - Emissor de Relatórios Oficiais em PDF / Impressão Executiva A4
- * Padrão Corporativo Papelaria Real — Design System SalesOps (v0)
+ * Padrão Corporativo Papelaria Real
  */
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';

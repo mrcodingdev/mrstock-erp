@@ -1,7 +1,7 @@
 <?php
 /**
  * MrStock ERP - Gestão de Lotes, Validades e Rastreabilidade de Compras
- * Design System SalesOps v0 (Bento Grid, PEPS / FIFO e Badges de Shelf-Life)
+ * Gestão de Lotes, PEPS / FIFO e Validades
  */
 
 $pageTitle  = 'Lotes & Validades';
@@ -30,7 +30,7 @@ $fornecedores = $pdo->query("SELECT id, nome FROM fornecedores ORDER BY nome ASC
 $produtos     = $pdo->query("SELECT id, nome, codigo_de_barra, preco_compra FROM produtos WHERE status = 'ativo' ORDER BY nome ASC")->fetchAll(PDO::FETCH_ASSOC);
 $produtosJson = json_encode($produtos, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 
-// ── 3. KPIs Estratégicos Bento Grid (Totais Globais) ──────────────────────────
+// ── 3. KPIs de Lotes e Validades (Totais Globais) ─────────────────────────────
 $sqlKpis = "
     SELECT 
         COUNT(CASE WHEN l.quantidade > 0 THEN 1 END) AS total_ativos,
@@ -151,7 +151,7 @@ require_once __DIR__ . '/../inc/header.php';
 
 <div class="content-body">
 
-    <!-- ══ CARDS DE RESUMO (BENTO GRID SALESOPS DE ELITE) ════════════════════ -->
+    <!-- ══ CARDS DE RESUMO ═════════════════════════════════════════════════════ -->
     <div class="row g-3 mb-4">
         <!-- Card 1: Total Lotes Ativos -->
         <div class="col-12 col-sm-6 col-lg-3">
@@ -169,33 +169,33 @@ require_once __DIR__ . '/../inc/header.php';
             </div>
         </div>
 
-        <!-- Card 2: Vencendo em 30 Dias -->
+        <!-- Card 2: Lotes Vencidos (Crítico) -->
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vencendo em 30 Dias</span>
-                        <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $kpiTotalVencendo ?>"><?= $kpiTotalVencendo ?></h3>
-                        <small class="text-warning fw-semibold"><i class="fa-solid fa-clock me-1"></i>Atenção ao Shelf-Life</small>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vencidos (Ação Imediata)</span>
+                        <h3 class="fw-bold text-danger m-0 tabular-nums" data-kpi="<?= $kpiTotalVencidos ?>"><?= $kpiTotalVencidos ?></h3>
+                        <small class="text-muted"><?= $kpiTotalVencidos > 0 ? 'Exige descarte / devolução' : 'Nenhum vencido' ?></small>
                     </div>
-                    <div class="kpi-icon-box kpi-icon-box--warning">
-                        <i class="fa-solid fa-hourglass-half"></i>
+                    <div class="kpi-icon-box kpi-icon-box--danger">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Card 3: Lotes Vencidos -->
+        <!-- Card 3: Vencendo em 30 Dias -->
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Lotes Vencidos</span>
-                        <h3 class="fw-bold text-danger m-0 tabular-nums" data-kpi="<?= $kpiTotalVencidos ?>"><?= $kpiTotalVencidos ?></h3>
-                        <small class="text-danger fw-semibold"><i class="fa-solid fa-triangle-exclamation me-1"></i>Bloqueados para venda</small>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Vencendo em até 30 Dias</span>
+                        <h3 class="fw-bold text-warning m-0 tabular-nums" data-kpi="<?= $kpiTotalVencendo ?>"><?= $kpiTotalVencendo ?></h3>
+                        <small class="text-muted"><?= $kpiTotalVencendo > 0 ? 'Priorizar no balcão (PEPS)' : 'Nenhum em alerta' ?></small>
                     </div>
-                    <div class="kpi-icon-box kpi-icon-box--danger">
-                        <i class="fa-solid fa-calendar-xmark"></i>
+                    <div class="kpi-icon-box kpi-icon-box--warning">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
                     </div>
                 </div>
             </div>
@@ -206,19 +206,19 @@ require_once __DIR__ . '/../inc/header.php';
             <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Capital Imobilizado</span>
+                        <span class="text-muted text-uppercase fw-bold text-xs d-block mb-1">Custo Total em Lotes</span>
                         <h3 class="fw-bold text-dark m-0 tabular-nums" data-kpi="<?= $kpiCapitalImob ?>">R$ <?= number_format($kpiCapitalImob, 2, ',', '.') ?></h3>
-                        <small class="text-success fw-semibold"><i class="fa-solid fa-coins me-1"></i>Custo total em estoque</small>
+                        <small class="text-muted">Valor a preço de custo</small>
                     </div>
-                    <div class="kpi-icon-box kpi-icon-box--success">
-                        <i class="fa-solid fa-sack-dollar"></i>
+                    <div class="kpi-icon-box kpi-icon-box--info">
+                        <i class="fa-solid fa-vault"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ══ FILTROS AVANÇADOS COM DESIGN SYSTEM SALESOPS ══════════════════════ -->
+    <!-- ══ FILTROS DE PESQUISA ═════════════════════════════════════════════════ -->
     <div class="so-card mb-4">
         <div class="so-card-body p-3">
             <form method="GET" action="index.php" class="row g-2 align-items-end">
@@ -283,7 +283,7 @@ require_once __DIR__ . '/../inc/header.php';
         </div>
     </div>
 
-    <!-- ══ TABELA DE LOTES E VALIDADES (ANTI-SLOP) ═══════════════════════════ -->
+    <!-- ══ TABELA DE LOTES E VALIDADES ═════════════════════════════════════════ -->
     <div class="so-card">
         <div class="so-card-header">
             <h5 class="so-card-title">

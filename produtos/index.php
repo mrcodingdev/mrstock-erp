@@ -1,7 +1,6 @@
 <?php
 /**
- * MrStock ERP - Gestão de Estoque & Produtos com Filtros Diretos em 1 Linha,
- * Paginação Parametrizada e Design System SalesOps
+ * MrStock ERP - Gestão de Estoque & Produtos com Filtros Diretos em 1 Linha e Paginação Parametrizada
  */
 $pageTitle  = 'Estoque & Produtos';
 $activePage = 'produtos';

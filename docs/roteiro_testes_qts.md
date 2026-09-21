@@ -26,7 +26,7 @@
 | **UC008** | Histórico Vendas | Filtragem por período e estorno ACID com devolução de saldo | 🟢 **PASS** |
 | **UC009** | Produtos Cadastro| Inclusão de item com cálculo automático de markup | 🟢 **PASS** |
 | **UC010** | Produtos Estoque | Alerta visual de estoque mínimo e validade de 30 dias | 🟢 **PASS** |
-| **UC011** | Movimentações | Registro forense de entradas, devoluções e perdas | 🟢 **PASS** |
+| **UC011** | Movimentações | Histórico de auditoria de entradas, devoluções e perdas | 🟢 **PASS** |
 | **UC012** | Etiquetas | Emissão de etiquetas Code 128B em SVG vetorial | 🟢 **PASS** |
 | **UC013** | Categorias | Gestão das 10 famílias com integridade referencial | 🟢 **PASS** |
 | **UC014** | Compras Entrada | Entrada de nota fiscal com recálculo automático de CMP | 🟢 **PASS** |

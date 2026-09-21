@@ -731,7 +731,7 @@ require_once __DIR__ . '/inc/header.php';
                                     <p class="text-muted small mb-3">Ajusta o espaçamento vertical entre as linhas das listagens.</p>
                                     <select id="densidade_tabela" name="densidade_tabela" class="form-select">
                                         <option value="padrao"   <?= $cfgDensidade === 'padrao' ? 'selected' : '' ?>>Padrão Confortável</option>
-                                        <option value="compacto" <?= $cfgDensidade === 'compacto' ? 'selected' : '' ?>>Alta Densidade (Compacto)</option>
+                                        <option value="compacto" <?= $cfgDensidade === 'compacto' ? 'selected' : '' ?>>Modo Compacto</option>
                                     </select>
                                 </div>
                             </div>

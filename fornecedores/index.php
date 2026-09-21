@@ -17,7 +17,7 @@ $stmt = $pdo->query("
 $fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalFornecedores = count($fornecedores);
 
-// KPIs para Bento Grid Stat Cards
+// KPIs para Stat Cards
 $fornecedoresAtivos = count(array_filter($fornecedores, fn($f) => ($f['status'] ?? '') === 'ativo'));
 $totalProdutosVinculados = (int)array_sum(array_column($fornecedores, 'qtd_produtos'));
 
@@ -69,7 +69,7 @@ require_once __DIR__ . '/../inc/header.php';
         <?php endif; ?>
     <?php endif; ?>
 
-    <!-- ══ STAT CARDS (BENTO GRID SALESOPS) ══════════════════════════════════ -->
+    <!-- ══ STAT CARDS ══════════════════════════════════════════════════════ -->
     <div class="row g-3 mb-4">
         <!-- Card 1: Total de Fornecedores -->
         <div class="col-12 col-md-4">

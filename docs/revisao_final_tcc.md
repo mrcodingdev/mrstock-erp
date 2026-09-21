@@ -1,4 +1,4 @@
-# 🎓 Manual de Homologação & Revisão Final do TCC
+# Manual de Homologação & Revisão Final do TCC
 **MrStock ERP v2.1.0** — Banca Examinadora da ETEC Fernando Prestes
 
 ---
@@ -6,17 +6,17 @@
 ## 1. Divisão Estratégica da Equipe na Apresentação
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                   DIVISÃO DE PAPÉIS & RESPONSABILIDADES NA BANCA                       │
-├───────────────────┬───────────────────────────────┬────────────────────────────────────┤
-│ Membro da Equipe  │ Especialidade / Foco          │ Ponto Alto da Fala                 │
-├───────────────────┼───────────────────────────────┼────────────────────────────────────┤
-│ 👨‍💻 Douglas        │ Direção Técnica & Arquitetura │ Transações ACID, PDV, Segurança    │
-│ 🗄️ Nikolas        │ Banco de Dados & DER          │ Modelagem 14 Tabelas, Índices, CMP │
-│ 👔 Cesar          │ Cliente & Requisitos de Varejo│ Papelaria Real, Dores do Negócio   │
-│ 📄 Enzo           │ Documentação & Normas ABNT    │ PRDs, Relatórios e Metodologia     │
-│ 🎤 Sugahara       │ Navegação & Demonstração Live │ Operação do PDV, Atalhos e BI      │
-└───────────────────┴───────────────────────────────┴────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                            DIVISÃO DE PAPÉIS & RESPONSABILIDADES NA BANCA                             │
+├───────────────────┬──────────────────────────────────────────────┬────────────────────────────────────┤
+│ Membro da Equipe  │ Especialidade / Foco                         │ Ponto Alto da Fala                 │
+├───────────────────┼──────────────────────────────────────────────┼────────────────────────────────────┤
+│ 👨‍💻 Douglas        │ Desenvolvimento Web e Programação Full-Stack │ Transações ACID, PDV, Segurança    │
+│ 🗄️ Nikolas        │ Banco de Dados & DER                         │ Modelagem 14 Tabelas, Índices, CMP │
+│ 👔 Cesar          │ Cliente & Requisitos de Varejo               │ Papelaria Real, Dores do Negócio   │
+│ 📄 Enzo           │ Documentação & Normas ABNT                   │ PRDs, Relatórios e Metodologia     │
+│ 🎤 Sugahara       │ Navegação & Demonstração Live                │ Operação do PDV, Atalhos e BI      │
+└───────────────────┴──────────────────────────────────────────────┴────────────────────────────────────┘
 ```
 
 ---

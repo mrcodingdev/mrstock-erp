@@ -70,7 +70,7 @@ O desenvolvimento do sistema tomou como base empírica a rotina comercial da **P
 
 ### Gargalos Diagnosticados e Soluções Implementadas
 
-| Gargalo Operacional Diagnosticado | Solução de Engenharia no MrStock ERP | Benefício Comprovado |
+| Gargalo Operacional Diagnosticado | Solução no MrStock ERP | Benefício Comprovado |
 | :--- | :--- | :--- |
 | **Controle manual em cadernos de papel** | Banco de dados centralizado MySQL com interface responsiva | Eliminação de erros manuais de contagem e retrabalho |
 | **Perda financeira por produtos vencidos** (colas, tintas guache, corretivos e massinhas) | Módulo de Lotes & Validades com triagem PEPS/FIFO e alerta visual preventivo de 30 dias | Identificação imediata de lotes críticos para liquidação prévia |
@@ -84,21 +84,21 @@ O desenvolvimento do sistema tomou como base empírica a rotina comercial da **P
 
 O sistema conta com 19 interfaces operacionais homologadas:
 
-1. **Autenticação e Sessão (`login.php`, `logout.php`):** Controle de login com verificação de perfil e proteção contra ataques de força bruta via rate limiting por IP.
-2. **Painel de Controle (`dashboard.php`):** Centro de informações com indicadores em tempo real (faturamento diário, itens com estoque baixo, lotes próximos ao vencimento e atalhos rápidos).
-3. **Ponto de Venda Ágil (`vendas/pdv.php`):** Interface de frente de caixa com leitor de código de barras, atalhos de teclado (F1 a F9), calculadora de troco e associação opcional de cliente.
-4. **Módulo Fiscal NFC-e (`vendas/nfce.php`, `vendas/cupom.php`):** Simulação acadêmica de Nota Fiscal de Consumidor Eletrônica com geração de chave de 44 dígitos, protocolo SEFAZ e renderização de cupom térmico (80mm) com QR Code.
-5. **Histórico de Vendas (`vendas/historico.php`):** Consulta analítica de transações, reimpressão de comprovantes e rotina de estorno auditado com devolução automática de saldo ao estoque.
-6. **Estoque & Produtos (`produtos/index.php`):** Catálogo geral com precificação, margem de lucro comercial, controle de estoque mínimo e busca filtrada.
-7. **Lotes & Validades (`lotes/index.php`):** Rastreabilidade logística de shelf-life com destaque visual de produtos a vencer em até 30 dias ou já expirados, orientando a triagem PEPS/FIFO.
-8. **Gerador de Etiquetas (`produtos/etiquetas.php`):** Exportação de folhas de código de barras em padrão A4 e formato compatível com impressoras térmicas.
+1. **Dashboard Operacional (`dashboard.php`):** Visão executiva em tempo real com 4 stat cards, atalhos rápidos de navegação e atalhos táteis para o balcão.
+2. **Frente de Caixa / PDV (`vendas/pdv.php`):** Interface otimizada para atendimento de balcão com leitor de código de barras, atalhos de teclado (F1 a F9), calculadora de troco com cédulas interativas e impressão térmica (80mm/58mm).
+3. **Simulação Fiscal NFC-e (`vendas/nfce.php`):** Painel fiscal para consulta e homologação didática de cupons eletrônicos padrão SEFAZ.
+4. **Comprovante de Venda (`vendas/cupom.php`):** Renderização vetorial de comprovante não-fiscal e NFC-e térmica.
+5. **Histórico de Vendas (`vendas/historico.php`):** Consulta analítica de transações com filtros temporais, por cliente e cancelamento com estorno automático de estoque.
+6. **Catálogo & Produtos (`produtos/index.php`):** Cadastro de itens com precificação, margem de lucro em tempo real e controle de estoque mínimo.
+7. **Lotes & Validades (`lotes/index.php`):** Gestão rigorosa de validades por lote com ordenação PEPS (Primeiro que Expira, Primeiro que Sai) e badges de criticidade (vencidos, alerta de 30 dias e válidos).
+8. **Gerador de Etiquetas (`produtos/etiquetas.php`):** Geração de etiquetas de gôndola com código de barras Code 128 vetorial e preços.
 9. **Categorias Funcionais (`categorias/index.php`):** Gestão das 10 famílias de produtos da Papelaria Real:
    * *Cadernos & Blocos*, *Canetas & Marcadores*, *Lápis & Apontadores*, *Borrachas & Correção*, *Colas & Fitas Adesivas*, *Papéis & Folhas*, *Pastas & Organização*, *Corte & Medição*, *Tintas & Pintura*, *Grampeadores & Fixação*.
 10. **Kardex de Movimentações (`produtos/movimentacoes.php`):** Extrato cronológico com registro de todas as entradas, saídas de balcão, perdas e ajustes operacionais com justificativa obrigatória.
 11. **Ordens de Compra (`compras/index.php`, `compras/nova.php`, `compras/visualizar.php`):** Gestão mestre-detalhe de abastecimento de fornecedores com registro de notas fiscais e custos de aquisição.
 12. **Gestão de Fornecedores (`fornecedores/index.php`):** Cadastro completo com CNPJ, contatos comerciais e atalho de disparo direto para WhatsApp.
 13. **Gestão de Clientes (`clientes/index.php`):** Ficha cadastral com validação de CPF/CNPJ, histórico de compras e integração com WhatsApp.
-14. **Centro de Inteligência (`relatorios/analise.php`):** Painel gráfico analítico com Curva ABC de produtos (Pareto 80/15/5), Demonstrativo do Resultado do Exercício (DRE) e ticket médio.
+14. **Painel de Análise (`relatorios/analise.php`):** Painel gráfico analítico com Curva ABC de produtos (Pareto 80/15/5), Demonstrativo do Resultado do Exercício (DRE) e ticket médio.
 15. **Central de Relatórios (`relatorios/index.php`, `relatorios/pdf.php`, `relatorios/excel.php`):** Emissão de relatórios estruturados para impressão e exportação nos formatos PDF e Excel.
 16. **Auditoria & Logs (`relatorios/logs.php`):** Trilha imutável de eventos sensíveis (autenticações, estornos, exclusões e alterações cadastrais) com operador, data/hora e endereço IP.
 17. **Central de Ajuda (`ajuda.php`):** Base de instruções e tutorial rápido de operação com tabela tátil de atalhos do PDV.
@@ -107,9 +107,9 @@ O sistema conta com 19 interfaces operacionais homologadas:
 
 ---
 
-## <a id="arquitetura-e-engenharia"></a>Arquitetura e Engenharia de Software
+## <a id="arquitetura-e-engenharia"></a>Arquitetura do Sistema
 
-O sistema foi concebido segundo padrões consolidados da engenharia de software corporativa:
+O sistema foi estruturado seguindo boas práticas de desenvolvimento web:
 
 ```mermaid
 flowchart TD
@@ -333,7 +333,7 @@ O sistema implementa o princípio do menor privilégio e do sigilo comercial atr
 | **Gestão de Lotes & Validades** | Sim | Consulta | Permite ao caixa checar validades sem alterar cadastros |
 | **Entrada de Ordens de Compra** | Sim | **Bloqueado** | Rotina financeira e de abastecimento restrita à gerência |
 | **Cancelamento / Estorno de Vendas** | Sim | **Bloqueado** | Requer autorização de supervisor para evitar fraudes |
-| **Centro de Inteligência / DRE / Curva ABC** | Sim | **Bloqueado** | Informações estratégicas exclusivas dos sócios da empresa |
+| **Painel de Análise / DRE / Curva ABC** | Sim | **Bloqueado** | Informações financeiras exclusivas dos sócios da empresa |
 | **Auditoria & Logs Transacionais** | Sim | **Bloqueado** | Rastreabilidade e conformidade gerencial |
 | **Configurações Gerais & Backup** | Sim | **Bloqueado** | Preservação da integridade da base de dados |
 
@@ -399,7 +399,7 @@ O projeto conta com documentação técnica completa indexada em [`docs/README.m
 
 ## <a id="governanca-e-padroes"></a>Governança do Repositório & Qualidade de Código
 
-O repositório adota padrões rígidos de engenharia de software corporativa:
+O repositório adota boas práticas de organização e padronização de código:
 
 * **Templates Padronizados de Issues & PR:** Formulários estruturados em [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/) e checklist operacional em [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md).
 * **Normalização de Linhas & Binários:** Configuração explícita de fim de linha (LF) e tipos binários em [`.gitattributes`](.gitattributes).
@@ -413,11 +413,11 @@ O repositório adota padrões rígidos de engenharia de software corporativa:
 Trabalho de Conclusão de Curso (TCC) apresentado ao curso Técnico em Desenvolvimento de Sistemas da **ETEC Fernando Prestes** (Centro Estadual de Educação Tecnológica Paula Souza, Sorocaba/SP):
 
 ### Integrantes (Equipe Mr. Coding)
-* **Cesar Augusto da Silva Junior:** *Levantamento de Requisitos, Modelagem de Negócio e Relações Comerciais*
-* **Douglas Moraes Braz:** *Direção Técnica, Arquitetura de Software e Desenvolvimento Full-Stack*
-* **Eduardo Sugahara Neto:** *Validação de Usabilidade, Navegação do Sistema e Demonstração Executiva*
-* **Enzo de Oliveira Soares:** *Engenharia de Documentação, Casos de Uso e Roteiros de Testes QA*
-* **Nikolas Pires Brandão:** *Engenharia de Banco de Dados, Modelagem DER e Otimização SQL*
+* **Cesar Augusto da Silva Junior:** *Levantamento de Requisitos e Relações com o Cliente*
+* **Douglas Moraes Braz:** *Desenvolvimento Web e Programação Full-Stack*
+* **Eduardo Sugahara Neto:** *Testes de Usabilidade e Apresentação do Sistema*
+* **Enzo de Oliveira Soares:** *Documentação do Projeto e Casos de Uso*
+* **Nikolas Pires Brandão:** *Banco de Dados e Modelagem DER*
 
 ### Orientadores Acadêmicos
 * **Prof. Luiz Flávio de Almeida:** *Orientação Metodológica e Governança de TCC*

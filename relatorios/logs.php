@@ -283,7 +283,7 @@ $exportCsvUrl = BASE_URL . '/relatorios/logs.php?' . http_build_query($csvExport
 require_once __DIR__ . '/../inc/header.php';
 ?>
 
-<!-- ══ CABEÇALHO DA PÁGINA (TOPBAR SALESOPS) ═════════════════════════════════ -->
+<!-- ══ CABEÇALHO DA PÁGINA ═══════════════════════════════════════════════════ -->
 <div class="content-header d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <div>
         <h2 class="fw-bold text-dark m-0">
@@ -305,7 +305,7 @@ require_once __DIR__ . '/../inc/header.php';
 </div>
 
 <div class="content-body">
-    <!-- ══ 4 STAT CARDS NO TOPO (BENTO GRID SALESOPS) ═════════════════════════ -->
+    <!-- ══ 4 STAT CARDS NO TOPO ═════════════════════════════════════════════ -->
     <div class="row g-3 mb-4">
         <!-- Card 1: Total Registros Hoje -->
         <div class="col-12 col-sm-6 col-lg-3">

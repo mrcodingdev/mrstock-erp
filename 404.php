@@ -1,7 +1,7 @@
 <?php
 /**
  * MrStock ERP - Página Institucional 404 (Não Encontrada)
- * Resposta de status HTTP 404 defensiva com design system institucional.
+ * Resposta de status HTTP 404 padronizada com design system institucional.
  * Híbrida: Exibe layout integrado para usuários autenticados e layout limpo para visitantes públicos.
  */
 http_response_code(404);

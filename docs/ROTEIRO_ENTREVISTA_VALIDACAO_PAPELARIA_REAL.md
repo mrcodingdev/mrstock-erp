@@ -22,7 +22,7 @@ A abordagem ideal é:
 | :--- | :--- | :--- |
 | **Cesar Augusto** | **Condutor do Diálogo** | Abre cordialmente, contextualiza o TCC, faz as perguntas e anota as respostas. |
 | **Eduardo Sugahara** | **Navegador do Sistema** | Demonstra o sistema ao vivo no notebook (simula bipagem no PDV, troco, busca e relatórios). |
-| **Douglas Moraes Braz** | **Direção Técnica** | Esclarece dúvidas técnicas e avalia a viabilidade de pedidos de simplificação/mudança. |
+| **Douglas Moraes Braz** | **Desenvolvimento e Programação** | Esclarece dúvidas técnicas e avalia a viabilidade de pedidos de simplificação/mudança. |
 | **Nikolas Pires** | **Anotador de Negócio** | Anota fornecedores, meios de pagamento e peculiaridades de produtos citados. |
 | **Enzo Soares** | **Registrador de QTS** | Aplica a escala de usabilidade (notas 1 a 5) e registra fotos da visita com autorização. |
 

@@ -2,7 +2,7 @@
 /**
  * MrStock ERP - Redirecionador Principal
  */
-// Caminho absoluto para config (inicializa headers de segurança e sessão blindada)
+// Caminho absoluto para config (inicializa headers de segurança e sessão segura)
 require_once __DIR__ . '/config.php';
 
 if (isset($_SESSION['user_id'])) {

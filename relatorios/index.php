@@ -1,7 +1,6 @@
 <?php
 /**
  * MrStock ERP - Central de Relatórios Oficiais & Auditoria Empresarial
- * Design System SalesOps (v0) - 14 Zonas Anti-Slop
  */
 $pageTitle  = 'Central de Relatórios';
 $activePage = 'relatorios';
@@ -67,7 +66,7 @@ $faturamentoVendasGeral = (float)($rowVendas['faturamento_total'] ?? 0);
 require_once __DIR__ . '/../inc/header.php';
 ?>
 
-<!-- ══ CABEÇALHO DA PÁGINA (TOPBAR SALESOPS) ═════════════════════════════════ -->
+<!-- ══ CABEÇALHO DA PÁGINA ═══════════════════════════════════════════════════ -->
 <div class="content-header d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <div>
         <h2 class="fw-bold text-dark m-0"><i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i>Central de Relatórios</h2>
@@ -78,7 +77,7 @@ require_once __DIR__ . '/../inc/header.php';
             <i class="fa-solid fa-clock-rotate-left me-1"></i> Auditoria de Logs
         </a>
         <a href="<?= BASE_URL ?>/relatorios/analise.php" class="btn btn-secondary fw-semibold shadow-sm text-white">
-            <i class="fa-solid fa-chart-line me-1"></i> Centro de Análise BI
+            <i class="fa-solid fa-chart-line me-1"></i> Painel de Análise
         </a>
         <a href="<?= BASE_URL ?>/vendas/pdv.php" class="btn btn-primary fw-bold shadow-sm text-white">
             <i class="fa-solid fa-cash-register me-1"></i> Abrir PDV
@@ -87,7 +86,7 @@ require_once __DIR__ . '/../inc/header.php';
 </div>
 
 <div class="content-body">
-    <!-- ══ 4 STAT CARDS NO TOPO (BENTO GRID SALESOPS) ═════════════════════════ -->
+    <!-- ══ 4 STAT CARDS NO TOPO ═════════════════════════════════════════════ -->
     <div class="row g-3 mb-4">
         <!-- Card 1: Catálogo Ativo -->
         <div class="col-12 col-sm-6 col-lg-3">

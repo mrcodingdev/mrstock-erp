@@ -1,7 +1,6 @@
 <?php
 /**
  * MrStock ERP - Gestão de Ordens de Compra
- * Design System SalesOps v0 (14 Zonas Anti-Slop)
  * Consome contrato de backend com filtros avançados, KPIs e paginação
  */
 $pageTitle  = 'Ordens de Compra';
@@ -155,7 +154,7 @@ require_once __DIR__ . '/../inc/header.php';
         <?php endif; ?>
     <?php endif; ?>
 
-    <!-- ══ 4 STAT CARDS NO TOPO (BENTO GRID SALESOPS) ════════════════════════ -->
+    <!-- ══ 4 STAT CARDS NO TOPO ═════════════════════════════════════════════ -->
     <div class="row g-3 mb-3">
         <!-- Card 1: Total de Compras -->
         <div class="col-12 col-sm-6 col-xl-3">
@@ -284,7 +283,7 @@ require_once __DIR__ . '/../inc/header.php';
         </form>
     </div>
 
-    <!-- ══ TABELA MODULAR ANTI-SLOP DE COMPRAS ═══════════════════════════════ -->
+    <!-- ══ TABELA DE COMPRAS ═════════════════════════════════════════════════ -->
     <div class="so-card">
         <div class="so-card-header d-flex justify-content-between align-items-center">
             <h5 class="so-card-title m-0"><i class="fas fa-receipt text-primary me-2"></i>Ordens de Compra</h5>

@@ -1,7 +1,7 @@
 <?php
 /**
  * MrStock ERP - Rastreabilidade de Movimentações de Estoque
- * Design System SalesOps v0, KPIs Bento Grid e Acessibilidade WCAG 2.1 AA
+ * Histórico e Registro de Movimentações de Estoque
  */
 $pageTitle  = 'Movimentações de Estoque';
 $activePage = 'movimentacoes';
@@ -60,7 +60,7 @@ if (!empty($produtoIdFiltro)) {
 
 $whereSql = implode(' AND ', $where);
 
-// ── 4. KPIs Agregados das Movimentações Filtradas (Bento Grid) ──────────────
+// ── 4. KPIs Agregados das Movimentações Filtradas ─────────────────────────
 $sqlKpis = "
     SELECT 
         COUNT(*) as total_movimentacoes,
@@ -152,7 +152,7 @@ require_once __DIR__ . '/../inc/header.php';
         <?php endif; ?>
     <?php endif; ?>
 
-    <!-- ══ 4 STAT CARDS NO TOPO (BENTO GRID SALESOPS) ═══════════════════════ -->
+    <!-- ══ 4 STAT CARDS NO TOPO ═════════════════════════════════════════════ -->
     <div class="row g-3 mb-4">
         <!-- Card 1: Total de Movimentações -->
         <div class="col-12 col-sm-6 col-xl-3">
@@ -301,7 +301,7 @@ require_once __DIR__ . '/../inc/header.php';
         </form>
     </div>
 
-    <!-- ══ TABELA ANTI-SLOP DE MOVIMENTAÇÕES ═════════════════════════════════ -->
+    <!-- ══ TABELA DE MOVIMENTAÇÕES ══════════════════════════════════════════ -->
     <div class="so-card">
         <div class="so-card-header d-flex justify-content-between align-items-center">
             <h5 class="so-card-title m-0">
@@ -397,7 +397,7 @@ require_once __DIR__ . '/../inc/header.php';
             </div>
         </div>
 
-        <!-- ══ PAGINAÇÃO INSTITUCIONAL SALESOPS ═══════════════════════════════ -->
+        <!-- ══ PAGINAÇÃO ════════════════════════════════════════════════════ -->
         <?php
         $firstItem = $totalRows > 0 ? ($offset + 1) : 0;
         $lastItem  = min($offset + $limit, $totalRows);
@@ -415,35 +415,15 @@ require_once __DIR__ . '/../inc/header.php';
                                 <i class="fas fa-chevron-left me-1"></i> Anterior
                             </a>
                         </li>
-                        
-                        <?php
-                        $range = 2;
-                        $startPage = max(1, $page - $range);
-                        $endPage = min($totalPages, $page + $range);
-                        
-                        if ($startPage > 1) {
-                            echo '<li class="page-item"><a class="page-link" href="movimentacoes.php?' . http_build_query($queryParamsBase + ['pagina' => 1]) . '">1</a></li>';
-                            if ($startPage > 2) {
-                                echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
-                            }
-                        }
-                        
-                        for ($i = $startPage; $i <= $endPage; $i++): 
-                        ?>
-                            <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
-                                <a class="page-link" href="movimentacoes.php?<?= http_build_query($queryParamsBase + ['pagina' => $i]) ?>"><?= $i ?></a>
-                            </li>
+                        <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+                            <?php if ($p === 1 || $p === $totalPages || ($p >= $page - 2 && $p <= $page + 2)): ?>
+                                <li class="page-item <?= ($p === $page) ? 'active' : '' ?>">
+                                    <a class="page-link" href="movimentacoes.php?<?= http_build_query($queryParamsBase + ['pagina' => $p]) ?>"><?= $p ?></a>
+                                </li>
+                            <?php elseif ($p === $page - 3 || $p === $page + 3): ?>
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            <?php endif; ?>
                         <?php endfor; ?>
-                        
-                        <?php
-                        if ($endPage < $totalPages) {
-                            if ($endPage < $totalPages - 1) {
-                                echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
-                            }
-                            echo '<li class="page-item"><a class="page-link" href="movimentacoes.php?' . http_build_query($queryParamsBase + ['pagina' => $totalPages]) . '">' . $totalPages . '</a></li>';
-                        }
-                        ?>
-                        
                         <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
                             <a class="page-link" href="movimentacoes.php?<?= http_build_query($queryParamsBase + ['pagina' => $page + 1]) ?>" aria-label="Próximo">
                                 Próximo <i class="fas fa-chevron-right ms-1"></i>
@@ -457,7 +437,7 @@ require_once __DIR__ . '/../inc/header.php';
     </div>
 </div>
 
-<!-- ══ MODAL NOVA MOVIMENTAÇÃO (SALESOPS CLEAN HEADER & WCAG AA) ═════════ -->
+<!-- ══ MODAL NOVA MOVIMENTAÇÃO ═══════════════════════════════════════════════ -->
 <div class="modal fade" id="modalMovimentacao" tabindex="-1" aria-labelledby="modalMovimentacaoLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border shadow-lg" style="border-radius: var(--mr-radius); border-color: #cbd5e1 !important;">

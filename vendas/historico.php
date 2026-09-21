@@ -1,6 +1,6 @@
 <?php
 /**
- * MrStock ERP - Histórico de Vendas com Filtros Avançados, KPIs e Design System SalesOps
+ * MrStock ERP - Histórico de Vendas com Filtros Avançados e KPIs
  */
 $pageTitle  = 'Histórico de Vendas';
 $activePage = 'historico';
@@ -163,7 +163,7 @@ require_once __DIR__ . '/../inc/header.php';
         <?php endif; ?>
     <?php endif; ?>
 
-    <!-- ══ CARDS DE KPI (BENTO GRID MODERNO - SEM 4PX BORDER) ═══════════════ -->
+    <!-- ══ CARDS DE KPI ══════════════════════════════════════════════════════ -->
     <div class="row g-3 mb-3">
         <div class="col-12 col-sm-6 col-md-4">
             <div class="so-card p-3 mb-0 h-100">
@@ -193,7 +193,7 @@ require_once __DIR__ . '/../inc/header.php';
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-12 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4">
             <div class="so-card p-3 mb-0 h-100">
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
@@ -209,7 +209,7 @@ require_once __DIR__ . '/../inc/header.php';
         </div>
     </div>
 
-    <!-- ══ BARRA DE FILTROS UNIFICADA (BENTO GRID COM LABELS ACESSÍVEIS) ═════ -->
+    <!-- ══ BARRA DE FILTROS UNIFICADA ════════════════════════════════════════════ -->
     <div class="so-card p-3 mb-3">
         <form method="GET" action="<?= BASE_URL ?>/vendas/historico.php" class="row g-2 align-items-end">
             

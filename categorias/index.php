@@ -60,7 +60,7 @@ require_once __DIR__ . '/../inc/header.php';
         <?php endif; ?>
     <?php endif; ?>
 
-    <!-- ══ CARDS DE RESUMO (BENTO GRID SALESOPS) ═════════════════════════════ -->
+    <!-- ══ CARDS DE RESUMO ═════════════════════════════════════════════════ -->
     <div class="row g-3 mb-4">
         <!-- Card 1: Total de Categorias -->
         <div class="col-12 col-md-4">
@@ -122,7 +122,7 @@ require_once __DIR__ . '/../inc/header.php';
         </div>
     </div>
 
-    <!-- ══ TABELA MODULAR DE CATEGORIAS (ANTI-SLOP) ══════════════════════════ -->
+    <!-- ══ TABELA DE CATEGORIAS ═════════════════════════════════════════════ -->
     <div class="so-card">
         <div class="so-card-header">
             <h5 class="so-card-title"><i class="fas fa-folder-tree text-primary"></i> Categorias Cadastradas</h5>

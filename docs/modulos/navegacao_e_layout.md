@@ -45,7 +45,7 @@ Define o padrão visual e ergonômico universal do MrStock ERP. Implementa as di
 }
 
 /* Animação Global Fluida */
-@keyframes salesOpsSlideInLeft {
+@keyframes mrStockSlideInLeft {
   from { opacity: 0; transform: translateX(-16px); }
   to { opacity: 1; transform: translateX(0); }
 }

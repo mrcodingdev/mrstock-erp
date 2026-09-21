@@ -1,10 +1,10 @@
 # Diário de Desenvolvimento & Histórico de Versões — MrStock ERP
 
-Este documento registra a linha do tempo, sprints de engenharia e a evolução arquitetural do **MrStock ERP** desde a concepção inicial até a homologação da **Versão 2.0 (SalesOps Edition)**.
+Este documento registra a linha do tempo, sprints de engenharia e a evolução arquitetural do **MrStock ERP** desde a concepção inicial até a homologação da **Versão 2.0 (Interface Comercial)**.
 
 ---
 
-## 🗓️ Linha do Tempo e Marcos do Projeto
+## Linha do Tempo e Marcos do Projeto
 
 ```mermaid
 timeline
@@ -18,7 +18,7 @@ timeline
     Sprint 3 (PDV & Transações)      : Módulo de Compras e Entradas
                                      : Frente de Caixa com Transações ACID
                                      : Emissão de Cupom Não-Fiscal Térmico
-    Sprint 4 (SalesOps v2.0)         : Refatoração Visual para Design System SalesOps
+    Sprint 4 (Interface Comercial v2.0) : Refatoração Visual para Design System Institucional MrStock
                                      : Sidebar Retrátil 260px/72px com Anti-FOUC
                                      : Web Audio API (880Hz) e Atalhos de Teclado no PDV
                                      : Modal de Troco Dinâmico e Cédulas Rápidas
@@ -28,7 +28,7 @@ timeline
 
 ---
 
-## 📋 Detalhamento dos Sprints de Desenvolvimento
+## Detalhamento dos Sprints de Desenvolvimento
 
 ### Sprint 1: Fundação & Modelagem (Maio/2026)
 - Visita técnica e levantamento de necessidades na Papelaria Real.
@@ -45,9 +45,9 @@ timeline
 - Implementação do PDV com bloqueio pessimista (`SELECT ... FOR UPDATE`).
 - Geração de relatórios PDF e exportação para planilhas Excel em 9 colunas.
 
-### Sprint 4: Versão 2.0 SalesOps Edition & Homologação (Agosto/2026)
+### Sprint 4: Versão 2.0 (Interface Comercial) & Homologação (Agosto/2026)
 - **Ergonomia do PDV:** Atalhos de teclado globais (`F2`-`F9`, `ESC`) e sintetizador sonoro de 880Hz via Web Audio API.
 - **Troco Dinâmico:** Teclado numérico e botões de cédula de R$ 10 a R$ 200.
 - **Etiquetas Vetoriais:** Geração autônoma de SVG Code-128 e EAN-13 em `inc/barcode_helper.php`.
-- **Design System SalesOps:** Sidebar com script Anti-FOUC no `<head>`, popover com `z-index: 99999` e paginação institucional verde.
+- **Design System Institucional MrStock:** Sidebar com script Anti-FOUC no `<head>`, popover com `z-index: 99999` e paginação institucional verde.
 - **Auditoria de QA:** Bateria de testes de conformidade cobrindo Segurança (RBAC/CSRF), Integridade ACID, UI/UX e Compatibilidade PHP 8.2.

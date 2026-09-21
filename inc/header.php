@@ -1,6 +1,6 @@
 <?php
 /**
- * MrStock ERP - Header Reutilizável (SalesOps v0 Design System)
+ * MrStock ERP - Header Reutilizável
  *
  * Variáveis esperadas (definidas antes do include):
  *   $pageTitle  string  - Ex: "MrStock ERP - Dashboard"
@@ -73,7 +73,7 @@ $_menuGroups = [
     [
         'type'     => 'group',
         'id'       => 'menuRelatorios',
-        'title'    => 'Inteligência & Relatórios',
+        'title'    => 'Relatórios & Análises',
         'icon'     => 'fa-solid fa-chart-pie',
         'active'   => in_array($_ap, ['analise', 'relatorios', 'logs']),
         'rbac'     => 'admin', // Grupo inteiro exclusivo Admin
@@ -168,7 +168,7 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
     <!-- ===== OVERLAY PARA MOBILE ===== -->
     <div class="mobile-overlay" onclick="toggleSidebar()"></div>
 
-    <!-- ===== SIDEBAR SALESOPS (v0) ===== -->
+    <!-- ===== SIDEBAR PRINCIPAL ===== -->
     <aside class="so-sidebar" id="soSidebar">
         <!-- Marca / Brand com Logo Oficial do MrStock -->
         <div class="so-brand">
@@ -216,7 +216,7 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
                         // Se não há itens visíveis para o perfil, não renderiza o grupo
                         if (empty($visibleItems)) continue;
                     ?>
-                        <!-- Grupo Acordeão (SalesOps v0 Accordion) -->
+                        <!-- Grupo Acordeão -->
                         <li class="so-nav__item <?= $group['active'] ? 'is-open' : '' ?>" id="<?= $group['id'] ?>">
                             <button type="button" 
                                     class="so-link <?= $group['active'] ? 'is-active' : '' ?>" 
@@ -263,7 +263,7 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
 
     <!-- ===== MAIN PANEL ===== -->
     <div class="main-panel">
-        <!-- TOPBAR SUPERIOR (SALESOPS v0) -->
+        <!-- TOPBAR SUPERIOR -->
         <header class="so-header">
             <div class="d-flex align-items-center gap-3">
                 <button class="d-md-none border-0 bg-transparent text-secondary p-0 fs-5" onclick="toggleSidebar()" aria-label="Alternar menu lateral" title="Abrir Menu">

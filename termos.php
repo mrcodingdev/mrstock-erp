@@ -123,7 +123,7 @@ if ($isLoggedIn) {
                 O <strong>MrStock ERP</strong> é um software de gestão empresarial integrado (ERP) desenvolvido especificamente para a gestão comercial, faturamento de PDV ágil e controle rigoroso de estoque físico baseado no método PEPS/FIFO (Primeiro que Entra, Primeiro que Sai) com rastreabilidade de lotes e datas de validade para a <strong>Papelaria Real Ltda</strong>.
             </p>
             <p style="color: #334155; line-height: 1.7;">
-                O acesso e a utilização dos módulos operacionais (PDV, Estoque, Ordens de Compra, Fornecedores, Clientes e Inteligência Gerencial) ficam condicionados à estrita aceitação e observância destes Termos de Uso.
+                O acesso e a utilização dos módulos operacionais (PDV, Estoque, Ordens de Compra, Fornecedores, Clientes e Relatórios Gerenciais) ficam condicionados à estrita aceitação e observância destes Termos de Uso.
             </p>
         </section>
 
@@ -140,7 +140,7 @@ if ($isLoggedIn) {
                     <div class="p-3 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
                         <h3 class="h6 fw-bold mb-2" style="color: #1e293b;"><i class="fas fa-user-shield me-2 text-danger"></i>Perfil Administrador:</h3>
                         <p class="mb-0 small" style="color: #475569; line-height: 1.6;">
-                            Acesso irrestrito a todos os módulos, parametrizações tributárias, controle de margens financeiras, centro de análise gerencial (DRE, Curva ABC), auditoria forense de logs e gestão de contas de operadores.
+                            Acesso irrestrito a todos os módulos, parametrizações tributárias, controle de margens financeiras, centro de análise gerencial (DRE, Curva ABC), histórico e logs de auditoria e gestão de contas de operadores.
                         </p>
                     </div>
                 </div>

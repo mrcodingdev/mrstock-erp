@@ -52,7 +52,7 @@ C:\xampp\htdocs\MrStock\
 │   ├── historico.php               # Histórico de vendas e cancelamento/estorno
 │   └── functions.php               # Motor de checkout transacional e concorrência
 │
-├── relatorios/                     # Centro de Inteligência e Relatórios
+├── relatorios/                     # Painel de Análise e Relatórios
 │   ├── index.php                   # Painel DRE Gerencial e Inventário Geral
 │   ├── analise.php                 # Curva ABC (80-15-5) e gráficos Chart.js
 │   ├── pdf.php                     # Gerador de relatório executivo A4 em 9 colunas

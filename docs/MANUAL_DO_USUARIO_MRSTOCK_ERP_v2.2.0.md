@@ -14,7 +14,7 @@
 
 ### FICHA TÉCNICA E CRÉDITOS DO PROJETO
 
-- **Sistema:** MrStock ERP — Versão 2.2.0 (SalesOps & QTS Edition — 100% Homologado)
+- **Sistema:** MrStock ERP — Versão 2.2.0 (Edição TCC ETEC — 100% Homologado)
 - **Cliente Homologado:** Papelaria Real Ltda (Rua XV de Novembro, 250 - Centro, Sorocaba/SP)
 - **Instituição de Ensino:** Escola Técnica Estadual Fernando Prestes (ETEC Fernando Prestes)
 - **Mantenedora:** Centro Estadual de Educação Tecnológica Paula Souza (CPS) / Governo de SP
@@ -22,11 +22,11 @@
 - **Orientadores Oficiais:** Prof. Luiz Flávio & Prof. Vinicius
 
 #### Equipe Mr. Coding (Autores & Desenvolvedores):
-1. **Douglas Moraes Braz:** Líder Técnico, Arquiteto de Software e Engenheiro Full-Stack.
-2. **Nikolas Pires Brandão:** Modelagem de Banco de Dados Relacional, Diagrama DER e DBA MySQL.
-3. **Cesar Augusto da Silva Junior:** Engenharia de Requisitos, Interface com o Cliente e Validação Comercial.
-4. **Enzo de Oliveira Soares:** Redação Técnica, Documentação Acadêmica e Normas ABNT/CPS.
-5. **Eduardo Sugahara Neto:** Navegação Operacional, Apresentação e Demonstração Prática na Banca.
+1. **Douglas Moraes Braz:** Desenvolvimento e Programação.
+2. **Nikolas Pires Brandão:** Banco de Dados e Modelagem DER.
+3. **Cesar Augusto da Silva Junior:** Levantamento de Requisitos e Validação com o Cliente.
+4. **Enzo de Oliveira Soares:** Documentação do Projeto e Casos de Uso.
+5. **Eduardo Sugahara Neto:** Testes e Apresentação do Sistema.
 
 ---
 
@@ -71,8 +71,8 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 | **Tela 16** | Nova Ordem de Compra & Entrada de Mercadorias | `/compras/nova.php` | Administrador |
 | **Tela 17** | Conferência de Compra / Espelho do Pedido | `/compras/visualizar.php` | Administrador |
 | **Tela 18** | Central de Relatórios Gerenciais & DRE | `/relatorios/index.php` | Administrador |
-| **Tela 19** | Centro de Inteligência Comercial (BI / Chart.js) | `/relatorios/analise.php` | Administrador |
-| **Tela 20** | Trilha de Auditoria Forense & Logs Imutáveis | `/relatorios/logs.php` | Administrador |
+| **Tela 19** | Painel de Análise Financeira & Vendas (Chart.js) | `/relatorios/analise.php` | Administrador |
+| **Tela 20** | Histórico de Auditoria & Logs de Ações | `/relatorios/logs.php` | Administrador |
 | **Tela 21** | Exportação de Relatórios para Excel (XLSX) | `/relatorios/excel.php` | Administrador |
 | **Tela 23** | Configurações da Empresa & Gestão de Operadores | `/configuracoes.php` | Administrador |
 | **Tela 22** | Central de Ajuda, Teclas de Atalho & FAQ | `/ajuda.php` | Administrador e Operador de Caixa |
@@ -418,7 +418,7 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 1. Acesse a tela de movimentações para auditar o fluxo físico de estoques.
 2. Utilize os filtros por período, produto ou operador responsável.
 3. Para registrar perda física (ex: vidro de tinta que quebrou no estoque): clique em 'Nova Movimentação', selecione o produto, escolha o tipo 'Avaria / Perda', informe a quantidade e digite a justificativa obrigatória.
-4. Confirme o lançamento: o estoque físico é abatido e um registro forense imutável é gravado na auditoria.
+4. Confirme o lançamento: o estoque físico é abatido e um registro de auditoria é gravado no histórico.
 
 > 💡 **Dica de Balcão:** Audite semanalmente o Kardex para confrontar as perdas físicas com a meta de quebra operacional da loja.
 
@@ -562,7 +562,7 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 ---
 
 
-# 7. CENTRO DE INTELIGÊNCIA, BI E RELATÓRIOS ESTRATÉGICOS
+# 7. PAINEL DE ANÁLISE FINANCEIRA E RELATÓRIOS ESTRATÉGICOS
 
 ### Tela 18: Central de Relatórios Gerenciais & DRE (`/relatorios/index.php`)
 
@@ -589,9 +589,9 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 
 ---
 
-### Tela 19: Centro de Inteligência Comercial (BI / Chart.js) (`/relatorios/analise.php`)
+### Tela 19: Painel de Análise Financeira & Vendas (Chart.js) (`/relatorios/analise.php`)
 
-📋 **RESUMO RÁPIDO — Centro de Inteligência Comercial (BI / Chart.js)**
+📋 **RESUMO RÁPIDO — Painel de Análise Financeira & Vendas (Chart.js)**
 - **Para que serve:** Dashboard analítico interativo com gráficos visuais em tempo real via Chart.js, cruzando faturamento, CMV, ticket médio e Curva ABC.
 - **Quem pode acessar:** Administrador.
 - **Onde encontrar:** Central de Relatórios > Centro de Análise (BI) (/relatorios/analise.php).
@@ -614,10 +614,10 @@ O **MrStock ERP v2.2.0** é propriedade de uso comercial da **Papelaria Real Ltd
 
 ---
 
-### Tela 20: Trilha de Auditoria Forense & Logs Imutáveis (`/relatorios/logs.php`)
+### Tela 20: Histórico de Auditoria & Logs de Ações (`/relatorios/logs.php`)
 
-📋 **RESUMO RÁPIDO — Trilha de Auditoria Forense & Logs Imutáveis**
-- **Para que serve:** Registro imutável de todas as transações, alterações de preço, concessão de desconto, estornos e acessos com data, hora, usuário e IP.
+📋 **RESUMO RÁPIDO — Histórico de Auditoria & Logs de Ações**
+- **Para que serve:** Registro de todas as transações, alterações de preço, concessão de desconto, estornos e acessos com data, hora, usuário e IP.
 - **Quem pode acessar:** Administrador.
 - **Onde encontrar:** Menu Lateral > Relatórios > Logs de Auditoria (/relatorios/logs.php).
 

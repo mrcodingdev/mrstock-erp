@@ -2,7 +2,7 @@
 /**
  * MrStock ERP - Configurações Globais & Hardening de Segurança (OWASP ZAP)
  * Centraliza constantes de caminho, detecção dinâmica de ambiente (Local vs Nuvem),
- * credenciais de banco de dados e cabeçalhos defensivos.
+ * credenciais de banco de dados e cabeçalhos de segurança.
  */
 
 // 1. Caminho absoluto da raiz do projeto no filesystem
@@ -106,7 +106,7 @@ if (function_exists('header_remove')) {
     @header_remove('X-Powered-By');
 }
 
-// 4. Configuração Defensiva de Cookies de Sessão (CWE-1004 & CWE-1275)
+// 4. Configuração de Segurança dos Cookies de Sessão (CWE-1004 & CWE-1275)
 if (session_status() === PHP_SESSION_NONE) {
     $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') 
             || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443)

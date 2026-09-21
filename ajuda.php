@@ -227,7 +227,7 @@ $modulosAjuda = [
         'id'        => 'M4',
         'categoria' => 'clientes',
         'keywords'  => 'clientes fornecedor cadastro compras ordem de compra entrada mercadoria whatsapp contato fornecedores viacep',
-        'titulo'    => 'Módulo 4: Gestão de Clientes & Atendimento Humanizado',
+        'titulo'    => 'Módulo 4: Gestão e Cadastro de Clientes',
         'icone'     => 'fa-users',
         'cor_icone' => 'text-success',
         'passos'    => [
@@ -270,7 +270,7 @@ $modulosAjuda = [
             [
                 'num'   => 1,
                 'icone' => 'fa-handshake',
-                'tit'   => 'Homologação de Parceiros Comerciais',
+                'tit'   => 'Cadastro de Fornecedores',
                 'desc'  => 'Cadastre grandes distribuidores e fabricantes da papelaria (Tilibra, Faber-Castell, Bic, Chamex) com CNPJ e contatos de representantes.'
             ],
             [
@@ -299,7 +299,7 @@ $modulosAjuda = [
         'id'        => 'M6',
         'categoria' => 'gestao',
         'keywords'  => 'financas relatorios dre curva abc cmv lucro faturamento receita analise bi pareto margem bruta excel pdf',
-        'titulo'    => 'Módulo 6: Inteligência Financeira, DRE Gerencial & Curva ABC',
+        'titulo'    => 'Módulo 6: Relatórios Financeiros, DRE & Curva ABC',
         'icone'     => 'fa-chart-pie',
         'cor_icone' => 'text-warning',
         'passos'    => [
@@ -343,7 +343,7 @@ $modulosAjuda = [
                 'num'   => 1,
                 'icone' => 'fa-wifi',
                 'tit'   => 'Operação sem Internet (Modo Local)',
-                'desc'  => 'A arquitetura híbrida (XAMPP local) permite que o PDV e os caixas continuem emitindo vendas normalmente mesmo em oscilações de rede.'
+                'desc'  => 'A operação local (XAMPP) permite que o PDV e os caixas continuem emitindo vendas normalmente mesmo se a internet oscilar.'
             ],
             [
                 'num'   => 2,
@@ -383,37 +383,37 @@ $faqItems = [
         'categoria' => 'suporte',
         'keywords'  => 'faq internet queda offline contingencia funcionamento local xampp rede conexao estabilidade balcao',
         'pergunta'  => 'Como o sistema opera em caso de instabilidade de internet (Modo Offline / Local)?',
-        'resposta'  => 'O MrStock ERP foi concebido sob uma arquitetura híbrida e resiliente. Caso ocorra queda ou instabilidade na conexão externa de internet, o sistema continua plenamente operacional no ambiente local (servidor XAMPP/Apache/MySQL). Todas as operações do Frente de Caixa (PDV), consultas de produtos por leitor de código de barras, baixas de estoque PEPS/FIFO e fechamento de vendas permanecem 100% ativas sem perda de integridade dos dados.'
+        'resposta'  => 'O MrStock ERP funciona tanto na nuvem quanto instalado localmente no computador da loja. Caso ocorra queda na conexão de internet, o caixa (PDV) e as consultas de produtos continuam funcionando normalmente no servidor local XAMPP sem perda de dados.'
     ],
     [
         'id'        => 'F3',
         'categoria' => 'vendas',
         'keywords'  => 'faq estorno cancelamento devolucao estoque retorno auditoria historico vendas operador',
         'pergunta'  => 'Qual o procedimento para estorno de venda e devolução ao estoque?',
-        'resposta'  => 'Para realizar o cancelamento ou estorno de uma venda concluída, o operador acessa o menu <em>Operação de Vendas > Histórico</em>, localiza o registro da venda e aciona a opção de estorno. O sistema devolve automaticamente as unidades físicas dos itens ao estoque e gera um registro inviolável no log forense de auditoria com data, hora, motivo e identificação do usuário responsável.'
+        'resposta'  => 'Para realizar o cancelamento ou estorno de uma venda concluída, o operador acessa o menu <em>Operação de Vendas > Histórico</em>, localiza o registro da venda e aciona a opção de estorno. O sistema devolve automaticamente as unidades físicas dos itens ao estoque e registra a operação no histórico de atividades do sistema com data, hora, motivo e o usuário responsável.'
     ],
     [
         'id'        => 'F4',
         'categoria' => 'estoque',
         'keywords'  => 'faq familias funcionais categorias genericas papelaria curva abc pareto gestao organizacao sortimento cadernos canetas',
         'pergunta'  => 'Por que os produtos são organizados em 10 Famílias Funcionais em vez de categorias genéricas?',
-        'resposta'  => 'A Papelaria Real opera com alta densidade de itens (SKUs) e características operacionais heterogêneas. A adoção de micro-categorias especializadas (Cadernos & Blocos, Canetas & Marcadores, Papéis Especiais, etc.) garante acurácia na Curva ABC (Princípio de Pareto) e evita distorções clássicas na apuração da rentabilidade e do CMV, permitindo gestão precisa de validade, shelf-life e reposição inteligente.'
+        'resposta'  => 'Papelarias possuem uma grande variedade de produtos com características bem distintas (materiais escolares, papéis, tintas e colas). Dividir em 10 famílias específicas facilita a organização física das prateleiras, o controle de produtos com validade e o acompanhamento das vendas.'
     ],
     [
         'id'        => 'F5',
         'categoria' => 'gestao',
         'keywords'  => 'faq senha redefinicao operadores caixa administradores rbac perfis seguranca bcrypt configuracoes',
         'pergunta'  => 'Como solicitar redefinição de senha ou gerenciar operadores de caixa?',
-        'resposta'  => 'O gerenciamento de acessos e credenciais é centralizado no módulo <em>Configurações > Operadores</em>, sendo restrito exclusivamente a usuários com perfil de Administrador (RBAC). O administrador pode cadastrar operadores, conceder permissões limitadas (Administrador vs. Operador de Caixa) e redefinir credenciais com criptografia defensiva BCrypt de alto custo computacional, assegurando as diretrizes de segurança da LGPD.'
+        'resposta'  => 'O gerenciamento de acessos e credenciais é centralizado no módulo <em>Configurações > Operadores</em>, sendo restrito exclusivamente a usuários com perfil de Administrador (RBAC). O administrador pode cadastrar operadores, conceder permissões limitadas (Administrador vs. Operador de Caixa) e redefinir credenciais com criptografia segura de senhas (BCrypt), assegurando as diretrizes de segurança da LGPD.'
     ],
 ];
 
 // 6. Equipe Técnica & Suporte Acadêmico
 $equipeSuporte = [
-    ['nome' => 'Douglas',          'funcao' => 'Direção Técnica e Arquitetura'],
+    ['nome' => 'Douglas',          'funcao' => 'Desenvolvimento e Programação'],
     ['nome' => 'Nikolas',          'funcao' => 'Banco de Dados e Modelagem DER'],
-    ['nome' => 'Cesar',            'funcao' => 'Requisitos de Negócio e Cliente'],
-    ['nome' => 'Enzo',             'funcao' => 'Documentação e Processos'],
+    ['nome' => 'Cesar',            'funcao' => 'Levantamento de Requisitos e Negócio'],
+    ['nome' => 'Enzo',             'funcao' => 'Documentação e Casos de Uso'],
     ['nome' => 'Eduardo Sugahara', 'funcao' => 'Demonstração e Navegação do Sistema'],
 ];
 
@@ -754,7 +754,7 @@ require_once __DIR__ . '/inc/header.php';
                 <div class="col-lg-7 col-12">
                     <h6 class="fw-bold text-dark mb-2">Projeto de Conclusão de Curso (TCC) | ETEC Fernando Prestes (Sorocaba/SP)</h6>
                     <p class="text-muted small mb-3">
-                        O <strong>MrStock ERP</strong> foi arquitetado e implementado pela equipe de engenharia de software <strong>Mr. Coding</strong>:
+                        O <strong>MrStock ERP</strong> foi desenvolvido pelos estudantes da equipe Mr. Coding no curso técnico da ETEC Fernando Prestes:
                     </p>
                     <div class="row g-2 small">
                         <?php foreach ($equipeSuporte as $membro): ?>

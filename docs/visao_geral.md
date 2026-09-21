@@ -8,7 +8,7 @@
 ---
 
 ## 1. Proposta de Valor e Contexto Comercial
-O **MrStock ERP** é uma plataforma corporativa integrada de **Gestão Comercial, Controle Inteligente de Estoque, Frente de Caixa (PDV de Alta Velocidade), Emissão Fiscal e Inteligência Analítica (BI)** desenvolvida sob medida para o varejo de papelarias e suprimentos corporativos, tendo como estudo de caso e beneficiária a **Papelaria Real Ltda**.
+O **MrStock ERP** é um sistema integrado de gestão comercial, controle de estoque e ponto de venda (PDV) desenvolvido sob medida para o varejo de papelarias e suprimentos corporativos, tendo como estudo de caso e beneficiária a **Papelaria Real Ltda**.
 
 A operação tradicional da papelaria enfrentava desafios críticos:
 - Perda de vendas em horários de pico escolar devido à lentidão no atendimento de balcão.
@@ -17,7 +17,7 @@ A operação tradicional da papelaria enfrentava desafios críticos:
 - Falta de visibilidade sobre produtos perecíveis próximos do vencimento (colas, tintas, corretivos líquidos).
 - Insegurança na segregação de funções entre o operador de caixa e a administração.
 
-O MrStock ERP v2.2.0 resolve integralmente esses gargalos através de engenharia de software consistente, interface ágil e regras fiscais automatizadas.
+O MrStock ERP v2.2.0 resolve integralmente esses gargalos através de desenvolvimento estruturado, interface ágil e regras fiscais automatizadas.
 
 ---
 

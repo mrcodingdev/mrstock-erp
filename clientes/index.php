@@ -15,7 +15,7 @@ $stmt = $pdo->query("
 $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalClientes = count($clientes);
 
-// KPIs para Bento Grid Stat Cards
+// KPIs para Stat Cards
 $clientesAtivos = count(array_filter($clientes, fn($c) => ($c['status'] ?? '') === 'ativo'));
 $faturamentoTotalClientes = (float)array_sum(array_column($clientes, 'total_compras'));
 
@@ -67,7 +67,7 @@ require_once __DIR__ . '/../inc/header.php';
         <?php endif; ?>
     <?php endif; ?>
 
-    <!-- ══ STAT CARDS (BENTO GRID SALESOPS) ══════════════════════════════════ -->
+    <!-- ══ STAT CARDS ══════════════════════════════════════════════════════ -->
     <div class="row g-3 mb-4">
         <!-- Card 1: Total de Clientes -->
         <div class="col-12 col-md-4">

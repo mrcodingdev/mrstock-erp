@@ -472,7 +472,7 @@ body.sidebar-collapsed .main-panel {
   box-shadow: 0 2px 6px rgba(40, 73, 54, 0.3);
 }
 
-/* Popover flutuante com z-index soberano e renderização desimpedida */
+/* Popover flutuante com z-index elevado e renderização desimpedida */
 .so-dropdown {
   position: absolute;
   top: calc(100% + 0.5rem);
@@ -580,7 +580,7 @@ body.sidebar-collapsed .main-panel {
 }
 
 /* Alias de retrocompatibilidade */
-@keyframes salesOpsSlideInLeft {
+@keyframes mrStockSlideInLeft {
   0% {
     opacity: 0;
     transform: translateX(-20px);
@@ -1186,7 +1186,7 @@ body.sidebar-collapsed .main-panel {
 /* ===== ANIMAÇÃO ESCALONADA EM LINHAS DE TABELAS E GRÁFICOS ===== */
 .so-table tbody tr,
 .table:not(.table-sheet) tbody tr {
-  animation: salesOpsSlideInLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: mrStockSlideInLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .so-table tbody tr:nth-child(1), .table tbody tr:nth-child(1)   { animation-delay: 0.03s; }
@@ -1219,7 +1219,7 @@ body.sidebar-collapsed .main-panel {
   overflow: visible !important;
 }
 
-/* Correção Soberana de Stacking Context para Dropdowns de Ações em Tabelas */
+/* Ajuste de Stacking Context para Dropdowns de Ações em Tabelas */
 .so-table tbody tr,
 .table tbody tr {
   position: relative;
@@ -1248,7 +1248,7 @@ body.sidebar-collapsed .main-panel {
 canvas,
 .chart-container,
 .card-chart {
-  animation: salesOpsSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: mrStockSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: 0.25s;
 }
 
@@ -2095,7 +2095,7 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
   background: #222d31 !important;
   border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
   color: #cbd5e1;
-  animation: salesOpsSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: mrStockSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: 0.15s;
 }
 

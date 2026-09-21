@@ -116,7 +116,7 @@
             document.documentElement.classList.remove('sidebar-collapsed-preload');
         }
 
-        // 2. Comportamento Acordeão Inteligente nos Itens da Sidebar (SalesOps Accordion)
+        // 2. Comportamento de Acordeão nos Itens da Sidebar
         document.querySelectorAll('[data-accordion-toggle]').forEach(function(button) {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -160,7 +160,7 @@
             }
         });
 
-        // 4. Correção Soberana de Z-Index e Overflow para Dropdowns em Linhas de Tabelas
+        // 4. Ajuste de Z-Index e Overflow para Dropdowns em Linhas de Tabelas
         document.addEventListener('show.bs.dropdown', function(e) {
             const tr = e.target.closest('tr');
             if (tr) {

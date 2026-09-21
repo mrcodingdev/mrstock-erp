@@ -68,4 +68,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
 
 ## 4. Segurança & Controle de Acesso (RBAC)
 - **Perfil Restrito:** Apenas o Administrador pode consultar movimentações ou lançar perdas/avarias.
-- **Imutabilidade de Histórico:** Movimentações registradas não podem ser editadas ou excluídas diretamente, garantindo auditoria forense.
+- **Imutabilidade de Histórico:** Movimentações registradas não podem ser editadas ou excluídas diretamente, garantindo logs de auditoria e rastreabilidade.

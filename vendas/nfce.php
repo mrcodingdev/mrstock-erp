@@ -2,7 +2,6 @@
 /**
  * MrStock ERP - Consulta e Painel Fiscal NFC-e
  * Módulo de Consulta de Cupons Fiscais, Chaves de Acesso e Auditoria Fiscal
- * Padrão SalesOps v0 - Design System & Anti-Slop (14 Zonas)
  */
 $pageTitle  = 'Consulta Fiscal NFC-e';
 $activePage = 'fiscal';
@@ -10,7 +9,7 @@ require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
 require_once __DIR__ . '/../inc/functions.php';
 
-// ── 1. Estatísticas Globais para os Stat Cards (Bento Grid) ─────────────────
+// ── 1. Estatísticas Globais para os Stat Cards ─────────────────────────
 $stmtStats = $pdo->query("
     SELECT 
         COUNT(cf.id) AS total_cupons,
@@ -173,7 +172,7 @@ require_once __DIR__ . '/../inc/header.php';
             <i class="fas fa-info-circle me-2"></i> Ambiente fiscal em modo de <strong>Homologação (Simulação TCC)</strong>. As chaves de acesso de 44 dígitos e a assinatura digital seguem o padrão técnico da SEFAZ SP para fins didáticos.
         </div>
 
-        <!-- ══ 3 STAT CARDS NO TOPO (BENTO GRID SALESOPS) ═══════════════════════ -->
+        <!-- ══ 3 STAT CARDS NO TOPO ═══════════════════════════════════════════ -->
         <div class="row g-3 mb-3">
             <!-- Card 1: Total de Cupons Emitidos -->
             <div class="col-12 col-sm-6 col-md-4">

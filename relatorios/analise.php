@@ -1,9 +1,9 @@
 <?php
 /**
- * MrStock ERP - Centro de Inteligência e Análise Gerencial
+ * MrStock ERP - Painel de Análise Financeira e Vendas
  * Painel com filtros temporais (7 dias, Mês Atual, Ano Atual), KPIs de margem e gráficos Chart.js
  */
-$pageTitle  = 'Centro de Análise';
+$pageTitle  = 'Painel de Análise';
 $activePage = 'analise';
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
@@ -214,7 +214,7 @@ require_once __DIR__ . '/../inc/header.php';
     <div class="content-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
             <h2 class="fw-bold text-dark m-0">
-                <i class="fas fa-chart-pie text-primary me-2"></i>Centro de Inteligência & Análise
+                <i class="fas fa-chart-pie text-primary me-2"></i>Painel de Análise Financeira
             </h2>
             <p class="text-muted m-0">Gráficos de vendas, margens de lucro e desempenho por período.</p>
         </div>
@@ -242,7 +242,7 @@ require_once __DIR__ . '/../inc/header.php';
     </div>
 
     <div class="content-body">
-        <!-- ══ CARDS DE KPIS DO PERÍODO SELECIONADO (BENTO GRID SALESOPS) ════════════ -->
+        <!-- ══ CARDS DE KPIS DO PERÍODO SELECIONADO ═════════════════════════════════ -->
         <div class="row g-3 mb-4">
             <!-- Card 1: Faturamento do Período -->
             <div class="col-12 col-sm-6 col-lg-3">

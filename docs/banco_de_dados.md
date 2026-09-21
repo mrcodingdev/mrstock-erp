@@ -23,7 +23,7 @@
 | **11** | `cupons_fiscais` | Registro fiscal com chave de 44 dígitos e protocolo | `id` | 8 |
 | **12** | `usuarios` | Contas de acesso e níveis de privilégio (Admin/Caixa) | `id` | 4 |
 | **13** | `configuracoes` | Repositório dinâmico de parâmetros operacionais da loja | `chave` | 3 |
-| **14** | `logs` | Trilha de auditoria forense de ações operacionais | `id` | 7 |
+| **14** | `logs` | Trilha de auditoria e histórico de logs | `id` | 7 |
 
 ---
 
@@ -124,7 +124,7 @@ CREATE TABLE `vendas_itens` (
 ```
 
 ### 5. Tabela `movimentacoes`
-Rastreabilidade forense de todas as alterações de saldo.
+Rastreabilidade de alterações de todas as movimentações de saldo.
 ```sql
 CREATE TABLE `movimentacoes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

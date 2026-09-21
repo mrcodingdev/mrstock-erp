@@ -18,7 +18,7 @@ Documentos finais homologados para submissão e avaliação da banca examinadora
 
 ---
 
-### 2. Arquitetura e Engenharia de Software
+### 2. Arquitetura do Sistema
 Fundamentos técnicos, topologia do sistema e decisões de projeto:
 * [Visão Geral do Sistema](visao_geral.md): Proposta de valor, contexto da Papelaria Real e diferenciais do projeto.
 * [Estrutura do Projeto](estrutura_projeto.md): Mapeamento detalhado dos diretórios e arquivos da aplicação.
@@ -43,7 +43,7 @@ Documentação técnica de cada uma das funcionalidades implementadas:
 * [Gestão de Compras](modulos/compras.md)
 * [Gestão de Fornecedores](modulos/fornecedores.md)
 * [Gestão de Clientes](modulos/clientes.md)
-* [Centro de Análise (Curva ABC & DRE)](modulos/analise.md)
+* [Painel de Análise (Curva ABC & DRE)](modulos/analise.md)
 * [Central de Relatórios](modulos/relatorios.md)
 * [Parâmetros & Configurações](modulos/configuracoes.md)
 * [Navegação, Topbar & Design System](modulos/navegacao_e_layout.md)

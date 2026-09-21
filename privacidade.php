@@ -139,7 +139,7 @@ if ($isLoggedIn) {
                         <h3 class="h6 fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-code me-2 text-success" style="color: #284936 !important;"></i>Operador &amp; Desenvolvedor:</h3>
                         <p class="mb-0 small" style="color: #475569;">
                             <strong>Equipe Mr. Coding</strong><br>
-                            Desenvolvimento e Engenharia de Software<br>
+                            Desenvolvimento de Sistemas (TCC)<br>
                             ETEC Fernando Prestes – Centro Paula Souza<br>
                             Orientação Técnica: Prof. Vinicius
                         </p>
@@ -177,7 +177,7 @@ if ($isLoggedIn) {
                             <td>Autenticação biométrica/credencial, segregação de privilégios de acesso e prevenção de acessos indevidos.</td>
                         </tr>
                         <tr>
-                            <td><strong>Registros de Conexão (Logs Forenses)</strong></td>
+                            <td><strong>Registros de Atividade e Acesso (Logs de Auditoria)</strong></td>
                             <td>Endereço IP de origem, data, horário (UTC-3), recurso acessado e identificador de ação no sistema.</td>
                             <td>Cumprimento mandatório do <strong>Artigo 15 da Lei nº 12.965/2014 (Marco Civil da Internet)</strong> e auditoria interna contra fraudes.</td>
                         </tr>
@@ -243,7 +243,7 @@ if ($isLoggedIn) {
         <!-- 5. Segurança Técnica -->
         <section class="mb-5">
             <h2 class="h5 fw-bold text-dark border-bottom pb-2 mb-3" style="color: #1e293b;">
-                <i class="fas fa-shield-halved text-success me-2" style="color: #284936 !important;"></i>5. Camadas de Segurança Técnica e Defesa Cibernética
+                <i class="fas fa-shield-halved text-success me-2" style="color: #284936 !important;"></i>5. Medidas de Segurança Técnica e Proteção da Informação
             </h2>
             <p style="color: #334155; line-height: 1.7;">
                 O MrStock ERP adota medidas técnicas, organizacionais e administrativas de segurança aptas a proteger os dados pessoais contra acessos não autorizados e eventos acidentais ou ilícitos:
