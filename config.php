@@ -23,7 +23,7 @@ if (!defined('APP_TIMEZONE')) {
 if (!defined('MRSTOCK_VERSION')) {
     define('MRSTOCK_VERSION', 'v2.2.0');
     define('MRSTOCK_EDITION', 'Papelaria Real');
-    define('MRSTOCK_BUILD_DATE', '03/09/2026');
+    define('MRSTOCK_BUILD_DATE', '21/09/2026');
 }
 
 // 2. Carregador Nativo de Variáveis de Ambiente (.env)

@@ -2179,14 +2179,15 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 }
 
 .so-footer-gestaoclick__support-circle--faq {
-  border: 1.5px solid #6ae49b;
-  color: #6ae49b;
-  background: rgba(106, 228, 155, 0.08);
+  background: #0d6efd !important;
+  border: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 8px rgba(13, 110, 253, 0.25);
 }
 .so-footer-gestaoclick__support-circle--faq:hover,
 .so-footer-gestaoclick__support-item:hover .so-footer-gestaoclick__support-circle--faq {
-  background: #284936;
-  color: #ffffff;
+  background: #0b5ed7 !important;
+  color: #ffffff !important;
 }
 
 .so-footer-gestaoclick__contact-direct {

@@ -242,4 +242,93 @@ if (!function_exists('registrar_log')) {
     }
 }
 
+/**
+ * Obtém metadados de versão e commit do Git (com detecção dinâmica de .git/HEAD
+ * e fallback resiliente para version.json e constantes do sistema).
+ *
+ * @return array{version: string, edition: string, commit: string, branch: string, date: string, repo_url: string, full_commit?: string}
+ */
+if (!function_exists('mrstock_get_git_info')) {
+    function mrstock_get_git_info(): array {
+        $defaults = [
+            'version'  => defined('MRSTOCK_VERSION') ? MRSTOCK_VERSION : 'v2.2.0',
+            'edition'  => defined('MRSTOCK_EDITION') ? MRSTOCK_EDITION : 'Papelaria Real',
+            'commit'   => '712b0d1',
+            'branch'   => 'main',
+            'date'     => defined('MRSTOCK_BUILD_DATE') ? MRSTOCK_BUILD_DATE : '21/09/2026',
+            'repo_url' => 'https://github.com/mrcodingdev/mrstock-erp',
+        ];
+
+        // 1. Tentar ler version.json se existir
+        $baseDir = defined('ROOT_PATH') ? ROOT_PATH : realpath(__DIR__ . '/..');
+        $jsonFile = $baseDir . '/version.json';
+        if (file_exists($jsonFile)) {
+            $jsonContent = @file_get_contents($jsonFile);
+            if ($jsonContent !== false) {
+                $decoded = json_decode($jsonContent, true);
+                if (is_array($decoded)) {
+                    $defaults = array_merge($defaults, array_filter($decoded, function($v) {
+                        return $v !== null && $v !== '';
+                    }));
+                }
+            }
+        }
+
+        // 2. Tentar ler dinamicamente do repositório .git local
+        $gitDir = $baseDir . '/.git';
+        $headFile = $gitDir . '/HEAD';
+
+        if (file_exists($headFile) && is_readable($headFile)) {
+            try {
+                $headContent = trim((string)@file_get_contents($headFile));
+
+                if (strpos($headContent, 'ref:') === 0) {
+                    $ref = trim(substr($headContent, 4));
+                    // Extrai branch (ex: refs/heads/main -> main)
+                    $parts = explode('/', $ref);
+                    $defaults['branch'] = end($parts);
+
+                    $refFile = $gitDir . '/' . $ref;
+                    if (file_exists($refFile) && is_readable($refFile)) {
+                        $fullHash = trim((string)@file_get_contents($refFile));
+                        if (!empty($fullHash)) {
+                            $defaults['commit'] = substr($fullHash, 0, 7);
+                            $defaults['full_commit'] = $fullHash;
+                        }
+                    } else {
+                        // Tenta packed-refs se o arquivo do ref avulso não existir
+                        $packedFile = $gitDir . '/packed-refs';
+                        if (file_exists($packedFile) && is_readable($packedFile)) {
+                            $lines = @file($packedFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                            if ($lines !== false) {
+                                foreach ($lines as $line) {
+                                    $line = trim($line);
+                                    if ($line === '' || strpos($line, '#') === 0 || strpos($line, '^') === 0) {
+                                        continue;
+                                    }
+                                    $tokens = preg_split('/\s+/', $line, 2);
+                                    if (count($tokens) === 2 && $tokens[1] === $ref) {
+                                        $defaults['commit'] = substr($tokens[0], 0, 7);
+                                        $defaults['full_commit'] = $tokens[0];
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } elseif (preg_match('/^[0-9a-f]{40}$/i', $headContent)) {
+                    // HEAD desanexado com hash direto
+                    $defaults['commit'] = substr($headContent, 0, 7);
+                    $defaults['full_commit'] = $headContent;
+                }
+            } catch (Throwable $e) {
+                // Fallback silencioso para version.json / constantes
+            }
+        }
+
+        return $defaults;
+    }
+}
+
+
 

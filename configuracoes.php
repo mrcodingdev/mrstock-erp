@@ -321,9 +321,6 @@ require_once __DIR__ . '/inc/header.php';
         <p class="text-muted m-0">Gerencie preferências da conta, parâmetros fiscais da loja, regras do PDV e diagnósticos de versão.</p>
     </div>
     <div class="d-flex align-items-center gap-2 flex-wrap">
-        <span class="version-badge-pill tabular-nums">
-            <i class="fas fa-code-branch me-1"></i> <?= defined('MRSTOCK_VERSION') ? MRSTOCK_VERSION : 'v2.2.0' ?>
-        </span>
         <span class="badge bg-secondary text-white small">
             Papelaria Real
         </span>
@@ -771,34 +768,51 @@ require_once __DIR__ . '/inc/header.php';
 
         <!-- ── ABA 7: SISTEMA, BACKUP & VERSIONAMENTO ──────────────────────── -->
         <div class="tab-pane fade <?= $activeTab === 'sistema' ? 'show active' : '' ?>" id="tab-sistema" role="tabpanel" aria-labelledby="tab-sistema-btn">
-            
+            <?php $gitInfo = mrstock_get_git_info(); ?>
             <!-- Card de Identificação de Versão e Micro-Patches -->
             <div class="so-card mb-4 border">
-                <div class="so-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="so-card-header">
                     <h5 class="so-card-title m-0"><i class="fas fa-code-branch text-primary me-2"></i>Identificação do Sistema & Micro-Patches</h5>
-                    <span class="badge bg-primary text-white fw-bold px-3 py-1">Versão Ativa: <?= defined('MRSTOCK_VERSION') ? MRSTOCK_VERSION : 'v2.1.0' ?></span>
                 </div>
                 <div class="so-card-body p-4">
                     <div class="row g-3">
                         <div class="col-md-4 col-12">
-                            <div class="p-3 bg-light rounded border text-center">
-                                <small class="text-muted d-block text-xs text-uppercase fw-bold">Release Oficial</small>
-                                <strong class="text-dark fs-5 tabular-nums"><?= defined('MRSTOCK_VERSION') ? MRSTOCK_VERSION : 'v2.1.0' ?></strong>
-                                <span class="badge bg-success text-white mt-1">Estável &bull; Produção</span>
+                            <div class="p-3 bg-light rounded border text-center h-100 d-flex flex-column justify-content-between">
+                                <div>
+                                    <small class="text-muted d-block text-xs text-uppercase fw-bold mb-1">Release Oficial</small>
+                                    <strong class="text-dark fs-5 tabular-nums"><?= defined('MRSTOCK_VERSION') ? MRSTOCK_VERSION : 'v2.2.0' ?></strong>
+                                </div>
+                                <div>
+                                    <span class="badge bg-success text-white mt-1">Estável &bull; Produção</span>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
-                            <div class="p-3 bg-light rounded border text-center">
-                                <small class="text-muted d-block text-xs text-uppercase fw-bold">Edição do Núcleo</small>
-                                <strong class="text-dark fs-6">Papelaria Real</strong>
-                                <span class="badge bg-primary text-white mt-1">ERP v2.1.0</span>
+                            <div class="p-3 bg-light rounded border text-center h-100 d-flex flex-column justify-content-between">
+                                <div>
+                                    <small class="text-muted d-block text-xs text-uppercase fw-bold mb-1">Edição do Núcleo</small>
+                                    <strong class="text-dark fs-6"><?= defined('MRSTOCK_EDITION') ? MRSTOCK_EDITION : 'Papelaria Real' ?></strong>
+                                </div>
+                                <div>
+                                    <span class="badge bg-primary text-white mt-1">ERP <?= defined('MRSTOCK_VERSION') ? MRSTOCK_VERSION : 'v2.2.0' ?></span>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
-                            <div class="p-3 bg-light rounded border text-center">
-                                <small class="text-muted d-block text-xs text-uppercase fw-bold">Compilação do Patch</small>
-                                <strong class="text-dark fs-6 tabular-nums"><?= defined('MRSTOCK_BUILD_DATE') ? MRSTOCK_BUILD_DATE : date('d/m/Y') ?></strong>
-                                <span class="badge bg-secondary text-white mt-1">Gated SDLC</span>
+                            <div class="p-3 bg-light rounded border text-center h-100 d-flex flex-column justify-content-between">
+                                <div>
+                                    <small class="text-muted d-block text-xs text-uppercase fw-bold mb-1">Compilação &amp; GitHub</small>
+                                    <strong class="text-dark fs-6 tabular-nums"><?= htmlspecialchars($gitInfo['date'] ?? '21/09/2026') ?></strong>
+                                </div>
+                                <div>
+                                    <a href="https://github.com/mrcodingdev/mrstock-erp/commit/<?= htmlspecialchars($gitInfo['commit'] ?? '712b0d1') ?>" 
+                                       target="_blank" 
+                                       rel="noopener noreferrer" 
+                                       class="badge bg-dark text-white mt-1 text-decoration-none font-monospace"
+                                       title="Ver commit no GitHub">
+                                        <i class="fab fa-github me-1"></i><?= htmlspecialchars($gitInfo['commit'] ?? '712b0d1') ?>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
