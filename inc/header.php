@@ -275,7 +275,7 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
             </div>
 
             <div class="d-flex align-items-center">
-                <a href="<?= BASE_URL ?>/manual.php" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-light border text-dark fw-semibold d-inline-flex align-items-center gap-1 shadow-sm me-2" style="font-size: 0.8125rem;" title="Manual do Usuário (PDF)">
+                <a href="<?= BASE_URL ?>/docs/MRSTOCK_MANUAL_DO_USUARIO_v2.2.0_FINAL.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-light border text-dark fw-semibold d-inline-flex align-items-center gap-1 shadow-sm me-2" style="font-size: 0.8125rem;" title="Manual do Usuário (PDF Oficial)">
                     <i class="fa-solid fa-book-open text-primary"></i> <span class="d-none d-md-inline">Manual</span>
                 </a>
 
@@ -306,7 +306,7 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
                         <a href="<?= BASE_URL ?>/ajuda.php" class="so-dropdown__link">
                             <i class="fa-solid fa-circle-question text-muted" style="width:18px;"></i> Ajuda & FAQ
                         </a>
-                        <a href="<?= BASE_URL ?>/manual.php" target="_blank" rel="noopener noreferrer" class="so-dropdown__link">
+                        <a href="<?= BASE_URL ?>/docs/MRSTOCK_MANUAL_DO_USUARIO_v2.2.0_FINAL.pdf" target="_blank" rel="noopener noreferrer" class="so-dropdown__link">
                             <i class="fa-solid fa-book-open text-muted" style="width:18px;"></i> Manual do Usuário
                         </a>
                         <hr class="so-dropdown__divider">

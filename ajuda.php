@@ -529,7 +529,7 @@ require_once __DIR__ . '/inc/header.php';
         <p class="text-muted m-0">Consulte manuais operacionais, guia tátil de atalhos do caixa e respostas para dúvidas frequentes.</p>
     </div>
     <div class="d-flex align-items-center gap-2 no-print">
-        <a href="<?= BASE_URL ?>/manual.php" target="_blank" rel="noopener noreferrer" class="btn btn-primary fw-bold text-white shadow-sm">
+        <a href="<?= BASE_URL ?>/docs/MRSTOCK_MANUAL_DO_USUARIO_v2.2.0_FINAL.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary fw-bold text-white shadow-sm">
             <i class="fa-solid fa-book-open me-2"></i> Abrir Manual do Usuário (PDF)
         </a>
         <button type="button" class="btn btn-secondary text-white fw-semibold shadow-sm btn-print-guide" onclick="window.print()">
