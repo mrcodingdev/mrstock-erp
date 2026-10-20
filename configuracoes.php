@@ -152,6 +152,19 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             $empCidade    = trim($_POST['empresa_cidade'] ?? '');
             $empRegime    = trim($_POST['empresa_regime'] ?? 'Simples Nacional (ME)');
 
+            if (!empty($empCnpj)) {
+                $empCnpj = formatar_cpf_cnpj($empCnpj);
+            }
+            if (!empty($empTelefone)) {
+                $empTelefone = formatar_telefone($empTelefone);
+            }
+            if (!empty($empWhatsapp)) {
+                $empWhatsapp = formatar_telefone($empWhatsapp);
+            }
+            if (!empty($empCep)) {
+                $empCep = formatar_cep($empCep);
+            }
+
             set_app_config($pdo, 'empresa_nome', $empNome);
             set_app_config($pdo, 'empresa_razao', $empRazao);
             set_app_config($pdo, 'empresa_cnpj', $empCnpj);
@@ -259,7 +272,7 @@ $cfgRazaoLoja       = get_app_config($pdo, 'empresa_razao', 'Papelaria Real Ltda
 $cfgCnpjLoja        = get_app_config($pdo, 'empresa_cnpj', '50.334.808/0001-38');
 $cfgIeLoja          = get_app_config($pdo, 'empresa_ie', '688.123.456.789');
 $cfgTelLoja         = get_app_config($pdo, 'empresa_telefone', '(15) 3232-0000');
-$cfgZapLoja         = get_app_config($pdo, 'empresa_whatsapp', '(15) 99123-4567');
+$cfgZapLoja         = get_app_config($pdo, 'empresa_whatsapp', '(15) 99605-6950');
 $cfgCepLoja         = get_app_config($pdo, 'empresa_cep', '18010-082');
 $cfgEndLoja         = get_app_config($pdo, 'empresa_endereco', 'Rua XV de Novembro, 250 - Centro, Sorocaba/SP');
 $cfgCidadeLoja      = get_app_config($pdo, 'empresa_cidade', 'Sorocaba/SP');
@@ -457,10 +470,6 @@ require_once __DIR__ . '/inc/header.php';
                     <h5 class="so-card-title"><i class="fas fa-shield-halved text-primary me-2"></i>Segurança & Troca de Senha</h5>
                 </div>
                 <div class="so-card-body p-4">
-                    <div class="alert alert-info border shadow-sm mb-4">
-                        <i class="fas fa-lock me-2"></i> As senhas no MrStock ERP utilizam criptografia <strong>BCrypt com Salt Dinâmico (Cost 12)</strong>, garantindo máxima segurança contra vazamentos.
-                    </div>
-
                     <form method="POST" action="<?= BASE_URL ?>/configuracoes.php?tab=seguranca" style="max-width: 620px;">
                         <?= csrf_input() ?>
                         <input type="hidden" name="acao" value="salvar_seguranca">
@@ -523,7 +532,7 @@ require_once __DIR__ . '/inc/header.php';
                         <div class="row g-3 mb-3">
                             <div class="col-md-4 col-12">
                                 <label for="empresa_cnpj" class="form-label fw-bold text-dark small">CNPJ</label>
-                                <input type="text" id="empresa_cnpj" name="empresa_cnpj" class="form-control tabular-nums" value="<?= htmlspecialchars($cfgCnpjLoja) ?>" <?= !$isAdmin ? 'disabled' : '' ?> required>
+                                <input type="text" id="empresa_cnpj" name="empresa_cnpj" class="form-control tabular-nums" value="<?= htmlspecialchars($cfgCnpjLoja) ?>" <?= !$isAdmin ? 'disabled' : '' ?> oninput="mascaraCpfCnpj(this)" onblur="mascaraCpfCnpj(this)" maxlength="18" required>
                             </div>
                             <div class="col-md-4 col-12">
                                 <label for="empresa_ie" class="form-label fw-bold text-dark small">Inscrição Estadual (IE)</label>
@@ -544,15 +553,15 @@ require_once __DIR__ . '/inc/header.php';
                         <div class="row g-3 mb-3">
                             <div class="col-md-4 col-12">
                                 <label for="empresa_telefone" class="form-label fw-bold text-dark small">Telefone Fixo</label>
-                                <input type="text" id="empresa_telefone" name="empresa_telefone" class="form-control tabular-nums" value="<?= htmlspecialchars($cfgTelLoja) ?>" <?= !$isAdmin ? 'disabled' : '' ?>>
+                                <input type="text" id="empresa_telefone" name="empresa_telefone" class="form-control tabular-nums" value="<?= htmlspecialchars($cfgTelLoja) ?>" <?= !$isAdmin ? 'disabled' : '' ?> oninput="mascaraTelefone(this)" onblur="mascaraTelefone(this)" maxlength="15">
                             </div>
                             <div class="col-md-4 col-12">
                                 <label for="empresa_whatsapp" class="form-label fw-bold text-dark small">WhatsApp Comercial</label>
-                                <input type="text" id="empresa_whatsapp" name="empresa_whatsapp" class="form-control tabular-nums" value="<?= htmlspecialchars($cfgZapLoja) ?>" <?= !$isAdmin ? 'disabled' : '' ?>>
+                                <input type="text" id="empresa_whatsapp" name="empresa_whatsapp" class="form-control tabular-nums" value="<?= htmlspecialchars($cfgZapLoja) ?>" <?= !$isAdmin ? 'disabled' : '' ?> oninput="mascaraTelefone(this)" onblur="mascaraTelefone(this)" maxlength="15">
                             </div>
                             <div class="col-md-4 col-12">
                                 <label for="empresa_cep" class="form-label fw-bold text-dark small">CEP</label>
-                                <input type="text" id="empresa_cep" name="empresa_cep" class="form-control tabular-nums" value="<?= htmlspecialchars($cfgCepLoja) ?>" <?= !$isAdmin ? 'disabled' : '' ?>>
+                                <input type="text" id="empresa_cep" name="empresa_cep" class="form-control tabular-nums" value="<?= htmlspecialchars($cfgCepLoja) ?>" <?= !$isAdmin ? 'disabled' : '' ?> oninput="mascaraCep(this)" onblur="mascaraCep(this)" maxlength="9">
                             </div>
                         </div>
 
@@ -941,5 +950,47 @@ require_once __DIR__ . '/inc/header.php';
 
     </div>
 </div>
+
+<script>
+function mascaraTelefone(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.substring(0, 11);
+    if (v.length > 10) {
+        input.value = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+    } else if (v.length > 6) {
+        input.value = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
+    } else if (v.length > 2) {
+        input.value = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+    } else {
+        input.value = v;
+    }
+}
+
+function mascaraCpfCnpj(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 14) v = v.substring(0, 14);
+    if (v.length <= 11) {
+        v = v.replace(/(\d{3})(\d)/, '$1.$2');
+        v = v.replace(/(\d{3})(\d)/, '$1.$2');
+        v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    } else {
+        v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+        v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+        v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
+        v = v.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+    }
+    input.value = v;
+}
+
+function mascaraCep(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 8) v = v.substring(0, 8);
+    if (v.length > 5) {
+        input.value = v.replace(/^(\d{5})(\d{1,3})$/, '$1-$2');
+    } else {
+        input.value = v;
+    }
+}
+</script>
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>

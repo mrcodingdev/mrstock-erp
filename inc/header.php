@@ -274,37 +274,46 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
                 </div>
             </div>
 
-            <!-- USER PROFILE POPOVER DROPDOWN -->
-            <div class="so-profile" id="soProfile">
-                <button class="so-avatar-btn" type="button" id="soAvatarBtn" onclick="toggleProfileDropdown()" aria-label="Menu de perfil do operador">
-                    <div class="so-avatar <?= $_uPerf === 'admin' ? 'so-avatar--admin' : 'so-avatar--caixa' ?>">
-                        <?= $_uInitials ?>
-                    </div>
-                    <div class="d-none d-md-flex flex-column text-start" style="line-height:1.2;">
-                        <span class="fw-semibold text-dark" style="font-size:0.875rem;"><?= htmlspecialchars($_uName, ENT_QUOTES, 'UTF-8') ?></span>
-                        <span class="text-muted" style="font-size:0.6875rem;"><?= htmlspecialchars($_uLabel, ENT_QUOTES, 'UTF-8') ?></span>
-                    </div>
-                    <i class="fa-solid fa-chevron-down text-muted ms-1" style="font-size:0.65rem;"></i>
-                </button>
+            <div class="d-flex align-items-center">
+                <a href="<?= BASE_URL ?>/manual.php" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-light border text-dark fw-semibold d-inline-flex align-items-center gap-1 shadow-sm me-2" style="font-size: 0.8125rem;" title="Manual do Usuário (PDF)">
+                    <i class="fa-solid fa-book-open text-primary"></i> <span class="d-none d-md-inline">Manual</span>
+                </a>
 
-                <div class="so-dropdown" id="soDropdown">
-                    <div class="px-2 py-1 mb-1">
-                        <div class="fw-bold text-white"><?= htmlspecialchars($_uName, ENT_QUOTES, 'UTF-8') ?></div>
-                        <span class="so-role-badge">
-                            <i class="fa-solid fa-shield-halved me-1"></i> <?= htmlspecialchars($_uLabel, ENT_QUOTES, 'UTF-8') ?>
-                        </span>
+                <!-- USER PROFILE POPOVER DROPDOWN -->
+                <div class="so-profile" id="soProfile">
+                    <button class="so-avatar-btn" type="button" id="soAvatarBtn" onclick="toggleProfileDropdown()" aria-label="Menu de perfil do operador">
+                        <div class="so-avatar <?= $_uPerf === 'admin' ? 'so-avatar--admin' : 'so-avatar--caixa' ?>">
+                            <?= $_uInitials ?>
+                        </div>
+                        <div class="d-none d-md-flex flex-column text-start" style="line-height:1.2;">
+                            <span class="fw-semibold text-dark" style="font-size:0.875rem;"><?= htmlspecialchars($_uName, ENT_QUOTES, 'UTF-8') ?></span>
+                            <span class="text-muted" style="font-size:0.6875rem;"><?= htmlspecialchars($_uLabel, ENT_QUOTES, 'UTF-8') ?></span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-muted ms-1" style="font-size:0.65rem;"></i>
+                    </button>
+
+                    <div class="so-dropdown" id="soDropdown">
+                        <div class="px-2 py-1 mb-1">
+                            <div class="fw-bold text-white"><?= htmlspecialchars($_uName, ENT_QUOTES, 'UTF-8') ?></div>
+                            <span class="so-role-badge">
+                                <i class="fa-solid fa-shield-halved me-1"></i> <?= htmlspecialchars($_uLabel, ENT_QUOTES, 'UTF-8') ?>
+                            </span>
+                        </div>
+                        <hr class="so-dropdown__divider">
+                        <a href="<?= BASE_URL ?>/configuracoes.php" class="so-dropdown__link">
+                            <i class="fa-solid fa-gear text-muted" style="width:18px;"></i> Configurações
+                        </a>
+                        <a href="<?= BASE_URL ?>/ajuda.php" class="so-dropdown__link">
+                            <i class="fa-solid fa-circle-question text-muted" style="width:18px;"></i> Ajuda & FAQ
+                        </a>
+                        <a href="<?= BASE_URL ?>/manual.php" target="_blank" rel="noopener noreferrer" class="so-dropdown__link">
+                            <i class="fa-solid fa-book-open text-muted" style="width:18px;"></i> Manual do Usuário
+                        </a>
+                        <hr class="so-dropdown__divider">
+                        <a href="<?= BASE_URL ?>/logout.php" class="so-dropdown__link is-danger">
+                            <i class="fa-solid fa-arrow-right-from-bracket" style="width:18px;"></i> Encerrar Sessão
+                        </a>
                     </div>
-                    <hr class="so-dropdown__divider">
-                    <a href="<?= BASE_URL ?>/configuracoes.php" class="so-dropdown__link">
-                        <i class="fa-solid fa-gear text-muted" style="width:18px;"></i> Configurações
-                    </a>
-                    <a href="<?= BASE_URL ?>/ajuda.php" class="so-dropdown__link">
-                        <i class="fa-solid fa-circle-question text-muted" style="width:18px;"></i> Ajuda & FAQ
-                    </a>
-                    <hr class="so-dropdown__divider">
-                    <a href="<?= BASE_URL ?>/logout.php" class="so-dropdown__link is-danger">
-                        <i class="fa-solid fa-arrow-right-from-bracket" style="width:18px;"></i> Encerrar Sessão
-                    </a>
                 </div>
             </div>
         </header>

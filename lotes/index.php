@@ -309,7 +309,7 @@ require_once __DIR__ . '/../inc/header.php';
                     </thead>
                     <tbody>
                         <?php if (count($lotes) > 0): ?>
-                            <?php foreach ($lotes as $l):
+                            <?php foreach ($lotes as $index => $l):
                                 $qtd = (int)$l['quantidade'];
                                 $dias = (int)$l['dias_para_vencer'];
 
@@ -380,8 +380,9 @@ require_once __DIR__ . '/../inc/header.php';
                                     <span class="fw-bold text-dark tabular-nums"><?= (int)$l['quantidade'] ?></span> <small class="text-muted d-block"><?= ((int)$l['quantidade'] === 1 ? 'unidade' : 'unidades') ?></small>
                                 </td>
                                 <td class="text-center">
-                                    <div class="dropdown">
-                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações para o lote <?= htmlspecialchars($l['numero_lote'], ENT_QUOTES, 'UTF-8') ?>" title="Ações">
+                                    <?php $isDropup = ($index >= count($lotes) - 2) ? 'dropup' : ''; ?>
+                                    <div class="dropdown <?= $isDropup ?>">
+                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="Ações para o lote <?= htmlspecialchars($l['numero_lote'], ENT_QUOTES, 'UTF-8') ?>" title="Ações">
                                             <i class="fa-solid fa-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow border py-2" style="border-color: #cbd5e1 !important; font-size:0.85rem;">

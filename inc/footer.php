@@ -24,7 +24,7 @@
                         <div class="fw-bold text-white fs-6 mb-2">Precisando de suporte?</div>
                         <div class="d-inline-flex align-items-center justify-content-md-end justify-content-center gap-3">
                             <!-- WhatsApp -->
-                            <a href="https://wa.me/5511987654321" target="_blank" rel="noopener noreferrer" class="so-footer-gestaoclick__support-item" title="Falar no WhatsApp">
+                            <a href="https://wa.me/5515996056950" target="_blank" rel="noopener noreferrer" class="so-footer-gestaoclick__support-item" title="Falar no WhatsApp">
                                 <div class="so-footer-gestaoclick__support-circle so-footer-gestaoclick__support-circle--wa">
                                     <i class="fab fa-whatsapp"></i>
                                 </div>
@@ -52,7 +52,7 @@
                             <a href="<?= BASE_URL ?>/privacidade.php" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">Política de Privacidade &amp; LGPD</a>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <a href="tel:+5511987654321" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'" aria-label="Ligar para Papelaria Real no número (11) 98765-4321"><i class="fas fa-phone-alt me-1" style="font-size: 0.7rem;"></i>(11) 98765-4321</a>
+                            <a href="tel:+5515996056950" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'" aria-label="Ligar para Papelaria Real no número (15) 99605-6950"><i class="fas fa-phone-alt me-1" style="font-size: 0.7rem;"></i>(15) 99605-6950</a>
                             <span>•</span>
                             <a href="mailto:contato@mrstock.com.br" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'" aria-label="Enviar e-mail para contato@mrstock.com.br"><i class="fas fa-envelope me-1" style="font-size: 0.7rem;"></i>contato@mrstock.com.br</a>
                         </div>

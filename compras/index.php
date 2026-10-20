@@ -307,7 +307,9 @@ require_once __DIR__ . '/../inc/header.php';
                     </thead>
                     <tbody>
                         <?php if (count($compras) > 0): ?>
-                            <?php foreach ($compras as $c): ?>
+                            <?php foreach ($compras as $index => $c): 
+                                $isDropup = ($index >= count($compras) - 2) ? 'dropup' : '';
+                            ?>
                             <tr class="linha-compra">
                                 <td class="fw-bold text-dark font-monospace tabular-nums">
                                     #<?= str_pad((string)$c['id'], 5, '0', STR_PAD_LEFT) ?>
@@ -333,8 +335,8 @@ require_once __DIR__ . '/../inc/header.php';
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">
-                                    <div class="dropdown">
-                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações da compra #<?= $c['id'] ?>" title="Ações">
+                                    <div class="dropdown <?= $isDropup ?>">
+                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="Ações da compra #<?= $c['id'] ?>" title="Ações">
                                             <i class="fas fa-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow border py-2" style="font-size:0.85rem; border-color:#cbd5e1;">

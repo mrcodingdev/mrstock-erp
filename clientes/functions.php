@@ -41,6 +41,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit;
             }
 
+            // Normalização de formatação via funções utilitárias
+            if (!empty($telefone)) {
+                $telefone = formatar_telefone($telefone);
+            }
+            if (!empty($cpf_cnpj)) {
+                $cpf_cnpj = formatar_cpf_cnpj($cpf_cnpj);
+            }
+            if (!empty($cep)) {
+                $cep = formatar_cep($cep);
+            }
+
             if ($id) {
                 $stmt = $pdo->prepare("UPDATE clientes SET nome=?, email=?, telefone=?, status=?, cpf_cnpj=?, endereco=?, numero=?, bairro=?, cidade=?, estado=?, cep=? WHERE id=?");
                 $stmt->execute([$nome, $email, $telefone, $status, $cpf_cnpj, $endereco, $numero, $bairro, $cidade, $estado, $cep, $id]);

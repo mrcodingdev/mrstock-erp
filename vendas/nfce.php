@@ -168,10 +168,6 @@ require_once __DIR__ . '/../inc/header.php';
         </div>
         <?php endif; ?>
 
-        <div class="alert alert-info border-0 shadow-sm mb-3">
-            <i class="fas fa-info-circle me-2"></i> Ambiente fiscal em modo de <strong>Homologação (Simulação TCC)</strong>. As chaves de acesso de 44 dígitos e a assinatura digital seguem o padrão técnico da SEFAZ SP para fins didáticos.
-        </div>
-
         <!-- ══ 3 STAT CARDS NO TOPO ═══════════════════════════════════════════ -->
         <div class="row g-3 mb-3">
             <!-- Card 1: Total de Cupons Emitidos -->

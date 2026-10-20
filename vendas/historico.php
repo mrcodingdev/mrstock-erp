@@ -297,7 +297,9 @@ require_once __DIR__ . '/../inc/header.php';
                     </thead>
                     <tbody>
                         <?php if (count($vendas) > 0): ?>
-                            <?php foreach ($vendas as $v): ?>
+                            <?php foreach ($vendas as $index => $v): 
+                                $isDropup = ($index >= count($vendas) - 2) ? 'dropup' : '';
+                            ?>
                             <tr class="linha-venda">
                                 <td class="fw-bold text-dark font-monospace tabular-nums">
                                     #<?= str_pad((string)$v['id'], 6, '0', STR_PAD_LEFT) ?>
@@ -324,8 +326,8 @@ require_once __DIR__ . '/../inc/header.php';
                                     R$ <?= number_format((float)$v['total'], 2, ',', '.') ?>
                                 </td>
                                 <td class="text-center">
-                                    <div class="dropdown">
-                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações da venda #<?= $v['id'] ?>" title="Ações da venda #<?= $v['id'] ?>">
+                                    <div class="dropdown <?= $isDropup ?>">
+                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="Ações da venda #<?= $v['id'] ?>" title="Ações da venda #<?= $v['id'] ?>">
                                             <i class="fas fa-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow border py-2">

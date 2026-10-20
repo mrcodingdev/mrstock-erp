@@ -2095,8 +2095,21 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
   background: #222d31 !important;
   border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
   color: #cbd5e1;
+  position: relative;
+  z-index: 10;
   animation: mrStockSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: 0.15s;
+}
+
+/* Correção de Dropdowns em Tabelas e Sobreposição com o Rodapé */
+.dropdown-menu {
+  z-index: 1060 !important;
+}
+
+.so-card-body .table-responsive,
+.card-body .table-responsive {
+  min-height: 280px;
+  padding-bottom: 70px;
 }
 
 .so-footer-gestaoclick__container {

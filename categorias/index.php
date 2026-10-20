@@ -142,7 +142,7 @@ require_once __DIR__ . '/../inc/header.php';
                     </thead>
                     <tbody>
                         <?php if ($totalCategorias > 0): ?>
-                            <?php foreach ($categorias as $c): ?>
+                            <?php foreach ($categorias as $index => $c): ?>
                             <tr class="linha-categoria">
                                 <td class="fw-bold text-muted font-monospace tabular-nums">#<?= str_pad((string)$c['id'], 3, '0', STR_PAD_LEFT) ?></td>
                                 <td>
@@ -155,8 +155,9 @@ require_once __DIR__ . '/../inc/header.php';
                                     <span class="text-dark fw-bold tabular-nums"><?= (int)$c['qtd_produtos'] === 1 ? '1 produto' : (int)$c['qtd_produtos'] . ' produtos' ?></span>
                                 </td>
                                 <td class="text-center">
-                                    <div class="dropdown">
-                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações para categoria <?= htmlspecialchars($c['nome'], ENT_QUOTES, 'UTF-8') ?>" title="Ações">
+                                    <?php $isDropup = ($index >= count($categorias) - 2) ? 'dropup' : ''; ?>
+                                    <div class="dropdown <?= $isDropup ?>">
+                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="Ações para categoria <?= htmlspecialchars($c['nome'], ENT_QUOTES, 'UTF-8') ?>" title="Ações">
                                             <i class="fas fa-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow border py-2" style="border-color: #cbd5e1 !important; font-size:0.85rem;">

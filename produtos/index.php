@@ -247,7 +247,7 @@ require_once __DIR__ . '/../inc/header.php';
                     </thead>
                     <tbody>
                         <?php if (count($produtos) > 0): ?>
-                            <?php foreach ($produtos as $p):
+                            <?php foreach ($produtos as $index => $p):
                                 if ($p['status'] === 'inativo') {
                                     $badgeEstoque = '<span class="so-badge so-badge-danger">Inativo</span>';
                                 } elseif ((int)$p['quantidade'] <= 0) {
@@ -299,8 +299,9 @@ require_once __DIR__ . '/../inc/header.php';
                                 </td>
                                 <td class="text-center">
                                     <!-- Menu de Ações em Linha (3 Pontos) -->
-                                    <div class="dropdown">
-                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Ações para <?= htmlspecialchars($p['nome']) ?>" title="Ações">
+                                    <?php $isDropup = ($index >= count($produtos) - 2) ? 'dropup' : ''; ?>
+                                    <div class="dropdown <?= $isDropup ?>">
+                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="Ações para <?= htmlspecialchars($p['nome']) ?>" title="Ações">
                                             <i class="fas fa-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2" style="font-size: 0.85rem;">

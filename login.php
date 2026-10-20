@@ -476,7 +476,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "addressRegion": "SP",
                     "addressCountry": "BR"
                 },
-                "telephone": "+5511987654321",
+                "telephone": "+5515996056950",
                 "email": "contato@mrstock.com.br"
             }
         ]

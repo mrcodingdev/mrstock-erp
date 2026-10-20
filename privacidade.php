@@ -351,7 +351,7 @@ if ($isLoggedIn) {
                 <a href="<?= BASE_URL ?>/privacidade.php" class="text-decoration-none text-white fw-semibold">Privacidade &amp; LGPD</a>
             </div>
             <div class="d-flex align-items-center gap-2">
-                <a href="tel:+5511987654321" class="text-decoration-none" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'" aria-label="Ligar para Papelaria Real no número (11) 98765-4321"><i class="fas fa-phone-alt me-1" style="font-size: 0.75rem;"></i>(11) 98765-4321</a>
+                <a href="tel:+5515996056950" class="text-decoration-none" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'" aria-label="Ligar para Papelaria Real no número (15) 99605-6950"><i class="fas fa-phone-alt me-1" style="font-size: 0.75rem;"></i>(15) 99605-6950</a>
                 <span class="text-muted">•</span>
                 <a href="mailto:contato@mrstock.com.br" class="text-decoration-none" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'" aria-label="Enviar e-mail para contato@mrstock.com.br"><i class="fas fa-envelope me-1" style="font-size: 0.75rem;"></i>contato@mrstock.com.br</a>
             </div>

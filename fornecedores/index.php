@@ -160,13 +160,14 @@ require_once __DIR__ . '/../inc/header.php';
                     </thead>
                     <tbody>
                         <?php if ($totalFornecedores > 0): ?>
-                            <?php foreach ($fornecedores as $f):
+                            <?php foreach ($fornecedores as $index => $f):
                                 $badgeStatus = ($f['status'] ?? '') === 'ativo' 
                                     ? '<span class="so-badge so-badge-success">Ativo</span>' 
                                     : '<span class="so-badge so-badge-danger">Inativo</span>';
                                 $zapLimpo = preg_replace('/[^0-9]/', '', $f['telefone'] ?? '');
                                 $qtdProds = (int)($f['qtd_produtos'] ?? 0);
                                 $totalItens = (int)($f['total_itens'] ?? 0);
+                                $isDropup = ($index >= count($fornecedores) - 2) ? 'dropup' : '';
                             ?>
                             <tr class="linha-fornecedor">
                                 <td class="fw-bold text-muted font-monospace tabular-nums">#<?= str_pad((string)$f['id'], 3, '0', STR_PAD_LEFT) ?></td>
@@ -202,8 +203,8 @@ require_once __DIR__ . '/../inc/header.php';
                                 </td>
                                 <td class="text-center"><?= $badgeStatus ?></td>
                                 <td class="text-center">
-                                    <div class="dropdown">
-                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações para <?= htmlspecialchars($f['nome']) ?>" aria-label="Ações para <?= htmlspecialchars($f['nome']) ?>">
+                                    <div class="dropdown <?= $isDropup ?>">
+                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" title="Ações para <?= htmlspecialchars($f['nome']) ?>" aria-label="Ações para <?= htmlspecialchars($f['nome']) ?>">
                                             <i class="fas fa-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow border py-2" style="font-size:0.85rem; border-color:#cbd5e1;">
@@ -294,7 +295,7 @@ require_once __DIR__ . '/../inc/header.php';
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="forn_telefone" class="form-label fw-bold">Telefone / WhatsApp</label>
-                                    <input type="text" class="form-control tabular-nums shadow-none" name="telefone" id="forn_telefone" placeholder="(00) 00000-0000" maxlength="15" oninput="mascaraTelefone(this)" value="<?= $editFornecedor ? htmlspecialchars(formatar_telefone($editFornecedor['telefone'])) : '' ?>">
+                                    <input type="text" class="form-control tabular-nums shadow-none" name="telefone" id="forn_telefone" placeholder="(00) 00000-0000" maxlength="15" oninput="mascaraTelefone(this)" onblur="mascaraTelefone(this)" value="<?= $editFornecedor ? htmlspecialchars(formatar_telefone($editFornecedor['telefone'])) : '' ?>">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="forn_email" class="form-label fw-bold">E-mail</label>
@@ -365,7 +366,7 @@ function mascaraTelefone(input) {
     if (v.length > 11) v = v.substring(0, 11);
     if (v.length > 10) {
         input.value = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
-    } else if (v.length > 5) {
+    } else if (v.length > 6) {
         input.value = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
     } else if (v.length > 2) {
         input.value = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');

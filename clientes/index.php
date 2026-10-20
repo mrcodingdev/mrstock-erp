@@ -158,12 +158,13 @@ require_once __DIR__ . '/../inc/header.php';
                     </thead>
                     <tbody>
                         <?php if ($totalClientes > 0): ?>
-                            <?php foreach ($clientes as $c):
+                            <?php foreach ($clientes as $index => $c):
                                 $zapNum = preg_replace('/[^0-9]/', '', $c['telefone'] ?? '');
                                 $hasZap = !empty($zapNum) && strlen($zapNum) >= 10;
                                 $badgeStatus = ($c['status'] ?? '') === 'ativo' 
                                     ? '<span class="so-badge so-badge-success">Ativo</span>' 
                                     : '<span class="so-badge so-badge-danger">Inativo</span>';
+                                $isDropup = ($index >= count($clientes) - 2) ? 'dropup' : '';
                             ?>
                             <tr class="linha-cliente">
                                 <td class="fw-bold text-muted font-monospace tabular-nums">#<?= str_pad((string)$c['id'], 4, '0', STR_PAD_LEFT) ?></td>
@@ -194,8 +195,8 @@ require_once __DIR__ . '/../inc/header.php';
                                 </td>
                                 <td class="text-center"><?= $badgeStatus ?></td>
                                 <td class="text-center">
-                                    <div class="dropdown">
-                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Ações para <?= htmlspecialchars($c['nome']) ?>" aria-label="Ações para <?= htmlspecialchars($c['nome']) ?>">
+                                    <div class="dropdown <?= $isDropup ?>">
+                                        <button class="so-actions-btn" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" title="Ações para <?= htmlspecialchars($c['nome']) ?>" aria-label="Ações para <?= htmlspecialchars($c['nome']) ?>">
                                             <i class="fas fa-ellipsis-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow border py-2" style="font-size: 0.85rem; border-color: #cbd5e1;">
@@ -276,7 +277,7 @@ require_once __DIR__ . '/../inc/header.php';
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="cli_telefone" class="form-label fw-bold">Telefone / WhatsApp</label>
-                                    <input type="text" class="form-control tabular-nums" name="telefone" id="cli_telefone" placeholder="(11) 99999-9999" maxlength="15" oninput="mascaraTelefone(this)" value="<?= $editCliente ? htmlspecialchars(formatar_telefone($editCliente['telefone'])) : '' ?>">
+                                    <input type="text" class="form-control tabular-nums" name="telefone" id="cli_telefone" placeholder="(11) 99999-9999" maxlength="15" oninput="mascaraTelefone(this)" onblur="mascaraTelefone(this)" value="<?= $editCliente ? htmlspecialchars(formatar_telefone($editCliente['telefone'])) : '' ?>">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="cli_status" class="form-label fw-bold">Status</label>
@@ -361,7 +362,7 @@ function mascaraTelefone(input) {
     if (v.length > 11) v = v.substring(0, 11);
     if (v.length > 10) {
         input.value = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
-    } else if (v.length > 5) {
+    } else if (v.length > 6) {
         input.value = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
     } else if (v.length > 2) {
         input.value = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
@@ -493,6 +494,10 @@ function destacarCampo(el) {
 }
 
 function validarFormCliente() {
+    const telEl = document.getElementById('cli_telefone');
+    if (telEl && telEl.value) {
+        mascaraTelefone(telEl);
+    }
     const nome = document.getElementById('cli_nome').value.trim();
     if (/[0-9]/.test(nome)) {
         alert('O nome do cliente não pode conter números.');
