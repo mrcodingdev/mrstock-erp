@@ -1,8 +1,7 @@
 <?php
 /**
- * MrStock ERP - Política de Privacidade & Proteção de Dados (LGPD)
- * Em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018)
- * e o Marco Civil da Internet (Lei nº 12.965/2014, Art. 15).
+ * MrStock ERP - Política de Privacidade
+ * Diretrizes de transparência e tratamento de dados da Papelaria Real.
  * 
  * Arquitetura Híbrida: Suporta renderização integrada ao ERP (usuário logado)
  * e visualização institucional limpa (usuário visitante/deslogado).
@@ -12,7 +11,7 @@ require_once __DIR__ . '/config.php';
 $isLoggedIn = isset($_SESSION['user_id']);
 
 if ($isLoggedIn) {
-    $pageTitle  = 'Política de Privacidade & LGPD';
+    $pageTitle  = 'Política de Privacidade';
     $activePage = '';
     require_once __DIR__ . '/inc/header.php';
 }
@@ -23,20 +22,20 @@ if ($isLoggedIn) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Política de Privacidade e Proteção de Dados do MrStock ERP - Papelaria Real. Em conformidade com a LGPD.">
-    <title>MrStock ERP - Política de Privacidade &amp; LGPD</title>
+    <meta name="description" content="Política de Privacidade do MrStock ERP - Papelaria Real.">
+    <title>Política de Privacidade - MrStock ERP</title>
     
     <!-- Metadados OpenGraph & Tema Institucional -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="MrStock ERP - Política de Privacidade &amp; LGPD">
-    <meta property="og:description" content="Política de Privacidade e Proteção de Dados do MrStock ERP para a Papelaria Real.">
+    <meta property="og:title" content="Política de Privacidade - MrStock ERP">
+    <meta property="og:description" content="Diretrizes de transparência e tratamento de dados da Papelaria Real.">
     <meta property="og:url" content="https://mrstock.com.br/privacidade.php">
     <meta property="og:image" content="https://mrstock.com.br/assets/img/mrstock_og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:site_name" content="MrStock ERP">
-    <meta name="theme-color" content="#284936">
+    <meta name="theme-color" content="#1a4231">
 
     <link href="<?= BASE_URL ?>/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css">
@@ -47,9 +46,9 @@ if ($isLoggedIn) {
     <style>
         :root {
             --brand-primary: #1a4231;
-            --brand-secondary: #284936;
-            --brand-accent: #6ae49b;
-            --bg-color: #f1f5f9;
+            --brand-secondary: #14532d;
+            --brand-accent: #39e07b;
+            --bg-color: #f8fafc;
             --text-dark: #1e293b;
             --text-muted: #475569;
         }
@@ -69,8 +68,8 @@ if ($isLoggedIn) {
         .public-footer {
             background: #222d31;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
-            color: #94a3b8;
-            padding: 1.5rem;
+            color: #cbd5e1;
+            padding: 1.5rem 0;
             margin-top: auto;
             font-size: 0.8125rem;
         }
@@ -83,7 +82,7 @@ if ($isLoggedIn) {
                 <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="MrStock ERP" width="28" height="28" style="object-fit: contain;">
                 <span class="text-white fw-bold fs-5">MrStock <small class="text-white-50 fs-6">ERP</small></span>
             </a>
-            <a href="<?= BASE_URL ?>/login.php" class="btn btn-success" style="background-color: #284936; border-color: #284936; color: #ffffff; font-weight: 600;" aria-label="Voltar para a página de login">
+            <a href="<?= BASE_URL ?>/login.php" class="btn btn-success" style="background-color: #14532d; border-color: #14532d; color: #ffffff; font-weight: 600;" aria-label="Voltar para a página de login">
                 <i class="fas fa-arrow-left me-2"></i>Voltar ao Login
             </a>
         </div>
@@ -93,231 +92,178 @@ if ($isLoggedIn) {
 <div class="<?= $isLoggedIn ? 'content-body' : 'container py-5 flex-grow-1' ?>" style="max-width: 1050px; margin: 0 auto; animation: mrStockSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;">
     
     <!-- Cabeçalho Institucional do Documento -->
-    <div class="card border-0 shadow-sm rounded-3 mb-4 p-4" style="background: linear-gradient(135deg, #1a4231, #284936); color: #ffffff;">
+    <div class="card border-0 shadow-sm rounded-3 mb-4 p-4" style="background: #1a4231; color: #ffffff;">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
-                <h1 class="h2 fw-bold mb-2 text-white">Política de Privacidade &amp; Proteção de Dados</h1>
-                <p class="mb-2 text-white-50" style="font-size: 0.95rem;">Diretrizes de conformidade, segurança da informação e transparência da Papelaria Real Ltda.</p>
-                <div class="d-flex align-items-center gap-2">
-                    <span class="badge" style="background: rgba(106, 228, 155, 0.2); color: #6ae49b; border: 1px solid rgba(106, 228, 155, 0.3);">LGPD Compliance</span>
-                    <span class="badge" style="background: rgba(255, 255, 255, 0.15); color: #ffffff;">Marco Civil da Internet</span>
-                    <span class="badge" style="background: rgba(255, 255, 255, 0.15); color: #ffffff;">Versão 2.2.0</span>
-                </div>
+                <h1 class="h2 fw-bold mb-1 text-white">Política de Privacidade</h1>
+                <p class="mb-0 text-white-50" style="font-size: 0.95rem;">Diretrizes de transparência e tratamento de dados da Papelaria Real.</p>
             </div>
             <div class="text-md-end text-start">
-                <small class="text-white-50 d-block">Última atualização:</small>
-                <strong class="text-white">07 de Setembro de 2026</strong>
+                <small class="text-white-50 d-block">Última atualização</small>
+                <strong class="text-white">24 de Outubro de 2026</strong>
             </div>
         </div>
     </div>
 
-    <!-- Conteúdo Jurídico Estruturado -->
+    <!-- Conteúdo da Política de Privacidade (7 Seções Claras e Objetivas) -->
     <div class="card border shadow-sm rounded-3 p-4 mb-4" style="background: #ffffff; border-color: #cbd5e1 !important;">
         
-        <!-- 1. Controlador e Operador -->
+        <!-- 1. Informações que Coletamos -->
         <section class="mb-5">
             <h2 class="h5 fw-bold text-dark border-bottom pb-2 mb-3" style="color: #1e293b;">
-                <i class="fas fa-building text-success me-2" style="color: #284936 !important;"></i>1. Qualificação das Partes: Controlador e Operador
+                1. Informações que Coletamos
             </h2>
             <p style="color: #334155; line-height: 1.7;">
-                Para fins do disposto na Lei Geral de Proteção de Dados Pessoais (LGPD – Lei Federal nº 13.709/2018), as operações de tratamento de dados pessoais realizadas através do <strong>MrStock ERP</strong> operam sob a seguinte estrutura de governança:
+                Para o regular funcionamento das operações comerciais e administrativas da <strong>Papelaria Real Ltda - ME</strong>, o MrStock ERP realiza a coleta e o processamento dos seguintes dados cadastrais e operacionais:
             </p>
-            <div class="row g-3 mt-1">
-                <div class="col-md-6">
-                    <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                        <h3 class="h6 fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-store me-2 text-success" style="color: #284936 !important;"></i>Controlador do Tratamento:</h3>
-                        <p class="mb-0 small" style="color: #475569;">
-                            <strong>Papelaria Real Ltda</strong><br>
-                            CNPJ: 12.345.678/0001-90<br>
-                            Sorocaba/SP – Brasil<br>
-                            Canal Institucional: <code>contato@mrstock.com.br</code>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                        <h3 class="h6 fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-code me-2 text-success" style="color: #284936 !important;"></i>Operador &amp; Desenvolvedor:</h3>
-                        <p class="mb-0 small" style="color: #475569;">
-                            <strong>Equipe Mr. Coding</strong><br>
-                            Desenvolvimento de Sistemas (TCC)<br>
-                            ETEC Fernando Prestes – Centro Paula Souza<br>
-                            Orientação Acadêmica: Prof. Luiz Flávio de Almeida &amp; Prof. Vinicius Sewaybricker
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. Dados Coletados -->
-        <section class="mb-5">
-            <h2 class="h5 fw-bold text-dark border-bottom pb-2 mb-3" style="color: #1e293b;">
-                <i class="fas fa-database text-success me-2" style="color: #284936 !important;"></i>2. Dados Pessoais Coletados e Finalidades do Tratamento
-            </h2>
-            <p style="color: #334155; line-height: 1.7;">
-                O MrStock ERP processa exclusivamente dados pessoais estritamente necessários à operação comercial da Papelaria Real, divididos nas seguintes categorias:
-            </p>
-            <div class="table-responsive mt-3">
-                <table class="table table-bordered align-middle" style="border-color: #cbd5e1;">
-                    <thead style="background: #f8fafc;">
-                        <tr>
-                            <th style="color: #1e293b; width: 25%;">Categoria de Titular</th>
-                            <th style="color: #1e293b; width: 35%;">Dados Pessoais Coletados</th>
-                            <th style="color: #1e293b; width: 40%;">Finalidade Específica</th>
-                        </tr>
-                    </thead>
-                    <tbody style="font-size: 0.875rem; color: #334155;">
-                        <tr>
-                            <td><strong>Clientes / Consumidores</strong></td>
-                            <td>Nome completo, CPF (Cadastro de Pessoa Física), telefone/WhatsApp, e-mail e endereço para faturamento/entrega.</td>
-                            <td>Identificação comercial, faturamento de vendas no PDV, emissão de NFC-e, controle de contas a receber e pós-venda.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Operadores / Colaboradores</strong></td>
-                            <td>Nome de usuário (username), credencial criptografada (hash BCrypt Cost 12) e perfil de acesso (RBAC).</td>
-                            <td>Autenticação biométrica/credencial, segregação de privilégios de acesso e prevenção de acessos indevidos.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Registros de Atividade e Acesso (Logs de Auditoria)</strong></td>
-                            <td>Endereço IP de origem, data, horário (UTC-3), recurso acessado e identificador de ação no sistema.</td>
-                            <td>Cumprimento mandatório do <strong>Artigo 15 da Lei nº 12.965/2014 (Marco Civil da Internet)</strong> e auditoria interna contra fraudes.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- 3. Bases Legais -->
-        <section class="mb-5">
-            <h2 class="h5 fw-bold text-dark border-bottom pb-2 mb-3" style="color: #1e293b;">
-                <i class="fas fa-scale-balanced text-success me-2" style="color: #284936 !important;"></i>3. Bases Legais do Tratamento (Art. 7º da LGPD)
-            </h2>
-            <p style="color: #334155; line-height: 1.7;">
-                Todas as operações de tratamento de dados realizadas pelo MrStock ERP possuem respaldo jurídico inequívoco nas seguintes hipóteses legais do Artigo 7º da Lei Federal nº 13.709/2018:
-            </p>
-            <ul style="color: #334155; line-height: 1.8;">
-                <li><strong>Execução de Contrato ou Procedimentos Preliminares (Art. 7º, V):</strong> Necessário para a formalização da compra e venda de mercadorias no balcão e no PDV, movimentação de itens e entrega física de produtos.</li>
-                <li><strong>Cumprimento de Obrigação Legal ou Regulatória (Art. 7º, II):</strong> Guarda de documentos fiscais e dados contábeis pelo prazo mínimo de 5 (cinco) anos, em cumprimento aos Artigos 173 e 174 do Código Tributário Nacional (CTN) e regulamentações da SEFAZ/SP.</li>
-                <li><strong>Cumprimento do Marco Civil da Internet (Art. 7º, II c/c Lei 12.965/2014, Art. 15):</strong> Armazenamento sob sigilo dos registros de acesso a aplicações de internet pelo prazo regulamentar de 6 (seis) meses.</li>
-                <li><strong>Legítimo Interesse do Controlador (Art. 7º, IX):</strong> Auditoria interna, aperfeiçoamento da estabilidade do software, integridade contábil e prevenção ativa contra fraudes comerciais.</li>
+            <ul style="color: #334155; line-height: 1.8; margin-bottom: 0;">
+                <li><strong>Dados de Clientes:</strong> Nome completo ou razão social, CPF/CNPJ (quando informado para faturamento), telefone/WhatsApp para contato e endereço completo para entrega de mercadorias.</li>
+                <li><strong>Registros de Vendas:</strong> Histórico de itens adquiridos, quantidades, valores faturados, data e hora da transação e modalidades de pagamento empregadas.</li>
+                <li><strong>Dados de Operadores e Colaboradores:</strong> Nome de usuário, credenciais com hash criptográfico, nível de permissão (RBAC) e logs técnicos de auditoria com carimbo temporal e endereço IP.</li>
             </ul>
         </section>
 
-        <!-- 4. Direitos dos Titulares -->
+        <!-- 2. Finalidade do Tratamento -->
         <section class="mb-5">
             <h2 class="h5 fw-bold text-dark border-bottom pb-2 mb-3" style="color: #1e293b;">
-                <i class="fas fa-user-shield text-success me-2" style="color: #284936 !important;"></i>4. Direitos dos Titulares de Dados (Art. 18 da LGPD)
+                2. Finalidade do Tratamento
             </h2>
             <p style="color: #334155; line-height: 1.7;">
-                O titular dos dados pessoais tem direito a obter da Papelaria Real Ltda, a qualquer momento e mediante requisição formal, em relação aos dados por ela tratados:
+                Os dados tratados pela Papelaria Real possuem finalidades operacionais legítimas e bem definidas:
             </p>
-            <div class="row g-2 mb-3">
+            <div class="row g-3 mt-1">
                 <div class="col-md-6">
-                    <div class="p-2 border rounded h-100 d-flex align-items-center" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
-                        <i class="fas fa-check-circle text-success me-2 flex-shrink-0" style="color: #284936 !important;"></i>
-                        <span class="flex-grow-1">Confirmação da existência de tratamento e acesso aos dados;</span>
+                    <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #cbd5e1;">
+                        <h3 class="h6 fw-bold mb-2" style="color: #1e293b;"><i class="fas fa-cash-register me-2 text-success" style="color: #14532d !important;"></i>Operação do PDV &amp; Balcão:</h3>
+                        <p class="mb-0 small" style="color: #475569; line-height: 1.6;">
+                            Identificação do comprador no registro de pedidos, emissão de comprovantes de venda térmicos e conferência de trocas de produtos escolares e de escritório.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="p-2 border rounded h-100 d-flex align-items-center" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
-                        <i class="fas fa-check-circle text-success me-2 flex-shrink-0" style="color: #284936 !important;"></i>
-                        <span class="flex-grow-1">Correção de dados incompletos, inexatos ou desatualizados;</span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="p-2 border rounded h-100 d-flex align-items-center" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
-                        <i class="fas fa-check-circle text-success me-2 flex-shrink-0" style="color: #284936 !important;"></i>
-                        <span class="flex-grow-1">Anonimização, bloqueio ou eliminação de dados excessivos;</span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="p-2 border rounded h-100 d-flex align-items-center" style="border-color: #cbd5e1 !important; background: #f8fafc; font-size: 0.85rem;">
-                        <i class="fas fa-check-circle text-success me-2 flex-shrink-0" style="color: #284936 !important;"></i>
-                        <span class="flex-grow-1">Revogação de consentimento e eliminação conforme disposições legais.</span>
+                    <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #cbd5e1;">
+                        <h3 class="h6 fw-bold mb-2" style="color: #1e293b;"><i class="fab fa-whatsapp me-2 text-success"></i>Comunicação e Entrega:</h3>
+                        <p class="mb-0 small" style="color: #475569; line-height: 1.6;">
+                            Aviso de chegada de listas de material escolar, orçamentos solicitados e confirmação de rotas de entrega de pedidos corporativos via WhatsApp ou telefone.
+                        </p>
                     </div>
                 </div>
             </div>
-            <div class="alert alert-light border p-3 rounded-3" style="border-color: #cbd5e1 !important; background: #f8fafc;">
-                <h3 class="h6 fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-envelope text-success me-2" style="color: #284936 !important;"></i>Canal Oficial de Atendimento ao Titular / DPO:</h3>
-                <p class="mb-0 small" style="color: #475569;">
-                    Para exercer quaisquer de seus direitos previstos no Art. 18 da LGPD, o titular poderá encaminhar solicitação para o e-mail: <strong><code>contato@mrstock.com.br</code></strong>, com o assunto <em>"Requisição LGPD - Titular de Dados"</em>. As solicitações serão atendidas no prazo regulamentar de até 15 (quinze) dias.
+        </section>
+
+        <!-- 3. Armazenamento e Segurança da Informação -->
+        <section class="mb-5">
+            <h2 class="h5 fw-bold text-dark border-bottom pb-2 mb-3" style="color: #1e293b;">
+                3. Armazenamento e Segurança da Informação
+            </h2>
+            <p style="color: #334155; line-height: 1.7;">
+                Adotamos controles rígidos de engenharia de software para resguardar a integridade, o sigilo e a disponibilidade de todas as bases de dados:
+            </p>
+            <ul style="color: #334155; line-height: 1.8; margin-bottom: 0;">
+                <li><strong>Criptografia em Trânsito:</strong> Conexões protegidas sob protocolo HTTPS com certificados SSL/TLS 1.3 ativos em ambiente de produção na Hostinger.</li>
+                <li><strong>Proteção de Credenciais:</strong> Senhas armazenadas com hash criptográfico unidirecional seguro (Bcrypt), sendo inacessíveis inclusive aos administradores.</li>
+                <li><strong>Prevenção contra Intrusões:</strong> Utilização estrita de consultas preparadas PDO (Prepared Statements) para neutralizar tentativas de injeção de SQL (SQL Injection), além de tokens de sessão anti-CSRF e renovação de Session ID contra fixação de sessão.</li>
+            </ul>
+        </section>
+
+        <!-- 4. Compartilhamento de Dados -->
+        <section class="mb-5">
+            <h2 class="h5 fw-bold text-dark border-bottom pb-2 mb-3" style="color: #1e293b;">
+                4. Compartilhamento de Dados
+            </h2>
+            <p style="color: #334155; line-height: 1.7;">
+                A <strong>Papelaria Real Ltda</strong> adota política de compartilhamento zero:
+            </p>
+            <div class="p-3 rounded-3" style="background: #f8fafc; border: 1px solid #cbd5e1;">
+                <p class="mb-0 small" style="color: #334155; line-height: 1.6;">
+                    Não comercializamos, alugamos, cedemos ou repassamos informações cadastrais de clientes ou colaboradores a terceiros, parceiros de publicidade ou ferramentas de marketing externo. As informações ficam restritas aos sistemas de gestão interna da loja física para processamento de transações comerciais.
                 </p>
             </div>
         </section>
 
-        <!-- 5. Segurança Técnica -->
+        <!-- 5. Direitos do Titular de Dados -->
         <section class="mb-5">
             <h2 class="h5 fw-bold text-dark border-bottom pb-2 mb-3" style="color: #1e293b;">
-                <i class="fas fa-shield-halved text-success me-2" style="color: #284936 !important;"></i>5. Medidas de Segurança Técnica e Proteção da Informação
+                5. Direitos do Titular de Dados
             </h2>
             <p style="color: #334155; line-height: 1.7;">
-                O MrStock ERP adota medidas técnicas, organizacionais e administrativas de segurança aptas a proteger os dados pessoais contra acessos não autorizados e eventos acidentais ou ilícitos:
+                Em observância à transparência e aos direitos do consumidor, qualquer cliente cadastrado pode requisitar à Papelaria Real, mediante solicitação formal:
             </p>
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <div class="p-3 border rounded-3 h-100" style="border-color: #cbd5e1 !important; background: #ffffff;">
-                        <div class="fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-lock text-success me-2" style="color: #284936 !important;"></i>Criptografia TLS 1.3</div>
-                        <p class="small mb-0" style="color: #475569;">Comunicação web 100% criptografada sob HTTPS com certificados SSL/TLS vigentes e HSTS ativo.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-3 border rounded-3 h-100" style="border-color: #cbd5e1 !important; background: #ffffff;">
-                        <div class="fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-key text-success me-2" style="color: #284936 !important;"></i>Hash BCrypt Cost 12</div>
-                        <p class="small mb-0" style="color: #475569;">Credenciais de operadores salvas em hashes unidirecionais BCrypt com fator de custo elevado.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-3 border rounded-3 h-100" style="border-color: #cbd5e1 !important; background: #ffffff;">
-                        <div class="fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-shield-virus text-success me-2" style="color: #284936 !important;"></i>PDO &amp; Anti-CSRF</div>
-                        <p class="small mb-0" style="color: #475569;">Prepared Statements PDO contra SQL Injection e verificação de tokens CSRF e Session Fixation.</p>
-                    </div>
-                </div>
-            </div>
+            <ul style="color: #334155; line-height: 1.8; margin-bottom: 0;">
+                <li>Confirmação da existência de registros cadastrais vinculados ao seu CPF;</li>
+                <li>Correção ou atualização imediata de dados cadastrais incompletos, inexatos ou antigos;</li>
+                <li>Exclusão de dados pessoais da base operacional, ressalvada a guarda obrigatória de registros contábeis e fiscais exigida pela legislação tributária aplicável.</li>
+            </ul>
         </section>
 
-        <!-- 6. Política de Cookies (#cookies) -->
-        <section id="cookies" class="mb-4 pt-2">
+        <!-- 6. Cookies e Tecnologias de Navegação -->
+        <section class="mb-5">
             <h2 class="h5 fw-bold text-dark border-bottom pb-2 mb-3" style="color: #1e293b;">
-                <i class="fas fa-cookie-bite text-success me-2" style="color: #284936 !important;"></i>6. Política de Cookies &amp; Rastreamento Técnico
+                6. Cookies e Tecnologias de Navegação
             </h2>
             <p style="color: #334155; line-height: 1.7;">
-                Cookies são pequenos arquivos gravados no dispositivo do usuário para permitir o funcionamento adequado da aplicação. O MrStock ERP utiliza <strong>exclusivamente cookies técnicos estritamente necessários</strong> para garantir a segurança, integridade de sessão e ergonomia visual:
+                O MrStock ERP utiliza exclusivamente recursos técnicos fundamentais para o funcionamento da aplicação web:
             </p>
-            <div class="table-responsive mt-3">
+            <div class="table-responsive mt-2">
                 <table class="table table-bordered align-middle" style="border-color: #cbd5e1;">
                     <thead style="background: #f8fafc;">
                         <tr>
-                            <th style="color: #1e293b;">Identificador</th>
-                            <th style="color: #1e293b;">Tipo</th>
-                            <th style="color: #1e293b;">Validade</th>
-                            <th style="color: #1e293b;">Finalidade Técnica</th>
+                            <th style="color: #1e293b; width: 30%;">Recurso Técnico</th>
+                            <th style="color: #1e293b; width: 25%;">Tipo</th>
+                            <th style="color: #1e293b; width: 45%;">Finalidade</th>
                         </tr>
                     </thead>
                     <tbody style="font-size: 0.875rem; color: #334155;">
                         <tr>
                             <td><code>PHPSESSID</code></td>
                             <td>Cookie de Sessão HTTP</td>
-                            <td>Ao fechar navegador</td>
-                            <td>Identificador criptográfico de sessão de operador autenticado (`HttpOnly`, `SameSite=Lax`).</td>
+                            <td>Manter a autenticação segura do operador durante o expediente de trabalho (`HttpOnly` e `SameSite=Lax`).</td>
                         </tr>
                         <tr>
                             <td><code>mrstock_sidebar_state</code></td>
                             <td>Armazenamento Local (LocalStorage)</td>
-                            <td>Persistente</td>
-                            <td>Memorização da preferência de layout do menu lateral (expandido vs. retrátil) para eliminar FOUC.</td>
-                        </tr>
-                        <tr>
-                            <td><code>mrstock_cookie_consent</code></td>
-                            <td>Armazenamento Local (LocalStorage)</td>
-                            <td>Persistente</td>
-                            <td>Registro da confirmação de ciência e conformidade com os cookies técnicos essenciais sob a LGPD.</td>
+                            <td>Memorizar a preferência de visualização do menu lateral (expandido ou recolhido) sem oscilação visual.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="alert alert-light border p-3 mt-3 rounded-3" style="border-color: #cbd5e1 !important; background: #f8fafc;">
-                <p class="small mb-0" style="color: #475569;">
-                    <i class="fas fa-info-circle text-success me-1" style="color: #284936 !important;"></i> <strong>Transparência Absoluta:</strong> O MrStock ERP <strong>não utiliza cookies de rastreamento de terceiros, pixels de redes sociais ou ferramentas de publicidade comportamental</strong>. O usuário pode desativar o armazenamento de cookies diretamente nas configurações de seu navegador web, ciente de que o acesso às áreas autenticadas do ERP poderá ficar comprometido.
-                </p>
+            <p class="small mb-0 text-muted">
+                O sistema não utiliza cookies de rastreamento de anúncios, pixels espiões ou scripts analíticos invasivos de terceiros.
+            </p>
+        </section>
+
+        <!-- 7. Canal de Atendimento e Dúvidas -->
+        <section class="mb-4">
+            <h2 class="h5 fw-bold text-dark border-bottom pb-2 mb-3" style="color: #1e293b;">
+                7. Canal de Atendimento e Dúvidas
+            </h2>
+            <p style="color: #334155; line-height: 1.7;">
+                Para esclarecimentos adicionais, exercício de direitos de titular ou solicitações sobre o tratamento de dados pessoais, entre em contato diretamente com a equipe responsável:
+            </p>
+            <div class="row g-3 mt-1">
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #cbd5e1;">
+                        <div class="fw-bold mb-1" style="color: #1e293b;"><i class="fab fa-whatsapp text-success me-2"></i>WhatsApp Oficial:</div>
+                        <p class="mb-0" style="color: #334155;">
+                            <a href="https://wa.me/5515996441796?text=Ola%20equipe%20MrStock%2C%20preciso%20de%20suporte%20no%20ERP" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-semibold" style="color: #14532d;">
+                                (15) 99644-1796
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #cbd5e1;">
+                        <div class="fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-envelope text-primary me-2"></i>E-mail Institucional:</div>
+                        <p class="mb-0" style="color: #334155;">
+                            <a href="mailto:contato@mrstock.com.br" class="text-decoration-none fw-semibold" style="color: #14532d;">
+                                contato@mrstock.com.br
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 text-muted small">
+                <strong>Endereço Comercial:</strong> Rua XV de Novembro, 250 - Centro, Sorocaba/SP • CEP: 18010-082
             </div>
         </section>
 
@@ -325,10 +271,10 @@ if ($isLoggedIn) {
 
     <!-- Navegação de Retorno -->
     <div class="d-flex justify-content-between align-items-center mt-3 mb-5">
-        <a href="<?= $isLoggedIn ? BASE_URL . '/dashboard.php' : BASE_URL . '/login.php' ?>" class="btn btn-success" style="background-color: #284936; border-color: #284936; color: #ffffff; padding: 10px 24px; font-weight: 600; border-radius: 8px;">
+        <a href="<?= $isLoggedIn ? BASE_URL . '/dashboard.php' : BASE_URL . '/login.php' ?>" class="btn btn-success" style="background-color: #14532d; border-color: #14532d; color: #ffffff; padding: 10px 24px; font-weight: 600; border-radius: 8px;">
             <i class="fas fa-arrow-left me-2"></i><?= $isLoggedIn ? 'Retornar ao Dashboard' : 'Voltar ao Login' ?>
         </a>
-        <a href="<?= BASE_URL ?>/termos.php" class="text-decoration-none fw-semibold" style="color: #284936;">
+        <a href="<?= BASE_URL ?>/termos.php" class="text-decoration-none fw-semibold" style="color: #14532d;">
             Consultar Termos de Uso <i class="fas fa-arrow-right ms-1"></i>
         </a>
     </div>
@@ -341,19 +287,17 @@ if ($isLoggedIn) {
 } else {
 ?>
     <footer class="public-footer">
-        <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <div>
-                <span>MrStock ERP © 2026 Papelaria Real Ltda • Sistema de Gestão Comercial</span>
-            </div>
-            <div class="d-flex gap-3">
-                <a href="<?= BASE_URL ?>/termos.php" class="text-decoration-none" style="color: #cbd5e1;">Termos de Uso</a>
-                <span class="text-muted">•</span>
-                <a href="<?= BASE_URL ?>/privacidade.php" class="text-decoration-none text-white fw-semibold">Privacidade &amp; LGPD</a>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-                <a href="tel:+5515996056950" class="text-decoration-none" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'" aria-label="Ligar para Papelaria Real no número (15) 99605-6950"><i class="fas fa-phone-alt me-1" style="font-size: 0.75rem;"></i>(15) 99605-6950</a>
-                <span class="text-muted">•</span>
-                <a href="mailto:contato@mrstock.com.br" class="text-decoration-none" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'" aria-label="Enviar e-mail para contato@mrstock.com.br"><i class="fas fa-envelope me-1" style="font-size: 0.75rem;"></i>contato@mrstock.com.br</a>
+        <div class="container">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-4 col-12 text-md-start text-center">
+                    <span>MrStock ERP © 2026 Papelaria Real</span>
+                </div>
+                <div class="col-md-4 col-12 text-center">
+                    <a href="<?= BASE_URL ?>/termos.php" class="text-decoration-none fw-semibold" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'">Termos de Uso</a><span class="mx-2 text-white-50">•</span><a href="<?= BASE_URL ?>/privacidade.php" class="text-decoration-none fw-semibold text-white">Política de Privacidade</a>
+                </div>
+                <div class="col-md-4 col-12 text-md-end text-center">
+                    <a href="tel:+5515996441796" class="text-decoration-none" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'"><i class="fas fa-phone-alt me-1" style="font-size: 0.7rem;"></i>(15) 99644-1796</a><span class="mx-2 text-white-50">•</span><a href="mailto:contato@mrstock.com.br" class="text-decoration-none" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'"><i class="fas fa-envelope me-1" style="font-size: 0.7rem;"></i>contato@mrstock.com.br</a>
+                </div>
             </div>
         </div>
     </footer>

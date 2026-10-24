@@ -5,26 +5,26 @@
             <div class="so-footer-gestaoclick__container">
                 <div class="row g-3 align-items-center">
                     <!-- COLUNA 1: Marca & Sistema (Enxuto com Logo Oficial) -->
-                    <div class="col-lg-4 col-md-5 col-12">
-                        <div class="d-flex align-items-center gap-2 mb-1">
+                    <div class="col-md-4 col-12 text-md-start text-center">
+                        <div class="d-flex align-items-center justify-content-md-start justify-content-center gap-2 mb-1">
                             <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="MrStock Logo" width="24" height="24" style="width: 24px; height: 24px; object-fit: contain;">
                             <span class="fw-bold text-white fs-6">MrStock ERP</span>
                         </div>
-                        <div style="color: #cbd5e1; font-size: 0.8125rem;">Papelaria Real • Sistema Integrado de Gestão & PDV</div>
+                        <div style="color: #cbd5e1; font-size: 0.8125rem;">Papelaria Real • Sistema Integrado de Gestão &amp; PDV</div>
                     </div>
 
                     <!-- COLUNA 2: Mr. Coding (Compacta e Direta) -->
-                    <div class="col-lg-4 col-md-4 col-12 text-md-center">
+                    <div class="col-md-4 col-12 text-center">
                         <div class="fw-bold text-white fs-6 mb-1"><i class="fas fa-code text-info me-1"></i> Mr. Coding</div>
                         <div style="color: #cbd5e1; font-size: 0.8125rem; font-weight: 500;">Douglas • Nikolas • Cesar • Enzo • Sugahara</div>
                     </div>
 
                     <!-- COLUNA 3: Precisando de Suporte? (2 botões circulares compactos + telefone) -->
-                    <div class="col-lg-4 col-md-3 col-12 text-md-end text-center">
+                    <div class="col-md-4 col-12 text-md-end text-center">
                         <div class="fw-bold text-white fs-6 mb-2">Precisando de suporte?</div>
                         <div class="d-inline-flex align-items-center justify-content-md-end justify-content-center gap-3">
                             <!-- WhatsApp -->
-                            <a href="https://wa.me/5515996056950" target="_blank" rel="noopener noreferrer" class="so-footer-gestaoclick__support-item" title="Falar no WhatsApp">
+                            <a href="https://wa.me/5515996441796?text=Ola%20equipe%20MrStock%2C%20preciso%20de%20suporte%20no%20ERP" target="_blank" rel="noopener noreferrer" class="so-footer-gestaoclick__support-item" title="Falar no WhatsApp">
                                 <div class="so-footer-gestaoclick__support-circle so-footer-gestaoclick__support-circle--wa">
                                     <i class="fab fa-whatsapp"></i>
                                 </div>
@@ -43,18 +43,16 @@
                 </div>
 
                 <!-- SUB-BARRA INFERIOR (1 Linha Compacta com Links Jurídicos) -->
-                <div class="so-footer-gestaoclick__bottom mt-2 pt-2" style="border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.75rem; color: #94a3b8;">
-                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-                        <span>MrStock ERP © 2026 Papelaria Real</span>
-                        <div class="d-flex align-items-center gap-2">
-                            <a href="<?= BASE_URL ?>/termos.php" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">Termos de Uso</a>
-                            <span>•</span>
-                            <a href="<?= BASE_URL ?>/privacidade.php" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">Política de Privacidade &amp; LGPD</a>
+                <div class="so-footer-gestaoclick__bottom mt-2 pt-2" style="border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.75rem; color: #cbd5e1;">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-4 col-12 text-md-start text-center">
+                            <span>MrStock ERP © 2026 Papelaria Real</span>
                         </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <a href="tel:+5515996056950" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'" aria-label="Ligar para Papelaria Real no número (15) 99605-6950"><i class="fas fa-phone-alt me-1" style="font-size: 0.7rem;"></i>(15) 99605-6950</a>
-                            <span>•</span>
-                            <a href="mailto:contato@mrstock.com.br" class="text-decoration-none" style="color: #94a3b8;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'" aria-label="Enviar e-mail para contato@mrstock.com.br"><i class="fas fa-envelope me-1" style="font-size: 0.7rem;"></i>contato@mrstock.com.br</a>
+                        <div class="col-md-4 col-12 text-center">
+                            <a href="<?= BASE_URL ?>/termos.php" class="text-decoration-none fw-semibold" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'">Termos de Uso</a><span class="mx-2 text-white-50">•</span><a href="<?= BASE_URL ?>/privacidade.php" class="text-decoration-none fw-semibold" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'">Política de Privacidade</a>
+                        </div>
+                        <div class="col-md-4 col-12 text-md-end text-center">
+                            <a href="tel:+5515996441796" class="text-decoration-none" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'"><i class="fas fa-phone-alt me-1" style="font-size: 0.7rem;"></i>(15) 99644-1796</a><span class="mx-2 text-white-50">•</span><a href="mailto:contato@mrstock.com.br" class="text-decoration-none" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'"><i class="fas fa-envelope me-1" style="font-size: 0.7rem;"></i>contato@mrstock.com.br</a>
                         </div>
                     </div>
                 </div>

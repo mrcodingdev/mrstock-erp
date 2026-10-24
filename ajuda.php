@@ -776,8 +776,8 @@ require_once __DIR__ . '/inc/header.php';
                         <span class="text-muted small d-block mb-1">Canal de Atendimento Oficial</span>
                         <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
                             <i class="fas fa-phone text-muted small"></i>
-                            <strong class="text-dark tabular-nums">(15) 99605-6950</strong>
-                            <a href="https://wa.me/5515996056950?text=Ola%20equipe%20MrStock%2C%20preciso%20de%20suporte%20no%20ERP" 
+                            <strong class="text-dark tabular-nums">(15) 99644-1796</strong>
+                            <a href="https://wa.me/5515996441796?text=Ola%20equipe%20MrStock%2C%20preciso%20de%20suporte%20no%20ERP" 
                                target="_blank" 
                                rel="noopener noreferrer" 
                                class="btn-whatsapp" 
@@ -785,7 +785,7 @@ require_once __DIR__ . '/inc/header.php';
                                 <i class="fab fa-whatsapp"></i>
                             </a>
                         </div>
-                        <a href="https://wa.me/5515996056950?text=Ola%20equipe%20MrStock%2C%20preciso%20de%20suporte%20no%20ERP" 
+                        <a href="https://wa.me/5515996441796?text=Ola%20equipe%20MrStock%2C%20preciso%20de%20suporte%20no%20ERP" 
                            target="_blank" 
                            rel="noopener noreferrer" 
                            class="btn btn-success fw-bold px-4 shadow-sm w-100 text-white">

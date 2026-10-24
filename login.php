@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         :root {
             --brand-primary: #1a4231;
-            --brand-secondary: #2c6e53;
+            --brand-secondary: #14532d;
             --brand-accent: #39e07b;
             --bg-color: #e8f3ee;
             --text-dark: #2d3748;
@@ -476,7 +476,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "addressRegion": "SP",
                     "addressCountry": "BR"
                 },
-                "telephone": "+5515996056950",
+                "telephone": "+5515996441796",
                 "email": "contato@mrstock.com.br"
             }
         ]
@@ -563,10 +563,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Rodapé Jurídico de Acesso -->
             <div class="text-center mt-3 pt-2">
-                <small style="color: var(--text-muted); font-size: 0.8125rem;">
+                <small style="color: #334155; font-size: 0.8125rem;">
                     Ao autenticar-se, você concorda com os 
-                    <a href="<?= BASE_URL ?>/termos.php" class="fw-semibold text-decoration-none" style="color: var(--brand-secondary);">Termos de Uso</a> e a 
-                    <a href="<?= BASE_URL ?>/privacidade.php" class="fw-semibold text-decoration-none" style="color: var(--brand-secondary);">Política de Privacidade</a>.
+                    <a href="<?= BASE_URL ?>/termos.php" class="fw-bold" style="color: #14532d !important; text-decoration: underline;" onmouseover="this.style.color='#052e16'" onmouseout="this.style.color='#14532d'">Termos de Uso</a> e a 
+                    <a href="<?= BASE_URL ?>/privacidade.php" class="fw-bold" style="color: #14532d !important; text-decoration: underline;" onmouseover="this.style.color='#052e16'" onmouseout="this.style.color='#14532d'">Política de Privacidade</a>.
                 </small>
             </div>
         </div>
