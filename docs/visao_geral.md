@@ -1,9 +1,11 @@
 # 🏢 MrStock ERP v2.2.0: Visão Geral do Sistema
 **Edição Oficial:** Papelaria Real (*Sueli & Osnir, Sorocaba/SP*)  
+**Telefone Oficial:** (15) 99644-1796  
 **Versão Atual:** `v2.2.0 Homologada`  
 **Data de Homologação:** Setembro de 2026  
 **Instituição:** ETEC Fernando Prestes (Centro Paula Souza / Sorocaba-SP)  
-**Curso Técnico:** Desenvolvimento de Sistemas (TCC Oficial)
+**Curso Técnico:** Desenvolvimento de Sistemas (TCC Oficial)  
+**Orientadores Acadêmicos:** Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker  
 
 ---
 

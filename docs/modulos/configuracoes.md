@@ -1,4 +1,8 @@
 # ⚙️ Módulo: Configurações do Sistema & Backup SQL
+**Versão Homologada:** `MrStock ERP v2.2.0`  
+**Instituição:** ETEC Fernando Prestes (Centro Paula Souza, Sorocaba/SP)  
+**Orientadores Acadêmicos:** Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker  
+**Estudo de Caso Oficial:** Papelaria Real Ltda (Rua XV de Novembro, 250 - Sorocaba/SP | Tel: (15) 99644-1796)  
 **Arquivos Principais:** `configuracoes.php`, `config.php`, `inc/auth.php`  
 **Escopo de Acesso:** Exclusivo Administrador (`require_admin()`)
 
@@ -12,11 +16,11 @@ Centraliza os 21 parâmetros operacionais, fiscais, de estoque e de experiência
 ## 2. Interface & Componentes Visuais (7 Abas Full-Width)
 1. **Perfil:** Nome de exibição, e-mail institucional e cargo.
 2. **Segurança:** Troca de senha com exigência da senha atual e criptografia **BCrypt Cost 12**.
-3. **Loja & Fiscal:** Razão Social (`Papelaria Real Ltda - ME`), CNPJ, Telefone, WhatsApp, Endereço e Alíquota padrão.
+3. **Loja & Fiscal:** Razão Social (`Papelaria Real Ltda - ME`), CNPJ (`50.334.808/0001-38`), Telefone Oficial (`(15) 99644-1796`), WhatsApp, Endereço e Alíquota padrão.
 4. **PDV & Caixa:** Formato de Impressora (80mm, 58mm, A4), Feedback Sonoro (ligado/desligado), Limite Máximo de Desconto (%) e Trava de Margem Negativa (bloquear/aviso/nenhum).
 5. **Estoque & Alertas:** Estoque Mínimo Padrão (unidades), Janela de Alerta de Vencimento (dias) e Bloqueio de Saldo Negativo.
 6. **Aparência & Ergonomia:** Densidade de Tabelas (compacta/padrão/confortável), Tamanho da Fonte e Linhas Zebradas.
-7. **Sistema & Backup:** Informações de versão (`v2.1.0 Enterprise`), status do banco de dados e botão para download do dump SQL completo.
+7. **Sistema & Backup:** Informações de versão (`v2.2.0 Homologada`), status do banco de dados e botão para download do dump SQL completo.
 
 ---
 
@@ -42,7 +46,7 @@ function set_app_config(PDO $pdo, string $chave, string $valor): bool {
 ```php
 function gerar_backup_sql(PDO $pdo): string {
     $tables = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
-    $sqlDump = "-- MrStock ERP v2.1.0 Backup SQL\n-- Data: " . date('Y-m-d H:i:s') . "\n\nSET FOREIGN_KEY_CHECKS=0;\n\n";
+    $sqlDump = "-- MrStock ERP v2.2.0 Backup SQL\n-- Data: " . date('Y-m-d H:i:s') . "\n\nSET FOREIGN_KEY_CHECKS=0;\n\n";
     
     foreach ($tables as $t) {
         $create = $pdo->query("SHOW CREATE TABLE `{$t}`")->fetch(PDO::FETCH_ASSOC);

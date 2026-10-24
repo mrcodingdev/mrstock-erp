@@ -1,5 +1,7 @@
 # Matriz das 50 Perguntas e Respostas para a Banca Examinadora
-**MrStock ERP v2.1.0** — ETEC Fernando Prestes
+**MrStock ERP v2.2.0 Homologada** — ETEC Fernando Prestes  
+**Orientadores Acadêmicos:** Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker  
+**Estudo de Caso Oficial:** Papelaria Real Ltda (Rua XV de Novembro, 250 - Sorocaba/SP | Tel: (15) 99644-1796)  
 
 ---
 
@@ -23,7 +25,7 @@
 
 5. **Como funciona o cálculo do Custo Médio Ponderado (CMP)?**  
    *Resposta:* A cada nova entrada de nota em `/compras/nova.php`, o sistema aplica a fórmula:
-   $$	ext{Novo CMP} = rac{(	ext{Estoque Atual} 	imes 	ext{Custo Atual}) + (	ext{Qtd Comprada} 	imes 	ext{Novo Custo})}{	ext{Estoque Atual} + 	ext{Qtd Comprada}}$$
+   $$\text{Novo CMP} = \frac{(\text{Estoque Atual} \times \text{Custo Atual}) + (\text{Qtd Comprada} \times \text{Novo Custo})}{\text{Estoque Atual} + \text{Qtd Comprada}}$$
    atualizando o campo `preco_compra` na tabela `produtos` de forma automatizada.
 
 6. **Como o sistema atende à legislação fiscal brasileira?**  

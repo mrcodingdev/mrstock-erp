@@ -1,4 +1,7 @@
-# 📂 Estrutura de Diretórios e Arquivos — MrStock ERP v2.1.0
+# 📂 Estrutura de Diretórios e Arquivos — MrStock ERP v2.2.0
+**Instituição:** ETEC Fernando Prestes (Centro Paula Souza, Sorocaba/SP)  
+**Orientadores Acadêmicos:** Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker  
+**Estudo de Caso Oficial:** Papelaria Real Ltda (Rua XV de Novembro, 250 - Centro, Sorocaba/SP | Tel: (15) 99644-1796)  
 
 A raiz do projeto em `C:\xampp\htdocs\MrStock\` adota uma arquitetura modular coesa em PHP 8.2 nativo:
 

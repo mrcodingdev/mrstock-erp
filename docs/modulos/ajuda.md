@@ -1,11 +1,15 @@
 # 📚 Módulo: Central de Ajuda & Base de Conhecimento
+**Versão Homologada:** `MrStock ERP v2.2.0`  
+**Instituição:** ETEC Fernando Prestes (Centro Paula Souza, Sorocaba/SP)  
+**Orientadores Acadêmicos:** Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker  
+**Estudo de Caso Oficial:** Papelaria Real Ltda (Rua XV de Novembro, 250 - Sorocaba/SP | Tel: (15) 99644-1796)  
 **Arquivo Principal:** `ajuda.php`  
 **Escopo de Acesso:** Administrador e Operador de Caixa
 
 ---
 
 ## 1. Objetivo & Contexto de Negócio
-Serve como o manual operacional digital interativo da Papelaria Real. Centraliza procedimentos passo a passo para o balcão (registro de vendas, concessão de desconto, emissão de NFC-e, cadastro de clientes), a mesa tátil de atalhos de teclado do PDV e canais de suporte técnico.
+Serve como o manual operacional digital interativo da Papelaria Real. Centraliza procedimentos passo a passo para o balcão (registro de vendas, concessão de desconto, emissão de NFC-e, cadastro de clientes), a mesa tátil de atalhos de teclado do PDV e canais de suporte técnico oficial `(15) 99644-1796`.
 
 ---
 
@@ -14,7 +18,7 @@ Serve como o manual operacional digital interativo da Papelaria Real. Centraliza
 - **Chips de Filtro Rápido:** Categorização instantânea por áreas operacionais (`Frente de Caixa`, `Estoque`, `Clientes`, `Relatórios`).
 - **Mesa de Atalhos de Teclado:** Tabela com `<kbd class="so-kbd">` contendo teclas de atalho (<kbd>F2</kbd>, <kbd>F4</kbd>, <kbd>F7</kbd>, <kbd>F8</kbd>, <kbd>F9</kbd>, <kbd>ESC</kbd>), ação e descrição de fluxo no balcão.
 - **Acordeões dos Manuais Operacionais:** 9 módulos estruturados com passos numerados 1, 2, 3 e caixas de dicas operacionais.
-- **Card de Contato & Suporte:** Botão circular verde oficial do WhatsApp (`.btn-whatsapp` de 22x22px) e botão para impressão do guia rápido.
+- **Card de Contato & Suporte:** Botão circular verde oficial do WhatsApp (`.btn-whatsapp` de 22x22px direcionando para o telefone `(15) 99644-1796`) e botão para impressão do guia rápido.
 
 ---
 

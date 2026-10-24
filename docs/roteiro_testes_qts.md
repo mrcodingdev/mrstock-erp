@@ -1,5 +1,5 @@
 # 🧪 Roteiro de Qualidade e Teste de Software (QTS)
-**MrStock ERP v2.1.0** — Matriz de Cobertura dos 22 Casos de Uso (UC001 a UC022)
+**MrStock ERP v2.2.0** — Matriz de Cobertura dos 22 Casos de Uso (UC001 a UC022)
 
 ---
 

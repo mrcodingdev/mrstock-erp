@@ -1,4 +1,8 @@
 # 🎨 Módulo: Navegação, Topbar Limpa & Design System
+**Versão Homologada:** `MrStock ERP v2.2.0`  
+**Instituição:** ETEC Fernando Prestes (Centro Paula Souza, Sorocaba/SP)  
+**Orientadores Acadêmicos:** Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker  
+**Estudo de Caso Oficial:** Papelaria Real Ltda (Rua XV de Novembro, 250 - Sorocaba/SP | Tel: (15) 99644-1796)  
 **Arquivos Principais:** `inc/header.php`, `inc/footer.php`, `css/style.css`  
 **Escopo de Acesso:** Compartilhado em todas as telas
 

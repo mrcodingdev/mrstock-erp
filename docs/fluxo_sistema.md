@@ -1,6 +1,6 @@
 # 🔄 Fluxos Operacionais e Ciclo de Vida do Sistema
 
-Os diagramas abaixo ilustram a esteira completa de processamento de dados no MrStock ERP v2.1.0:
+Os diagramas abaixo ilustram a esteira completa de processamento de dados no MrStock ERP v2.2.0:
 
 ---
 

@@ -1,5 +1,7 @@
 # Manual de Homologação & Revisão Final do TCC
-**MrStock ERP v2.1.0** — Banca Examinadora da ETEC Fernando Prestes
+**MrStock ERP v2.2.0 Homologada** — Banca Examinadora da ETEC Fernando Prestes  
+**Orientadores Acadêmicos:** Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker  
+**Estudo de Caso Oficial:** Papelaria Real Ltda (Rua XV de Novembro, 250 - Sorocaba/SP | Tel: (15) 99644-1796)  
 
 ---
 

@@ -5,7 +5,7 @@
 
 ## 1. Visão Estratégica da Versão 3.0
 
-Embora a versão atual **v2.1.0 em PHP 8.2 Nativo** atenda plenamente a todos os requisitos operacionais da Papelaria Real e aos critérios de avaliação da banca da ETEC, o roadmap corporativo prevê as seguintes evoluções:
+Embora a versão atual **v2.2.0 em PHP 8.2 Nativo** atenda plenamente a todos os requisitos operacionais da Papelaria Real e aos critérios de avaliação da banca da ETEC, o roadmap corporativo prevê as seguintes evoluções:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐

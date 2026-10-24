@@ -1,4 +1,8 @@
 # 🔐 Módulo: Autenticação, Sessão & Logout
+**Versão Homologada:** `MrStock ERP v2.2.0`  
+**Instituição:** ETEC Fernando Prestes (Centro Paula Souza, Sorocaba/SP)  
+**Orientadores Acadêmicos:** Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker  
+**Estudo de Caso Oficial:** Papelaria Real Ltda (Rua XV de Novembro, 250 - Sorocaba/SP | Tel: (15) 99644-1796)  
 **Arquivos Principais:** `login.php`, `logout.php`, `inc/auth.php`  
 **Escopo de Acesso:** Público / Usuários Autenticados
 
