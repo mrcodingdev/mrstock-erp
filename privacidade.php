@@ -117,9 +117,9 @@ if ($isLoggedIn) {
                 Para o regular funcionamento das operações comerciais e administrativas da <strong>Papelaria Real Ltda - ME</strong>, o MrStock ERP realiza a coleta e o processamento dos seguintes dados cadastrais e operacionais:
             </p>
             <ul style="color: #334155; line-height: 1.8; margin-bottom: 0;">
-                <li><strong>Dados de Clientes:</strong> Nome completo ou razão social, CPF/CNPJ (quando informado para faturamento), telefone/WhatsApp para contato e endereço completo para entrega de mercadorias.</li>
-                <li><strong>Registros de Vendas:</strong> Histórico de itens adquiridos, quantidades, valores faturados, data e hora da transação e modalidades de pagamento empregadas.</li>
-                <li><strong>Dados de Operadores e Colaboradores:</strong> Nome de usuário, credenciais com hash criptográfico, nível de permissão (RBAC) e logs técnicos de auditoria com carimbo temporal e endereço IP.</li>
+                <li><strong>Dados de Clientes:</strong> Nome completo ou razão social, <strong>CPF/CNPJ</strong> (quando informado para faturamento), telefone/<strong>WhatsApp</strong> para contato e <strong>endereço para entrega</strong> de mercadorias.</li>
+                <li><strong>Registros de Vendas:</strong> <strong>Histórico de itens adquiridos, quantidades e valores</strong> faturados, data e hora da transação e modalidades de pagamento empregadas.</li>
+                <li><strong>Dados de Operadores e Colaboradores:</strong> Nome de usuário, credenciais com <strong>hash criptográfico</strong>, nível de permissão (<strong>RBAC</strong>) e <strong>logs técnicos de auditoria</strong> com carimbo temporal e endereço IP.</li>
             </ul>
         </section>
 
@@ -136,7 +136,7 @@ if ($isLoggedIn) {
                     <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #cbd5e1;">
                         <h3 class="h6 fw-bold mb-2" style="color: #1e293b;"><i class="fas fa-cash-register me-2 text-success" style="color: #14532d !important;"></i>Operação do PDV &amp; Balcão:</h3>
                         <p class="mb-0 small" style="color: #475569; line-height: 1.6;">
-                            Identificação do comprador no registro de pedidos, emissão de comprovantes de venda térmicos e conferência de trocas de produtos escolares e de escritório.
+                            Identificação do comprador no registro de pedidos, emissão de <strong>comprovantes de venda térmicos</strong> e conferência de <strong>trocas de produtos</strong> escolares e de escritório.
                         </p>
                     </div>
                 </div>
@@ -144,7 +144,7 @@ if ($isLoggedIn) {
                     <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #cbd5e1;">
                         <h3 class="h6 fw-bold mb-2" style="color: #1e293b;"><i class="fab fa-whatsapp me-2 text-success"></i>Comunicação e Entrega:</h3>
                         <p class="mb-0 small" style="color: #475569; line-height: 1.6;">
-                            Aviso de chegada de listas de material escolar, orçamentos solicitados e confirmação de rotas de entrega de pedidos corporativos via WhatsApp ou telefone.
+                            Aviso de chegada de <strong>listas de material escolar</strong>, <strong>orçamentos solicitados</strong> e confirmação de <strong>rotas de entrega</strong> de pedidos corporativos via WhatsApp ou telefone.
                         </p>
                     </div>
                 </div>
@@ -160,9 +160,9 @@ if ($isLoggedIn) {
                 Adotamos controles rígidos de engenharia de software para resguardar a integridade, o sigilo e a disponibilidade de todas as bases de dados:
             </p>
             <ul style="color: #334155; line-height: 1.8; margin-bottom: 0;">
-                <li><strong>Criptografia em Trânsito:</strong> Conexões protegidas sob protocolo HTTPS com certificados SSL/TLS 1.3 ativos em ambiente de produção na Hostinger.</li>
-                <li><strong>Proteção de Credenciais:</strong> Senhas armazenadas com hash criptográfico unidirecional seguro (Bcrypt), sendo inacessíveis inclusive aos administradores.</li>
-                <li><strong>Prevenção contra Intrusões:</strong> Utilização estrita de consultas preparadas PDO (Prepared Statements) para neutralizar tentativas de injeção de SQL (SQL Injection), além de tokens de sessão anti-CSRF e renovação de Session ID contra fixação de sessão.</li>
+                <li><strong>Criptografia em Trânsito:</strong> Conexões protegidas sob protocolo <strong>HTTPS</strong> com certificados <strong>SSL/TLS 1.3</strong> ativos em ambiente de produção na Hostinger.</li>
+                <li><strong>Proteção de Credenciais:</strong> Senhas armazenadas com <strong>hash criptográfico unidirecional seguro (Bcrypt)</strong>, sendo inacessíveis inclusive aos administradores.</li>
+                <li><strong>Prevenção contra Intrusões:</strong> Utilização estrita de <strong>consultas preparadas PDO (Prepared Statements)</strong> para neutralizar tentativas de injeção de SQL (<strong>SQL Injection</strong>), além de tokens de sessão <strong>anti-CSRF</strong> e renovação de <strong>Session ID</strong> contra fixação de sessão.</li>
             </ul>
         </section>
 
@@ -172,11 +172,11 @@ if ($isLoggedIn) {
                 4. Compartilhamento de Dados
             </h2>
             <p style="color: #334155; line-height: 1.7;">
-                A <strong>Papelaria Real Ltda</strong> adota política de compartilhamento zero:
+                A <strong>Papelaria Real Ltda</strong> adota <strong>política de compartilhamento zero</strong>:
             </p>
             <div class="p-3 rounded-3" style="background: #f8fafc; border: 1px solid #cbd5e1;">
                 <p class="mb-0 small" style="color: #334155; line-height: 1.6;">
-                    Não comercializamos, alugamos, cedemos ou repassamos informações cadastrais de clientes ou colaboradores a terceiros, parceiros de publicidade ou ferramentas de marketing externo. As informações ficam restritas aos sistemas de gestão interna da loja física para processamento de transações comerciais.
+                    <strong>Não comercializamos, alugamos, cedemos ou repassamos informações cadastrais</strong> de clientes ou colaboradores a terceiros, parceiros de publicidade ou ferramentas de marketing externo. As informações ficam <strong>restritas aos sistemas de gestão interna da loja física</strong> para processamento de transações comerciais.
                 </p>
             </div>
         </section>
@@ -190,9 +190,9 @@ if ($isLoggedIn) {
                 Em observância à transparência e aos direitos do consumidor, qualquer cliente cadastrado pode requisitar à Papelaria Real, mediante solicitação formal:
             </p>
             <ul style="color: #334155; line-height: 1.8; margin-bottom: 0;">
-                <li>Confirmação da existência de registros cadastrais vinculados ao seu CPF;</li>
-                <li>Correção ou atualização imediata de dados cadastrais incompletos, inexatos ou antigos;</li>
-                <li>Exclusão de dados pessoais da base operacional, ressalvada a guarda obrigatória de registros contábeis e fiscais exigida pela legislação tributária aplicável.</li>
+                <li><strong>Confirmação da existência</strong> de registros cadastrais vinculados ao seu CPF;</li>
+                <li><strong>Correção ou atualização imediata</strong> de dados cadastrais incompletos, inexatos ou antigos;</li>
+                <li><strong>Exclusão de dados pessoais</strong> da base operacional, ressalvada a guarda obrigatória de registros contábeis e fiscais exigida pela legislação tributária aplicável.</li>
             </ul>
         </section>
 
@@ -215,20 +215,20 @@ if ($isLoggedIn) {
                     </thead>
                     <tbody style="font-size: 0.875rem; color: #334155;">
                         <tr>
-                            <td><code>PHPSESSID</code></td>
-                            <td>Cookie de Sessão HTTP</td>
-                            <td>Manter a autenticação segura do operador durante o expediente de trabalho (`HttpOnly` e `SameSite=Lax`).</td>
+                            <td><strong><code>PHPSESSID</code></strong></td>
+                            <td><strong>Cookie de Sessão HTTP</strong></td>
+                            <td>Manter a autenticação segura do operador durante o expediente de trabalho (<strong><code>HttpOnly</code></strong> e <strong><code>SameSite=Lax</code></strong>).</td>
                         </tr>
                         <tr>
-                            <td><code>mrstock_sidebar_state</code></td>
-                            <td>Armazenamento Local (LocalStorage)</td>
+                            <td><strong><code>mrstock_sidebar_state</code></strong></td>
+                            <td><strong>Armazenamento Local (LocalStorage)</strong></td>
                             <td>Memorizar a preferência de visualização do menu lateral (expandido ou recolhido) sem oscilação visual.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <p class="small mb-0 text-muted">
-                O sistema não utiliza cookies de rastreamento de anúncios, pixels espiões ou scripts analíticos invasivos de terceiros.
+                O sistema <strong>não utiliza cookies de rastreamento de anúncios, pixels espiões ou scripts analíticos invasivos de terceiros</strong>.
             </p>
         </section>
 
@@ -245,8 +245,8 @@ if ($isLoggedIn) {
                     <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #cbd5e1;">
                         <div class="fw-bold mb-1" style="color: #1e293b;"><i class="fab fa-whatsapp text-success me-2"></i>WhatsApp Oficial:</div>
                         <p class="mb-0" style="color: #334155;">
-                            <a href="https://wa.me/5515996441796?text=Ola%20equipe%20MrStock%2C%20preciso%20de%20suporte%20no%20ERP" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-semibold" style="color: #14532d;">
-                                (15) 99644-1796
+                            <a href="https://wa.me/5515996441796?text=Ola%20equipe%20MrStock%2C%20preciso%20de%20suporte%20no%20ERP" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-bold" style="color: #14532d;">
+                                <strong>(15) 99644-1796</strong>
                             </a>
                         </p>
                     </div>
@@ -255,8 +255,8 @@ if ($isLoggedIn) {
                     <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #cbd5e1;">
                         <div class="fw-bold mb-1" style="color: #1e293b;"><i class="fas fa-envelope text-primary me-2"></i>E-mail Institucional:</div>
                         <p class="mb-0" style="color: #334155;">
-                            <a href="mailto:contato@mrstock.com.br" class="text-decoration-none fw-semibold" style="color: #14532d;">
-                                contato@mrstock.com.br
+                            <a href="mailto:contato@mrstock.com.br" class="text-decoration-none fw-bold" style="color: #14532d;">
+                                <strong>contato@mrstock.com.br</strong>
                             </a>
                         </p>
                     </div>

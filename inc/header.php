@@ -275,10 +275,6 @@ $_browserTitle = 'MrStock ERP - ' . $_pageTitleClean;
             </div>
 
             <div class="d-flex align-items-center">
-                <a href="<?= BASE_URL ?>/docs/MRSTOCK_MANUAL_DO_USUARIO_v2.2.0_FINAL.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-light border text-dark fw-semibold d-inline-flex align-items-center gap-1 shadow-sm me-2" style="font-size: 0.8125rem;" title="Manual do Usuário (PDF Oficial)">
-                    <i class="fa-solid fa-book-open text-primary"></i> <span class="d-none d-md-inline">Manual</span>
-                </a>
-
                 <!-- USER PROFILE POPOVER DROPDOWN -->
                 <div class="so-profile" id="soProfile">
                     <button class="so-avatar-btn" type="button" id="soAvatarBtn" onclick="toggleProfileDropdown()" aria-label="Menu de perfil do operador">
