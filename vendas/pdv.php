@@ -13,7 +13,6 @@ $cfgPdvImpressora  = get_app_config($pdo, 'pdv_impressora', '80mm');
 // Consulta de produtos ativos com saldo em estoque considerando lotes válidos
 $stmt = $pdo->query("
     SELECT p.id, p.nome, p.codigo_de_barra, p.categoria, p.preco_venda AS preco, 
-           p.preco_compra,
            CASE 
                WHEN (SELECT COUNT(*) FROM lotes WHERE produto_id = p.id) > 0 
                THEN (SELECT COALESCE(SUM(quantidade), 0) FROM lotes WHERE produto_id = p.id AND quantidade > 0 AND data_validade >= CURDATE())
@@ -118,7 +117,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <i class="fas fa-arrow-trend-down fa-2x me-3 text-danger"></i>
                 <div>
                     <h6 class="mb-1 fw-bold"><i class="fas fa-ban text-danger me-1"></i> Venda com Prejuízo Bloqueada</h6>
-                    <span>O valor total líquido da venda (R$ <strong class="tabular-nums"><?= htmlspecialchars($_GET['total'] ?? '') ?></strong>) é inferior ao custo total dos produtos (R$ <strong class="tabular-nums"><?= htmlspecialchars($_GET['custo'] ?? '') ?></strong>).</span>
+                    <span>O valor total líquido da venda com o desconto aplicado resulta em margem negativa (prejuízo) e requer autorização gerencial.</span>
                 </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
@@ -683,7 +682,6 @@ function processarAdicao(id, nome, preco, qtdMax, qtd, precoCompra = 0) {
             id: id,
             nome: nome,
             preco: preco,
-            preco_compra: precoCompra,
             quantidade: qtd,
             subtotal: qtd * preco,
             max: qtdMax
@@ -701,7 +699,7 @@ function processarAdicao(id, nome, preco, qtdMax, qtd, precoCompra = 0) {
 function adicionarItemDireto(id) {
     const p = catalogoProdutos.find(item => parseInt(item.id) === parseInt(id));
     if (!p) return;
-    processarAdicao(parseInt(p.id), p.nome, parseFloat(p.preco), parseInt(p.quantidade), 1, parseFloat(p.preco_compra || 0));
+    processarAdicao(parseInt(p.id), p.nome, parseFloat(p.preco), parseInt(p.quantidade), 1);
 }
 
 function alterarQuantidadeItem(id, delta) {
@@ -821,7 +819,6 @@ function recalcularTotal() {
     let custoTotal = 0.0;
     carrinho.forEach(item => { 
         subtotal += item.subtotal; 
-        custoTotal += (parseFloat(item.preco_compra || 0) * item.quantidade);
     });
 
     subtotal = Math.round(subtotal * 100) / 100;
@@ -931,7 +928,6 @@ function abrirModalPagamento() {
     }
 
     let custoTotal = 0.0;
-    carrinho.forEach(item => { custoTotal += (parseFloat(item.preco_compra || 0) * item.quantidade); });
 
     if (custoTotal > 0 && totalVendaAtual < custoTotal) {
         if (MRSTOCK_CONFIG.pdvTravaMargem === 'bloquear') {

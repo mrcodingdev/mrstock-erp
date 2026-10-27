@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1320" width="1600" height="1320">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+      * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+      .bg { fill: #f8fafc; }
+      .header-box { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff; padding: 28px 36px; border-radius: 12px; }
+      .badge-tag { display: inline-block; padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; border-radius: 6px; text-transform: uppercase; }
+      .table-container { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+      th { background: #f1f5f9; color: #334155; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; padding: 14px 18px; text-align: left; border-bottom: 2px solid #cbd5e1; }
+      td { padding: 16px 18px; font-size: 13px; line-height: 1.5; color: #1e293b; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+      tr:last-child td { border-bottom: none; }
+      tr:nth-child(even) td { background-color: #fafafa; }
+      .topic-title { font-weight: 700; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+      .status-pill { display: inline-block; padding: 3px 8px; font-size: 11px; font-weight: 600; border-radius: 4px; }
+      .pill-red { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+      .pill-yellow { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+      .pill-blue { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+      .pill-green { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+      .pill-purple { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+      .code-inline { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: #e2e8f0; padding: 1px 5px; border-radius: 4px; font-size: 12px; color: #0f172a; }
+      .col-1 { width: 23%; }
+      .col-2 { width: 25%; }
+      .col-3 { width: 25%; }
+      .col-4 { width: 27%; }
+      .doc-impact { font-size: 12.5px; color: #475569; }
+      .doc-impact strong { color: #0f172a; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1320" class="bg"/>
+
+  <foreignObject x="30" y="30" width="1540" height="1260">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <div class="header-box">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span class="badge-tag" style="background: #2563eb; color: #ffffff; margin-bottom: 8px;">MrStock ERP • TCC ETEC 2026</span>
+            <h1 style="font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Mapa de Transição: Estado Atual vs. O Que Muda vs. Estado Alvo vs. Impacto no TCC</h1>
+            <p style="font-size: 14px; color: #94a3b8; margin-top: 4px;">Comparativo arquitetural de 4 colunas para alinhamento entre Nikolas (DER), Cesar (Requisitos), Enzo (Documentos), Sugahara (Apresentação) e Douglas (Arquitetura).</p>
+          </div>
+          <div style="text-align: right;">
+            <span class="status-pill pill-purple" style="font-size: 12px; padding: 6px 12px;">Governança Técnica Rigorosa</span>
+          </div>
+        </div>
+      </div>
+
+      <table class="table-container">
+        <thead>
+          <tr>
+            <th class="col-1">1. Como Está Atualmente</th>
+            <th class="col-2">2. O Que Irá Mudar</th>
+            <th class="col-3">3. Como é para Supostamente Ficar</th>
+            <th class="col-4">4. Como a Resolução Afeta o TCC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- LINHA 1: ESTORNO -->
+          <tr>
+            <td>
+              <div class="topic-title"><span class="status-pill pill-red">Falso Positivo</span> Estorno de Vendas (UC008)</div>
+              <p>O Histórico de Vendas é estritamente <strong>somente leitura</strong>. Não existe rota, botão ou query para cancelar uma venda. Porém, o roteiro QTS aprovava com "100% PASS".</p>
+            </td>
+            <td>
+              <p>Criação de endpoint transacional seguro com verificação de alçada exclusiva para <strong>Admin</strong>, confirmação de senha do gerente e obrigatoriedade de digitar o motivo do estorno.</p>
+            </td>
+            <td>
+              <p>Ao cancelar a venda, o sistema define <span class="code-inline">status='CANCELADA'</span>, estorna o estoque para o <strong>lote exato de origem</strong> e registra a movimentação em log ACID.</p>
+            </td>
+            <td class="doc-impact">
+              <strong>Impacto para Enzo &amp; Sugahara:</strong> O caso UC008 ganha prova real no software; o Sugahara ganha uma rotina brilhante para demonstrar na banca ao vivo; Dossiê §6 e fluxo de vendas harmonizados.
+            </td>
+          </tr>
+
+          <!-- LINHA 2: CUSTO MEDIO (CMP) -->
+          <tr>
+            <td>
+              <div class="topic-title"><span class="status-pill pill-red">Inexistente</span> Custo Médio Ponderado (CMP)</div>
+              <p>Na entrada de nota (<span class="code-inline">compras/functions.php</span>), o sistema simplesmente sobrescreve o custo pelo <strong>último preço da nota</strong>. Não calculava média ponderada, violando o Objetivo 3.</p>
+            </td>
+            <td>
+              <p>Implementação do cálculo real da média ponderada com trava atômica de concorrência (<span class="code-inline">FOR UPDATE</span>) e ordenação estrita dos produtos por ID crescente para erradicar deadlock.</p>
+            </td>
+            <td>
+              <p>Cálculo exato: <br/><span class="code-inline">CMP = (EstoqueAnt × CustoAnt + QtdNova × CustoNovo) ÷ EstoqueTotal</span>. Se estoque for zero ou negativo, assume o custo da nova nota fiscal.</p>
+            </td>
+            <td class="doc-impact">
+              <strong>Impacto para Cesar &amp; Nikolas:</strong> O Objetivo Específico 3 e a pergunta Q03 do TCC são 100% cumpridos no código; o Nikolas adiciona <span class="code-inline">custo_anterior</span> no DER para viabilizar cancelamento de compras.
+            </td>
+          </tr>
+
+          <!-- LINHA 3: VAZAMENTO DE CUSTO NO PDV -->
+          <tr>
+            <td>
+              <div class="topic-title"><span class="status-pill pill-yellow">Vulnerabilidade</span> Preço de Custo Visível ao Caixa</div>
+              <p>O campo <span class="code-inline">p.preco_compra</span> é serializado no JSON do catálogo JS (visível no F12 do navegador) e o redirect de bloqueio de margem exibia o custo total na URL (<span class="code-inline">?custo=...</span>).</p>
+            </td>
+            <td>
+              <p>Remoção completa de <span class="code-inline">preco_compra</span> do catálogo do PDV. A URL de bloqueio recebe parâmetro genérico (<span class="code-inline">?erro=margem_negativa</span>), sem expor números.</p>
+            </td>
+            <td>
+              <p>O caixa opera no escuro em relação às margens de lucro e custos de atacado. O custo e a tentativa de venda no prejuízo são gravados exclusivamente no log interno do servidor.</p>
+            </td>
+            <td class="doc-impact">
+              <strong>Impacto para Cesar &amp; Enzo:</strong> A tese de sigilo comercial e a regra de RBAC ("Caixa nunca vê preço de compra") deixam de ser promessas furadas e viram segurança técnica auditada na monografia.
+            </td>
+          </tr>
+
+          <!-- LINHA 4: CUPOM E PRIVACIDADE LGPD -->
+          <tr>
+            <td>
+              <div class="topic-title"><span class="status-pill pill-yellow">Falha de Acesso</span> Cupons e CPF Expostos (IDOR)</div>
+              <p>Qualquer operador de caixa autenticado conseguia digitar <span class="code-inline">cupom.php?venda_id=X</span> pela URL e visualizar o histórico de vendas de outros caixas e CPFs/CNPJs de clientes.</p>
+            </td>
+            <td>
+              <p>Restrição de escopo por sessão: perfil caixa só acessa cupons emitidos por ele próprio na data de hoje (<span class="code-inline">CURDATE()</span>). Painel <span class="code-inline">nfce.php</span> restrito a administradores.</p>
+            </td>
+            <td>
+              <p>Tentativas de acesso a cupons fora de alçada retornam HTTP 404. O CPF do cliente impresso no cupom do caixa passa a exibir máscara parcial de proteção (<span class="code-inline">***.123.456-**</span>).</p>
+            </td>
+            <td class="doc-impact">
+              <strong>Impacto para Douglas &amp; Enzo:</strong> O capítulo de Segurança e Governança LGPD da monografia passa a demonstrar proteção efetiva contra Insecure Direct Object References (OWASP Top 10).
+            </td>
+          </tr>
+
+          <!-- LINHA 5: DRE E LUCRO REAL -->
+          <tr>
+            <td>
+              <div class="topic-title"><span class="status-pill pill-yellow">Erro Contábil</span> DRE Retroativo e sem Descontos</div>
+              <p>O DRE calculava lucro sobre o custo atual da tabela de produtos (distorcendo vendas passadas) e ignorava os descontos globais dados no caixa, gerando lucro inflado.</p>
+            </td>
+            <td>
+              <p>Adição de <span class="code-inline">custo_unitario</span> (snapshot na hora da venda) e <span class="code-inline">desconto_rateado</span> por item em <span class="code-inline">vendas_itens</span>, rateado no centavo com resto na última linha.</p>
+            </td>
+            <td>
+              <p>O DRE calcula o lucro fidedigno: <br/><span class="code-inline">Lucro = ∑ (Qtd × (Preço - Custo) - DescontoRateado)</span>. O faturamento líquido bate no centavo com o caixa recebido.</p>
+            </td>
+            <td class="doc-impact">
+              <strong>Impacto para Nikolas &amp; Douglas:</strong> Nikolas defende com orgulho a denormalização histórica no DER (snapshot em 3FN); os demonstrativos financeiros do TCC tornam-se inatacáveis pela banca.
+            </td>
+          </tr>
+
+          <!-- LINHA 6: PEPS VS FEFO -->
+          <tr>
+            <td>
+              <div class="topic-title"><span class="status-pill pill-blue">Terminologia</span> Classificação PEPS vs. FEFO</div>
+              <p>O código baixa lotes por <span class="code-inline">ORDER BY data_validade ASC</span> (vence primeiro sai primeiro), mas a documentação inteira chamava erroneamente de "PEPS/FIFO estrito".</p>
+            </td>
+            <td>
+              <p>Manutenção da regra do código (que é perfeita para papelaria) e correção cirúrgica da terminologia conceitual em todos os documentos e diagramas do projeto.</p>
+            </td>
+            <td>
+              <p>Sistema e documentação harmonizados com o termo logístico correto: <strong>FEFO (First Expired, First Out / PVPS)</strong>, com PEPS como critério de desempate por data de entrada.</p>
+            </td>
+            <td class="doc-impact">
+              <strong>Impacto para Enzo:</strong> Substituição em 14 documentos da pasta docs/. Elimina uma armadilha fatal onde qualquer professor de logística ou administração pontuaria o grupo negativamente.
+            </td>
+          </tr>
+
+          <!-- LINHA 7: BACKUP CONSISTENTE -->
+          <tr>
+            <td>
+              <div class="topic-title"><span class="status-pill pill-blue">Integridade</span> Backup Iterativo em PHP</div>
+              <p>O botão de backup gerava o arquivo SQL iterando tabela por tabela via PHP sem transação. Vendas simultâneas durante o download geravam risco de chaves órfãs.</p>
+            </td>
+            <td>
+              <p>Inclusão de <span class="code-inline">START TRANSACTION WITH CONSISTENT SNAPSHOT</span> no início do script de dump e encerramento com <span class="code-inline">COMMIT</span>.</p>
+            </td>
+            <td>
+              <p>Backup em 1-clique gera um dump SQL consistente e atômico, imune a interferências de vendas ou compras ocorrendo no exato momento da exportação.</p>
+            </td>
+            <td class="doc-impact">
+              <strong>Impacto para Douglas &amp; Nikolas:</strong> A seção de Política de Contingência e Backups da monografia ganha conformidade com snapshots ACID consistentes sem travar o banco.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </foreignObject>
+</svg>

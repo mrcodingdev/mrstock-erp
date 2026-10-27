@@ -575,8 +575,17 @@ $protocoloAut   = '13526' . str_pad((string)$venda['id'], 10, '0', STR_PAD_LEFT)
             <div class="consumer-info">
                 <strong>CONSUMIDOR:</strong> 
                 <?= !empty($venda['cliente_nome']) ? htmlspecialchars($venda['cliente_nome'], ENT_QUOTES, 'UTF-8') : 'NÃO IDENTIFICADO' ?>
-                <?php if (!empty($venda['cliente_documento'])): ?>
-                    <br><strong>CPF/CNPJ:</strong> <?= htmlspecialchars($venda['cliente_documento'], ENT_QUOTES, 'UTF-8') ?>
+                <?php if (!empty($venda['cliente_documento'])): 
+                    $docLimpo = preg_replace('/\D/', '', $venda['cliente_documento']);
+                    if (strlen($docLimpo) === 11) {
+                        $docMascarado = substr($docLimpo, 0, 3) . '.***.***-' . substr($docLimpo, -2);
+                    } elseif (strlen($docLimpo) === 14) {
+                        $docMascarado = substr($docLimpo, 0, 2) . '.***.***/****-' . substr($docLimpo, -2);
+                    } else {
+                        $docMascarado = htmlspecialchars($venda['cliente_documento'], ENT_QUOTES, 'UTF-8');
+                    }
+                ?>
+                    <br><strong>CPF/CNPJ:</strong> <?= $docMascarado ?>
                 <?php endif; ?>
             </div>
 

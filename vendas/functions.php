@@ -217,7 +217,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $pdvTravaMargem = get_app_config($pdo, 'pdv_trava_margem', 'aviso');
                 if ($pdvTravaMargem === 'bloquear' && $totalLiquido < $custoTotal) {
                     if ($pdo->inTransaction()) { $pdo->rollBack(); }
-                    header("Location: " . BASE_URL . "/vendas/pdv.php?erro=margem_negativa&custo=" . $custoTotal . "&total=" . $totalLiquido);
+                    header("Location: " . BASE_URL . "/vendas/pdv.php?erro=margem_negativa");
                     exit;
                 }
 

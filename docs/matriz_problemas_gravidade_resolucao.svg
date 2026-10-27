@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1340" width="1600" height="1340">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+      * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+      .bg { fill: #f8fafc; }
+      .header-box { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: #ffffff; padding: 28px 36px; border-radius: 12px; }
+      .badge-tag { display: inline-block; padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; border-radius: 6px; text-transform: uppercase; }
+      .table-container { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+      th { background: #f1f5f9; color: #334155; font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; padding: 14px 16px; text-align: left; border-bottom: 2px solid #cbd5e1; }
+      td { padding: 15px 16px; font-size: 12.5px; line-height: 1.48; color: #1e293b; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+      tr:last-child td { border-bottom: none; }
+      tr:nth-child(even) td { background-color: #fafafa; }
+      .sev-badge { display: inline-flex; align-items: center; justify-content: center; padding: 3px 8px; font-size: 11px; font-weight: 700; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+      .sev-critica { background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; }
+      .sev-alta { background: #ffedd5; color: #c2410c; border: 1px solid #fb923c; }
+      .sev-media { background: #fef9c3; color: #a16207; border: 1px solid #facc15; }
+      .code-inline { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: #e2e8f0; padding: 1px 4px; border-radius: 3px; font-size: 11.5px; color: #0f172a; }
+      .col-prob { width: 18%; font-weight: 600; color: #0f172a; }
+      .col-sev { width: 9%; text-align: center; }
+      .col-det { width: 27%; }
+      .col-res { width: 23%; }
+      .col-doc { width: 23%; color: #475569; }
+      .col-doc strong { color: #0f172a; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1340" class="bg"/>
+
+  <foreignObject x="30" y="30" width="1540" height="1280">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <div class="header-box">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span class="badge-tag" style="background: #ef4444; color: #ffffff; margin-bottom: 8px;">Auditoria de Riscos &amp; Rastreabilidade</span>
+            <h1 style="font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Matriz de Problemas Atuais, Gravidade, Detalhes, Resolução e Impacto no TCC</h1>
+            <p style="font-size: 14px; color: #c7d2fe; margin-top: 4px;">Inventário de fragilidades identificadas pelo auditor Claude, sua gravidade real perante a banca e o plano de ação de correção.</p>
+          </div>
+          <div style="text-align: right;">
+            <span style="display: inline-block; padding: 6px 12px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 12px; font-weight: 600; border: 1px solid rgba(255,255,255,0.2);">7 Fragilidades Mapeadas</span>
+          </div>
+        </div>
+      </div>
+
+      <table class="table-container">
+        <thead>
+          <tr>
+            <th class="col-prob">1. Problema Atual</th>
+            <th class="col-sev" style="text-align: center;">2. Gravidade</th>
+            <th class="col-det">3. Detalhes do Problema &amp; Como Isso Afeta</th>
+            <th class="col-res">4. Resolução Técnica Planejada</th>
+            <th class="col-doc">5. Como Afeta a Documentação do TCC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- ITEM 1 -->
+          <tr>
+            <td class="col-prob">
+              Testes Falsos no QTS (UC008 Estorno e UC014 CMP)
+            </td>
+            <td class="col-sev">
+              <span class="sev-badge sev-critica">CRÍTICA</span>
+            </td>
+            <td class="col-det">
+              O roteiro QTS aprovou com 100% PASS duas funções inexistentes no código. Se a banca pedir: <em>"Mostrem o cancelamento da venda funcionando"</em>, a demo ao vivo falha imediatamente, destruindo a credibilidade do grupo.
+            </td>
+            <td class="col-res">
+              Construir a rotina transacional de estorno com recomposição de estoque e implementar a fórmula de CMP nas compras, eliminando a discrepância entre software e teste.
+            </td>
+            <td class="col-doc">
+              O roteiro de testes (QTS) do Sugahara passa por reexecução real com registro de evidências e prints; o caso de teste deixa de ser ficção e vira prova irrefutável.
+            </td>
+          </tr>
+
+          <!-- ITEM 2 -->
+          <tr>
+            <td class="col-prob">
+              Vazamento Duplo de Preço de Custo no Caixa
+            </td>
+            <td class="col-sev">
+              <span class="sev-badge sev-alta">ALTA</span>
+            </td>
+            <td class="col-det">
+              O custo unitário viajava no JSON do PDV (<span class="code-inline">F12</span>) e o redirect de margem negativa expunha o custo total na barra de endereço (<span class="code-inline">?custo=45.20</span>). O operador de caixa podia descobrir a margem real de lucro da loja.
+            </td>
+            <td class="col-res">
+              Remover <span class="code-inline">p.preco_compra</span> da consulta do catálogo e substituir o redirect por mensagem genérica, registrando valores sensíveis apenas no log interno.
+            </td>
+            <td class="col-doc">
+              A matriz de controle de acesso (RBAC) e as regras do cliente (Sueli &amp; Osnir) tornam-se 100% verídicas na monografia e no Manual de Operação do Caixa.
+            </td>
+          </tr>
+
+          <!-- ITEM 3 -->
+          <tr>
+            <td class="col-prob">
+              Acesso Indevido a Cupons e CPF de Terceiros (IDOR)
+            </td>
+            <td class="col-sev">
+              <span class="sev-badge sev-alta">ALTA</span>
+            </td>
+            <td class="col-det">
+              Falta de validação de dono e data em <span class="code-inline">cupom.php</span>. Qualquer caixa podia trocar o parâmetro <span class="code-inline">?venda_id=1</span> e ver dados pessoais e CPF de clientes de outros operadores e de datas passadas (infração LGPD).
+            </td>
+            <td class="col-res">
+              Restringir caixa a abrir apenas cupons de sua autoria na data atual com CPF parcialmente mascarado (<span class="code-inline">***.123.456-**</span>). Painel geral de cupons restrito a Administradores.
+            </td>
+            <td class="col-doc">
+              O capítulo de Segurança e Privacidade LGPD ganha fundamentação prática demonstrando conformidade com as diretrizes da ANPD e mitigação da vulnerabilidade IDOR (OWASP A01:2021).
+            </td>
+          </tr>
+
+          <!-- ITEM 4 -->
+          <tr>
+            <td class="col-prob">
+              DRE com Lucro Distorcido e Falso Faturamento
+            </td>
+            <td class="col-sev">
+              <span class="sev-badge sev-alta">ALTA</span>
+            </td>
+            <td class="col-det">
+              O DRE calculava lucro com o preço de custo atual do produto (alterando retroativamente vendas antigas) e ignorava o desconto global concedido na venda. O lucro gerencial nunca batia com o caixa recebido.
+            </td>
+            <td class="col-res">
+              Adicionar snapshot de <span class="code-inline">custo_unitario</span> e <span class="code-inline">desconto_rateado</span> na tabela <span class="code-inline">vendas_itens</span>, deduzindo a parcela exata de desconto no lucro de cada linha.
+            </td>
+            <td class="col-doc">
+              Os gráficos de DRE, faturamento e Curva ABC nos relatórios do Enzo e na apresentação do Cesar tornam-se auditáveis e matematicamente congruentes com o fluxo financeiro.
+            </td>
+          </tr>
+
+          <!-- ITEM 5 -->
+          <tr>
+            <td class="col-prob">
+              Risco de Deadlock entre Venda e Entrada de Compras
+            </td>
+            <td class="col-sev">
+              <span class="sev-badge sev-alta">ALTA</span>
+            </td>
+            <td class="col-det">
+              O PDV trava linhas por ID crescente, mas a entrada de compra travava na ordem aleatória da nota. Venda e compra simultâneas envolvendo os mesmos produtos podiam travar o MySQL em cruz (erro 1213).
+            </td>
+            <td class="col-res">
+              Ordenar produtos por <span class="code-inline">id ASC</span> em todas as operações com trava (<span class="code-inline">FOR UPDATE</span>) e encapsular em helper com até 3 tentativas (retry) em erros 1213/1205.
+            </td>
+            <td class="col-doc">
+              Douglas descreve a rotina de transações atômicas com tratamento formal de concorrência e retry no capítulo de Arquitetura de Software do TCC.
+            </td>
+          </tr>
+
+          <!-- ITEM 6 -->
+          <tr>
+            <td class="col-prob">
+              Inconsistência Conceitual PEPS vs. FEFO
+            </td>
+            <td class="col-sev">
+              <span class="sev-badge sev-media">MÉDIA</span>
+            </td>
+            <td class="col-det">
+              A regra de negócio ordena lotes por data de vencimento mais próxima, o que define a estratégia <strong>FEFO</strong>. A documentação jurava "PEPS/FIFO estrito", criando uma contradição primária.
+            </td>
+            <td class="col-res">
+              Manter o código atual (que está correto) e atualizar a redação dos documentos, explicando que o FEFO prioriza validades e o PEPS serve de desempate por entrada.
+            </td>
+            <td class="col-doc">
+              Enzo harmoniza todos os 14 documentos de texto, o Dossiê, o resumo executivo e os slides de apresentação, blindando o grupo contra perguntas de banca em logística.
+            </td>
+          </tr>
+
+          <!-- ITEM 7 -->
+          <tr>
+            <td class="col-prob">
+              Backup SQL sem Consistência Transacional (Snapshot)
+            </td>
+            <td class="col-sev">
+              <span class="sev-badge sev-media">MÉDIA</span>
+            </td>
+            <td class="col-det">
+              O gerador de backup em PHP iterava tabela por tabela sem trava transacional. Se uma venda ocorresse no meio do processo, o arquivo exportado podia conter tabelas descompassadas.
+            </td>
+            <td class="col-res">
+              Iniciar o script de exportação com <span class="code-inline">START TRANSACTION WITH CONSISTENT SNAPSHOT</span> e finalizar com <span class="code-inline">COMMIT</span>, gerando dump íntegro.
+            </td>
+            <td class="col-doc">
+              A seção de Política de Backup e Continuidade de Negócios na monografia passa a documentar um procedimento técnico seguro e compatível com ACID em bancos relacionais.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </foreignObject>
+</svg>

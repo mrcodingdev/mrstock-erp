@@ -34,8 +34,10 @@ if (isset($_GET['acao']) && $_GET['acao'] === 'exportar_backup_sql') {
     echo "-- Data de Geração: " . date('d/m/Y H:i:s') . "\n";
     echo "-- Gerado por: " . $userName . " (" . $userRole . ")\n";
     echo "-- ============================================================================\n\n";
+    echo "-- Transação Atômica: START TRANSACTION WITH CONSISTENT SNAPSHOT\n\n";
     echo "SET FOREIGN_KEY_CHECKS=0;\nSET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\nSET NAMES utf8mb4;\n\n";
 
+    $pdo->exec("START TRANSACTION WITH CONSISTENT SNAPSHOT;");
     $tabelas = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
 
     foreach ($tabelas as $tab) {
@@ -67,6 +69,7 @@ if (isset($_GET['acao']) && $_GET['acao'] === 'exportar_backup_sql') {
         }
     }
 
+    $pdo->exec("COMMIT;");
     echo "SET FOREIGN_KEY_CHECKS=1;\n";
     exit;
 }
