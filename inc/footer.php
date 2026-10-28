@@ -157,8 +157,42 @@
             }
         });
 
-        // 4. Ajuste de Z-Index e Overflow para Dropdowns em Linhas de Tabelas
+        // 4. Inicialização Robusta e Suporte a Dropdowns em Tabelas com Popper Fixed Strategy
+        function initTableDropdowns() {
+            if (typeof bootstrap !== 'undefined' && bootstrap.Dropdown) {
+                const tableDropdownToggles = document.querySelectorAll(
+                    '.table [data-bs-toggle="dropdown"], .table-responsive [data-bs-toggle="dropdown"]'
+                );
+                tableDropdownToggles.forEach(function(toggleEl) {
+                    bootstrap.Dropdown.getOrCreateInstance(toggleEl, {
+                        popperConfig: function(defaultBsPopperConfig) {
+                            return Object.assign({}, defaultBsPopperConfig, {
+                                strategy: 'fixed'
+                            });
+                        }
+                    });
+                });
+            }
+        }
+        initTableDropdowns();
+
         document.addEventListener('show.bs.dropdown', function(e) {
+            // Garante popperConfig fixed mesmo para dropdowns adicionados dinamicamente
+            if (typeof bootstrap !== 'undefined' && bootstrap.Dropdown) {
+                if (e.target.closest('.table, .table-responsive')) {
+                    const inst = bootstrap.Dropdown.getInstance(e.target);
+                    if (!inst || !inst._config || !inst._config.popperConfig) {
+                        bootstrap.Dropdown.getOrCreateInstance(e.target, {
+                            popperConfig: function(defaultBsPopperConfig) {
+                                return Object.assign({}, defaultBsPopperConfig, {
+                                    strategy: 'fixed'
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+
             const tr = e.target.closest('tr');
             if (tr) {
                 tr.style.zIndex = '1050';
@@ -182,6 +216,10 @@
             const tableResp = e.target.closest('.table-responsive');
             if (tableResp) {
                 tableResp.classList.remove('dropdown-active');
+            }
+            const card = e.target.closest('.so-card, .card');
+            if (card) {
+                card.style.overflow = '';
             }
         });
     });

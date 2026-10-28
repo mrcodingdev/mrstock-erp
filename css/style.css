@@ -1103,6 +1103,8 @@ body.sidebar-collapsed .main-panel {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
 }
 
 .so-card-title {
@@ -1201,22 +1203,56 @@ body.sidebar-collapsed .main-panel {
 .so-table tbody tr:nth-child(10), .table tbody tr:nth-child(10) { animation-delay: 0.30s; }
 .so-table tbody tr:nth-child(n+11), .table tbody tr:nth-child(n+11) { animation-delay: 0.30s; }
 
-/* Prevenção Absoluta de Corte de Dropdowns e Scroll Vertical Indesejado em Tabelas */
-.so-card-body .table-responsive,
-.card-body .table-responsive {
-  min-height: 240px;
+/* Prevenção Universal de Quebra e Contenção Estrita de Tabelas (Zoom & Responsividade) */
+.so-card,
+.card {
+  min-width: 0;
+  max-width: 100%;
+  position: relative;
 }
 
-@media (min-width: 992px) {
-  .so-card-body .table-responsive,
-  .card-body .table-responsive,
-  .so-card .table-responsive {
-    overflow: visible;
-  }
+.so-card-body,
+.card-body {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.row > [class*="col-"] {
+  min-width: 0;
+}
+
+.so-card-body .table-responsive,
+.card-body .table-responsive,
+.so-card .table-responsive,
+.table-responsive {
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
 .table-responsive.dropdown-active {
   overflow: visible !important;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* Ajuste de Stacking Context para Dropdowns de Ações em Tabelas */
@@ -2108,8 +2144,8 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 
 .so-card-body .table-responsive,
 .card-body .table-responsive {
-  min-height: 280px;
-  padding-bottom: 70px;
+  min-height: auto;
+  padding-bottom: 0;
 }
 
 .so-footer-gestaoclick__container {

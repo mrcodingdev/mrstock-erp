@@ -40,7 +40,7 @@ if ($isLoggedIn) {
     <link href="<?= BASE_URL ?>/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/inter.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.min.css?v=2.2.5">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/style.min.css?v=2.2.7">
     <link rel="icon" href="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" type="image/x-icon">
 
     <style>
