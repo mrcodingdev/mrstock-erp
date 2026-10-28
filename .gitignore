@@ -34,6 +34,7 @@ scripts/*
 !scripts/seed_demo_tcc.php
 !scripts/verify_demo_data.php
 !scripts/inspect_october.php
+!scripts/run_seed_hostinger.php
 graphify-out/
 node_modules/
 

@@ -97,7 +97,7 @@ $sql = "
     LEFT JOIN cupons_fiscais cf ON cf.venda_id = v.id
     WHERE $whereSql
     GROUP BY v.id 
-    ORDER BY v.data_venda DESC
+    ORDER BY v.id DESC, v.data_venda DESC
     LIMIT :limit OFFSET :offset
 ";
 

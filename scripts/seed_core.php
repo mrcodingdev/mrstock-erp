@@ -632,14 +632,19 @@ function executarSeedingTCC(PDO $pdo, bool $isWeb = false): array {
             $stmtLog->execute([1, 'LOGOUT', "Sessão encerrada com sucesso pelo usuário 'admin'", 'usuarios', '127.0.0.1', $timeLogoutAdmin]);
         }
 
-        // --- LOOP 2: MÊS 10 (OUTUBRO/2026 - 01/10/2026 a 28/10/2026) ---
+        // --- LOOP 2: MÊS 10 (OUTUBRO/2026 - 01/10/2026 a 27/10/2026) ---
         // Implementa o algoritmo de alta fidelidade para 4 semanas balanceadas e 10 categorias decrescentes
         $diasOutubroPlan = [];
-        for ($d = 1; $d <= 28; $d++) {
+        for ($d = 1; $d <= 27; $d++) {
             $dateStr = sprintf('2026-10-%02d', $d);
             $dw = (int)date('N', strtotime($dateStr));
             
-            if ($dw === 1) { // Segunda mais calma
+            if ($d === 27) { // Terça-feira 27/10 (Véspera da Banca): Fechamento histórico com 10 vendas para totalizar exatamente 579 vendas
+                $numSales = 10;
+                $minT = 650.0;
+                $maxT = 1100.0;
+                $targetRev = 820.0;
+            } elseif ($dw === 1) { // Segunda mais calma
                 $numSales = mt_rand(2, 3);
                 $minT = 180.0;
                 $maxT = 300.0;
@@ -672,7 +677,7 @@ function executarSeedingTCC(PDO $pdo, bool $isWeb = false): array {
             ];
         }
 
-        // Simula e calibra as vendas dos 28 dias de Outubro
+        // Simula e calibra as vendas dos 27 dias de Outubro
         $vendasPorDiaOutubro = [];
         foreach ($diasOutubroPlan as $dateStr => $info) {
             $minT = $info['min_target'];
@@ -809,8 +814,8 @@ function executarSeedingTCC(PDO $pdo, bool $isWeb = false): array {
             ];
         }
 
-        // Calibração de precisão no dia 28/10 (Qua) para garantir 100% das faixas e ordem estrita
-        $date28 = '2026-10-28';
+        // Calibração de precisão no dia 27/10 para garantir 100% das faixas e ordem estrita de Outubro
+        $dateCalib = '2026-10-27';
         foreach ($faixasMinOutubro as $catId => $fMin) {
             if ($faturadoCatOutubro[$catId] < $fMin) {
                 $deficit = $fMin + 20.0 - $faturadoCatOutubro[$catId];
@@ -820,12 +825,12 @@ function executarSeedingTCC(PDO $pdo, bool $isWeb = false): array {
                 if ($qAdd < 1) $qAdd = 1;
                 $sub = $qAdd * $prod['preco_venda'];
 
-                $lastSaleIdx = count($vendasPorDiaOutubro[$date28]['sales']) - 1;
+                $lastSaleIdx = count($vendasPorDiaOutubro[$dateCalib]['sales']) - 1;
 
-                // Mantém o teto do dia 28/10 em <= 760.0
-                while ($vendasPorDiaOutubro[$date28]['rev'] + $sub > 760.0) {
+                // Mantém o teto do dia 27/10 em <= 1200.0
+                while ($vendasPorDiaOutubro[$dateCalib]['rev'] + $sub > 1200.0) {
                     $freed = false;
-                    foreach ($vendasPorDiaOutubro[$date28]['sales'] as $sIdx => &$sRef) {
+                    foreach ($vendasPorDiaOutubro[$dateCalib]['sales'] as $sIdx => &$sRef) {
                         foreach ($sRef['items'] as $pRem => &$itRem) {
                             $cRem = $itRem['cat'];
                             if ($cRem !== $catId && $faturadoCatOutubro[$cRem] - $itRem['preco'] >= $faixasMinOutubro[$cRem]) {
@@ -835,7 +840,7 @@ function executarSeedingTCC(PDO $pdo, bool $isWeb = false): array {
                                     unset($sRef['items'][$pRem]);
                                 }
                                 $sRef['total'] -= $itRem['preco'];
-                                $vendasPorDiaOutubro[$date28]['rev'] -= $itRem['preco'];
+                                $vendasPorDiaOutubro[$dateCalib]['rev'] -= $itRem['preco'];
                                 $faturadoCatOutubro[$cRem] -= $itRem['preco'];
                                 $freed = true;
                                 break 2;
@@ -847,13 +852,13 @@ function executarSeedingTCC(PDO $pdo, bool $isWeb = false): array {
                     if (!$freed) break;
                 }
 
-                if (isset($vendasPorDiaOutubro[$date28]['sales'][$lastSaleIdx]['items'][$pid])) {
-                    $vendasPorDiaOutubro[$date28]['sales'][$lastSaleIdx]['items'][$pid]['qtd'] += $qAdd;
+                if (isset($vendasPorDiaOutubro[$dateCalib]['sales'][$lastSaleIdx]['items'][$pid])) {
+                    $vendasPorDiaOutubro[$dateCalib]['sales'][$lastSaleIdx]['items'][$pid]['qtd'] += $qAdd;
                 } else {
-                    $vendasPorDiaOutubro[$date28]['sales'][$lastSaleIdx]['items'][$pid] = ['pid' => $pid, 'cat' => $catId, 'qtd' => $qAdd, 'preco' => $prod['preco_venda']];
+                    $vendasPorDiaOutubro[$dateCalib]['sales'][$lastSaleIdx]['items'][$pid] = ['pid' => $pid, 'cat' => $catId, 'qtd' => $qAdd, 'preco' => $prod['preco_venda']];
                 }
-                $vendasPorDiaOutubro[$date28]['sales'][$lastSaleIdx]['total'] += $sub;
-                $vendasPorDiaOutubro[$date28]['rev'] += $sub;
+                $vendasPorDiaOutubro[$dateCalib]['sales'][$lastSaleIdx]['total'] += $sub;
+                $vendasPorDiaOutubro[$dateCalib]['rev'] += $sub;
                 $faturadoCatOutubro[$catId] += $sub;
             }
         }
@@ -867,14 +872,12 @@ function executarSeedingTCC(PDO $pdo, bool $isWeb = false): array {
 
             $timestamps = [];
             if ($dateStr === '2026-10-27') {
-                $fixedTimes = ['09:14:22', '10:45:10', '12:30:45', '14:15:33', '16:50:18', '17:35:50'];
+                $fixedTimes = [
+                    '08:45:10', '09:30:22', '10:15:45', '11:20:18', '12:35:50',
+                    '13:50:33', '14:40:12', '15:25:05', '16:30:40', '17:45:20'
+                ];
                 for ($i = 0; $i < $numS; $i++) {
-                    $timestamps[] = $dateStr . ' ' . ($fixedTimes[$i] ?? sprintf('%02d:%02d:%02d', 11 + $i, mt_rand(10, 50), mt_rand(10, 50)));
-                }
-            } elseif ($dateStr === '2026-10-28') {
-                $fixedTimes = ['08:45:12', '10:15:30', '11:40:15', '14:20:00', '16:35:22', '17:40:10'];
-                for ($i = 0; $i < $numS; $i++) {
-                    $timestamps[] = $dateStr . ' ' . ($fixedTimes[$i] ?? sprintf('%02d:%02d:%02d', 9 + $i, mt_rand(10, 50), mt_rand(10, 50)));
+                    $timestamps[] = $dateStr . ' ' . ($fixedTimes[$i] ?? sprintf('%02d:%02d:%02d', 8 + (int)($i * 0.7), mt_rand(10, 50), mt_rand(10, 50)));
                 }
             } else {
                 $startHour = ($dw === 7) ? 9 : 8;
@@ -952,6 +955,45 @@ function executarSeedingTCC(PDO $pdo, bool $isWeb = false): array {
             $stmtLog->execute([2, 'LOGOUT', "Sessão encerrada com sucesso pelo operador 'caixa'", 'usuarios', '127.0.0.1', $timeLogoutCaixa]);
             $stmtLog->execute([1, 'LOGOUT', "Sessão encerrada com sucesso pelo usuário 'admin'", 'usuarios', '127.0.0.1', $timeLogoutAdmin]);
         }
+
+        // ── 6.1 VENDA REAL DO DIA DA BANCA / DEMONSTRAÇÃO (28/10/2026) ────────────
+        // Venda #580 realizada no PDV da Papelaria Real às 06:33:55
+        // Produto: Aquarela em Pastilha 12 Cores Pentel Arts (R$ 31,90 em Dinheiro)
+        $distinctDays++; // 28/10/2026 (120º dia consecutivo)
+        $dataVendaReal = '2026-10-28 06:33:55';
+        $vendaRealId = 580;
+
+        $stmtVenda->execute([$vendaRealId, null, $dataVendaReal, 31.90, 'DINHEIRO']);
+        $stmtItemVenda->execute([$vendaRealId, 45, 1, 31.90]);
+
+        $stmtMov->execute([
+            45,
+            'saida_venda',
+            1,
+            $dataVendaReal,
+            "Venda PDV #{$vendaRealId}"
+        ]);
+        $vendidosPorProduto[45] += 1;
+
+        $chaveNfceReal = '35261004148243000116650010000005809812475112';
+        $stmtCupom->execute([$vendaRealId, $chaveNfceReal, $dataVendaReal]);
+
+        $stmtLog->execute([
+            2, // Caixa
+            'VENDA_PDV',
+            "Venda PDV #{$vendaRealId} finalizada no valor de R$ 31.90 via DINHEIRO",
+            'vendas',
+            '127.0.0.1',
+            $dataVendaReal
+        ]);
+
+        $totalFaturamento += 31.90;
+        $totalVendasCount++;
+        $faturadoCatOutubro[9] += 31.90;
+
+        // Logs de autenticação do dia da banca (28/10/2026 - Manhã em andamento)
+        $stmtLog->execute([1, 'LOGIN_SUCESSO', "Usuário 'admin' autenticado com sucesso no sistema", 'usuarios', '127.0.0.1', '2026-10-28 06:00:15']);
+        $stmtLog->execute([2, 'LOGIN_SUCESSO', "Operador 'caixa' autenticado no terminal PDV", 'usuarios', '127.0.0.1', '2026-10-28 06:15:30']);
 
         $logMsg(" -> Total de Vendas geradas: {$totalVendasCount} vendas ao longo de {$distinctDays} dias consecutivos.");
         $logMsg(" -> Faturamento Acumulado: R$ " . number_format($totalFaturamento, 2, ',', '.'));
@@ -1094,6 +1136,7 @@ function executarSeedingTCC(PDO $pdo, bool $isWeb = false): array {
         }
         $logMsg(" -> 20 Lotes cadastrados com integridade exata (produtos.quantidade == SUM(lotes.quantidade)).");
 
+        $pdo->exec("ALTER TABLE vendas AUTO_INCREMENT = 581;");
         $pdo->exec("SET FOREIGN_KEY_CHECKS = 1;");
 
         $logMsg("\n========================================================");

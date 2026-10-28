@@ -71,7 +71,7 @@ $stmtUltimasVendas = $pdo->query("
            COALESCE(c.nome, 'Consumidor Final') AS cliente_nome 
     FROM vendas v 
     LEFT JOIN clientes c ON v.cliente_id = c.id 
-    ORDER BY v.data_venda DESC, v.id DESC 
+    ORDER BY v.id DESC 
     LIMIT 5
 ");
 $ultimasVendas = $stmtUltimasVendas->fetchAll();
