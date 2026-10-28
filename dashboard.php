@@ -83,7 +83,7 @@ if (!function_exists('render_forma_pagamento')) {
         if (strpos($formaUpper, 'DINHEIRO') !== false) {
             return '<span class="text-dark d-inline-flex align-items-center gap-1"><i class="fas fa-money-bill-wave text-success"></i> <span>Dinheiro</span></span>';
         } elseif (strpos($formaUpper, 'PIX') !== false) {
-            return '<span class="text-dark d-inline-flex align-items-center gap-1"><i class="fas fa-bolt text-warning"></i> <span>PIX</span></span>';
+            return '<span class="text-dark d-inline-flex align-items-center gap-1">' . pix_icon_svg(14, 14) . ' <span>PIX</span></span>';
         } elseif (strpos($formaUpper, 'CRÉDITO') !== false || strpos($formaUpper, 'CREDITO') !== false) {
             return '<span class="text-dark d-inline-flex align-items-center gap-1"><i class="fas fa-credit-card text-primary"></i> <span>Cartão de Crédito</span></span>';
         } elseif (strpos($formaUpper, 'DÉBITO') !== false || strpos($formaUpper, 'DEBITO') !== false) {

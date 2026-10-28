@@ -2482,3 +2482,11 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
 @keyframes mrSpin {
   to { transform: rotate(360deg); }
 }
+
+/* Logotipo Vetorial Oficial PIX (Banco Central do Brasil) */
+.icon-pix {
+  vertical-align: -0.15em;
+  display: inline-block;
+  flex-shrink: 0;
+}
+

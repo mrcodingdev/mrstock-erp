@@ -113,22 +113,26 @@ $vendas = $stmt->fetchAll();
 /**
  * Renderiza forma de pagamento em texto limpo com ícone contextual colorido
  */
-function render_forma_pagamento(string $forma): string {
-    $formaUpper = mb_strtoupper(trim($forma), 'UTF-8');
-    if (strpos($formaUpper, 'DINHEIRO') !== false) {
-        return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-money-bill-wave text-success"></i><span>Dinheiro</span></span>';
-    } elseif (strpos($formaUpper, 'PIX') !== false) {
-        return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-bolt text-warning"></i><span>PIX</span></span>';
-    } elseif (strpos($formaUpper, 'CRÉDITO') !== false || strpos($formaUpper, 'CREDITO') !== false) {
-        return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-credit-card text-primary"></i><span>Cartão de Crédito</span></span>';
-    } elseif (strpos($formaUpper, 'DÉBITO') !== false || strpos($formaUpper, 'DEBITO') !== false) {
-        return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-credit-card text-info"></i><span>Cartão de Débito</span></span>';
+if (!function_exists('render_forma_pagamento')) {
+    function render_forma_pagamento(string $forma): string {
+        $formaUpper = mb_strtoupper(trim($forma), 'UTF-8');
+        if (strpos($formaUpper, 'DINHEIRO') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-money-bill-wave text-success"></i><span>Dinheiro</span></span>';
+        } elseif (strpos($formaUpper, 'PIX') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-2">' . pix_icon_svg(14, 14) . ' <span>PIX</span></span>';
+        } elseif (strpos($formaUpper, 'CRÉDITO') !== false || strpos($formaUpper, 'CREDITO') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-credit-card text-primary"></i><span>Cartão de Crédito</span></span>';
+        } elseif (strpos($formaUpper, 'DÉBITO') !== false || strpos($formaUpper, 'DEBITO') !== false) {
+            return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-credit-card text-info"></i><span>Cartão de Débito</span></span>';
+        }
+        return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-wallet text-secondary"></i><span>' . htmlspecialchars($forma, ENT_QUOTES, 'UTF-8') . '</span></span>';
     }
-    return '<span class="text-dark d-inline-flex align-items-center gap-2"><i class="fas fa-wallet text-secondary"></i><span>' . htmlspecialchars($forma, ENT_QUOTES, 'UTF-8') . '</span></span>';
 }
 
-function render_forma_pagamento_badge(string $forma): string {
-    return render_forma_pagamento($forma);
+if (!function_exists('render_forma_pagamento_badge')) {
+    function render_forma_pagamento_badge(string $forma): string {
+        return render_forma_pagamento($forma);
+    }
 }
 
 require_once __DIR__ . '/../inc/header.php';
