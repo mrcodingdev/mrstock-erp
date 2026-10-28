@@ -82,7 +82,7 @@ if (!empty($dataFim)) {
 
 $whereSql = implode(' AND ', $whereClauses);
 
-// Ordenação: Recente (padrão) ou Severidade Crítica Implícita
+// Ordenação: Recente (padrão), Mais Antigos ou Severidade Crítica Implícita
 if ($ordem === 'severidade') {
     $orderBySql = "
         CASE 
@@ -94,6 +94,8 @@ if ($ordem === 'severidade') {
         END ASC,
         l.id DESC
     ";
+} elseif ($ordem === 'antigo') {
+    $orderBySql = "l.id ASC";
 } else {
     $orderBySql = "l.id DESC";
 }
@@ -284,14 +286,14 @@ require_once __DIR__ . '/../inc/header.php';
 ?>
 
 <!-- ══ CABEÇALHO DA PÁGINA ═══════════════════════════════════════════════════ -->
-<div class="content-header d-flex justify-content-between align-items-start mb-3 gap-3">
+<div class="content-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-3">
     <div>
         <h2 class="fw-bold text-dark m-0">
             <i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>Auditoria & Logs Operacionais
         </h2>
         <p class="text-muted m-0">Rastreabilidade completa de autenticações, vendas, movimentações de estoque e cadastros do ERP.</p>
     </div>
-    <div class="d-flex align-items-center gap-2 flex-shrink-0 no-print">
+    <div class="d-flex flex-wrap align-items-center gap-2 no-print">
         <a href="<?= BASE_URL ?>/relatorios/index.php" class="btn btn-sm btn-secondary text-white fw-semibold shadow-sm px-3 py-1">
             <i class="fa-solid fa-arrow-left me-1"></i> Relatórios
         </a>
@@ -374,7 +376,7 @@ require_once __DIR__ . '/../inc/header.php';
 
     <!-- ══ CARD DE FILTROS AVANÇADOS ═══════════════════════════════════════════ -->
     <div class="so-card mb-4">
-        <div class="so-card-header d-flex justify-content-between align-items-center">
+        <div class="so-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
             <h5 class="so-card-title text-dark m-0">
                 <i class="fa-solid fa-filter text-primary me-2"></i>Filtros de Auditoria
             </h5>
@@ -385,9 +387,9 @@ require_once __DIR__ . '/../inc/header.php';
             <?php endif; ?>
         </div>
         <div class="so-card-body">
-            <form method="GET" action="<?= BASE_URL ?>/relatorios/logs.php" class="row g-3 align-items-end">
-                <!-- Busca Textual Inteligente -->
-                <div class="col-12 col-md-3">
+            <form method="GET" action="<?= BASE_URL ?>/relatorios/logs.php" class="row g-2 align-items-end">
+                <!-- Linha 1 -->
+                <div class="col-12 col-md-4">
                     <label class="form-label text-xs fw-semibold text-muted mb-1" for="filtro_busca">Busca Inteligente</label>
                     <div class="input-group input-group-sm">
                         <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
@@ -395,8 +397,7 @@ require_once __DIR__ . '/../inc/header.php';
                     </div>
                 </div>
 
-                <!-- Filtro de Ação com Opção de Ações Críticas -->
-                <div class="col-12 col-sm-6 col-md-2">
+                <div class="col-12 col-sm-6 col-md-4">
                     <label class="form-label text-xs fw-semibold text-muted mb-1" for="filtro_acao">Tipo de Ação</label>
                     <select id="filtro_acao" name="acao" class="form-select form-select-sm">
                         <option value="">Todas as Ações</option>
@@ -409,17 +410,7 @@ require_once __DIR__ . '/../inc/header.php';
                     </select>
                 </div>
 
-                <!-- Ordenação com Severidade Implícita -->
-                <div class="col-12 col-sm-6 col-md-2">
-                    <label class="form-label text-xs fw-semibold text-muted mb-1" for="filtro_ordem">Ordenação</label>
-                    <select id="filtro_ordem" name="ordem" class="form-select form-select-sm">
-                        <option value="recente" <?= $ordem === 'recente' ? 'selected' : '' ?>>Mais Recentes (Padrão)</option>
-                        <option value="severidade" <?= $ordem === 'severidade' ? 'selected' : '' ?>>Severidade Crítica Primeiro</option>
-                    </select>
-                </div>
-
-                <!-- Filtro de Usuário -->
-                <div class="col-12 col-sm-6 col-md-2">
+                <div class="col-12 col-sm-6 col-md-4">
                     <label class="form-label text-xs fw-semibold text-muted mb-1" for="filtro_usuario">Operador / Usuário</label>
                     <select id="filtro_usuario" name="usuario_id" class="form-select form-select-sm">
                         <option value="">Todos os Operadores</option>
@@ -431,20 +422,27 @@ require_once __DIR__ . '/../inc/header.php';
                     </select>
                 </div>
 
-                <!-- Data Inicial -->
-                <div class="col-12 col-sm-6 col-md-1">
+                <!-- Linha 2 -->
+                <div class="col-12 col-sm-6 col-md-4">
+                    <label class="form-label text-xs fw-semibold text-muted mb-1" for="filtro_ordem">Ordenação</label>
+                    <select id="filtro_ordem" name="ordem" class="form-select form-select-sm">
+                        <option value="recente" <?= $ordem === 'recente' ? 'selected' : '' ?>>Mais Recentes (Padrão)</option>
+                        <option value="antigo" <?= $ordem === 'antigo' ? 'selected' : '' ?>>Mais Antigos Primeiro</option>
+                        <option value="severidade" <?= $ordem === 'severidade' ? 'selected' : '' ?>>Severidade Crítica Primeiro</option>
+                    </select>
+                </div>
+
+                <div class="col-6 col-sm-3 col-md-3">
                     <label class="form-label text-xs fw-semibold text-muted mb-1" for="filtro_data_ini">Data Início</label>
                     <input type="date" id="filtro_data_ini" name="data_inicio" class="form-control form-control-sm tabular-nums" value="<?= htmlspecialchars($dataInicio, ENT_QUOTES, 'UTF-8') ?>">
                 </div>
 
-                <!-- Data Final -->
-                <div class="col-12 col-sm-6 col-md-1">
+                <div class="col-6 col-sm-3 col-md-3">
                     <label class="form-label text-xs fw-semibold text-muted mb-1" for="filtro_data_fim">Data Fim</label>
                     <input type="date" id="filtro_data_fim" name="data_fim" class="form-control form-control-sm tabular-nums" value="<?= htmlspecialchars($dataFim, ENT_QUOTES, 'UTF-8') ?>">
                 </div>
 
-                <!-- Botão Filtrar -->
-                <div class="col-12 col-md-1 d-grid">
+                <div class="col-12 col-md-2 d-grid">
                     <button type="submit" class="btn btn-sm btn-primary fw-bold text-white shadow-sm">
                         <i class="fa-solid fa-filter me-1"></i> Filtrar
                     </button>
@@ -456,7 +454,7 @@ require_once __DIR__ . '/../inc/header.php';
                 <span class="text-xs text-muted fw-bold text-uppercase d-flex align-items-center">
                     <i class="fa-solid fa-bolt text-warning me-1"></i> Filtros Rápidos:
                 </span>
-                <a href="<?= BASE_URL ?>/relatorios/logs.php" class="badge rounded-pill <?= (empty($filtroRapido) && empty($filtroAcao) && !$filtroCritico && $ordem !== 'severidade') ? 'bg-primary text-white' : 'bg-light text-dark border' ?> text-decoration-none py-2 px-3">
+                <a href="<?= BASE_URL ?>/relatorios/logs.php" class="badge rounded-pill <?= (empty($filtroRapido) && empty($filtroAcao) && !$filtroCritico && $ordem !== 'severidade' && $ordem !== 'antigo') ? 'bg-primary text-white' : 'bg-light text-dark border' ?> text-decoration-none py-2 px-3">
                     Todos os Logs
                 </a>
                 <a href="<?= BASE_URL ?>/relatorios/logs.php?critico=1" class="badge rounded-pill <?= ($filtroCritico || $filtroRapido === 'criticas') ? 'bg-danger text-white' : 'bg-light text-danger border' ?> text-decoration-none py-2 px-3">
@@ -477,8 +475,11 @@ require_once __DIR__ . '/../inc/header.php';
                 <a href="<?= BASE_URL ?>/relatorios/logs.php?acao=CONFIGURACAO_ALTERADA" class="badge rounded-pill <?= $filtroAcao === 'CONFIGURACAO_ALTERADA' ? 'bg-dark text-white' : 'bg-light text-dark border' ?> text-decoration-none py-2 px-3">
                     <i class="fa-solid fa-sliders me-1"></i> Configurações
                 </a>
-                <a href="<?= BASE_URL ?>/relatorios/logs.php?ordem=severidade" class="badge rounded-pill <?= $ordem === 'severidade' ? 'bg-dark text-white' : 'bg-light text-dark border' ?> text-decoration-none py-2 px-3 ms-auto">
-                    <i class="fa-solid fa-arrow-down-wide-short me-1"></i> Ordenar por Severidade
+                <a href="<?= BASE_URL ?>/relatorios/logs.php?ordem=antigo" class="badge rounded-pill <?= $ordem === 'antigo' ? 'bg-dark text-white' : 'bg-light text-dark border' ?> text-decoration-none py-2 px-3">
+                    <i class="fa-solid fa-arrow-up-wide-short me-1"></i> Mais Antigos
+                </a>
+                <a href="<?= BASE_URL ?>/relatorios/logs.php?ordem=severidade" class="badge rounded-pill <?= $ordem === 'severidade' ? 'bg-dark text-white' : 'bg-light text-dark border' ?> text-decoration-none py-2 px-3">
+                    <i class="fa-solid fa-arrow-down-wide-short me-1"></i> Mais Críticos
                 </a>
             </div>
         </div>
