@@ -29,7 +29,12 @@ llms.txt
 progress.txt
 tasks/
 tools/
-scripts/
+scripts/*
+!scripts/seed_core.php
+!scripts/seed_demo_tcc.php
+!scripts/run_seed_hostinger.php
+!scripts/verify_demo_data.php
+!scripts/inspect_october.php
 graphify-out/
 node_modules/
 
