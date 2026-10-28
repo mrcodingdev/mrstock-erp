@@ -66,7 +66,7 @@ require_once __DIR__ . '/../inc/header.php';
 
 <style>
 @media print {
-    .sidebar-wrapper, .topbar, .btn-no-print, .alert {
+    .sidebar-wrapper, .topbar, .btn-no-print, .no-print, .alert {
         display: none !important;
     }
     .main-panel {
@@ -84,18 +84,18 @@ require_once __DIR__ . '/../inc/header.php';
 }
 </style>
 
-<div class="content-header d-flex justify-content-between align-items-center mb-3">
+<div class="content-header d-flex justify-content-between align-items-start mb-3 gap-3">
     <div>
         <h2 class="fw-bold text-dark m-0">
             <i class="fas fa-file-invoice text-primary me-2"></i>Ordem de Compra #<?= str_pad((string)$compra['id'], 5, '0', STR_PAD_LEFT) ?>
         </h2>
         <p class="text-muted m-0">Detalhamento de entrada de mercadorias e composição de custos.</p>
     </div>
-    <div class="btn-no-print d-flex gap-2">
-        <a href="<?= BASE_URL ?>/compras/index.php" class="btn btn-secondary fw-bold shadow-sm">
+    <div class="d-flex align-items-center gap-2 flex-shrink-0 no-print">
+        <a href="<?= BASE_URL ?>/compras/index.php" class="btn btn-sm btn-secondary text-white fw-semibold shadow-sm px-3 py-1">
             <i class="fas fa-arrow-left me-1"></i> Voltar
         </a>
-        <button type="button" class="btn btn-primary fw-bold shadow-sm" onclick="window.print()">
+        <button type="button" class="btn btn-sm btn-primary text-white fw-semibold shadow-sm px-3 py-1" onclick="window.print()">
             <i class="fas fa-print me-1"></i> Imprimir Ordem
         </button>
     </div>

@@ -67,19 +67,19 @@ require_once __DIR__ . '/../inc/header.php';
 ?>
 
 <!-- ══ CABEÇALHO DA PÁGINA ═══════════════════════════════════════════════════ -->
-<div class="content-header d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+<div class="content-header d-flex justify-content-between align-items-start mb-3 gap-3">
     <div>
         <h2 class="fw-bold text-dark m-0"><i class="fa-solid fa-file-invoice-dollar text-primary me-2"></i>Central de Relatórios</h2>
         <p class="text-muted m-0">Emissão de relatórios oficiais em PDF A4 de alta fidelidade e exportação de planilhas em Excel.</p>
     </div>
-    <div class="d-flex gap-2 flex-wrap">
-        <a href="<?= BASE_URL ?>/relatorios/logs.php" class="btn btn-secondary fw-semibold shadow-sm text-white">
-            <i class="fa-solid fa-clock-rotate-left me-1"></i> Auditoria de Logs
+    <div class="d-flex align-items-center gap-2 flex-shrink-0 no-print">
+        <a href="<?= BASE_URL ?>/relatorios/logs.php" class="btn btn-sm btn-secondary text-white fw-semibold shadow-sm px-3 py-1">
+            <i class="fa-solid fa-clock-rotate-left me-1"></i> Auditoria
         </a>
-        <a href="<?= BASE_URL ?>/relatorios/analise.php" class="btn btn-secondary fw-semibold shadow-sm text-white">
+        <a href="<?= BASE_URL ?>/relatorios/analise.php" class="btn btn-sm btn-secondary text-white fw-semibold shadow-sm px-3 py-1">
             <i class="fa-solid fa-chart-line me-1"></i> Painel de Análise
         </a>
-        <a href="<?= BASE_URL ?>/vendas/pdv.php" class="btn btn-primary fw-bold shadow-sm text-white">
+        <a href="<?= BASE_URL ?>/vendas/pdv.php" class="btn btn-sm btn-primary text-white fw-semibold shadow-sm px-3 py-1">
             <i class="fa-solid fa-cash-register me-1"></i> Abrir PDV
         </a>
     </div>

@@ -284,21 +284,21 @@ require_once __DIR__ . '/../inc/header.php';
 ?>
 
 <!-- ══ CABEÇALHO DA PÁGINA ═══════════════════════════════════════════════════ -->
-<div class="content-header d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+<div class="content-header d-flex justify-content-between align-items-start mb-3 gap-3">
     <div>
         <h2 class="fw-bold text-dark m-0">
             <i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>Auditoria & Logs Operacionais
         </h2>
         <p class="text-muted m-0">Rastreabilidade completa de autenticações, vendas, movimentações de estoque e cadastros do ERP.</p>
     </div>
-    <div class="d-flex gap-2 flex-wrap">
-        <a href="<?= BASE_URL ?>/relatorios/index.php" class="btn btn-secondary fw-semibold shadow-sm text-white">
-            <i class="fa-solid fa-arrow-left me-1"></i> Central de Relatórios
+    <div class="d-flex align-items-center gap-2 flex-shrink-0 no-print">
+        <a href="<?= BASE_URL ?>/relatorios/index.php" class="btn btn-sm btn-secondary text-white fw-semibold shadow-sm px-3 py-1">
+            <i class="fa-solid fa-arrow-left me-1"></i> Relatórios
         </a>
-        <a href="<?= $exportCsvUrl ?>" class="btn btn-success fw-semibold shadow-sm text-white" title="Exportar dados filtrados para planilha">
+        <a href="<?= $exportCsvUrl ?>" class="btn btn-sm btn-success text-white fw-semibold shadow-sm px-3 py-1" title="Exportar dados filtrados para planilha">
             <i class="fa-solid fa-file-excel me-1"></i> Exportar CSV
         </a>
-        <a href="<?= BASE_URL ?>/relatorios/logs.php" class="btn btn-primary fw-semibold shadow-sm text-white">
+        <a href="<?= BASE_URL ?>/relatorios/logs.php" class="btn btn-sm btn-primary text-white fw-semibold shadow-sm px-3 py-1">
             <i class="fa-solid fa-rotate-right me-1"></i> Atualizar
         </a>
     </div>
