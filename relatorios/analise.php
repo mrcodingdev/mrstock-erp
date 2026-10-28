@@ -207,7 +207,78 @@ foreach ($topCategorias as $tc) {
     $dataTopCat[]   = round((float)$tc['total_faturado'], 2);
 }
 
-$extraHead = '<script src="' . BASE_URL . '/js/chart.min.js"></script><style>.chart-container{position:relative;height:300px;width:100%;}</style>';
+$extraHead = '<script src="' . BASE_URL . '/js/chart.min.js"></script>
+<style>
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+@media (max-width: 991.98px) {
+  .so-card.h-100 {
+    height: auto !important;
+    min-height: auto !important;
+  }
+}
+@media print {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+  }
+  .content-body,
+  .content-body .row {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .content-body .row > [class*="col-"] {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    float: none !important;
+    margin-bottom: 1.5rem !important;
+    padding: 0 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  .so-card {
+    display: block !important;
+    height: auto !important;
+    min-height: auto !important;
+    margin-bottom: 1.5rem !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+  .so-card-body {
+    display: block !important;
+    overflow: visible !important;
+    padding: 1rem !important;
+  }
+  .chart-container {
+    position: relative !important;
+    height: 280px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    display: block !important;
+  }
+  canvas {
+    max-width: 100% !important;
+    height: 280px !important;
+    display: block !important;
+  }
+  .btn, .btn-group, .so-sidebar, .so-header, .no-print, .content-header .btn-group, .content-header button {
+    display: none !important;
+  }
+}
+</style>';
 require_once __DIR__ . '/../inc/header.php';
 ?>
 
@@ -235,8 +306,8 @@ require_once __DIR__ . '/../inc/header.php';
                 </a>
             </div>
             <!-- Botão de Impressão Sólido -->
-            <button type="button" class="btn btn-sm btn-secondary text-white shadow-sm fw-semibold" onclick="window.print()">
-                <i class="fas fa-print me-1"></i> Imprimir Relatório
+            <button type="button" class="btn btn-sm btn-secondary text-white shadow-sm fw-semibold" onclick="prepararEImprimir()">
+                <i class="fas fa-print me-1"></i> Imprimir / Salvar PDF
             </button>
         </div>
     </div>
@@ -566,6 +637,34 @@ new Chart(document.getElementById('chartTopProdutos'), {
                 grid: { display: false }
             }
         }
+    }
+});
+
+function prepararEImprimir() {
+    if (typeof Chart !== 'undefined' && Chart.instances) {
+        Object.values(Chart.instances).forEach(function(c) {
+            c.resize();
+            c.render();
+        });
+    }
+    setTimeout(function() {
+        window.print();
+    }, 150);
+}
+window.addEventListener('beforeprint', function() {
+    if (typeof Chart !== 'undefined' && Chart.instances) {
+        Object.values(Chart.instances).forEach(function(c) {
+            c.resize();
+            c.render();
+        });
+    }
+});
+window.addEventListener('afterprint', function() {
+    if (typeof Chart !== 'undefined' && Chart.instances) {
+        Object.values(Chart.instances).forEach(function(c) {
+            c.resize();
+            c.render();
+        });
     }
 });
 </script>

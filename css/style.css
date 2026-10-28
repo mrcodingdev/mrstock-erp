@@ -2441,9 +2441,20 @@ body.table-striped-on .so-table tbody tr:nth-of-type(odd) {
     break-after: page;
   }
 
-  tr {
-    page-break-inside: avoid;
-    break-inside: avoid;
+  tr,
+  .so-card,
+  .card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  canvas,
+  .chart-container,
+  .card-chart {
+    animation: none !important;
+    transform: none !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 }
 
