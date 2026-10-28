@@ -38,7 +38,7 @@
     <a href="#instalacao-e-execucao">Instalação</a> •
     <a href="docs/README.md">Documentação</a> •
     <a href="SECURITY.md">Segurança</a> •
-    <a href="#equipe-e-orientadores">Equipe & Orientadores</a>
+    <a href="#equipe-do-projeto">Equipe do Projeto</a>
   </p>
 </div>
 
@@ -408,7 +408,7 @@ O repositório adota boas práticas de organização e padronização de código
 
 ---
 
-## <a id="equipe-e-orientadores"></a>Equipe do Projeto & Orientadores
+## <a id="equipe-do-projeto"></a><a id="equipe-e-orientadores"></a>Equipe do Projeto
 
 Trabalho de Conclusão de Curso (TCC) apresentado ao curso Técnico em Desenvolvimento de Sistemas da **ETEC Fernando Prestes** (Centro Estadual de Educação Tecnológica Paula Souza, Sorocaba/SP):
 
@@ -418,10 +418,6 @@ Trabalho de Conclusão de Curso (TCC) apresentado ao curso Técnico em Desenvolv
 * **Eduardo Sugahara Neto:** *Testes de Usabilidade e Apresentação do Sistema*
 * **Enzo de Oliveira Soares:** *Documentação do Projeto e Casos de Uso*
 * **Nikolas Pires Brandão:** *Banco de Dados e Modelagem DER*
-
-### Orientadores Acadêmicos
-* **Prof. Luiz Flávio de Almeida:** *Orientação Metodológica e Governança de TCC*
-* **Prof. Vinicius Sewaybricker:** *Orientação Técnica e Engenharia de Sistemas*
 
 ---
 

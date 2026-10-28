@@ -523,17 +523,17 @@ require_once __DIR__ . '/inc/header.php';
 }
 </style>
 
-<div class="content-header d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+<div class="content-header d-flex justify-content-between align-items-start mb-3 gap-3">
     <div>
         <h2 class="fw-bold text-dark m-0"><i class="fas fa-circle-question text-primary me-2"></i>Central de Ajuda</h2>
-        <p class="text-muted m-0">Consulte manuais operacionais, guia tátil de atalhos do caixa e respostas para dúvidas frequentes.</p>
+        <p class="text-muted m-0 small">Consulte o manual de uso, atalhos do teclado e dúvidas frequentes.</p>
     </div>
-    <div class="d-flex align-items-center gap-2 no-print">
-        <a href="<?= BASE_URL ?>/docs/MRSTOCK_MANUAL_DO_USUARIO_v2.2.0_FINAL.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-primary fw-bold text-white shadow-sm">
-            <i class="fa-solid fa-book-open me-2"></i> Abrir Manual do Usuário (PDF)
+    <div class="d-flex align-items-center gap-2 flex-shrink-0 no-print">
+        <a href="<?= BASE_URL ?>/docs/MRSTOCK_MANUAL_DO_USUARIO_v2.2.0_FINAL.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary text-white fw-semibold shadow-sm px-3 py-1">
+            <i class="fa-solid fa-book-open me-1"></i> Manual em PDF
         </a>
-        <button type="button" class="btn btn-secondary text-white fw-semibold shadow-sm btn-print-guide" onclick="window.print()">
-            <i class="fas fa-print me-1"></i> Imprimir Guia Rápido
+        <button type="button" class="btn btn-sm btn-secondary text-white fw-semibold shadow-sm px-3 py-1 btn-print-guide" onclick="window.print()">
+            <i class="fas fa-print me-1"></i> Imprimir Guia
         </button>
     </div>
 </div>
@@ -604,13 +604,12 @@ require_once __DIR__ . '/inc/header.php';
     <div class="so-card mb-4 border ajuda-section" id="atalhos" data-categoria="atalhos" data-keywords="atalho teclado f1 f2 f4 f7 f8 f9 f10 esc pdv caixa tecla operacao comando balcao leitor cupom">
         <div class="so-card-header bg-dark text-white d-flex justify-content-between align-items-center">
             <h5 class="so-card-title text-white m-0">
-                <i class="fas fa-keyboard text-success me-2"></i>Mesa Tátil de Atalhos de Teclado (Frente de Caixa)
+                <i class="fas fa-keyboard text-success me-2"></i>Atalhos Rápidos de Teclado (Frente de Caixa)
             </h5>
-            <span class="badge bg-success text-white">100% Operável por Teclado</span>
         </div>
         <div class="so-card-body p-4">
             <p class="text-muted small mb-3">
-                O Frente de Caixa (PDV) do MrStock ERP foi desenvolvido para permitir agilidade máxima e ergonomia no balcão, dispensando o uso de mouse nas operações cotidianas de checkout:
+                Comandos de teclado para agilizar o atendimento no balcão sem necessidade de usar o mouse:
             </p>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover align-middle mb-0">
@@ -766,9 +765,6 @@ require_once __DIR__ . '/inc/header.php';
                                 <span class="text-muted"><?= htmlspecialchars($membro['funcao']) ?></span>
                             </div>
                         <?php endforeach; ?>
-                    </div>
-                    <div class="mt-3 pt-2 border-top">
-                        <span class="text-muted small"><strong>Orientação Acadêmica:</strong> Prof. Luiz Flávio de Almeida e Prof. Vinicius Sewaybricker</span>
                     </div>
                 </div>
                 <div class="col-lg-5 col-12 text-lg-end">
