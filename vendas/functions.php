@@ -140,6 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // ══ VALIDAÇÃO COM LOCK PESSIMISTA & CÁLCULO OFICIAL DE PREÇO ══
                 $itensValidados = [];
+                $quantidadesPorProduto = [];
                 $totalCalculado = 0.0;
                 $custoTotal     = 0.0;
 
@@ -147,22 +148,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $item_id  = (int)($item['id'] ?? 0);
                     $item_qtd = (int)($item['quantidade'] ?? 0);
 
-                    if ($item_id <= 0 || $item_qtd <= 0) {
+                    $quantidadeAnterior = $quantidadesPorProduto[$item_id] ?? 0;
+                    if ($item_id <= 0 || $item_qtd <= 0 || $item_qtd > PHP_INT_MAX - $quantidadeAnterior) {
                         if ($pdo->inTransaction()) { $pdo->rollBack(); }
                         header("Location: " . BASE_URL . "/vendas/pdv.php?erro=dados_invalidos");
                         exit;
                     }
+
+                    // Duplicatas compartilham o saldo, mas preservam suas linhas na venda.
+                    $quantidadeAcumulada = $quantidadeAnterior + $item_qtd;
+                    $quantidadesPorProduto[$item_id] = $quantidadeAcumulada;
 
                     // Consulta com Lock Pessimista (FOR UPDATE)
                     $stmtChk = $pdo->prepare("SELECT id, nome, preco_venda, preco_compra, quantidade, status FROM produtos WHERE id = ? FOR UPDATE");
                     $stmtChk->execute([$item_id]);
                     $prodInfo = $stmtChk->fetch();
 
-                    if (!$prodInfo || $prodInfo['status'] !== 'ativo' || (int)$prodInfo['quantidade'] < $item_qtd) {
+                    if (!$prodInfo || $prodInfo['status'] !== 'ativo' || (int)$prodInfo['quantidade'] < $quantidadeAcumulada) {
                         if ($pdo->inTransaction()) { $pdo->rollBack(); }
                         $disponivel = $prodInfo ? (int)$prodInfo['quantidade'] : 0;
                         $nomeProd   = $prodInfo ? $prodInfo['nome']            : ('Produto #' . $item_id);
-                        header("Location: " . BASE_URL . "/vendas/pdv.php?erro=estoque&produto=" . urlencode($nomeProd) . "&disponivel=" . $disponivel . "&solicitado=" . $item_qtd);
+                        header("Location: " . BASE_URL . "/vendas/pdv.php?erro=estoque&produto=" . urlencode($nomeProd) . "&disponivel=" . $disponivel . "&solicitado=" . $quantidadeAcumulada);
                         exit;
                     }
 
@@ -176,11 +182,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $stmtLoteVal->execute([$item_id]);
                         $qtdLotesValidos = (int)$stmtLoteVal->fetchColumn();
 
-                        if ($qtdLotesValidos < $item_qtd) {
+                        if ($qtdLotesValidos < $quantidadeAcumulada) {
                             if ($pdo->inTransaction()) { $pdo->rollBack(); }
                             $nomeProd = $prodInfo['nome'] ?? ('Produto #' . $item_id);
-                            registrar_log($pdo, 'BLOQUEIO_SANITARIO', "Venda bloqueada (CDC Art. 18): Produto #$item_id ($nomeProd) possui apenas $qtdLotesValidos un. em lotes válidos (solicitado: $item_qtd)", 'lotes');
-                            header("Location: " . BASE_URL . "/vendas/pdv.php?erro=lote_vencido&produto=" . urlencode($nomeProd) . "&disponivel=" . $qtdLotesValidos . "&solicitado=" . $item_qtd);
+                            registrar_log($pdo, 'BLOQUEIO_SANITARIO', "Venda bloqueada (CDC Art. 18): Produto #$item_id ($nomeProd) possui apenas $qtdLotesValidos un. em lotes válidos (solicitado: $quantidadeAcumulada)", 'lotes');
+                            header("Location: " . BASE_URL . "/vendas/pdv.php?erro=lote_vencido&produto=" . urlencode($nomeProd) . "&disponivel=" . $qtdLotesValidos . "&solicitado=" . $quantidadeAcumulada);
                             exit;
                         }
                     }
