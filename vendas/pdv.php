@@ -960,7 +960,6 @@ function abrirModalPagamento() {
 
     setTimeout(() => {
         if (formaPagto === 'DINHEIRO') {
-            definirValorExato();
             const valInput = document.getElementById('modal_valor_recebido');
             if (valInput) {
                 valInput.focus();
@@ -973,12 +972,15 @@ function abrirModalPagamento() {
 function aoMudarFormaPagamentoModal(forma) {
     document.getElementById('input_forma_pagamento').value = forma;
     const secaoDinheiro = document.getElementById('secaoDinheiroTroco');
+    document.getElementById('modal_valor_recebido').value = '';
+    document.querySelectorAll('.btn-cedula').forEach(b => b.classList.remove('active-cedula'));
 
     if (forma === 'DINHEIRO') {
         secaoDinheiro.style.display = 'block';
-        definirValorExato();
+        calcularTroco();
     } else {
         secaoDinheiro.style.display = 'none';
+        document.getElementById('btnConfirmarVendaModal').disabled = false;
     }
 }
 
@@ -998,7 +1000,8 @@ function definirValorExato() {
 }
 
 function calcularTroco() {
-    const valRecebido = Math.round((parseFloat(document.getElementById('modal_valor_recebido').value) || 0.0) * 100) / 100;
+    const valorInformado = document.getElementById('modal_valor_recebido').value.trim();
+    const valRecebido = Math.round(Number(valorInformado) * 100) / 100;
     const totalRef = Math.round(totalVendaAtual * 100) / 100;
     const troco = Math.round((valRecebido - totalRef) * 100) / 100;
     const trocoDisplay = document.getElementById('trocoValorDisplay');
@@ -1006,24 +1009,29 @@ function calcularTroco() {
     const alertaInsuf = document.getElementById('trocoAlertaInsuficiente');
     const btnConfirmar = document.getElementById('btnConfirmarVendaModal');
 
-    if (valRecebido < totalRef) {
+    if (valorInformado === '' || !Number.isFinite(valRecebido) || valRecebido < 0 || valRecebido < totalRef) {
         trocoBox.className = 'troco-box troco-insuficiente text-center';
         trocoDisplay.className = 'fw-bold mb-0 text-danger tabular-nums';
-        trocoDisplay.textContent = `Faltam R$ ${formatarMoeda(Math.abs(troco))}`;
-        alertaInsuf.classList.remove('d-none');
+        const semValor = valorInformado === '' || !Number.isFinite(valRecebido) || valRecebido < 0;
+        trocoDisplay.textContent = semValor ? 'Informe o valor recebido' : `Faltam R$ ${formatarMoeda(Math.abs(troco))}`;
+        alertaInsuf.classList.toggle('d-none', semValor);
         btnConfirmar.disabled = true;
+        return false;
     } else {
         trocoBox.className = 'troco-box troco-valido text-center';
         trocoDisplay.className = 'fw-bold mb-0 text-success tabular-nums';
         trocoDisplay.textContent = `R$ ${formatarMoeda(Math.max(0, troco))}`;
         alertaInsuf.classList.add('d-none');
         btnConfirmar.disabled = false;
+        return true;
     }
 }
 
 function confirmarVendaFinal() {
-    playBeep('cash');
     const btn = document.getElementById('btnConfirmarVendaModal');
+    if (btn.disabled) return;
+    if (document.getElementById('modal_forma_pagamento').value === 'DINHEIRO' && !calcularTroco()) return;
+    playBeep('cash');
     btn.disabled = true;
     btn.innerHTML = '<span class="mr-spinner"></span> Emitindo NFC-e...';
     document.getElementById('formVenda').submit();
