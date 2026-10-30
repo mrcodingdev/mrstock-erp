@@ -6,6 +6,7 @@ $pageTitle  = 'Estoque & Produtos';
 $activePage = 'produtos';
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
+$podeGerenciarProdutos = is_admin();
 
 // ── 1. Ingestão de Parâmetros de Filtro via GET ─────────────────────────────
 $statusFiltro     = trim($_GET['status'] ?? '');
@@ -74,7 +75,9 @@ $offset = ($page - 1) * $limit;
 
 // Query Principal de Produtos
 $stmt = $pdo->prepare("
-    SELECT p.*, f.nome as fornecedor_nome, c.nome as categoria_nome_rel
+    SELECT p.id, p.nome, p.categoria, p.codigo_de_barra, p.quantidade,
+           p.estoque_minimo, p.preco_venda, p.validade, p.status,
+           f.nome as fornecedor_nome, c.nome as categoria_nome_rel
     FROM produtos p 
     LEFT JOIN fornecedores f ON p.fornecedor_id = f.id 
     LEFT JOIN categorias c ON p.categoria_id = c.id
@@ -99,7 +102,7 @@ $categoriasLista = $stmtCat ? $stmtCat->fetchAll() : [];
 
 // Edição de Produto via Modal
 $editProduto = null;
-if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
+if ($podeGerenciarProdutos && isset($_GET['edit']) && is_numeric($_GET['edit'])) {
     $stmtEdit = $pdo->prepare("SELECT * FROM produtos WHERE id = ?");
     $stmtEdit->execute([$_GET['edit']]);
     $editProduto = $stmtEdit->fetch();
@@ -120,6 +123,7 @@ require_once __DIR__ . '/../inc/header.php';
         <h2 class="fw-bold text-dark m-0"><i class="fas fa-boxes-stacked text-primary me-2"></i>Estoque & Produtos</h2>
         <p class="text-muted m-0">Cadastre itens, defina o estoque mínimo, preços e gere etiquetas de código de barras.</p>
     </div>
+    <?php if ($podeGerenciarProdutos): ?>
     <div class="d-flex gap-2 flex-wrap">
         <a href="<?= BASE_URL ?>/produtos/etiquetas.php" class="btn btn-secondary fw-semibold">
             <i class="fas fa-barcode me-1"></i> Imprimir Etiquetas
@@ -128,6 +132,7 @@ require_once __DIR__ . '/../inc/header.php';
             <i class="fas fa-plus-circle me-1"></i> Adicionar Produto
         </button>
     </div>
+    <?php endif; ?>
 </div>
 
 <div class="content-body">
@@ -242,7 +247,9 @@ require_once __DIR__ . '/../inc/header.php';
                             <th width="14%" class="text-center">Estoque</th>
                             <th width="14%">Validade</th>
                             <th width="12%">Preço Venda</th>
+                            <?php if ($podeGerenciarProdutos): ?>
                             <th width="6%" class="text-center">Ações</th>
+                            <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -297,6 +304,7 @@ require_once __DIR__ . '/../inc/header.php';
                                 <td class="fw-bold text-dark tabular-nums">
                                     R$ <?= number_format((float)$p['preco_venda'], 2, ',', '.') ?>
                                 </td>
+                                <?php if ($podeGerenciarProdutos): ?>
                                 <td class="text-center">
                                     <!-- Menu de Ações em Linha (3 Pontos) -->
                                     <?php $isDropup = ($index >= count($produtos) - 2) ? 'dropup' : ''; ?>
@@ -345,11 +353,12 @@ require_once __DIR__ . '/../inc/header.php';
                                         </ul>
                                     </div>
                                 </td>
+                                <?php endif; ?>
                             </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="7" class="p-0 border-0">
+                                <td colspan="<?= $podeGerenciarProdutos ? 7 : 6 ?>" class="p-0 border-0">
                                     <?= render_empty_state('Nenhum produto localizado', 'Não encontramos nenhum produto ativo para os filtros selecionados.', BASE_URL . '/produtos/index.php') ?>
                                 </td>
                             </tr>
@@ -419,6 +428,7 @@ require_once __DIR__ . '/../inc/header.php';
     </div>
 </div>
 
+<?php if ($podeGerenciarProdutos): ?>
 <!-- Modal Produto -->
 <div class="modal fade" id="modalProduto" tabindex="-1" aria-labelledby="modalProdutoLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg">
@@ -507,6 +517,8 @@ require_once __DIR__ . '/../inc/header.php';
     </div>
 </div>
 
+<?php endif; ?>
+
 <script>
 function filtrarAoVivo(input) {
     const termo = input.value.toLowerCase().trim();
@@ -517,6 +529,7 @@ function filtrarAoVivo(input) {
     });
 }
 
+<?php if ($podeGerenciarProdutos): ?>
 function clearForm() {
     ['prod_id','prod_nome','prod_validade','prod_codigo_de_barra'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('prod_categoria_id').value = '';
@@ -531,6 +544,7 @@ function clearForm() {
 
 <?php if ($editProduto): ?>
 window.onload = () => new bootstrap.Modal(document.getElementById('modalProduto')).show();
+<?php endif; ?>
 <?php endif; ?>
 </script>
 
