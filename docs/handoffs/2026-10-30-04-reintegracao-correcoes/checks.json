@@ -1,0 +1,46 @@
+[
+  {
+    "suite": "rbac",
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "tests/produtos_rbac_test.php"
+    ],
+    "exit_code": 0
+  },
+  {
+    "suite": "carrinho",
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "tests/vendas_carrinho_test.php"
+    ],
+    "exit_code": 0
+  },
+  {
+    "suite": "pagamento",
+    "command": [
+      "node",
+      "tests/pdv_pagamento_test.cjs"
+    ],
+    "exit_code": 0
+  },
+  {
+    "lint": "produtos/index.php",
+    "exit_code": 0
+  },
+  {
+    "lint": "vendas/functions.php",
+    "exit_code": 0
+  },
+  {
+    "lint": "vendas/pdv.php",
+    "exit_code": 0
+  },
+  {
+    "lint": "tests/produtos_rbac_test.php",
+    "exit_code": 0
+  },
+  {
+    "lint": "tests/vendas_carrinho_test.php",
+    "exit_code": 0
+  }
+]

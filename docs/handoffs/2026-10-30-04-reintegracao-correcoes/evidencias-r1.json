@@ -1,0 +1,98 @@
+{
+  "base_commit": "31eeb9304bdb202ab8a0ea082f443103f44d2c31",
+  "files": [
+    {
+      "path": "produtos/index.php",
+      "sha256": "1142a70683462272928fd975741732f3f93d69858fcec0bdf7ee0e1564ba9407",
+      "state": "modified"
+    },
+    {
+      "path": "vendas/functions.php",
+      "sha256": "83876270e499fecb595a15752a5e3c4253c7e916fc85b5ae1e703d354dc5770e",
+      "state": "modified"
+    },
+    {
+      "path": "vendas/pdv.php",
+      "sha256": "e72fb1bdc7897f2381c70712674eb402fe0d252a24c958df2fcacee2a329e86a",
+      "state": "modified"
+    },
+    {
+      "path": "tests/produtos_rbac_test.php",
+      "sha256": "a4599080eb96d42fd9d0271f95a58f6a49fc1f1e1937063062e4c4f44677f4e3",
+      "state": "untracked"
+    },
+    {
+      "path": "tests/vendas_carrinho_test.php",
+      "sha256": "609c1a642bb75ba1eb91a0d9f0122df9b523973d2ca40ff057ca5982a23dff04",
+      "state": "untracked"
+    },
+    {
+      "path": "tests/pdv_pagamento_test.cjs",
+      "sha256": "1798452bee9149711b03f2d0c0f5a4cab0ff11b19e97c0bfd6448a18c0a3a186",
+      "state": "untracked"
+    }
+  ],
+  "patches": {
+    "alteracoes-r1.patch": "0995a025b02b629245947ec16c9c04fcbd057760b26267fbef7fba99f350ca21",
+    "pacote-consolidado.patch": "d2fd309e125664098ee9a69c20361886d654b921c24e7cee267ee27394838a63"
+  },
+  "checks": [
+    {
+      "suite": "rbac",
+      "command": [
+        "C:\\xampp\\php\\php.exe",
+        "tests/produtos_rbac_test.php"
+      ],
+      "exit_code": 0
+    },
+    {
+      "suite": "carrinho",
+      "command": [
+        "C:\\xampp\\php\\php.exe",
+        "tests/vendas_carrinho_test.php"
+      ],
+      "exit_code": 0
+    },
+    {
+      "suite": "pagamento",
+      "command": [
+        "node",
+        "tests/pdv_pagamento_test.cjs"
+      ],
+      "exit_code": 0
+    },
+    {
+      "lint": "produtos/index.php",
+      "exit_code": 0
+    },
+    {
+      "lint": "vendas/functions.php",
+      "exit_code": 0
+    },
+    {
+      "lint": "vendas/pdv.php",
+      "exit_code": 0
+    },
+    {
+      "lint": "tests/produtos_rbac_test.php",
+      "exit_code": 0
+    },
+    {
+      "lint": "tests/vendas_carrinho_test.php",
+      "exit_code": 0
+    }
+  ],
+  "tests_before": {
+    "rbac": "5/10 passaram;5 falharam",
+    "carrinho": "12/15 passaram;3 falharam"
+  },
+  "tests_after": {
+    "rbac": "10/10",
+    "carrinho": "15/15",
+    "pagamento": "9/9",
+    "total": "34/34"
+  },
+  "patch_reverse_checks": "both passed",
+  "real_database_writes": false,
+  "external_review": "pending"
+}

@@ -1,0 +1,15 @@
+{
+  "base_commit": "31eeb9304bdb202ab8a0ea082f443103f44d2c31",
+  "archived_packages_verified": [
+    {
+      "task": "2026-10-30-02-rbac-produtos",
+      "verified": true
+    },
+    {
+      "task": "2026-10-30-03-pdv-itens-duplicados",
+      "verified": true
+    }
+  ],
+  "preexisting_payment_sha256": "e72fb1bdc7897f2381c70712674eb402fe0d252a24c958df2fcacee2a329e86a",
+  "preexisting_payment_test_sha256": "1798452bee9149711b03f2d0c0f5a4cab0ff11b19e97c0bfd6448a18c0a3a186"
+}

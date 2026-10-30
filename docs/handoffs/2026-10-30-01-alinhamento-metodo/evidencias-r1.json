@@ -1,0 +1,309 @@
+{
+  "files": [
+    {
+      "path": "docs/handoffs/README.md",
+      "before_sha256": null,
+      "after_sha256": "b745be986f035d0af3591d71e9b390d56a424c2bc52dc1aa5f4a57abb16cbb49",
+      "state": "new"
+    },
+    {
+      "path": "docs/handoffs/templates/entrega.md",
+      "before_sha256": null,
+      "after_sha256": "02caa2bb220f639f5b26ac187467817e67c0d4971f246e3ce7374df7f586816b",
+      "state": "new"
+    },
+    {
+      "path": "docs/handoffs/templates/revisao.md",
+      "before_sha256": null,
+      "after_sha256": "c81651d073ce9d1ccd2c592d520b919e16ecf4d425b4fdf7c3ddb4bf0da273e6",
+      "state": "new"
+    },
+    {
+      "path": "docs/handoffs/.htaccess",
+      "before_sha256": null,
+      "after_sha256": "7518683e40aff6401dfd056c589fc195bae9b79bcb3531a3591e260895bd85d4",
+      "state": "new"
+    },
+    {
+      "path": "AGENTS.md",
+      "before_sha256": "27e9ad20c92bdaad041b9ccd6792ebeb8a4fe33c739e853126d1ed76637affc6",
+      "after_sha256": "efd332c00e2009bc0ae86b2214cea96408c800d805c157c69d5434a1f80ab60a",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/rules/mrstock_design_and_architecture_rules.md",
+      "before_sha256": "37ea4a2840473d19168e04df83e91e28483838e341e272a564f983c285094182",
+      "after_sha256": "2e248bf7e9cfbd5fee6f2d1170f8c0b3c9a8aa96f791aec1927c0e13b09d723b",
+      "state": "modified"
+    },
+    {
+      "path": "GEMINI.md",
+      "before_sha256": "970df1513726f2966e2ea0d36fe695080c6c260b02293effd878308068e9e704",
+      "after_sha256": "2e248bf7e9cfbd5fee6f2d1170f8c0b3c9a8aa96f791aec1927c0e13b09d723b",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/skills/metodo-fundido/SKILL.md",
+      "before_sha256": "7962af23b5a18f74ccd75f3a256d6566014845598ec6bf2abe923534ecaf0aa5",
+      "after_sha256": "370cddb82124306bd5070324cb401c1c7a0246df62abd45230841b2c9d81570f",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/skills/progressive-agent-memory/SKILL.md",
+      "before_sha256": "96b7ffb61bf87d6dcb0d2185f3fae543fd6e5c1953e80cc9be04bd1a1a18ee5c",
+      "after_sha256": "2e1336e679261c26b46d00361fc1a1fafee404747487e5c9c86d52e9c0efd5c3",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/skills/git-workflow-and-versioning/SKILL.md",
+      "before_sha256": "0d9427de4fe7443625cb2bf0a0ef09927931f4f740df6890c164dea88876e55f",
+      "after_sha256": "ae6b8fd9d646db49ff6975ffd0f1b4b2d8224f9e43db28eedc5c13f3caadaeab",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/skills/incremental-implementation/SKILL.md",
+      "before_sha256": "3a3581e7084a0dc85af420afcc91211a159d3dc46f3d81075a4d53c566b70b80",
+      "after_sha256": "0063df8672cb7263f107b570448d1f045250e8f6fc1531f621ee0ef0a776b5b9",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/skills/spec-driven-development/SKILL.md",
+      "before_sha256": "ea69a9afd020f2087859cf79587b7fd2d2b923fd4b34b5fb3b76c6a956b1fe71",
+      "after_sha256": "1f92c24064ec2f2f47516bf2f88f7fe6e575ea51b769ccf5335c5e56509ad771",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/agents/backend-engineer.md",
+      "before_sha256": "4d7b87d12db02a012aea9864ed279a68cc297947b6fe4012b22e83e4e494763a",
+      "after_sha256": "fef5499a66bcca20a2b177e45239611a2e0e382b8302d2e9b1d06b2fcd78bdcd",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/agents/frontend-engineer.md",
+      "before_sha256": "8c2d7a5a1f13a7018e605de4a7b9a231c2c2deaef57986aca4ea70c106e74696",
+      "after_sha256": "38fe2c56476256672e21097b909dc42327dd86361ed8bf0a6cd8e6a9ea9a74fe",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/agents/software-engineer.md",
+      "before_sha256": "115091a65ae973c2ed35e4d40135c6c7c1d70332f08bdb890d0b7e812d3073e6",
+      "after_sha256": "1addf9fcc4d7c60d1b15d3f31848f58c6099b401bf9d928cf35a5eecedcdbf7b",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/agents/code-reviewer.md",
+      "before_sha256": "527a9ae62c4b7d66dce9c499dd28bd415e3acd77e58f682ca83a4aaf1c87ff51",
+      "after_sha256": "13074774a6ca489caf861bf959a6ef404160a4efea4241e0fef1eb71e6676aef",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/agents/test-engineer.md",
+      "before_sha256": "d70ecc4de2d6d95b67b6376748c1fb8ab3e96b2c0063f0d467ca4b5e112ff9e0",
+      "after_sha256": "f8220a3075c108f8657d9ba637369803c7cc211bc164e6daad1e17cbbbb8fc67",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/agents/security-auditor.md",
+      "before_sha256": "3c488edad99bde740985a998fda036dc9dab7c1c23609aba79abfb3f294be1c8",
+      "after_sha256": "a24d31c350329b02ccd0d64669bd4daed1fe17b7cfc900379a89f3f3401b3ea8",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/agents/chief-erp-architect.md",
+      "before_sha256": "3a5aa2af2f07faa01fd2ef5ccea205fb12f6e82bfeb4176a67e5328f13bda602",
+      "after_sha256": "5f56a6cf860b554dd9e90cebc10b26daca9bea3884db867a402974833f07c6d8",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/agents/anti-slop-ui-auditor.md",
+      "before_sha256": "6107f2b46fd3e8d2b1084a9231f4c1d1d7424f4bd26b1628a6c2df1ceafdc5f1",
+      "after_sha256": "ae2a497079d81690ecd2ee22d893fc6753e9c29b1fe6c34dc5170c987a377861",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/agents/web-performance-auditor.md",
+      "before_sha256": "b7ee2744701d96c6c6eed831a42fe8f6fab0d4ff16bba912079e3ec271af7c35",
+      "after_sha256": "5c84419769e077cc31157400190769d09a3f78312158e85b161030cdb38f64a0",
+      "state": "modified"
+    },
+    {
+      "path": ".agents/references/orchestration-patterns.md",
+      "before_sha256": "96dce9799c902c53674f9a206d172a24760e80446dc66d8d2acdf6adfb12e05c",
+      "after_sha256": "0c113f9b4d211d1f1889302ae6920c3e1df55888f74c7546fe59b00058800cc4",
+      "state": "modified"
+    }
+  ],
+  "patch_sha256": "292f308dab92000f9dca01ca5475d4c3d99697d531d479d2bafedba874f4748a",
+  "checks": [
+    {
+      "check": "skill_frontmatter_basic",
+      "path": ".agents/skills/metodo-fundido/SKILL.md",
+      "result": "passed",
+      "scope": "required fields and delimiters; not full YAML validation"
+    },
+    {
+      "check": "skill_frontmatter_basic",
+      "path": ".agents/skills/progressive-agent-memory/SKILL.md",
+      "result": "passed",
+      "scope": "required fields and delimiters; not full YAML validation"
+    },
+    {
+      "check": "skill_frontmatter_basic",
+      "path": ".agents/skills/git-workflow-and-versioning/SKILL.md",
+      "result": "passed",
+      "scope": "required fields and delimiters; not full YAML validation"
+    },
+    {
+      "check": "skill_frontmatter_basic",
+      "path": ".agents/skills/incremental-implementation/SKILL.md",
+      "result": "passed",
+      "scope": "required fields and delimiters; not full YAML validation"
+    },
+    {
+      "check": "skill_frontmatter_basic",
+      "path": ".agents/skills/spec-driven-development/SKILL.md",
+      "result": "passed",
+      "scope": "required fields and delimiters; not full YAML validation"
+    },
+    {
+      "check": "file_sha256",
+      "result": "passed",
+      "count": 22
+    },
+    {
+      "check": "local_markdown_links",
+      "result": "passed",
+      "count": 18
+    },
+    {
+      "check": "GEMINI_rules_identical",
+      "result": "passed"
+    },
+    {
+      "check": "git_apply_check_local_baseline",
+      "result": "passed",
+      "scope": "read-only check against captured local base; not against HEAD"
+    },
+    {
+      "check": "quick_validate.py",
+      "result": "not_run_successfully",
+      "reason": "ModuleNotFoundError: yaml (PyYAML not installed); no dependency installed"
+    },
+    {
+      "check": "global_git_diff_check",
+      "result": "preexisting_out_of_scope_findings",
+      "details": "trailing whitespace in docs/banco_de_dados.md:4 and docs/perguntas_banca.md:26; files were already modified before this task and were not edited by it"
+    }
+  ],
+  "links": [
+    {
+      "from": "docs/handoffs/README.md",
+      "to": "templates/entrega.md"
+    },
+    {
+      "from": "docs/handoffs/README.md",
+      "to": "templates/revisao.md"
+    },
+    {
+      "from": "AGENTS.md",
+      "to": "docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/skills/metodo-fundido/SKILL.md",
+      "to": "../../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/skills/progressive-agent-memory/SKILL.md",
+      "to": "../../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/skills/git-workflow-and-versioning/SKILL.md",
+      "to": "../../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/skills/incremental-implementation/SKILL.md",
+      "to": "../../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/skills/spec-driven-development/SKILL.md",
+      "to": "../../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/agents/backend-engineer.md",
+      "to": "../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/agents/frontend-engineer.md",
+      "to": "../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/agents/software-engineer.md",
+      "to": "../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/agents/code-reviewer.md",
+      "to": "../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/agents/test-engineer.md",
+      "to": "../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/agents/security-auditor.md",
+      "to": "../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/agents/chief-erp-architect.md",
+      "to": "../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/agents/anti-slop-ui-auditor.md",
+      "to": "../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/agents/web-performance-auditor.md",
+      "to": "../../docs/handoffs/README.md"
+    },
+    {
+      "from": ".agents/references/orchestration-patterns.md",
+      "to": "../../docs/handoffs/README.md"
+    }
+  ],
+  "http": [
+    {
+      "url": "http://localhost/MrStock/docs/handoffs/2026-10-30-01-alinhamento-metodo/alteracoes-r1.patch",
+      "expected": 403,
+      "result": "not_executed",
+      "reason": "<urlopen error [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente>"
+    },
+    {
+      "url": "http://localhost/MrStock/docs/handoffs/README.md",
+      "expected": 403,
+      "result": "not_executed",
+      "reason": "<urlopen error [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente>"
+    },
+    {
+      "url": "http://localhost/MrStock/css/style.css",
+      "expected": 200,
+      "result": "not_executed",
+      "reason": "<urlopen error [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente>"
+    }
+  ],
+  "scope": "local rules/documentation only; no PHP/MySQL behavior tested",
+  "internal_review": {
+    "reviewer": "subagente interno /root/revisao_protocolo",
+    "scope": "somente leitura, coordenação/documentação, links e identidade dos arquivos",
+    "rounds": [
+      {
+        "result": "com achado",
+        "finding": "F001: modelos das seis personas só ofereciam PASS/FAIL"
+      },
+      {
+        "result": "sem novos achados no escopo",
+        "resolution": "F001 corrigido com INCOMPLETA e Não executado/Não aplicável; hashes reais reconferidos"
+      }
+    ],
+    "external_antigravity_review": "pendente; revisao-r1.md ainda não existe"
+  },
+  "timestamp": "2026-10-30T14:49:55-03:00"
+}

@@ -1,0 +1,117 @@
+{
+  "task": "2026-10-30-02-rbac-produtos",
+  "round": 1,
+  "timestamp": "2026-10-30T15:06:16-03:00",
+  "workspace": "C:\\xampp\\htdocs\\MrStock",
+  "base_commit": "31eeb9304bdb202ab8a0ea082f443103f44d2c31",
+  "base": "captured local bytes; produtos/index.php had no git diff at start",
+  "files": [
+    {
+      "path": "produtos/index.php",
+      "state": "modified",
+      "before_sha256": "98d3001a9a29df40db5ebe87a67ac246e095dfabe40534b053aad2e1daa2116e",
+      "after_sha256": "1142a70683462272928fd975741732f3f93d69858fcec0bdf7ee0e1564ba9407"
+    },
+    {
+      "path": "tests/produtos_rbac_test.php",
+      "state": "new_untracked",
+      "before_sha256": null,
+      "after_sha256": "a4599080eb96d42fd9d0271f95a58f6a49fc1f1e1937063062e4c4f44677f4e3"
+    }
+  ],
+  "patch_sha256": "db324b3367338bf112ef30bfb2f946b9f62ecb74e671236e179706929cb9b88e",
+  "unchanged_dependencies_and_preexisting_files": [
+    {
+      "path": "produtos/functions.php",
+      "sha256_before_and_after": "9a29231aedb91a6feda17b42c45e271cebb74bdafb60a398a94e8506f4e9beda"
+    },
+    {
+      "path": "inc/auth.php",
+      "sha256_before_and_after": "5d55c1ec6592aef25a8284f988016dfc363c6a3dea146e2108809888c159259c"
+    },
+    {
+      "path": ".gitignore",
+      "sha256_before_and_after": "9c437666b0c092f0a56a2523d59d2584a3aa5beeb72365980777702aa2aea080"
+    },
+    {
+      "path": "README.md",
+      "sha256_before_and_after": "b34f27e9146edc8ffdc84cc98555860358cffc4a7e78745b3129e816ee1f032d"
+    },
+    {
+      "path": "docs/banco_de_dados.md",
+      "sha256_before_and_after": "0111fc0a97fe68a076f416a497629e4ecf461df7fdb89502d20cf3b270f96d2c"
+    },
+    {
+      "path": "docs/perguntas_banca.md",
+      "sha256_before_and_after": "74d4c4e13368ca31aad43e4bd42cc17399832cf966c92036e159147fbd750133"
+    }
+  ],
+  "test_runtime": "C:\\xampp\\php\\php.exe, PHP 8.2.12 CLI",
+  "tests": {
+    "command": "C:\\xampp\\php\\php.exe tests\\produtos_rbac_test.php",
+    "scope": "actual PHP template/auth/controller copies with synthetic fixtures; simulated DB and header/footer; no MySQL, HTTP or browser",
+    "red": {
+      "exit_code": 1,
+      "passed": 5,
+      "failed": 5,
+      "failed_cases": [
+        "caixa_catalogo",
+        "caixa_edit_direto",
+        "caixa_filtros_paginacao",
+        "caixa_lista_vazia",
+        "perfil_sem_privilegio"
+      ],
+      "observation": "administrative modal emitted to cashier; empty-state colspan did not match read-only catalog"
+    },
+    "green": {
+      "exit_code": 0,
+      "passed": 10,
+      "failed": 0,
+      "passed_cases": [
+        "caixa_catalogo",
+        "caixa_edit_direto",
+        "caixa_filtros_paginacao",
+        "caixa_lista_vazia",
+        "perfil_sem_privilegio",
+        "admin_cadastro",
+        "admin_edicao",
+        "admin_edicao_inexistente",
+        "visitante_bloqueado",
+        "caixa_post_bloqueado"
+      ]
+    }
+  },
+  "checks": [
+    {
+      "command": "C:\\xampp\\php\\php.exe -l produtos\\index.php",
+      "result": "passed"
+    },
+    {
+      "command": "C:\\xampp\\php\\php.exe -l tests\\produtos_rbac_test.php",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check -- produtos/index.php",
+      "result": "passed"
+    },
+    {
+      "command": "git apply --check --whitespace=error-all alteracoes-r1.patch",
+      "result": "passed",
+      "scope": "captured local baseline, without applying"
+    }
+  ],
+  "pending": [
+    "Antigravity independent review",
+    "real authenticated HTTP and browser validation",
+    "MySQL read-path integration; no real write-path tests performed"
+  ],
+  "operations_not_performed": [
+    "commit",
+    "push",
+    "merge",
+    "deploy",
+    "database mutation",
+    "external synchronization",
+    "additional Codex CLI sessions"
+  ]
+}

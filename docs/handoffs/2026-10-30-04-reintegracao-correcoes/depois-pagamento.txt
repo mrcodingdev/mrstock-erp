@@ -1,0 +1,10 @@
+PASSOU: abertura em dinheiro exige valor explícito
+PASSOU: cédula de 50 calcula troco 30 e permite uma confirmação
+PASSOU: foco atrasado não sobrescreve cédula escolhida
+PASSOU: Exato permanece disponível por escolha explícita
+PASSOU: valor insuficiente bloqueia finalização
+PASSOU: reabrir modal limpa valor anterior
+PASSOU: PIX e cartões não herdam bloqueio do dinheiro vazio
+PASSOU: voltar de PIX para dinheiro exige nova informação
+PASSOU: vazio ou inválido não confirma nem em total zero
+9/9 cenários aprovados

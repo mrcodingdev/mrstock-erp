@@ -1,0 +1,105 @@
+{
+  "task": "2026-10-30-03-pdv-itens-duplicados",
+  "round": 1,
+  "timestamp": "2026-10-30T15:15:59-03:00",
+  "workspace": "C:\\xampp\\htdocs\\MrStock",
+  "branch": "main",
+  "base_commit": "31eeb9304bdb202ab8a0ea082f443103f44d2c31",
+  "base": "local snapshot captured before this task; prior RBAC modifications excluded",
+  "files": [
+    {
+      "path": "vendas/functions.php",
+      "state": "modified",
+      "before_sha256": "c4ec204db4151f0a2f373001bf1d1429b92bcfdf0e38f839a84e8af96b45b863",
+      "after_sha256": "2a47a7d4fc02a50d71df00520e3fe9ef150ae2f135611a9e3fac76df3bc7f92b"
+    },
+    {
+      "path": "tests/vendas_carrinho_test.php",
+      "state": "new_untracked",
+      "before_sha256": null,
+      "after_sha256": "609c1a642bb75ba1eb91a0d9f0122df9b523973d2ca40ff057ca5982a23dff04"
+    }
+  ],
+  "patch_sha256": "57c225af34d61812ea0c189cc5d37953fab849a6e1a8a3d41c1f91fe0c22dff4",
+  "unchanged_dependencies_and_preexisting_files": [
+    {
+      "path": "vendas/pdv.php",
+      "sha256_before_and_after": "c41b1c04b8f149261c8b5882de948248056abee62ffe98fccb09d9d470d3f257"
+    },
+    {
+      "path": "inc/auth.php",
+      "sha256_before_and_after": "5d55c1ec6592aef25a8284f988016dfc363c6a3dea146e2108809888c159259c"
+    },
+    {
+      "path": "inc/functions.php",
+      "sha256_before_and_after": "1968b5ba1adb882376e0e95cc5d9da16ec97e051c163d4b947c07cbb1c930a04"
+    },
+    {
+      "path": "produtos/index.php",
+      "sha256_before_and_after": "1142a70683462272928fd975741732f3f93d69858fcec0bdf7ee0e1564ba9407"
+    },
+    {
+      "path": "tests/produtos_rbac_test.php",
+      "sha256_before_and_after": "a4599080eb96d42fd9d0271f95a58f6a49fc1f1e1937063062e4c4f44677f4e3"
+    },
+    {
+      "path": ".gitignore",
+      "sha256_before_and_after": "9c437666b0c092f0a56a2523d59d2584a3aa5beeb72365980777702aa2aea080"
+    },
+    {
+      "path": "README.md",
+      "sha256_before_and_after": "b34f27e9146edc8ffdc84cc98555860358cffc4a7e78745b3129e816ee1f032d"
+    },
+    {
+      "path": "docs/banco_de_dados.md",
+      "sha256_before_and_after": "0111fc0a97fe68a076f416a497629e4ecf461df7fdb89502d20cf3b270f96d2c"
+    },
+    {
+      "path": "docs/perguntas_banca.md",
+      "sha256_before_and_after": "74d4c4e13368ca31aad43e4bd42cc17399832cf966c92036e159147fbd750133"
+    }
+  ],
+  "tests": {
+    "runtime": "C:\\xampp\\php\\php.exe (PHP 8.2.12 CLI)",
+    "command": "C:\\xampp\\php\\php.exe tests\\vendas_carrinho_test.php",
+    "scope": "real controller and auth copies, PDO/PDOStatement doubles; synthetic in-memory transactions/lots; csrf/config/log helpers stubbed; no .env or MySQL",
+    "red": {
+      "exit_code": 1,
+      "output": "FAIL duplicados_excedem_estoque: Invalid sale was committed or not rolled back\nFAIL duplicados_excedem_lotes_validos: Invalid sale was committed or not rolled back\nFAIL soma_nao_pode_estourar_inteiro: Invalid sale was committed or not rolled back\nPASS duplicados_no_limite\nPASS preco_oficial_e_desconto_preservados\nPASS consumo_fefo_preservado\nPASS ordem_de_locks_preservada\nPASS quantidade_invalida\nPASS produto_inexistente\nPASS produto_inativo\nPASS carrinho_vazio\nPASS desconto_excessivo\nPASS margem_bloqueada\nPASS rollback_em_falha_de_gravacao_simulada\nPASS venda_rapida_preservada\n15 cases; 12 passed; 3 failed; PDO double, no MySQL\n"
+    },
+    "green": {
+      "exit_code": 0,
+      "output": "PASS duplicados_excedem_estoque\nPASS duplicados_excedem_lotes_validos\nPASS soma_nao_pode_estourar_inteiro\nPASS duplicados_no_limite\nPASS preco_oficial_e_desconto_preservados\nPASS consumo_fefo_preservado\nPASS ordem_de_locks_preservada\nPASS quantidade_invalida\nPASS produto_inexistente\nPASS produto_inativo\nPASS carrinho_vazio\nPASS desconto_excessivo\nPASS margem_bloqueada\nPASS rollback_em_falha_de_gravacao_simulada\nPASS venda_rapida_preservada\n15 cases; 15 passed; 0 failed; PDO double, no MySQL\n"
+    },
+    "rbac_regression": {
+      "command": "C:\\xampp\\php\\php.exe tests\\produtos_rbac_test.php",
+      "result": "10/10 passed"
+    }
+  },
+  "checks": [
+    {
+      "command": "php -l vendas/functions.php",
+      "result": "passed"
+    },
+    {
+      "command": "php -l tests/vendas_carrinho_test.php",
+      "result": "passed"
+    },
+    {
+      "command": "git diff --check -- vendas/functions.php",
+      "result": "passed",
+      "note": "Git emitted CRLF-to-LF normalization warning, no whitespace error"
+    },
+    {
+      "command": "git apply --check --whitespace=error-all alteracoes-r1.patch",
+      "result": "passed",
+      "scope": "captured local baseline, without applying"
+    }
+  ],
+  "pending": [
+    "Antigravity review",
+    "MySQL/InnoDB integration, transaction rollback and concurrent requests",
+    "authenticated HTTP/browser"
+  ],
+  "restricted_operations": "No commit, push, merge, deploy, real database writes, external synchronization or additional Codex CLI session"
+}

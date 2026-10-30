@@ -1,0 +1,16 @@
+PASS duplicados_excedem_estoque
+PASS duplicados_excedem_lotes_validos
+PASS soma_nao_pode_estourar_inteiro
+PASS duplicados_no_limite
+PASS preco_oficial_e_desconto_preservados
+PASS consumo_fefo_preservado
+PASS ordem_de_locks_preservada
+PASS quantidade_invalida
+PASS produto_inexistente
+PASS produto_inativo
+PASS carrinho_vazio
+PASS desconto_excessivo
+PASS margem_bloqueada
+PASS rollback_em_falha_de_gravacao_simulada
+PASS venda_rapida_preservada
+15 cases; 15 passed; 0 failed; PDO double, no MySQL

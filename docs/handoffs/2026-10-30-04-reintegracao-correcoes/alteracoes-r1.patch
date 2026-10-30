@@ -1,0 +1,688 @@
+diff --git a/produtos/index.php b/produtos/index.php
+index 8127cf1..7e715e9 100644
+--- a/produtos/index.php
++++ b/produtos/index.php
+@@ -6,6 +6,7 @@ $pageTitle  = 'Estoque & Produtos';
+ $activePage = 'produtos';
+ require_once __DIR__ . '/../inc/database.php';
+ require_once __DIR__ . '/../inc/auth.php';
++$podeGerenciarProdutos = is_admin();
+ 
+ // ── 1. Ingestão de Parâmetros de Filtro via GET ─────────────────────────────
+ $statusFiltro     = trim($_GET['status'] ?? '');
+@@ -74,7 +75,9 @@ $offset = ($page - 1) * $limit;
+ 
+ // Query Principal de Produtos
+ $stmt = $pdo->prepare("
+-    SELECT p.*, f.nome as fornecedor_nome, c.nome as categoria_nome_rel
++    SELECT p.id, p.nome, p.categoria, p.codigo_de_barra, p.quantidade,
++           p.estoque_minimo, p.preco_venda, p.validade, p.status,
++           f.nome as fornecedor_nome, c.nome as categoria_nome_rel
+     FROM produtos p 
+     LEFT JOIN fornecedores f ON p.fornecedor_id = f.id 
+     LEFT JOIN categorias c ON p.categoria_id = c.id
+@@ -99,7 +102,7 @@ $categoriasLista = $stmtCat ? $stmtCat->fetchAll() : [];
+ 
+ // Edição de Produto via Modal
+ $editProduto = null;
+-if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
++if ($podeGerenciarProdutos && isset($_GET['edit']) && is_numeric($_GET['edit'])) {
+     $stmtEdit = $pdo->prepare("SELECT * FROM produtos WHERE id = ?");
+     $stmtEdit->execute([$_GET['edit']]);
+     $editProduto = $stmtEdit->fetch();
+@@ -120,6 +123,7 @@ require_once __DIR__ . '/../inc/header.php';
+         <h2 class="fw-bold text-dark m-0"><i class="fas fa-boxes-stacked text-primary me-2"></i>Estoque & Produtos</h2>
+         <p class="text-muted m-0">Cadastre itens, defina o estoque mínimo, preços e gere etiquetas de código de barras.</p>
+     </div>
++    <?php if ($podeGerenciarProdutos): ?>
+     <div class="d-flex gap-2 flex-wrap">
+         <a href="<?= BASE_URL ?>/produtos/etiquetas.php" class="btn btn-secondary fw-semibold">
+             <i class="fas fa-barcode me-1"></i> Imprimir Etiquetas
+@@ -128,6 +132,7 @@ require_once __DIR__ . '/../inc/header.php';
+             <i class="fas fa-plus-circle me-1"></i> Adicionar Produto
+         </button>
+     </div>
++    <?php endif; ?>
+ </div>
+ 
+ <div class="content-body">
+@@ -242,7 +247,9 @@ require_once __DIR__ . '/../inc/header.php';
+                             <th width="14%" class="text-center">Estoque</th>
+                             <th width="14%">Validade</th>
+                             <th width="12%">Preço Venda</th>
++                            <?php if ($podeGerenciarProdutos): ?>
+                             <th width="6%" class="text-center">Ações</th>
++                            <?php endif; ?>
+                         </tr>
+                     </thead>
+                     <tbody>
+@@ -297,6 +304,7 @@ require_once __DIR__ . '/../inc/header.php';
+                                 <td class="fw-bold text-dark tabular-nums">
+                                     R$ <?= number_format((float)$p['preco_venda'], 2, ',', '.') ?>
+                                 </td>
++                                <?php if ($podeGerenciarProdutos): ?>
+                                 <td class="text-center">
+                                     <!-- Menu de Ações em Linha (3 Pontos) -->
+                                     <?php $isDropup = ($index >= count($produtos) - 2) ? 'dropup' : ''; ?>
+@@ -345,11 +353,12 @@ require_once __DIR__ . '/../inc/header.php';
+                                         </ul>
+                                     </div>
+                                 </td>
++                                <?php endif; ?>
+                             </tr>
+                             <?php endforeach; ?>
+                         <?php else: ?>
+                             <tr>
+-                                <td colspan="7" class="p-0 border-0">
++                                <td colspan="<?= $podeGerenciarProdutos ? 7 : 6 ?>" class="p-0 border-0">
+                                     <?= render_empty_state('Nenhum produto localizado', 'Não encontramos nenhum produto ativo para os filtros selecionados.', BASE_URL . '/produtos/index.php') ?>
+                                 </td>
+                             </tr>
+@@ -419,6 +428,7 @@ require_once __DIR__ . '/../inc/header.php';
+     </div>
+ </div>
+ 
++<?php if ($podeGerenciarProdutos): ?>
+ <!-- Modal Produto -->
+ <div class="modal fade" id="modalProduto" tabindex="-1" aria-labelledby="modalProdutoLabel" aria-hidden="true" data-bs-backdrop="static">
+     <div class="modal-dialog modal-lg">
+@@ -507,6 +517,8 @@ require_once __DIR__ . '/../inc/header.php';
+     </div>
+ </div>
+ 
++<?php endif; ?>
++
+ <script>
+ function filtrarAoVivo(input) {
+     const termo = input.value.toLowerCase().trim();
+@@ -517,6 +529,7 @@ function filtrarAoVivo(input) {
+     });
+ }
+ 
++<?php if ($podeGerenciarProdutos): ?>
+ function clearForm() {
+     ['prod_id','prod_nome','prod_validade','prod_codigo_de_barra'].forEach(id => document.getElementById(id).value = '');
+     document.getElementById('prod_categoria_id').value = '';
+@@ -532,6 +545,7 @@ function clearForm() {
+ <?php if ($editProduto): ?>
+ window.onload = () => new bootstrap.Modal(document.getElementById('modalProduto')).show();
+ <?php endif; ?>
++<?php endif; ?>
+ </script>
+ 
+ <?php require_once __DIR__ . '/../inc/footer.php'; ?>
+diff --git a/vendas/functions.php b/vendas/functions.php
+index 13fdbc1..0ada7a5 100644
+--- a/vendas/functions.php
++++ b/vendas/functions.php
+@@ -140,6 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
+ 
+                 // ══ VALIDAÇÃO COM LOCK PESSIMISTA & CÁLCULO OFICIAL DE PREÇO ══
+                 $itensValidados = [];
++                $quantidadesPorProduto = [];
+                 $totalCalculado = 0.0;
+                 $custoTotal     = 0.0;
+ 
+@@ -147,22 +148,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                     $item_id  = (int)($item['id'] ?? 0);
+                     $item_qtd = (int)($item['quantidade'] ?? 0);
+ 
+-                    if ($item_id <= 0 || $item_qtd <= 0) {
++                    $quantidadeAnterior = $quantidadesPorProduto[$item_id] ?? 0;
++                    if ($item_id <= 0 || $item_qtd <= 0 || $item_qtd > PHP_INT_MAX - $quantidadeAnterior) {
+                         if ($pdo->inTransaction()) { $pdo->rollBack(); }
+                         header("Location: " . BASE_URL . "/vendas/pdv.php?erro=dados_invalidos");
+                         exit;
+                     }
+ 
++                    // Duplicatas compartilham o saldo, mas preservam suas linhas na venda.
++                    $quantidadeAcumulada = $quantidadeAnterior + $item_qtd;
++                    $quantidadesPorProduto[$item_id] = $quantidadeAcumulada;
++
+                     // Consulta com Lock Pessimista (FOR UPDATE)
+                     $stmtChk = $pdo->prepare("SELECT id, nome, preco_venda, preco_compra, quantidade, status FROM produtos WHERE id = ? FOR UPDATE");
+                     $stmtChk->execute([$item_id]);
+                     $prodInfo = $stmtChk->fetch();
+ 
+-                    if (!$prodInfo || $prodInfo['status'] !== 'ativo' || (int)$prodInfo['quantidade'] < $item_qtd) {
++                    if (!$prodInfo || $prodInfo['status'] !== 'ativo' || (int)$prodInfo['quantidade'] < $quantidadeAcumulada) {
+                         if ($pdo->inTransaction()) { $pdo->rollBack(); }
+                         $disponivel = $prodInfo ? (int)$prodInfo['quantidade'] : 0;
+                         $nomeProd   = $prodInfo ? $prodInfo['nome']            : ('Produto #' . $item_id);
+-                        header("Location: " . BASE_URL . "/vendas/pdv.php?erro=estoque&produto=" . urlencode($nomeProd) . "&disponivel=" . $disponivel . "&solicitado=" . $item_qtd);
++                        header("Location: " . BASE_URL . "/vendas/pdv.php?erro=estoque&produto=" . urlencode($nomeProd) . "&disponivel=" . $disponivel . "&solicitado=" . $quantidadeAcumulada);
+                         exit;
+                     }
+ 
+@@ -176,11 +182,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                         $stmtLoteVal->execute([$item_id]);
+                         $qtdLotesValidos = (int)$stmtLoteVal->fetchColumn();
+ 
+-                        if ($qtdLotesValidos < $item_qtd) {
++                        if ($qtdLotesValidos < $quantidadeAcumulada) {
+                             if ($pdo->inTransaction()) { $pdo->rollBack(); }
+                             $nomeProd = $prodInfo['nome'] ?? ('Produto #' . $item_id);
+-                            registrar_log($pdo, 'BLOQUEIO_SANITARIO', "Venda bloqueada (CDC Art. 18): Produto #$item_id ($nomeProd) possui apenas $qtdLotesValidos un. em lotes válidos (solicitado: $item_qtd)", 'lotes');
+-                            header("Location: " . BASE_URL . "/vendas/pdv.php?erro=lote_vencido&produto=" . urlencode($nomeProd) . "&disponivel=" . $qtdLotesValidos . "&solicitado=" . $item_qtd);
++                            registrar_log($pdo, 'BLOQUEIO_SANITARIO', "Venda bloqueada (CDC Art. 18): Produto #$item_id ($nomeProd) possui apenas $qtdLotesValidos un. em lotes válidos (solicitado: $quantidadeAcumulada)", 'lotes');
++                            header("Location: " . BASE_URL . "/vendas/pdv.php?erro=lote_vencido&produto=" . urlencode($nomeProd) . "&disponivel=" . $qtdLotesValidos . "&solicitado=" . $quantidadeAcumulada);
+                             exit;
+                         }
+                     }
+--- /dev/null
++++ b/tests/produtos_rbac_test.php
+@@ -0,0 +1,247 @@
++<?php
++declare(strict_types=1);
++
++// Execute via CLI. Fixtures isolate rendering from MySQL and real credentials.
++if (PHP_SAPI !== 'cli') {
++    http_response_code(403);
++    exit;
++}
++
++final class ProdutosFixtureDb
++{
++    public array $queries = [];
++    public array $product = [
++        'id' => 37, 'nome' => 'Caneta de teste RBAC', 'categoria' => 'Teste RBAC',
++        'categoria_id' => 1, 'categoria_nome_rel' => 'Teste RBAC',
++        'fornecedor_id' => 1, 'fornecedor_nome' => 'Fornecedor ficticio',
++        'codigo_de_barra' => '7890000000037', 'quantidade' => 12,
++        'estoque_minimo' => 3, 'preco_venda' => '19.90',
++        'preco_compra' => '8457.13', 'validade' => null, 'status' => 'ativo',
++    ];
++
++    public function __construct(public bool $empty = false) {}
++
++    public function prepare(string $sql): ProdutosFixtureStatement
++    {
++        $this->queries[] = preg_replace('/\s+/', ' ', trim($sql));
++        return new ProdutosFixtureStatement($this, $sql);
++    }
++
++    public function query(string $sql): ProdutosFixtureStatement
++    {
++        return $this->prepare($sql);
++    }
++}
++
++final class ProdutosFixtureStatement
++{
++    private array $params = [];
++
++    public function __construct(private ProdutosFixtureDb $db, private string $sql) {}
++
++    public function bindValue(string $name, mixed $value, int $type = 0): void
++    {
++        $this->params[$name] = $value;
++    }
++
++    public function execute(?array $params = null): bool
++    {
++        $this->params = $params ?? $this->params;
++        if (!preg_match('/^\s*SELECT\b/i', $this->sql)) {
++            throw new RuntimeException('Fixture refuses writes');
++        }
++        return true;
++    }
++
++    public function fetchColumn(): int
++    {
++        return $this->db->empty ? 0 : 11;
++    }
++
++    public function fetch(): array|false
++    {
++        return (int)($this->params[0] ?? 0) === 37 ? $this->db->product : false;
++    }
++
++    public function fetchAll(): array
++    {
++        if (preg_match('/FROM produtos p\b/i', $this->sql)) {
++            return $this->db->empty ? [] : [$this->db->product];
++        }
++        return [['id' => 1, 'nome' => 'Teste RBAC']];
++    }
++}
++
++function renderWorker(array $case): never
++{
++    $root = dirname(__DIR__);
++    $temp = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'mrstock-produtos-rbac-' . bin2hex(random_bytes(8));
++    mkdir($temp . '/inc', 0700, true);
++    mkdir($temp . '/produtos', 0700);
++    foreach (['produtos/index.php', 'produtos/functions.php', 'inc/auth.php'] as $path) {
++        copy($root . '/' . $path, $temp . '/' . $path);
++    }
++    file_put_contents($temp . '/inc/database.php', '<?php $pdo = $GLOBALS["fixtureDb"]; define("BASE_URL", "/MrStock");');
++    file_put_contents($temp . '/inc/functions.php', '<?php');
++    file_put_contents($temp . '/inc/header.php', <<<'PHP'
++<?php
++function csrf_input(): string { return '<input type="hidden" name="csrf_token" value="fixture">'; }
++function render_empty_state(string $title, string $message, string $url): string { return htmlspecialchars($title); }
++PHP);
++    file_put_contents($temp . '/inc/footer.php', '<?php');
++
++    ini_set('session.save_path', $temp);
++    session_start(['use_cookies' => false, 'cache_limiter' => '']);
++    $_SESSION = $case['session'];
++    $_GET = $case['get'] ?? [];
++    $_POST = $case['post'] ?? [];
++    $_SERVER['REQUEST_METHOD'] = $case['method'] ?? 'GET';
++    $db = new ProdutosFixtureDb($case['empty'] ?? false);
++    $GLOBALS['fixtureDb'] = $db;
++    $result = ['completed' => false, 'error' => null];
++    ob_start();
++    register_shutdown_function(static function () use (&$result, $db, $temp): void {
++        $result['html'] = ob_get_clean();
++        $result['queries'] = $db->queries;
++        $result['flash_error'] = $_SESSION['flash_error'] ?? null;
++        $sessionFile = $temp . '/sess_' . session_id();
++        session_write_close();
++        // Only the files created by this worker are removed; no recursive delete.
++        foreach (['produtos/index.php', 'produtos/functions.php', 'inc/auth.php',
++                  'inc/database.php', 'inc/functions.php', 'inc/header.php', 'inc/footer.php'] as $path) {
++            unlink($temp . '/' . $path);
++        }
++        if (is_file($sessionFile)) {
++            unlink($sessionFile);
++        }
++        rmdir($temp . '/inc');
++        rmdir($temp . '/produtos');
++        rmdir($temp);
++        echo json_encode($result, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE);
++    });
++    set_error_handler(static function (int $severity, string $message, string $file, int $line): never {
++        throw new ErrorException($message, 0, $severity, $file, $line);
++    });
++    try {
++        require $temp . '/' . ($case['target'] ?? 'produtos/index.php');
++        $result['completed'] = true;
++    } catch (Throwable $error) {
++        $result['error'] = $error->getMessage();
++    }
++    exit;
++}
++
++if (($argv[1] ?? '') === '--worker') {
++    renderWorker(json_decode(base64_decode($argv[2]), true, flags: JSON_THROW_ON_ERROR));
++}
++
++function renderCase(array $case): array
++{
++    $command = [PHP_BINARY, __FILE__, '--worker', base64_encode(json_encode($case, JSON_THROW_ON_ERROR))];
++    $pipes = [];
++    $process = proc_open($command, [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
++    if (!is_resource($process)) {
++        throw new RuntimeException('Unable to start PHP worker');
++    }
++    fclose($pipes[0]);
++    $stdout = stream_get_contents($pipes[1]);
++    $stderr = stream_get_contents($pipes[2]);
++    fclose($pipes[1]);
++    fclose($pipes[2]);
++    $exit = proc_close($process);
++    if ($exit !== 0 || $stderr !== '') {
++        throw new RuntimeException('PHP worker failed: ' . $stderr);
++    }
++    $result = json_decode($stdout, true, flags: JSON_THROW_ON_ERROR);
++    if ($result['error'] !== null) {
++        throw new RuntimeException($result['error']);
++    }
++    return $result;
++}
++
++function expect(bool $condition, string $message): void
++{
++    if (!$condition) {
++        throw new RuntimeException($message);
++    }
++}
++
++function expectCashierReadOnly(array $result): void
++{
++    expect($result['completed'], 'Catalog did not render');
++    foreach (['modalProduto', 'preco_compra', '8457.13', 'Custo (R$)',
++              '/produtos/functions.php', 'Editar Produto', 'Adicionar Produto'] as $forbidden) {
++        expect(!str_contains($result['html'], $forbidden), 'Administrative content in response: ' . $forbidden);
++    }
++    expect(str_contains($result['html'], 'Caneta de teste RBAC'), 'Product missing');
++    expect(str_contains($result['html'], 'Teste RBAC'), 'Category missing');
++    expect(str_contains($result['html'], '12 un'), 'Stock missing');
++    expect(str_contains($result['html'], '19,90'), 'Sale price missing');
++    $editQueries = array_filter($result['queries'], static fn(string $sql): bool => (bool)preg_match('/FROM produtos WHERE id\s*=\s*\?/i', $sql));
++    expect($editQueries === [], 'Cashier executed edit query');
++    foreach ($result['queries'] as $sql) {
++        if (preg_match('/FROM produtos p\b/i', $sql) && !str_contains($sql, 'COUNT(*)')) {
++            expect(!str_contains($sql, 'p.*') && !str_contains($sql, 'preco_compra'), 'Catalog requested administrative fields');
++        }
++    }
++}
++
++$cashier = ['user_id' => 1, 'user_perfil' => 'caixa'];
++$admin = ['user_id' => 2, 'user_perfil' => 'admin'];
++$cases = [
++    'caixa_catalogo' => static fn() => expectCashierReadOnly(renderCase(['session' => $cashier])),
++    'caixa_edit_direto' => static fn() => expectCashierReadOnly(renderCase(['session' => $cashier, 'get' => ['edit' => '37']])),
++    'caixa_filtros_paginacao' => static function () use ($cashier): void {
++        $result = renderCase(['session' => $cashier, 'get' => ['pagina' => '2', 'categoria_id' => '1', 'busca' => 'Caneta']]);
++        expectCashierReadOnly($result);
++        expect(str_contains($result['html'], 'pagina=1'), 'Pagination missing');
++        expect(str_contains($result['html'], 'categoria_id=1'), 'Filter lost in pagination');
++    },
++    'caixa_lista_vazia' => static function () use ($cashier): void {
++        $html = renderCase(['session' => $cashier, 'empty' => true])['html'];
++        expect(str_contains($html, 'Nenhum produto localizado'), 'Empty state missing');
++        expect(str_contains($html, 'colspan="6"'), 'Empty state has wrong column count');
++        expect(!str_contains($html, 'modalProduto'), 'Administrative modal in empty catalog');
++    },
++    'perfil_sem_privilegio' => static fn() => expectCashierReadOnly(renderCase(['session' => ['user_id' => 3]])),
++    'admin_cadastro' => static function () use ($admin): void {
++        $html = renderCase(['session' => $admin])['html'];
++        foreach (['id="modalProduto"', 'Adicionar Produto', 'Editar Produto', 'name="preco_compra"', 'name="csrf_token"', 'function clearForm()'] as $required) {
++            expect(str_contains($html, $required), 'Admin content missing: ' . $required);
++        }
++    },
++    'admin_edicao' => static function () use ($admin): void {
++        $result = renderCase(['session' => $admin, 'get' => ['edit' => '37']]);
++        expect(str_contains($result['html'], 'value="8457.13"'), 'Admin cost was not populated');
++        expect(str_contains($result['html'], 'value="37"'), 'Admin product ID missing');
++        expect(str_contains($result['html'], 'window.onload'), 'Edit modal no longer opens');
++    },
++    'admin_edicao_inexistente' => static function () use ($admin): void {
++        $html = renderCase(['session' => $admin, 'get' => ['edit' => '999']])['html'];
++        expect(str_contains($html, 'id="modalProduto"'), 'Admin create modal missing');
++        expect(!str_contains($html, 'window.onload'), 'Unknown product opened edit modal');
++    },
++    'visitante_bloqueado' => static function (): void {
++        $result = renderCase(['session' => [], 'get' => ['edit' => '37']]);
++        expect(!$result['completed'] && $result['queries'] === [] && $result['html'] === '', 'Unauthenticated request reached catalog');
++    },
++    'caixa_post_bloqueado' => static function () use ($cashier): void {
++        $result = renderCase(['session' => $cashier, 'target' => 'produtos/functions.php',
++            'method' => 'POST', 'get' => ['tipo' => 'produto'],
++            'post' => ['acao' => 'salvar', 'id' => '37', 'preco_compra' => '1']]);
++        expect(!$result['completed'] && $result['queries'] === [] && $result['flash_error'] !== null, 'Cashier reached product write path');
++    },
++];
++
++$failures = 0;
++foreach ($cases as $name => $test) {
++    try {
++        $test();
++        echo "PASS $name\n";
++    } catch (Throwable $error) {
++        $failures++;
++        echo "FAIL $name: {$error->getMessage()}\n";
++    }
++}
++echo sprintf("%d cases; %d passed; %d failed; isolated fixtures, no MySQL\n", count($cases), count($cases) - $failures, $failures);
++exit($failures === 0 ? 0 : 1);
+--- /dev/null
++++ b/tests/vendas_carrinho_test.php
+@@ -0,0 +1,264 @@
++<?php
++declare(strict_types=1);
++
++if (PHP_SAPI !== 'cli') {
++    http_response_code(403);
++    exit;
++}
++
++// In-memory PDO double: executes the real controller without opening MySQL.
++final class CarrinhoDb extends PDO
++{
++    public array $state;
++    public array $writes = [];
++    public array $locks = [];
++    public array $logs = [];
++    public bool $committed = false;
++    public int $rollbacks = 0;
++    private bool $transaction = false;
++    private array $snapshot = [];
++
++    public function __construct(public array $fixture)
++    {
++        $this->state = [
++            'products' => [
++                1 => ['id' => 1, 'nome' => 'Produto ficticio A', 'preco_venda' => 10.0, 'preco_compra' => 4.0, 'quantidade' => $fixture['stock'] ?? 10, 'status' => $fixture['status'] ?? 'ativo'],
++                2 => ['id' => 2, 'nome' => 'Produto ficticio B', 'preco_venda' => 20.0, 'preco_compra' => 8.0, 'quantidade' => 10, 'status' => 'ativo'],
++            ],
++            'lots' => $fixture['lots'] ?? [], 'sales' => [], 'items' => [], 'movements' => [], 'receipts' => [],
++        ];
++    }
++
++    public function prepare(string $query, array $options = []): PDOStatement|false
++    {
++        return new CarrinhoStatement($this, preg_replace('/\s+/', ' ', trim($query)));
++    }
++
++    public function beginTransaction(): bool
++    {
++        $this->snapshot = $this->state;
++        return $this->transaction = true;
++    }
++
++    public function inTransaction(): bool { return $this->transaction; }
++
++    public function commit(): bool
++    {
++        $this->committed = true;
++        $this->transaction = false;
++        return true;
++    }
++
++    public function rollBack(): bool
++    {
++        $this->state = $this->snapshot;
++        $this->transaction = false;
++        $this->rollbacks++;
++        return true;
++    }
++
++    public function lastInsertId(?string $name = null): string|false { return '1'; }
++}
++
++final class CarrinhoStatement extends PDOStatement
++{
++    private mixed $value = null;
++
++    public function __construct(private CarrinhoDb $db, private string $sql) {}
++
++    public function execute(?array $params = null): bool
++    {
++        $params ??= [];
++        $sql = $this->sql;
++        $db = $this->db;
++        if (str_starts_with($sql, 'SELECT')) {
++            if (str_contains($sql, 'FROM produtos WHERE')) {
++                $db->locks[] = (int)$params[0];
++                $this->value = $db->state['products'][(int)$params[0]] ?? false;
++            } elseif (str_contains($sql, 'FROM lotes')) {
++                $lots = array_values(array_filter($db->state['lots'], static fn(array $lot): bool => $lot['produto_id'] === (int)$params[0]));
++                if (!str_contains($sql, 'COUNT(*)')) {
++                    $lots = array_values(array_filter($lots, static fn(array $lot): bool => $lot['quantidade'] > 0 && $lot['data_validade'] >= '2026-10-30'));
++                }
++                usort($lots, static fn(array $a, array $b): int => [$a['data_validade'], $a['id']] <=> [$b['data_validade'], $b['id']]);
++                $this->value = str_contains($sql, 'COUNT(*)') ? count($lots)
++                    : (str_contains($sql, 'SUM(quantidade)') ? array_sum(array_column($lots, 'quantidade')) : $lots);
++            } else {
++                throw new RuntimeException('Unsupported fixture SELECT');
++            }
++            return true;
++        }
++
++        $db->writes[] = ['sql' => $sql, 'params' => $params];
++        if (str_starts_with($sql, 'INSERT INTO vendas ')) {
++            $db->state['sales'][] = ['total' => $params[count($params) - 2], 'payment' => $params[count($params) - 1]];
++        } elseif (str_starts_with($sql, 'INSERT INTO vendas_itens ')) {
++            if ($db->fixture['fail_item'] ?? false) {
++                throw new RuntimeException('simulated_item_failure');
++            }
++            $db->state['items'][] = ['product' => $params[1], 'quantity' => $params[2], 'price' => $params[3]];
++        } elseif (str_starts_with($sql, 'UPDATE produtos ')) {
++            $db->state['products'][(int)$params[1]]['quantidade'] -= $params[0];
++        } elseif (str_starts_with($sql, 'UPDATE lotes ')) {
++            foreach ($db->state['lots'] as &$lot) {
++                if ($lot['id'] === (int)$params[1]) { $lot['quantidade'] = $params[0]; }
++            }
++            unset($lot);
++        } elseif (str_starts_with($sql, 'INSERT INTO movimentacoes ')) {
++            $db->state['movements'][] = $params;
++        } elseif (str_starts_with($sql, 'INSERT INTO cupons_fiscais ')) {
++            $db->state['receipts'][] = $params;
++        } else {
++            throw new RuntimeException('Unsupported fixture write');
++        }
++        return true;
++    }
++
++    public function fetch(int $mode = PDO::FETCH_DEFAULT, int $cursorOrientation = PDO::FETCH_ORI_NEXT, int $cursorOffset = 0): mixed { return $this->value; }
++    public function fetchColumn(int $column = 0): mixed { return $this->value; }
++    public function fetchAll(int $mode = PDO::FETCH_DEFAULT, mixed ...$args): array { return $this->value; }
++}
++
++function controllerWorker(array $case): never
++{
++    $root = dirname(__DIR__);
++    $temp = sys_get_temp_dir() . '/mrstock-carrinho-' . bin2hex(random_bytes(8));
++    mkdir($temp . '/inc', 0700, true);
++    mkdir($temp . '/vendas', 0700);
++    copy($root . '/vendas/functions.php', $temp . '/vendas/functions.php');
++    copy($root . '/inc/auth.php', $temp . '/inc/auth.php');
++    file_put_contents($temp . '/inc/database.php', '<?php $pdo = $GLOBALS["cartDb"]; define("BASE_URL", "/MrStock");');
++    file_put_contents($temp . '/inc/functions.php', <<<'PHP'
++<?php
++function csrf_verify(): void {}
++function get_app_config(PDO $pdo, string $key, string $default): string { return (string)($pdo->fixture['config'][$key] ?? $default); }
++function registrar_log(PDO $pdo, string $action, string $message, string $table): void { $pdo->logs[] = $action; }
++PHP);
++    ini_set('session.save_path', $temp);
++    ini_set('error_log', $temp . '/errors.log');
++    session_start(['use_cookies' => false, 'cache_limiter' => '']);
++    $_SESSION = ['user_id' => 1, 'user_perfil' => 'caixa'];
++    $_GET = ['tipo' => 'venda'];
++    $_POST = array_merge(['acao' => 'venda_completa', 'cart_data' => json_encode($case['cart'] ?? [], JSON_THROW_ON_ERROR)], $case['post'] ?? []);
++    $_SERVER['REQUEST_METHOD'] = 'POST';
++    $db = new CarrinhoDb($case);
++    $GLOBALS['cartDb'] = $db;
++    ob_start();
++    register_shutdown_function(static function () use ($db, $temp): void {
++        $result = ['state' => $db->state, 'committed' => $db->committed, 'rollbacks' => $db->rollbacks,
++            'writes' => $db->writes, 'locks' => $db->locks, 'logs' => $db->logs, 'html' => ob_get_clean(),
++            'error_log' => is_file($temp . '/errors.log') ? file_get_contents($temp . '/errors.log') : ''];
++        $sessionFile = $temp . '/sess_' . session_id();
++        session_write_close();
++        foreach (['vendas/functions.php', 'inc/auth.php', 'inc/database.php', 'inc/functions.php', 'errors.log'] as $path) {
++            if (is_file($temp . '/' . $path)) { unlink($temp . '/' . $path); }
++        }
++        if (is_file($sessionFile)) { unlink($sessionFile); }
++        rmdir($temp . '/inc');
++        rmdir($temp . '/vendas');
++        rmdir($temp);
++        echo json_encode($result, JSON_THROW_ON_ERROR);
++    });
++    set_error_handler(static function (int $severity, string $message, string $file, int $line): never {
++        throw new ErrorException($message, 0, $severity, $file, $line);
++    });
++    require $temp . '/vendas/functions.php';
++    exit;
++}
++
++if (($argv[1] ?? '') === '--worker') {
++    controllerWorker(json_decode(base64_decode($argv[2]), true, flags: JSON_THROW_ON_ERROR));
++}
++
++function sale(array $case): array
++{
++    $pipes = [];
++    $process = proc_open([PHP_BINARY, __FILE__, '--worker', base64_encode(json_encode($case, JSON_THROW_ON_ERROR))],
++        [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
++    if (!is_resource($process)) { throw new RuntimeException('Unable to start worker'); }
++    fclose($pipes[0]);
++    $stdout = stream_get_contents($pipes[1]);
++    $stderr = stream_get_contents($pipes[2]);
++    fclose($pipes[1]);
++    fclose($pipes[2]);
++    $exit = proc_close($process);
++    if ($exit !== 0 || $stderr !== '') { throw new RuntimeException('Worker failed: ' . $stderr); }
++    return json_decode($stdout, true, flags: JSON_THROW_ON_ERROR);
++}
++
++function check(bool $condition, string $message): void
++{
++    if (!$condition) { throw new RuntimeException($message); }
++}
++
++function rejected(array $result): void
++{
++    check(!$result['committed'] && $result['rollbacks'] === 1, 'Invalid sale was committed or not rolled back');
++    check($result['writes'] === [], 'Invalid cart reached writes');
++    check($result['error_log'] === '', 'Unexpected processing exception');
++}
++
++$duplicates = [['id' => 1, 'quantidade' => 6], ['id' => '1', 'quantidade' => 6]];
++$lots = [
++    ['id' => 3, 'produto_id' => 1, 'quantidade' => 50, 'data_validade' => '2020-01-01'],
++    ['id' => 2, 'produto_id' => 1, 'quantidade' => 7, 'data_validade' => '2027-02-01'],
++    ['id' => 1, 'produto_id' => 1, 'quantidade' => 3, 'data_validade' => '2027-01-01'],
++];
++$tests = [
++    'duplicados_excedem_estoque' => static function () use ($duplicates): void {
++        $r = sale(['cart' => $duplicates]);
++        rejected($r);
++        check($r['state']['products'][1]['quantidade'] === 10, 'Stock changed on rejection');
++    },
++    'duplicados_excedem_lotes_validos' => static function () use ($duplicates, $lots): void {
++        $r = sale(['cart' => $duplicates, 'stock' => 20, 'lots' => $lots]);
++        rejected($r);
++        check(in_array('BLOQUEIO_SANITARIO', $r['logs'], true), 'Valid-lot shortage not detected');
++        check($r['state']['lots'] === $lots, 'Lots changed on rejection');
++    },
++    'soma_nao_pode_estourar_inteiro' => static function (): void {
++        rejected(sale(['stock' => PHP_INT_MAX, 'cart' => [['id' => 1, 'quantidade' => PHP_INT_MAX], ['id' => 1, 'quantidade' => 1]]]));
++    },
++    'duplicados_no_limite' => static function (): void {
++        $r = sale(['cart' => [['id' => 1, 'quantidade' => 4], ['id' => 1, 'quantidade' => 6]]]);
++        check($r['committed'] && $r['state']['products'][1]['quantidade'] === 0, 'Exact stock balance failed');
++        check(count($r['state']['items']) === 2 && count($r['state']['movements']) === 2, 'Sale lines changed');
++    },
++    'preco_oficial_e_desconto_preservados' => static function (): void {
++        $r = sale(['cart' => [['id' => 1, 'quantidade' => 2, 'preco' => 0.01], ['id' => 1, 'quantidade' => 3, 'preco' => 0.01]], 'post' => ['desconto' => '2']]);
++        check($r['committed'] && (float)$r['state']['sales'][0]['total'] === 48.0, 'Official total or discount changed');
++        check($r['state']['products'][1]['quantidade'] === 5, 'Wrong quantity debited');
++    },
++    'consumo_fefo_preservado' => static function () use ($lots): void {
++        $r = sale(['lots' => $lots, 'cart' => [['id' => 1, 'quantidade' => 2], ['id' => 1, 'quantidade' => 3]]]);
++        $balances = array_column($r['state']['lots'], 'quantidade', 'id');
++        check($r['committed'] && $balances === [3 => 50, 2 => 5, 1 => 0], 'Valid lots/FEFO changed');
++    },
++    'ordem_de_locks_preservada' => static function (): void {
++        $r = sale(['cart' => [['id' => 2, 'quantidade' => 1], ['id' => 1, 'quantidade' => 2], ['id' => 2, 'quantidade' => 2]]]);
++        check($r['committed'] && $r['locks'] === [1, 2, 2], 'Product lock order changed');
++        check($r['state']['products'][1]['quantidade'] === 8 && $r['state']['products'][2]['quantidade'] === 7, 'Cross-product quantities mixed');
++    },
++    'quantidade_invalida' => static fn() => rejected(sale(['cart' => [['id' => 1, 'quantidade' => 2], ['id' => 1, 'quantidade' => -1]]])),
++    'produto_inexistente' => static fn() => rejected(sale(['cart' => [['id' => 99, 'quantidade' => 1]]])),
++    'produto_inativo' => static fn() => rejected(sale(['status' => 'inativo', 'cart' => [['id' => 1, 'quantidade' => 1]]])),
++    'carrinho_vazio' => static fn() => rejected(sale(['cart' => []])),
++    'desconto_excessivo' => static fn() => rejected(sale(['cart' => [['id' => 1, 'quantidade' => 1]], 'post' => ['desconto' => 9]])),
++    'margem_bloqueada' => static fn() => rejected(sale(['cart' => [['id' => 1, 'quantidade' => 1]], 'post' => ['desconto' => 7], 'config' => ['pdv_desconto_maximo' => '100', 'pdv_trava_margem' => 'bloquear']])),
++    'rollback_em_falha_de_gravacao_simulada' => static function (): void {
++        $r = sale(['fail_item' => true, 'cart' => [['id' => 1, 'quantidade' => 1]]]);
++        check(!$r['committed'] && $r['rollbacks'] === 1 && $r['state']['sales'] === [] && $r['state']['products'][1]['quantidade'] === 10, 'Rollback did not restore state');
++        check(str_contains($r['error_log'], 'simulated_item_failure'), 'Expected failure was not processed');
++    },
++    'venda_rapida_preservada' => static function (): void {
++        $r = sale(['post' => ['acao' => 'venda_rapida', 'produto_id' => 1, 'quantidade' => 2]]);
++        check($r['committed'] && $r['state']['products'][1]['quantidade'] === 8 && (float)$r['state']['sales'][0]['total'] === 20.0, 'Quick sale changed');
++    },
++];
++$failures = 0;
++foreach ($tests as $name => $test) {
++    try { $test(); echo "PASS $name\n"; }
++    catch (Throwable $error) { $failures++; echo "FAIL $name: {$error->getMessage()}\n"; }
++}
++echo sprintf("%d cases; %d passed; %d failed; PDO double, no MySQL\n", count($tests), count($tests) - $failures, $failures);
++exit($failures === 0 ? 0 : 1);

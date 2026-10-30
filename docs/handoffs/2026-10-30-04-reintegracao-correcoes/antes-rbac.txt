@@ -1,0 +1,11 @@
+FAIL caixa_catalogo: Administrative content in response: modalProduto
+FAIL caixa_edit_direto: Administrative content in response: modalProduto
+FAIL caixa_filtros_paginacao: Administrative content in response: modalProduto
+FAIL caixa_lista_vazia: Empty state has wrong column count
+FAIL perfil_sem_privilegio: Administrative content in response: modalProduto
+PASS admin_cadastro
+PASS admin_edicao
+PASS admin_edicao_inexistente
+PASS visitante_bloqueado
+PASS caixa_post_bloqueado
+10 cases; 5 passed; 5 failed; isolated fixtures, no MySQL

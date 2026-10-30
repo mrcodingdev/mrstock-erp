@@ -1,0 +1,11 @@
+PASS caixa_catalogo
+PASS caixa_edit_direto
+PASS caixa_filtros_paginacao
+PASS caixa_lista_vazia
+PASS perfil_sem_privilegio
+PASS admin_cadastro
+PASS admin_edicao
+PASS admin_edicao_inexistente
+PASS visitante_bloqueado
+PASS caixa_post_bloqueado
+10 cases; 10 passed; 0 failed; isolated fixtures, no MySQL
