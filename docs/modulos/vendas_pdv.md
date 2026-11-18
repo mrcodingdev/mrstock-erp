@@ -81,6 +81,9 @@ function recalcularTotal() {
 ```
 
 ### 3.3 Motor de Checkout Transacional em PHP (`vendas/functions.php`)
+
+O exemplo abaixo é ilustrativo. A decisão vigente sobre lotes descreve o comportamento dos dois fluxos implementados no controlador.
+
 ```php
 function processar_checkout_pdv(PDO $pdo, array $dadosVenda): int {
     $pdo->beginTransaction();
@@ -129,6 +132,17 @@ function processar_checkout_pdv(PDO $pdo, array $dadosVenda): int {
     }
 }
 ```
+
+### 3.4 Venda com e sem lote
+
+Douglas Moraes confirmou em 17/11/2026 a manutenção da regra atual na venda completa e na venda rápida:
+
+- **Produto sem registro em `lotes`** (`COUNT(*) = 0`). O PDV permite a venda com base no saldo em `produtos.quantidade` e dá baixa nesse saldo.
+- **Produto com pelo menos um registro em `lotes`** (`COUNT(*) > 0`). O pedido precisa caber tanto no saldo cadastrado quanto no saldo dos lotes com quantidade positiva e validade a partir da data atual. Na venda completa, linhas repetidas do mesmo produto são somadas para a validação. Se o saldo cadastrado comportar o pedido, mas o saldo em lotes válidos for insuficiente, o controlador reverte a transação e registra `BLOQUEIO_SANITARIO`. Quando a venda é aceita, a baixa segue FEFO, priorizando a validade mais próxima e usando o menor ID quando as datas são iguais.
+
+A regra permite vender itens secos pelo saldo cadastrado e mantém o controle por validade nos produtos com lotes. A decisão evita exigir uma regularização geral do estoque existente. Uma exigência seletiva futura depende de definir os produtos abrangidos, regularizar o estoque que já existe sem lote e acrescentar testes de regressão.
+
+As três baterias de 17/11/2026 totalizaram 15 cenários aprovados e reproduzidos em MariaDB 10.4.32/InnoDB descartável, na base `be1bda7`. Os dois fluxos foram verificados para produto sem lote, saldo físico insuficiente e ordem de baixa entre lotes com validades diferentes. O desempate entre validades iguais está previsto no código e ficou fora dos cenários executados.
 
 ---
 
