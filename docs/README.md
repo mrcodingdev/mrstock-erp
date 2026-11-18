@@ -63,3 +63,5 @@ Critérios de homologação, garantia da qualidade e preparação para a banca:
 <div align="center">
   <sub>MrStock ERP v2.2.0 • ETEC Fernando Prestes • Sorocaba/SP</sub>
 </div>
+
+Mapa de pastas e ferramentas locais: [Organização do projeto](organizacao.md).
