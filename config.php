@@ -135,9 +135,9 @@ if (!headers_sent()) {
     header("Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=()");
 
     $csp = "default-src 'self'; "
-         . "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
-         . "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
-         . "font-src 'self' data: https://fonts.gstatic.com; "
+         . "script-src 'self' 'unsafe-inline'; "
+         . "style-src 'self' 'unsafe-inline'; "
+         . "font-src 'self' data:; "
          . "img-src 'self' data:; "
          . "connect-src 'self'; "
          . "frame-ancestors 'self'; "

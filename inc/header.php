@@ -39,7 +39,7 @@ $_menuGroups = [
         'items'    => [
             ['id' => 'pdv',       'href' => BASE_URL . '/vendas/pdv.php',       'icon' => 'fa-solid fa-barcode',         'label' => 'PDV (Frente de Caixa)', 'rbac' => null],
             ['id' => 'historico', 'href' => BASE_URL . '/vendas/historico.php', 'icon' => 'fa-solid fa-clock-rotate-left', 'label' => 'Histórico de Vendas',  'rbac' => 'admin'],
-            ['id' => 'fiscal',    'href' => BASE_URL . '/vendas/nfce.php',      'icon' => 'fa-solid fa-receipt',           'label' => 'Consulta Fiscal NFC-e', 'rbac' => null],
+            ['id' => 'fiscal',    'href' => BASE_URL . '/vendas/nfce.php',      'icon' => 'fa-solid fa-receipt',           'label' => 'Consulta Fiscal NFC-e', 'rbac' => 'admin'],
         ]
     ],
     [

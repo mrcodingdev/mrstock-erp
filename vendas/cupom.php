@@ -8,22 +8,35 @@ require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
 require_once __DIR__ . '/../inc/barcode_helper.php';
 
-// Determina URL de retorno com base no perfil do usuário ativo
-$voltarUrl = (isset($_SESSION['user_perfil']) && $_SESSION['user_perfil'] === 'caixa')
-    ? BASE_URL . '/vendas/pdv.php'
-    : BASE_URL . '/vendas/historico.php';
+// Sem titularidade persistida, o caixa tem acesso apenas aos cupons do dia.
+$podeConsultarHistorico = is_admin();
+$voltarUrl = BASE_URL . ($podeConsultarHistorico ? '/vendas/historico.php' : '/vendas/pdv.php');
 
 $venda_id = $_GET['venda_id'] ?? $_GET['id'] ?? null;
 if (!$venda_id || !is_numeric($venda_id)) {
+    if (!$podeConsultarHistorico) {
+        http_response_code(404);
+        exit('Cupom não encontrado.');
+    }
     header("Location: " . $voltarUrl . "?erro=cupom_invalido");
     exit;
 }
 
-$stmtVenda = $pdo->prepare("SELECT v.*, c.nome as cliente_nome, c.cpf_cnpj as cliente_documento FROM vendas v LEFT JOIN clientes c ON v.cliente_id = c.id WHERE v.id = ?");
+$sqlVenda = 'SELECT v.*, c.nome AS cliente_nome, c.cpf_cnpj AS cliente_documento
+             FROM vendas v LEFT JOIN clientes c ON v.cliente_id = c.id
+             WHERE v.id = ?';
+if (!$podeConsultarHistorico) {
+    $sqlVenda .= ' AND v.data_venda >= CURRENT_DATE AND v.data_venda < CURRENT_DATE + INTERVAL 1 DAY';
+}
+$stmtVenda = $pdo->prepare($sqlVenda);
 $stmtVenda->execute([$venda_id]);
 $venda = $stmtVenda->fetch();
 
 if (!$venda) {
+    if (!$podeConsultarHistorico) {
+        http_response_code(404);
+        exit('Cupom não encontrado.');
+    }
     header("Location: " . $voltarUrl . "?erro=venda_nao_encontrada");
     exit;
 }
@@ -582,10 +595,10 @@ $protocoloAut   = '13526' . str_pad((string)$venda['id'], 10, '0', STR_PAD_LEFT)
                     } elseif (strlen($docLimpo) === 14) {
                         $docMascarado = substr($docLimpo, 0, 2) . '.***.***/****-' . substr($docLimpo, -2);
                     } else {
-                        $docMascarado = htmlspecialchars($venda['cliente_documento'], ENT_QUOTES, 'UTF-8');
+                        $docMascarado = $podeConsultarHistorico ? $venda['cliente_documento'] : '***';
                     }
                 ?>
-                    <br><strong>CPF/CNPJ:</strong> <?= $docMascarado ?>
+                    <br><strong>CPF/CNPJ:</strong> <?= htmlspecialchars($docMascarado, ENT_QUOTES, 'UTF-8') ?>
                 <?php endif; ?>
             </div>
 

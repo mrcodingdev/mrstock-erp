@@ -12,25 +12,26 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $ip = get_client_ip();
-$statusRate = check_rate_limit($pdo, $ip);
+$recebeuLogin = $_SERVER['REQUEST_METHOD'] === 'POST';
+$username = $recebeuLogin ? (is_string($_POST['username'] ?? null) ? trim($_POST['username']) : '') : null;
+$statusRate = check_rate_limit($pdo, $ip, username: $username);
 $bloqueado = $statusRate['bloqueado'];
 $erroBloqueio = '';
 
 if ($bloqueado) {
     http_response_code(429);
-    $erroBloqueio = "Muitas tentativas incorretas. Por segurança, o acesso deste IP foi bloqueado temporariamente por mais {$statusRate['minutos_restantes']} minuto(s).";
+    $erroBloqueio = "Muitas tentativas incorretas. Aguarde {$statusRate['minutos_restantes']} minuto(s) para tentar novamente.";
 }
 
 $erro = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($recebeuLogin) {
     if ($bloqueado) {
         // Bloqueio rigoroso: impede qualquer processamento de autenticação sob força bruta
         http_response_code(429);
     } else {
         csrf_verify(); // Proteção contra ataques CSRF
 
-        $username = trim($_POST['username'] ?? '');
-        $password = trim($_POST['password'] ?? '');
+        $password = is_string($_POST['password'] ?? null) ? trim($_POST['password']) : '';
         $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE username = ?");
         $stmt->execute([$username]);
         $user = $stmt->fetch();
@@ -67,21 +68,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $erro = "Credenciais inválidas. Tente novamente.";
                 registrar_tentativa_falha($pdo, $ip, $username);
-                $statusRate = check_rate_limit($pdo, $ip);
+                $statusRate = check_rate_limit($pdo, $ip, username: $username);
                 if ($statusRate['bloqueado']) {
                     $bloqueado = true;
                     http_response_code(429);
-                    $erroBloqueio = "Muitas tentativas incorretas. Por segurança, o acesso deste IP foi bloqueado temporariamente por mais {$statusRate['minutos_restantes']} minuto(s).";
+                    $erroBloqueio = "Muitas tentativas incorretas. Aguarde {$statusRate['minutos_restantes']} minuto(s) para tentar novamente.";
                 }
             }
         } else {
             $erro = "Credenciais inválidas. Tente novamente.";
             registrar_tentativa_falha($pdo, $ip, $username);
-            $statusRate = check_rate_limit($pdo, $ip);
+            $statusRate = check_rate_limit($pdo, $ip, username: $username);
             if ($statusRate['bloqueado']) {
                 $bloqueado = true;
                 http_response_code(429);
-                $erroBloqueio = "Muitas tentativas incorretas. Por segurança, o acesso deste IP foi bloqueado temporariamente por mais {$statusRate['minutos_restantes']} minuto(s).";
+                $erroBloqueio = "Muitas tentativas incorretas. Aguarde {$statusRate['minutos_restantes']} minuto(s) para tentar novamente.";
             }
         }
     }
@@ -483,7 +484,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     </script>
 </head>
-<body>
+<body class="mrstock-login-page">
 
     <!-- Background Animado -->
     <div class="bg-shapes">

@@ -43,18 +43,21 @@ if (!function_exists('garantir_tabela_rate_limit')) {
 }
 
 /**
- * Verifica se um endereço IP excedeu o limite de tentativas na janela de tempo.
- * Fallback gracioso em caso de falha de banco de dados (não quebra a navegação).
+ * Verifica a janela agregada por IP e, quando informado, por IP e usuário.
  *
  * @param PDO    $pdo
  * @param string $ip
- * @param int    $maxTentativas Limite máximo de tentativas antes do bloqueio (padrão: 5)
+ * @param int|null $maxTentativas Limite agregado opcional (padrão de ambiente: 5)
  * @param int    $minutosJanela Janela de observação em minutos (padrão: 15)
  * @return array ['bloqueado' => bool, 'minutos_restantes' => int, 'tentativas_atuais' => int]
  */
 if (!function_exists('check_rate_limit')) {
-    function check_rate_limit(PDO $pdo, string $ip, int $maxTentativas = 5, int $minutosJanela = 15): array {
+    function check_rate_limit(PDO $pdo, string $ip, ?int $maxTentativas = null, int $minutosJanela = 15, ?string $username = null): array {
         garantir_tabela_rate_limit($pdo);
+
+        $valorAmbiente = $_ENV['MRSTOCK_LOGIN_IP_MAX_ATTEMPTS'] ?? $_SERVER['MRSTOCK_LOGIN_IP_MAX_ATTEMPTS']
+            ?? getenv('MRSTOCK_LOGIN_IP_MAX_ATTEMPTS');
+        $maxTentativas ??= filter_var($valorAmbiente, FILTER_VALIDATE_INT, ['options' => ['min_range' => 5]]) ?: 5;
 
         $resultado = [
             'bloqueado'         => false,
@@ -64,31 +67,36 @@ if (!function_exists('check_rate_limit')) {
 
         try {
             $stmt = $pdo->prepare("
-                SELECT COUNT(*) AS total, MIN(data_tentativa) AS primeira_tentativa
+                SELECT COUNT(*) AS total_ip, MIN(data_tentativa) AS primeira_ip,
+                       SUM(CASE WHEN username = ? THEN 1 ELSE 0 END) AS total_par,
+                       MIN(CASE WHEN username = ? THEN data_tentativa END) AS primeira_par
                 FROM login_tentativas
                 WHERE ip_usuario = ? AND data_tentativa >= (NOW() - INTERVAL ? MINUTE)
             ");
-            $stmt->execute([$ip, $minutosJanela]);
+            $chaveUsuario = login_tentativas_chave_usuario($username ?? '');
+            $stmt->execute([$chaveUsuario, $chaveUsuario, $ip, $minutosJanela]);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $tentativas = (int)($row['total'] ?? 0);
-            $resultado['tentativas_atuais'] = $tentativas;
-
-            if ($tentativas >= $maxTentativas) {
-                $resultado['bloqueado'] = true;
-
-                if (!empty($row['primeira_tentativa'])) {
-                    $primeiroTimestamp = strtotime($row['primeira_tentativa']);
-                    $expiracao = $primeiroTimestamp + ($minutosJanela * 60);
-                    $segundosRestantes = max(0, $expiracao - time());
-                    $minutosRestantes = (int)ceil($segundosRestantes / 60);
-                    $resultado['minutos_restantes'] = max(1, $minutosRestantes);
-                } else {
-                    $resultado['minutos_restantes'] = $minutosJanela;
+            $resultado['tentativas_atuais'] = (int)($row['total_ip'] ?? 0);
+            $bloqueios = [];
+            if ($resultado['tentativas_atuais'] >= $maxTentativas) {
+                $bloqueios[] = $row['primeira_ip'];
+            }
+            if ($username !== null && (int)($row['total_par'] ?? 0) >= 5) {
+                $bloqueios[] = $row['primeira_par'];
+            }
+            foreach ($bloqueios as $primeiraTentativa) {
+                $primeiroTimestamp = $primeiraTentativa ? strtotime($primeiraTentativa) : false;
+                $minutos = $minutosJanela;
+                if ($primeiroTimestamp !== false) {
+                    $segundos = $primeiroTimestamp + $minutosJanela * 60 - time();
+                    $minutos = min($minutosJanela, max(1, (int)ceil($segundos / 60)));
                 }
+                $resultado['bloqueado'] = true;
+                $resultado['minutos_restantes'] = max($resultado['minutos_restantes'], $minutos);
             }
         } catch (Throwable $e) {
-            error_log("Erro no rate limiter: " . $e->getMessage());
+            error_log('Falha na consulta ao rate limiter. Autenticação liberada pela política de contingência.');
             return [
                 'bloqueado'         => false,
                 'minutos_restantes' => 0,
@@ -100,6 +108,11 @@ if (!function_exists('check_rate_limit')) {
     }
 }
 
+function login_tentativas_chave_usuario(string $username): string {
+    // Registra também nomes inválidos ou acima do limite da coluna.
+    return preg_match('/^.{0,100}$/usD', $username) === 1 ? $username : '#' . hash('sha256', $username);
+}
+
 /**
  * Registra uma tentativa de login falha no banco de dados.
  * Dispara logs de auditoria e alerta de Brute Force caso atinja o limite.
@@ -107,18 +120,18 @@ if (!function_exists('check_rate_limit')) {
  * @param PDO    $pdo
  * @param string $ip
  * @param string $username
- * @param int    $maxTentativas Limite para disparar o alerta de Brute Force (padrão: 5)
+ * @param int|null $maxTentativas Limite agregado opcional
  * @param int    $minutosJanela Janela de observação em minutos (padrão: 15)
  * @return void
  */
 if (!function_exists('registrar_tentativa_falha')) {
-    function registrar_tentativa_falha(PDO $pdo, string $ip, string $username, int $maxTentativas = 5, int $minutosJanela = 15): void {
+    function registrar_tentativa_falha(PDO $pdo, string $ip, string $username, ?int $maxTentativas = null, int $minutosJanela = 15): void {
         garantir_tabela_rate_limit($pdo);
 
         try {
             // 1. Grava a tentativa na tabela login_tentativas
             $stmt = $pdo->prepare("INSERT INTO login_tentativas (ip_usuario, username, data_tentativa) VALUES (?, ?, NOW())");
-            $stmt->execute([$ip, $username]);
+            $stmt->execute([$ip, login_tentativas_chave_usuario($username)]);
 
             // 2. Dispara log de auditoria padrão para falha de login
             registrar_log(
@@ -130,12 +143,12 @@ if (!function_exists('registrar_tentativa_falha')) {
             );
 
             // 3. Avalia se atingiu o limite para emissão de alerta de Brute Force
-            $status = check_rate_limit($pdo, $ip, $maxTentativas, $minutosJanela);
+            $status = check_rate_limit($pdo, $ip, $maxTentativas, $minutosJanela, $username);
             if ($status['bloqueado']) {
                 registrar_log(
                     $pdo,
                     'ALERTA_BRUTE_FORCE',
-                    "Bloqueio de Brute Force acionado para o IP {$ip}. Total de tentativas: {$status['tentativas_atuais']}/{$maxTentativas} na janela de {$minutosJanela}m (Usuário alvo: '{$username}')",
+                    "Bloqueio do rate limiter para o IP {$ip}. Tentativas no IP: {$status['tentativas_atuais']} na janela de {$minutosJanela} min.",
                     'login_tentativas',
                     1
                 );
@@ -152,7 +165,7 @@ if (!function_exists('registrar_tentativa_falha')) {
 }
 
 /**
- * Limpa o histórico de tentativas do IP e do usuário após login bem-sucedido.
+ * Limpa as falhas do par autenticado, preservando as tentativas dos demais pares.
  *
  * @param PDO    $pdo
  * @param string $ip
@@ -164,8 +177,8 @@ if (!function_exists('limpar_tentativas_ip')) {
         garantir_tabela_rate_limit($pdo);
 
         try {
-            $stmt = $pdo->prepare("DELETE FROM login_tentativas WHERE ip_usuario = ? OR (username = ? AND username != '')");
-            $stmt->execute([$ip, $username]);
+            $stmt = $pdo->prepare("DELETE FROM login_tentativas WHERE ip_usuario = ? AND username = ?");
+            $stmt->execute([$ip, login_tentativas_chave_usuario($username)]);
         } catch (Throwable $e) {
             error_log("Erro ao limpar tentativas de login: " . $e->getMessage());
         }

@@ -51,7 +51,7 @@ if (!function_exists('csrf_verify')) {
             $token = $_POST['csrf_token'] ?? '';
             $session_token = $_SESSION['csrf_token'] ?? '';
             
-            if (empty($session_token) || !hash_equals($session_token, $token)) {
+            if (!is_string($token) || empty($session_token) || !hash_equals($session_token, $token)) {
                 http_response_code(403);
                 die("<div style='font-family:Arial;padding:20px;background:#fee;border:1px solid #f00;border-radius:8px;max-width:600px;margin:40px auto'>
                     <h3>Erro de Segurança (CSRF)</h3>
@@ -168,36 +168,42 @@ if (!function_exists('set_app_config')) {
 }
 
 /**
- * Captura o endereço IP do cliente com validação estrita contra IP Spoofing (CWE-290).
- * Inspeciona HTTP_X_FORWARDED_FOR, HTTP_CLIENT_IP e REMOTE_ADDR garantindo formato IP legítimo.
+ * Usa X-Forwarded-For somente quando o peer direto consta na lista de proxies.
  */
 if (!function_exists('get_client_ip')) {
     function get_client_ip(): string {
-        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-            foreach ($ips as $candidate) {
-                $candidate = trim($candidate);
-                if (filter_var($candidate, FILTER_VALIDATE_IP)) {
-                    return substr($candidate, 0, 45);
-                }
+        $normalizarIp = static function (string $ip): ?string {
+            $ip = trim($ip);
+            if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+                return null;
+            }
+            return inet_ntop(inet_pton($ip));
+        };
+
+        $peer = $normalizarIp($_SERVER['REMOTE_ADDR'] ?? '');
+        if ($peer === null) {
+            return '127.0.0.1';
+        }
+
+        $lista = $_ENV['MRSTOCK_TRUSTED_PROXY_IPS'] ?? $_SERVER['MRSTOCK_TRUSTED_PROXY_IPS']
+            ?? (getenv('MRSTOCK_TRUSTED_PROXY_IPS') ?: '');
+        $proxies = array_filter(array_map($normalizarIp, explode(',', $lista)));
+        if (!in_array($peer, $proxies, true) || empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            return $peer;
+        }
+
+        // Percorre do proxy mais próximo até o primeiro salto não confiável.
+        foreach (array_reverse(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])) as $hop) {
+            $ip = $normalizarIp($hop);
+            if ($ip === null) {
+                return $peer;
+            }
+            if (!in_array($ip, $proxies, true)) {
+                return $ip;
             }
         }
 
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $candidate = trim($_SERVER['HTTP_CLIENT_IP']);
-            if (filter_var($candidate, FILTER_VALIDATE_IP)) {
-                return substr($candidate, 0, 45);
-            }
-        }
-
-        if (!empty($_SERVER['REMOTE_ADDR'])) {
-            $candidate = trim($_SERVER['REMOTE_ADDR']);
-            if (filter_var($candidate, FILTER_VALIDATE_IP)) {
-                return substr($candidate, 0, 45);
-            }
-        }
-
-        return '127.0.0.1';
+        return $peer;
     }
 }
 

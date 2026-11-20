@@ -3,7 +3,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const source = fs.readFileSync(path.join(__dirname, '../vendas/pdv.php'), 'utf8');
-const code = source.slice(source.indexOf('function abrirModalPagamento()'), source.indexOf('function atualizarClienteSelecionado('));
+const start = source.indexOf('let checkoutEmAndamento');
+const code = source.slice(start < 0 ? source.indexOf('function abrirModalPagamento()') : start, source.indexOf('function atualizarClienteSelecionado('));
 function setup(total = 20) {
     const elements = new Map();
     function element(id) {
@@ -16,17 +17,28 @@ function setup(total = 20) {
     }
     let submissions = 0;
     const callbacks = [];
+    const requests = [];
+    const destinations = [];
+    const outcomes = [];
     element('modal_forma_pagamento').value = 'DINHEIRO';
     element('formVenda').submit = () => submissions++;
     const context = vm.createContext({
         document: { getElementById: element, querySelectorAll: () => [], querySelector: () => element('exato') },
         totalVendaAtual: total, carrinho: [{ id: 1, quantidade: 2 }], modalFinalizarInstancia: null,
-        MRSTOCK_CONFIG: {}, recalcularTotal() {}, playBeep() {}, showToast() {},
+        MRSTOCK_CONFIG: {}, recalcularTotal() {}, playBeep() {}, showToast() {}, window: { location: { assign: path => destinations.push(path) } },
+        FormData: class { constructor() { this.fields = new Map(); } set(key, value) { this.fields.set(key, value); } },
+        fetch: async (url, config) => {
+            submissions++;
+            requests.push(config);
+            const outcome = outcomes.shift() || { status: 200, body: { status: 'ok', redirect: '/cupom' } };
+            if (outcome instanceof Error) throw outcome;
+            return { status: outcome.status, json: async () => outcome.body };
+        },
         formatarMoeda: n => n.toLocaleString('pt-BR', { minimumFractionDigits: 2 }),
         bootstrap: { Modal: class { show() {} } }, setTimeout: fn => callbacks.push(fn),
     });
     vm.runInContext(code, context);
-    return { context, element, callbacks, submissions: () => submissions };
+    return { context, element, callbacks, outcomes, requests, destinations, submissions: () => submissions };
 }
 const tests = [
     ['abertura em dinheiro exige valor explícito', () => {
@@ -81,12 +93,41 @@ const tests = [
             assert.equal(s.element('btnConfirmarVendaModal').disabled, true, value);
         }
     }],
+    ['aviso preserva carrinho e envia token numa segunda confirmação', async () => {
+        const s = setup();
+        s.context.abrirModalPagamento();
+        s.context.definirCedula(50);
+        s.outcomes.push({ status: 409, body: { status: 'margem_aviso', token: 'token-da-fixture' } });
+        await s.context.confirmarVendaFinal();
+        assert.match(s.element('pdvFeedbackCheckout').textContent, /margem negativa/i);
+        assert.equal(s.requests[0].body.fields.has('confirmacao_margem'), false);
+        assert.equal(s.destinations.length, 0);
+        assert.equal(s.context.carrinho[0].quantidade, 2);
+        await s.context.confirmarVendaFinal();
+        assert.equal(s.requests[1].body.fields.get('confirmacao_margem'), 'token-da-fixture');
+        assert.deepEqual(s.destinations, ['/cupom']);
+    }],
+    ['falha de rede mantém carrinho e impede novo envio na mesma tela', async () => {
+        const s = setup();
+        s.context.abrirModalPagamento();
+        s.context.definirCedula(50);
+        s.outcomes.push(new Error('rede indisponível'));
+        await s.context.confirmarVendaFinal();
+        s.context.definirCedula(50);
+        await s.context.confirmarVendaFinal();
+        assert.equal(s.submissions(), 1);
+        assert.equal(s.context.carrinho[0].quantidade, 2);
+        assert.match(s.element('pdvFeedbackCheckout').textContent, /confira se a venda/i);
+    }],
 ];
-let failed = 0;
-for (const [name, test] of tests) {
-    try { test(); console.log('PASSOU: ' + name); }
-    catch (e) { failed++; console.log('FALHOU: ' + name + ' — ' + e.message); }
+async function run() {
+    let failed = 0;
+    for (const [name, test] of tests) {
+        try { await test(); console.log('PASSOU: ' + name); }
+        catch (e) { failed++; console.log('FALHOU: ' + name + ' — ' + e.message); }
+    }
+    console.log(`${tests.length - failed}/${tests.length} cenários aprovados`);
+    process.exitCode = failed ? 1 : 0;
 }
-console.log(`${tests.length - failed}/${tests.length} cenários aprovados`);
-process.exitCode = failed ? 1 : 0;
+run();
 

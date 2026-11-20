@@ -7,7 +7,6 @@ require_once __DIR__ . '/../inc/auth.php';
 // Ingestão das configurações operacionais do PDV
 $cfgSomPdv         = get_app_config($pdo, 'som_pdv', '1') === '1';
 $cfgPdvDescMax     = (float)get_app_config($pdo, 'pdv_desconto_maximo', '15.0');
-$cfgPdvTravaMargem = get_app_config($pdo, 'pdv_trava_margem', 'aviso');
 $cfgPdvImpressora  = get_app_config($pdo, 'pdv_impressora', '80mm');
 
 // Consulta de produtos ativos com saldo em estoque considerando lotes válidos
@@ -122,6 +121,8 @@ require_once __DIR__ . '/../inc/header.php';
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
         </div>
+        <?php elseif ($_GET['erro'] === 'margem_aviso' || $_GET['erro'] === 'confirmacao_desatualizada'): ?>
+            <div class="alert alert-warning" role="alert">Abra o pagamento do PDV para conferir e confirmar a venda.</div>
         <?php endif; ?>
     <?php endif; ?>
 
@@ -411,6 +412,7 @@ require_once __DIR__ . '/../inc/header.php';
                             <small class="text-danger fw-bold d-none" id="trocoAlertaInsuficiente"><i class="fas fa-exclamation-circle me-1"></i> Valor recebido é menor que o total!</small>
                         </div>
                     </div>
+                    <div class="alert alert-warning mt-3 mb-0 d-none" id="pdvFeedbackCheckout" role="alert"></div>
                 </div>
                 <div class="modal-footer border-top bg-light p-3">
                     <button type="button" class="btn btn-secondary px-4 fw-bold shadow-sm" data-bs-dismiss="modal">Voltar (ESC)</button>
@@ -447,7 +449,6 @@ require_once __DIR__ . '/../inc/header.php';
 const MRSTOCK_CONFIG = {
     somPdv:         <?= json_encode($cfgSomPdv) ?>,
     pdvDescMax:     <?= json_encode($cfgPdvDescMax) ?>,
-    pdvTravaMargem: <?= json_encode($cfgPdvTravaMargem) ?>,
     pdvImpressora:  <?= json_encode($cfgPdvImpressora) ?>
 };
 // ══ CATÁLOGO CLIENT-SIDE E ESTADO DO PDV ═════════════════════════════════════
@@ -651,7 +652,7 @@ function filtrarProdutosPorCategoria(catId) {
 }
 
 // ══ ADIÇÃO E MANIPULAÇÃO DO CARRINHO ═════════════════════════════════════════
-function processarAdicao(id, nome, preco, qtdMax, qtd, precoCompra = 0) {
+function processarAdicao(id, nome, preco, qtdMax, qtd) {
     if (isNaN(qtd) || qtd <= 0) {
         mostrarAlertaEstoque('Quantidade inválida', 'Informe uma quantidade maior que zero.');
         return false;
@@ -816,13 +817,11 @@ function renderizarCarrinho() {
 
 function recalcularTotal() {
     let subtotal = 0.0;
-    let custoTotal = 0.0;
     carrinho.forEach(item => { 
         subtotal += item.subtotal; 
     });
 
     subtotal = Math.round(subtotal * 100) / 100;
-    custoTotal = Math.round(custoTotal * 100) / 100;
 
     let descInput = parseFloat(document.getElementById('desconto_input')?.value) || 0.0;
     descInput = Math.round(descInput * 100) / 100;
@@ -843,27 +842,6 @@ function recalcularTotal() {
     }
 
     totalVendaAtual = Math.round(Math.max(0, subtotal - descInput) * 100) / 100;
-
-    // Validação de Margem de Lucro / Custo de Compra
-    const btnPagar = document.getElementById('btnPagarModal');
-    if (carrinho.length > 0 && custoTotal > 0 && totalVendaAtual < custoTotal) {
-        if (MRSTOCK_CONFIG.pdvTravaMargem === 'bloquear') {
-            if (btnPagar) {
-                btnPagar.disabled = true;
-                btnPagar.title = 'Venda bloqueada: Total abaixo do custo de compra.';
-            }
-        } else {
-            if (btnPagar) {
-                btnPagar.disabled = false;
-                btnPagar.title = '';
-            }
-        }
-    } else {
-        if (btnPagar) {
-            btnPagar.disabled = false;
-            btnPagar.title = '';
-        }
-    }
 
     document.getElementById('display_subtotal').textContent = `R$ ${formatarMoeda(subtotal)}`;
     document.getElementById('display_total').textContent    = `R$ ${formatarMoeda(totalVendaAtual)}`;
@@ -919,7 +897,21 @@ document.getElementById('barcode_input').addEventListener('input', mrStockDeboun
 }, 250));
 
 // ══ MODAL DE PAGAMENTO, TROCO E FINALIZAÇÃO ══════════════════════════════════
+let checkoutEmAndamento = false;
+let checkoutBloqueado = false;
+let tokenConfirmacaoMargem = null;
+
+function atualizarFeedbackCheckout(mensagem = '') {
+    const alerta = document.getElementById('pdvFeedbackCheckout');
+    alerta.textContent = mensagem;
+    alerta.classList.toggle('d-none', !mensagem);
+    document.getElementById('btnConfirmarVendaModal').textContent = tokenConfirmacaoMargem
+        ? 'Confirmar venda com margem negativa'
+        : 'Confirmar e Emitir NFC-e';
+}
+
 function abrirModalPagamento() {
+    if (checkoutEmAndamento) return;
     if (carrinho.length === 0) {
         playBeep('error');
         showToast('Adicione ao menos um produto antes de finalizar a venda.', 'danger', 'Carrinho Vazio');
@@ -927,18 +919,8 @@ function abrirModalPagamento() {
         return;
     }
 
-    let custoTotal = 0.0;
-
-    if (custoTotal > 0 && totalVendaAtual < custoTotal) {
-        if (MRSTOCK_CONFIG.pdvTravaMargem === 'bloquear') {
-            playBeep('error');
-            mostrarAlertaEstoque('Margem Negativa Bloqueada!', `O valor total da venda (R$ ${formatarMoeda(totalVendaAtual)}) é inferior ao custo dos produtos (R$ ${formatarMoeda(custoTotal)}). Reduza o desconto para prosseguir.`);
-            return;
-        } else if (MRSTOCK_CONFIG.pdvTravaMargem === 'aviso') {
-            showToast(`Atenção: Total abaixo do custo dos produtos (R$ ${formatarMoeda(custoTotal)}). Venda autorizada sob margem negativa.`, 'danger', 'Aviso de Margem');
-        }
-    }
-
+    tokenConfirmacaoMargem = null;
+    if (!checkoutBloqueado) atualizarFeedbackCheckout();
     recalcularTotal();
     document.getElementById('modal_total_display').textContent = formatarMoeda(totalVendaAtual);
 
@@ -970,6 +952,10 @@ function abrirModalPagamento() {
 }
 
 function aoMudarFormaPagamentoModal(forma) {
+    if (tokenConfirmacaoMargem) {
+        tokenConfirmacaoMargem = null;
+        atualizarFeedbackCheckout();
+    }
     document.getElementById('input_forma_pagamento').value = forma;
     const secaoDinheiro = document.getElementById('secaoDinheiroTroco');
     document.getElementById('modal_valor_recebido').value = '';
@@ -980,7 +966,7 @@ function aoMudarFormaPagamentoModal(forma) {
         calcularTroco();
     } else {
         secaoDinheiro.style.display = 'none';
-        document.getElementById('btnConfirmarVendaModal').disabled = false;
+        document.getElementById('btnConfirmarVendaModal').disabled = checkoutBloqueado || checkoutEmAndamento;
     }
 }
 
@@ -1022,19 +1008,69 @@ function calcularTroco() {
         trocoDisplay.className = 'fw-bold mb-0 text-success tabular-nums';
         trocoDisplay.textContent = `R$ ${formatarMoeda(Math.max(0, troco))}`;
         alertaInsuf.classList.add('d-none');
-        btnConfirmar.disabled = false;
+        btnConfirmar.disabled = checkoutBloqueado || checkoutEmAndamento;
         return true;
     }
 }
 
-function confirmarVendaFinal() {
+async function confirmarVendaFinal() {
     const btn = document.getElementById('btnConfirmarVendaModal');
-    if (btn.disabled) return;
-    if (document.getElementById('modal_forma_pagamento').value === 'DINHEIRO' && !calcularTroco()) return;
-    playBeep('cash');
+    if (checkoutEmAndamento || checkoutBloqueado || btn.disabled) return;
+    const emDinheiro = document.getElementById('modal_forma_pagamento').value === 'DINHEIRO';
+    if (emDinheiro && !calcularTroco()) return;
+
+    const form = document.getElementById('formVenda');
+    const dados = new FormData(form);
+    if (tokenConfirmacaoMargem) dados.set('confirmacao_margem', tokenConfirmacaoMargem);
+    tokenConfirmacaoMargem = null;
+    atualizarFeedbackCheckout();
+    checkoutEmAndamento = true;
     btn.disabled = true;
-    btn.innerHTML = '<span class="mr-spinner"></span> Emitindo NFC-e...';
-    document.getElementById('formVenda').submit();
+    btn.textContent = 'Processando venda...';
+
+    try {
+        const resposta = await fetch(form.action, {
+            method: 'POST', body: dados, headers: { Accept: 'application/json' }, redirect: 'error',
+        });
+        if (resposta.status === 403) {
+            checkoutBloqueado = true;
+            atualizarFeedbackCheckout('Sessão inválida para o pagamento. Recarregue o PDV antes de tentar novamente.');
+            return;
+        }
+        const resultado = await resposta.json();
+        if (resposta.status === 200 && resultado.status === 'ok' && typeof resultado.redirect === 'string') {
+            checkoutBloqueado = true;
+            playBeep('cash');
+            window.location.assign(resultado.redirect);
+        } else if (resposta.status === 409 && resultado.status === 'margem_aviso' && typeof resultado.token === 'string') {
+            tokenConfirmacaoMargem = resultado.token;
+            atualizarFeedbackCheckout('Venda com margem negativa. Confirme para finalizar ou volte para revisar o carrinho.');
+        } else if (resposta.status === 422 && resultado.status === 'erro') {
+            const mensagens = {
+                carrinho_vazio: 'O carrinho está vazio.',
+                dados_invalidos: 'Revise os dados da venda.',
+                estoque: 'O saldo disponível mudou. Revise as quantidades antes de confirmar.',
+                lote_vencido: 'O saldo em lotes válidos é insuficiente. Revise as quantidades.',
+                desconto_excedido: 'O desconto excede o limite permitido. Revise o valor.',
+                margem_negativa: 'Venda bloqueada pela política de margem. Revise o desconto.',
+                confirmacao_desatualizada: 'As condições mudaram. Revise e confirme novamente a venda.',
+            };
+            atualizarFeedbackCheckout(Object.hasOwn(mensagens, resultado.erro) ? mensagens[resultado.erro] : 'Revise os dados antes de confirmar a venda.');
+        } else {
+            throw new Error('Resposta inesperada na finalização.');
+        }
+    } catch {
+        checkoutBloqueado = true;
+        atualizarFeedbackCheckout('Não foi possível confirmar o resultado. Confira se a venda foi registrada antes de iniciar outra.');
+    } finally {
+        checkoutEmAndamento = false;
+        if (!checkoutBloqueado) {
+            btn.disabled = document.getElementById('modal_forma_pagamento').value === 'DINHEIRO' && !calcularTroco();
+            if (!btn.disabled) btn.focus();
+        } else {
+            btn.disabled = true;
+        }
+    }
 }
 
 function atualizarClienteSelecionado(select) {
@@ -1043,6 +1079,10 @@ function atualizarClienteSelecionado(select) {
 
 // ══ ATALHOS GLOBAIS DE TECLADO (F1, F2, F4, F8, F9, ESC) ═════════════════════
 window.addEventListener('keydown', function(e) {
+    if (checkoutEmAndamento && /^F[1-9]$/.test(e.key)) {
+        e.preventDefault();
+        return;
+    }
     // F1: Modal de Ajuda / Atalhos
     if (e.key === 'F1') {
         e.preventDefault();
@@ -1117,6 +1157,9 @@ function scrollChipsBar(distance) {
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('modalFinalizarVenda').addEventListener('hide.bs.modal', function(event) {
+        if (checkoutEmAndamento) event.preventDefault();
+    });
     renderizarGradeRapida();
     renderizarCarrinho();
     const barcodeInput = document.getElementById('barcode_input');

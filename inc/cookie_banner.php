@@ -4,8 +4,31 @@
     0% { opacity: 0; transform: translateX(20px); }
     100% { opacity: 1; transform: translateX(0); }
 }
+
+.mrstock-login-page {
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mrstock-login-page > .login-card {
+    margin-block: 0;
+}
+
+.mrstock-cookie-banner {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 360px;
+    max-width: calc(100vw - 40px);
+}
+
+.mrstock-login-page > .mrstock-cookie-banner {
+    position: relative;
+    inset: auto;
+    max-width: 100%;
+}
 </style>
-<div id="mrstockCookieBanner" class="mrstock-cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de Cookies LGPD" style="display: none; position: fixed; bottom: 20px; right: 20px; width: 360px; max-width: calc(100vw - 40px); z-index: 1060; background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 1.25rem; color: #f1f5f9; font-family: 'Inter', sans-serif;">
+<div id="mrstockCookieBanner" class="mrstock-cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de Cookies LGPD" style="display: none; z-index: 1060; background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 1.25rem; color: #f1f5f9; font-family: 'Inter', sans-serif;">
     <div class="d-flex align-items-start gap-2 mb-2">
         <div style="background: rgba(40, 73, 54, 0.3); border: 1px solid rgba(106, 228, 155, 0.3); border-radius: 6px; padding: 6px 8px; color: #6ae49b; font-size: 1rem; flex-shrink: 0;">
             <i class="fas fa-cookie-bite"></i>
