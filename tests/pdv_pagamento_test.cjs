@@ -107,17 +107,24 @@ const tests = [
         assert.equal(s.requests[1].body.fields.get('confirmacao_margem'), 'token-da-fixture');
         assert.deepEqual(s.destinations, ['/cupom']);
     }],
-    ['falha de rede mantém carrinho e impede novo envio na mesma tela', async () => {
+    ['falha de rede oferece reenvio explícito com a chave e o aceite originais', async () => {
         const s = setup();
         s.context.abrirModalPagamento();
         s.context.definirCedula(50);
-        s.outcomes.push(new Error('rede indisponível'));
+        s.outcomes.push({ status: 409, body: { status: 'margem_aviso', token: 'token-da-fixture' } }, new Error('rede indisponível'));
         await s.context.confirmarVendaFinal();
-        s.context.definirCedula(50);
         await s.context.confirmarVendaFinal();
-        assert.equal(s.submissions(), 1);
+        assert.equal(s.submissions(), 2);
+        assert.equal(s.requests[1].body.fields.get('confirmacao_margem'), 'token-da-fixture');
         assert.equal(s.context.carrinho[0].quantidade, 2);
-        assert.match(s.element('pdvFeedbackCheckout').textContent, /confira se a venda/i);
+        assert.equal(s.element('btnConfirmarVendaModal').textContent, 'Reenviar esta venda');
+        assert.equal(s.element('modal_forma_pagamento').disabled, true);
+        assert.equal(s.element('modal_valor_recebido').disabled, true);
+        assert.equal(s.element('btnConfirmarVendaModal').disabled, false);
+        s.outcomes.push({ status: 409, body: { status: 'margem_ja_confirmada', redirect: '/cupom' } });
+        await s.context.confirmarVendaFinal();
+        assert.strictEqual(s.requests[2].body, s.requests[1].body);
+        assert.deepEqual(s.destinations, ['/cupom']);
     }],
 ];
 async function run() {

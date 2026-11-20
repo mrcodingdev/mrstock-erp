@@ -48,11 +48,13 @@ function runFefoStage(array $args): void
         session_save_path(__DIR__);
         session_start(['use_cookies' => false, 'cache_limiter' => '']);
         $_SESSION = ['user_id' => 1, 'user_perfil' => 'caixa', 'csrf_token' => bin2hex(random_bytes(32))];
+        require_once __DIR__ . '/app/inc/venda_envio.php';
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_GET = ['tipo' => 'venda'];
         $_POST = [
             'acao' => 'venda_completa',
+            'chave_envio' => emitir_chave_envio_venda('venda_completa'),
             'csrf_token' => $_SESSION['csrf_token'],
             'forma_pagamento' => 'DINHEIRO',
             'cart_data' => json_encode([['id' => 1, 'quantidade' => 3]], JSON_THROW_ON_ERROR),
@@ -86,11 +88,12 @@ function seedFefoFixture(PDO $pdo): void
 
 function assertFefoResult(PDO $pdo): void
 {
-    $sales = $pdo->query('SELECT id, total, forma_pagamento FROM vendas')->fetchAll();
+    $sales = $pdo->query('SELECT id, total, forma_pagamento, chave_envio FROM vendas')->fetchAll();
     $items = $pdo->query('SELECT venda_id, produto_id, quantidade FROM vendas_itens')->fetchAll();
     $movements = $pdo->query('SELECT produto_id, tipo, quantidade FROM movimentacoes')->fetchAll();
     $stock = (int)$pdo->query('SELECT quantidade FROM produtos WHERE id = 1')->fetchColumn();
     if (count($sales) !== 1 || (float)$sales[0]['total'] !== 30.0 || $sales[0]['forma_pagamento'] !== 'DINHEIRO'
+        || !is_string($sales[0]['chave_envio']) || preg_match('/\A[0-9a-f]{32}\z/', $sales[0]['chave_envio']) !== 1
         || $items !== [['venda_id' => $sales[0]['id'], 'produto_id' => 1, 'quantidade' => 3]]
         || $movements !== [['produto_id' => 1, 'tipo' => 'saida_venda', 'quantidade' => 3]]
         || $stock !== 8

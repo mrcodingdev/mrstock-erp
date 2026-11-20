@@ -56,8 +56,8 @@ def wait_for_server(server, client, data, port, env, log_path):
     raise RuntimeError("O MariaDB descartável não respondeu.")
 
 
-def run_variants(temp, ddl, client, env, port):
-    for relative in ("vendas/functions.php", "inc/auth.php", "inc/functions.php"):
+def run_variants(temp, ddl, migration, client, env, port):
+    for relative in ("vendas/functions.php", "inc/auth.php", "inc/functions.php", "inc/venda_envio.php"):
         target = temp / "app" / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(WORKSPACE / relative, target)
@@ -72,7 +72,7 @@ def run_variants(temp, ddl, client, env, port):
     reports = []
     for schema, order, expected_code, expected_lots in VARIANTS:
         sql = f"CREATE DATABASE `{schema}`; USE `{schema}`; SET FOREIGN_KEY_CHECKS=0;\n"
-        run(client, label=f"Criar {schema}", input=sql + ddl + "\nSET FOREIGN_KEY_CHECKS=1;", env=env)
+        run(client, label=f"Criar {schema}", input=sql + ddl + "\nSET FOREIGN_KEY_CHECKS=1;\n" + migration, env=env)
         controller.write_bytes(source.replace(LOT_ORDER, order, 1))
         for stage in ("seed", "sale"):
             execution = run([PHP, runner, stage, str(port), schema], label=f"{schema}/{stage}", env=env)
@@ -98,6 +98,7 @@ def main():
     )
     if len(statements) != 15 or any(statement.count(";") != 1 for statement in statements):
         raise RuntimeError("Esperava 15 CREATE TABLE InnoDB em database/schema_only.sql.")
+    migration = (WORKSPACE / "database/migrations/001_vendas_chave_envio.sql").read_text(encoding="utf-8-sig")
 
     with tempfile.TemporaryDirectory(prefix="mrstock-fefo-") as directory:
         temp = Path(directory)
@@ -123,7 +124,7 @@ def main():
             client = [MYSQL_BIN / "mysql.exe", "--no-defaults", "--protocol=TCP", "-h", "127.0.0.1",
                       "-P", str(port), "-u", "root"]
             version = wait_for_server(server, client, data, port, env, log_path)
-            reports = run_variants(temp, "\n".join(statements), client, env, port)
+            reports = run_variants(temp, "\n".join(statements), migration, client, env, port)
         finally:
             if server.poll() is None:
                 server.terminate()

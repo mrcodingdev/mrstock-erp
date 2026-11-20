@@ -3,6 +3,9 @@ $pageTitle  = 'PDV (Frente de Caixa)';
 $activePage = 'pdv';
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
+require_once __DIR__ . '/../inc/venda_envio.php';
+
+$chaveEnvio = emitir_chave_envio_venda('venda_completa');
 
 // Ingestão das configurações operacionais do PDV
 $cfgSomPdv         = get_app_config($pdo, 'som_pdv', '1') === '1';
@@ -206,6 +209,7 @@ require_once __DIR__ . '/../inc/header.php';
                             <!-- Formulário Oculto de Submissão -->
                             <form action="<?= BASE_URL ?>/vendas/functions.php?tipo=venda" method="POST" id="formVenda">
                                 <?= csrf_input() ?>
+                                <input type="hidden" name="chave_envio" value="<?= $chaveEnvio ?>">
                                 <input type="hidden" name="acao"            value="venda_completa">
                                 <input type="hidden" name="cart_data"       id="cart_data" value="[]">
                                 <input type="hidden" name="subtotal"        id="input_subtotal" value="0.00">
@@ -899,7 +903,15 @@ document.getElementById('barcode_input').addEventListener('input', mrStockDeboun
 // ══ MODAL DE PAGAMENTO, TROCO E FINALIZAÇÃO ══════════════════════════════════
 let checkoutEmAndamento = false;
 let checkoutBloqueado = false;
+let checkoutReenvio = null;
 let tokenConfirmacaoMargem = null;
+
+function bloquearControlesPagamento(bloquear) {
+    document.getElementById('modal_forma_pagamento').disabled = bloquear;
+    document.getElementById('modal_valor_recebido').disabled = bloquear;
+    document.querySelectorAll('#modalFinalizarVenda .btn-cedula, #modalFinalizarVenda [data-bs-dismiss="modal"]')
+        .forEach(controle => { controle.disabled = bloquear; });
+}
 
 function atualizarFeedbackCheckout(mensagem = '') {
     const alerta = document.getElementById('pdvFeedbackCheckout');
@@ -1015,16 +1027,18 @@ function calcularTroco() {
 
 async function confirmarVendaFinal() {
     const btn = document.getElementById('btnConfirmarVendaModal');
-    if (checkoutEmAndamento || checkoutBloqueado || btn.disabled) return;
+    if (checkoutEmAndamento || checkoutBloqueado || (btn.disabled && !checkoutReenvio)) return;
     const emDinheiro = document.getElementById('modal_forma_pagamento').value === 'DINHEIRO';
-    if (emDinheiro && !calcularTroco()) return;
+    if (!checkoutReenvio && emDinheiro && !calcularTroco()) return;
 
     const form = document.getElementById('formVenda');
-    const dados = new FormData(form);
-    if (tokenConfirmacaoMargem) dados.set('confirmacao_margem', tokenConfirmacaoMargem);
+    const dados = checkoutReenvio ?? new FormData(form);
+    if (!checkoutReenvio && tokenConfirmacaoMargem) dados.set('confirmacao_margem', tokenConfirmacaoMargem);
+    checkoutReenvio = null;
     tokenConfirmacaoMargem = null;
     atualizarFeedbackCheckout();
     checkoutEmAndamento = true;
+    bloquearControlesPagamento(true);
     btn.disabled = true;
     btn.textContent = 'Processando venda...';
 
@@ -1038,7 +1052,9 @@ async function confirmarVendaFinal() {
             return;
         }
         const resultado = await resposta.json();
-        if (resposta.status === 200 && resultado.status === 'ok' && typeof resultado.redirect === 'string') {
+        const vendaConfirmada = (resposta.status === 200 && resultado.status === 'ok')
+            || (resposta.status === 409 && resultado.status === 'margem_ja_confirmada');
+        if (vendaConfirmada && typeof resultado.redirect === 'string') {
             checkoutBloqueado = true;
             playBeep('cash');
             window.location.assign(resultado.redirect);
@@ -1054,17 +1070,23 @@ async function confirmarVendaFinal() {
                 desconto_excedido: 'O desconto excede o limite permitido. Revise o valor.',
                 margem_negativa: 'Venda bloqueada pela política de margem. Revise o desconto.',
                 confirmacao_desatualizada: 'As condições mudaram. Revise e confirme novamente a venda.',
+                chave_envio_invalida: 'Esta tela de pagamento expirou. Abra novamente o PDV antes de reenviar.',
             };
             atualizarFeedbackCheckout(Object.hasOwn(mensagens, resultado.erro) ? mensagens[resultado.erro] : 'Revise os dados antes de confirmar a venda.');
         } else {
             throw new Error('Resposta inesperada na finalização.');
         }
     } catch {
-        checkoutBloqueado = true;
-        atualizarFeedbackCheckout('Não foi possível confirmar o resultado. Confira se a venda foi registrada antes de iniciar outra.');
+        checkoutReenvio = dados;
+        atualizarFeedbackCheckout('Resultado indisponível. Use Reenviar esta venda para recuperar a confirmação sem duplicar o lançamento.');
     } finally {
         checkoutEmAndamento = false;
-        if (!checkoutBloqueado) {
+        bloquearControlesPagamento(checkoutReenvio !== null || checkoutBloqueado);
+        if (checkoutReenvio) {
+            btn.textContent = 'Reenviar esta venda';
+            btn.disabled = false;
+            btn.focus();
+        } else if (!checkoutBloqueado) {
             btn.disabled = document.getElementById('modal_forma_pagamento').value === 'DINHEIRO' && !calcularTroco();
             if (!btn.disabled) btn.focus();
         } else {
@@ -1079,7 +1101,7 @@ function atualizarClienteSelecionado(select) {
 
 // ══ ATALHOS GLOBAIS DE TECLADO (F1, F2, F4, F8, F9, ESC) ═════════════════════
 window.addEventListener('keydown', function(e) {
-    if (checkoutEmAndamento && /^F[1-9]$/.test(e.key)) {
+    if ((checkoutEmAndamento || checkoutReenvio) && /^F[1-9]$/.test(e.key)) {
         e.preventDefault();
         return;
     }
@@ -1158,7 +1180,7 @@ function scrollChipsBar(distance) {
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('modalFinalizarVenda').addEventListener('hide.bs.modal', function(event) {
-        if (checkoutEmAndamento) event.preventDefault();
+        if (checkoutEmAndamento || checkoutReenvio) event.preventDefault();
     });
     renderizarGradeRapida();
     renderizarCarrinho();

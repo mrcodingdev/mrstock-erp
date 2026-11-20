@@ -6,6 +6,7 @@
 require_once __DIR__ . '/../inc/database.php';
 require_once __DIR__ . '/../inc/auth.php';
 require_once __DIR__ . '/../inc/functions.php';
+require_once __DIR__ . '/../inc/venda_envio.php';
 
 /**
  * Abate estoque de lotes sequencialmente via estratégia PEPS / FIFO.
@@ -55,6 +56,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($tipo === 'venda') {
         $acao = $_POST['acao'] ?? 'venda_completa';
+        if (!in_array($acao, ['venda_completa', 'venda_rapida'], true)) {
+            http_response_code(422);
+            exit;
+        }
+        $chaveEnvio = $_POST['chave_envio'] ?? null;
+        $confirmandoMargem = isset($_POST['confirmacao_margem']);
         $pdvJson = $acao !== 'venda_rapida' && str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
         $responderPdv = static function (string $destino, array $dados, int $codigo = 200) use ($pdvJson): never {
             if ($pdvJson) {
@@ -66,11 +73,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             exit;
         };
-        $erroPdv = static function (string $erro, string $detalheUrl = '', int $codigo = 422) use ($responderPdv): never {
-            $responderPdv(BASE_URL . '/vendas/pdv.php?erro=' . $erro . $detalheUrl, ['status' => 'erro', 'erro' => $erro], $codigo);
+        $origem = $acao === 'venda_rapida' ? '/dashboard.php' : '/vendas/pdv.php';
+        $responderErro = static function (string $erro, string $detalheUrl = '', int $codigo = 422) use ($responderPdv, $origem): never {
+            $responderPdv(BASE_URL . $origem . '?erro=' . $erro . $detalheUrl, ['status' => 'erro', 'erro' => $erro], $codigo);
+        };
+        if (!chave_envio_venda_autorizada($chaveEnvio, $acao)) {
+            $responderErro('chave_envio_invalida');
+        }
+
+        $responderSeConcluida = static function () use ($pdo, $chaveEnvio, $acao, $confirmandoMargem, $responderPdv): void {
+            $vendaExistente = localizar_venda_por_envio($pdo, $chaveEnvio);
+            if (!$vendaExistente) {
+                return;
+            }
+            concluir_chave_envio_venda($chaveEnvio, $acao);
+            $destino = BASE_URL . '/vendas/cupom.php?venda_id=' . $vendaExistente;
+            $status = $confirmandoMargem ? 'margem_ja_confirmada' : 'ok';
+            $responderPdv($destino, ['status' => $status, 'redirect' => $destino], $confirmandoMargem ? 409 : 200);
+        };
+        $erroPdv = static function (string $erro, string $detalheUrl = '') use ($responderSeConcluida, $responderErro): never {
+            // A regra pode ter falhado porque o primeiro envio já debitou o estoque.
+            $responderSeConcluida();
+            $responderErro($erro, $detalheUrl);
         };
 
         try {
+            $responderSeConcluida();
             $pdo->beginTransaction();
             if ($acao === 'venda_rapida') {
                 // ── Venda Rápida (Dashboard) ─────────────────────────────────
@@ -80,8 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if ($produto_id <= 0 || $quantidade <= 0) {
                     if ($pdo->inTransaction()) { $pdo->rollBack(); }
-                    header("Location: " . BASE_URL . "/dashboard.php?erro=dados_invalidos");
-                    exit;
+                    $erroPdv('dados_invalidos');
                 }
 
                 // Lock pessimista para garantir saldo e evitar race condition
@@ -93,8 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($pdo->inTransaction()) { $pdo->rollBack(); }
                     $dispParam = $prodInfo ? (int)$prodInfo['quantidade'] : 0;
                     $nomParam  = $prodInfo ? $prodInfo['nome']            : 'Produto';
-                    header("Location: " . BASE_URL . "/dashboard.php?erro=estoque&produto=" . urlencode($nomParam) . "&disponivel=" . $dispParam);
-                    exit;
+                    $erroPdv('estoque', '&produto=' . urlencode($nomParam) . '&disponivel=' . $dispParam);
                 }
 
                 // Preço oficial do banco de dados
@@ -115,13 +141,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if ($pdo->inTransaction()) { $pdo->rollBack(); }
                         $nomParam = $prodInfo['nome'] ?? 'Produto';
                         registrar_log($pdo, 'BLOQUEIO_SANITARIO', "Venda bloqueada (CDC Art. 18): Produto #$produto_id ($nomParam) possui apenas $qtdLotesValidos un. em lotes válidos (solicitado: $quantidade)", 'lotes');
-                        header("Location: " . BASE_URL . "/dashboard.php?erro=lote_vencido&produto=" . urlencode($nomParam) . "&disponivel=" . $qtdLotesValidos . "&solicitado=" . $quantidade);
-                        exit;
+                        $erroPdv('lote_vencido', '&produto=' . urlencode($nomParam) . '&disponivel=' . $qtdLotesValidos . '&solicitado=' . $quantidade);
                     }
                 }
 
-                $stmtV = $pdo->prepare("INSERT INTO vendas (cliente_id, total, forma_pagamento) VALUES (NULL, ?, ?)");
-                $stmtV->execute([$total, $forma_pagamento]);
+                $stmtV = $pdo->prepare("INSERT INTO vendas (cliente_id, total, forma_pagamento, chave_envio) VALUES (NULL, ?, ?, ?)");
+                $stmtV->execute([$total, $forma_pagamento, $chaveEnvio]);
                 $venda_id = (int)$pdo->lastInsertId();
 
                 $stmtI = $pdo->prepare("INSERT INTO vendas_itens (venda_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)");
@@ -143,8 +168,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $cartRaw         = $_POST['cart_data'] ?? '[]';
                 $cart            = json_decode($cartRaw, true);
                 $tokenEnviado    = $_POST['confirmacao_margem'] ?? null;
-                $confirmacaoMargem = $_SESSION['pdv_confirmacao_margem'] ?? null;
-                unset($_SESSION['pdv_confirmacao_margem']);
+                $confirmacaoMargem = $_SESSION['pdv_confirmacoes_margem'][$chaveEnvio] ?? null;
+                unset($_SESSION['pdv_confirmacoes_margem'][$chaveEnvio]);
                 $margemConfirmada = false;
 
                 if (empty($cart) || !is_array($cart)) {
@@ -245,7 +270,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($pdvTravaMargem === 'aviso' && $margemNegativa) {
                     // As chaves são inseridas em ordem de ID e as quantidades repetidas são somadas.
                     $assinatura = hash('sha256', serialize([
-                        session_id(), $_SESSION['user_id'], $quantidadesPorProduto, $valoresPorProduto,
+                        session_id(), $_SESSION['user_id'], $chaveEnvio, $quantidadesPorProduto, $valoresPorProduto,
                         $cliente_id, $desconto, $forma_pagamento, $pdvTravaMargem, $pdvDescMax,
                     ]));
                     $margemConfirmada = is_string($tokenEnviado) && is_array($confirmacaoMargem)
@@ -256,11 +281,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     if (!$margemConfirmada) {
                         $pdo->rollBack();
+                        $responderSeConcluida();
                         if (!registrar_log($pdo, 'MARGEM_AVISO_PDV', $resumoMargem, 'vendas')) {
-                            $erroPdv('processamento', '', 500);
+                            $responderErro('processamento', '', 500);
                         }
                         $token = bin2hex(random_bytes(32));
-                        $_SESSION['pdv_confirmacao_margem'] = ['token' => $token, 'assinatura' => $assinatura, 'expira' => time() + 120];
+                        $_SESSION['pdv_confirmacoes_margem'][$chaveEnvio] = ['token' => $token, 'assinatura' => $assinatura, 'expira' => time() + 120];
                         $responderPdv(BASE_URL . '/vendas/pdv.php?erro=margem_aviso', ['status' => 'margem_aviso', 'token' => $token], 409);
                     }
                 } elseif ($tokenEnviado !== null) {
@@ -269,8 +295,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
                 // ══ GRAVAÇÃO DA VENDA ═════════════════════════════════════════
-                $stmtV = $pdo->prepare("INSERT INTO vendas (cliente_id, total, forma_pagamento) VALUES (?, ?, ?)");
-                $stmtV->execute([$cliente_id, $totalLiquido, $forma_pagamento]);
+                $stmtV = $pdo->prepare("INSERT INTO vendas (cliente_id, total, forma_pagamento, chave_envio) VALUES (?, ?, ?, ?)");
+                $stmtV->execute([$cliente_id, $totalLiquido, $forma_pagamento, $chaveEnvio]);
                 $venda_id = (int)$pdo->lastInsertId();
 
                 // ══ GRAVAÇÃO DOS ITENS, DÉBITO DE ESTOQUE E AUDITORIA ═════════
@@ -300,6 +326,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new RuntimeException('Falha na auditoria da confirmação de margem do PDV.');
             }
             $pdo->commit();
+            concluir_chave_envio_venda($chaveEnvio, $acao);
 
             if ($acao === 'venda_rapida') {
                 registrar_log($pdo, 'VENDA_RAPIDA', "Venda Rápida #$venda_id registrada. Total: R$ " . number_format($total, 2, ',', '.') . " ($forma_pagamento)", 'vendas');
@@ -311,21 +338,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header('Location: ' . BASE_URL . '/dashboard.php?msg=sucesso');
                 exit;
             }
-            $redirect = is_admin()
-                ? BASE_URL . '/vendas/nfce.php?msg=sucesso&venda_id=' . $venda_id
-                : BASE_URL . '/vendas/cupom.php?venda_id=' . $venda_id;
+            $redirect = BASE_URL . '/vendas/cupom.php?venda_id=' . $venda_id;
             $responderPdv($redirect, ['status' => 'ok', 'redirect' => $redirect]);
 
         } catch (\Throwable $e) {
             if ($pdo->inTransaction()) {
                 $pdo->rollBack();
             }
-            error_log("Erro no processamento da venda MrStock: " . $e->getMessage());
-            if ($acao === 'venda_rapida') {
-                header('Location: ' . BASE_URL . '/dashboard.php?erro=processamento');
-                exit;
+            if ($e instanceof PDOException && (int)($e->errorInfo[1] ?? 0) === 1062) {
+                try {
+                    $responderSeConcluida();
+                } catch (PDOException $consultaFalhou) {
+                    error_log('Falha ao consultar o resultado do envio da venda.');
+                }
             }
-            $erroPdv('processamento', '', 500);
+            // A mensagem do banco pode incluir a chave do envio.
+            error_log('Erro no processamento da venda MrStock. Código: ' . $e->getCode());
+            $responderErro('processamento', '', 500);
         }
     }
 }

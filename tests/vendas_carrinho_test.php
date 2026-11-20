@@ -27,6 +27,7 @@ final class CarrinhoDb extends PDO
             ],
             'lots' => $fixture['lots'] ?? [], 'sales' => [], 'items' => [], 'movements' => [], 'receipts' => [],
         ];
+        $this->state = $fixture['state'] ?? $this->state;
     }
 
     public function prepare(string $query, array $options = []): PDOStatement|false
@@ -83,6 +84,14 @@ final class CarrinhoStatement extends PDOStatement
                 usort($lots, static fn(array $a, array $b): int => [$a['data_validade'], $a['id']] <=> [$b['data_validade'], $b['id']]);
                 $this->value = str_contains($sql, 'COUNT(*)') ? count($lots)
                     : (str_contains($sql, 'SUM(quantidade)') ? array_sum(array_column($lots, 'quantidade')) : $lots);
+            } elseif ($sql === 'SELECT id FROM vendas WHERE chave_envio = ?') {
+                $this->value = false;
+                foreach ($db->state['sales'] as $sale) {
+                    if ($sale['key'] === $params[0]) {
+                        $this->value = $sale['id'];
+                        break;
+                    }
+                }
             } else {
                 throw new RuntimeException('Unsupported fixture SELECT');
             }
@@ -91,7 +100,15 @@ final class CarrinhoStatement extends PDOStatement
 
         $db->writes[] = ['sql' => $sql, 'params' => $params];
         if (str_starts_with($sql, 'INSERT INTO vendas ')) {
-            $db->state['sales'][] = ['total' => $params[count($params) - 2], 'payment' => $params[count($params) - 1]];
+            [$total, $payment, $key] = array_slice($params, -3);
+            foreach ($db->state['sales'] as $sale) {
+                if ($sale['key'] === $key) {
+                    $duplicate = new PDOException('Chave de envio duplicada.', 23000);
+                    $duplicate->errorInfo = ['23000', 1062, 'Chave de envio duplicada.'];
+                    throw $duplicate;
+                }
+            }
+            $db->state['sales'][] = ['id' => 1, 'total' => $total, 'payment' => $payment, 'key' => $key];
         } elseif (str_starts_with($sql, 'INSERT INTO vendas_itens ')) {
             if ($db->fixture['fail_item'] ?? false) {
                 throw new RuntimeException('simulated_item_failure');
@@ -127,6 +144,7 @@ function controllerWorker(array $case): never
     mkdir($temp . '/vendas', 0700);
     copy($root . '/vendas/functions.php', $temp . '/vendas/functions.php');
     copy($root . '/inc/auth.php', $temp . '/inc/auth.php');
+    copy($root . '/inc/venda_envio.php', $temp . '/inc/venda_envio.php');
     file_put_contents($temp . '/inc/database.php', '<?php $pdo = $GLOBALS["cartDb"]; define("BASE_URL", "/MrStock");');
     file_put_contents($temp . '/inc/functions.php', <<<'PHP'
 <?php
@@ -141,6 +159,10 @@ PHP);
     $_SESSION = ['user_id' => $case['operator'] ?? 1, 'user_perfil' => $case['role'] ?? 'caixa'] + ($case['session'] ?? []);
     $_GET = ['tipo' => 'venda'];
     $_POST = array_merge(['acao' => 'venda_completa', 'cart_data' => json_encode($case['cart'] ?? [], JSON_THROW_ON_ERROR)], $case['post'] ?? []);
+    require_once $temp . '/inc/venda_envio.php';
+    if (!array_key_exists('chave_envio', $_POST)) {
+        $_POST['chave_envio'] = emitir_chave_envio_venda($_POST['acao']);
+    }
     $_SERVER['REQUEST_METHOD'] = 'POST';
     if ($case['json'] ?? false) { $_SERVER['HTTP_ACCEPT'] = 'application/json'; }
     $db = new CarrinhoDb($case);
@@ -150,10 +172,11 @@ PHP);
         $result = ['state' => $db->state, 'committed' => $db->committed, 'rollbacks' => $db->rollbacks,
             'writes' => $db->writes, 'locks' => $db->locks, 'logs' => $db->logs, 'html' => ob_get_clean(),
             'session_id' => session_id(), 'session' => array_diff_key($_SESSION, ['user_id' => true, 'user_perfil' => true]),
+            'key' => $_POST['chave_envio'], 'status' => http_response_code(),
             'error_log' => is_file($temp . '/errors.log') ? file_get_contents($temp . '/errors.log') : ''];
         $sessionFile = $temp . '/sess_' . session_id();
         session_write_close();
-        foreach (['vendas/functions.php', 'inc/auth.php', 'inc/database.php', 'inc/functions.php', 'errors.log'] as $path) {
+        foreach (['vendas/functions.php', 'inc/auth.php', 'inc/database.php', 'inc/functions.php', 'inc/venda_envio.php', 'errors.log'] as $path) {
             if (is_file($temp . '/' . $path)) { unlink($temp . '/' . $path); }
         }
         if (is_file($sessionFile)) { unlink($sessionFile); }
@@ -216,7 +239,8 @@ function avisoMargem(array $result): array
     $feedback = json_decode($result['html'], true, flags: JSON_THROW_ON_ERROR);
     check(array_keys($feedback) === ['status', 'token'] && $feedback['status'] === 'margem_aviso', 'Aviso deve expor apenas estado e token');
     check(in_array('MARGEM_AVISO_PDV', $result['logs'], true), 'Auditoria do primeiro aviso ausente');
-    return ['session_id' => $result['session_id'], 'session' => $result['session'], 'post' => ['confirmacao_margem' => $feedback['token']]];
+    return ['session_id' => $result['session_id'], 'session' => $result['session'],
+        'post' => ['confirmacao_margem' => $feedback['token'], 'chave_envio' => $result['key']]];
 }
 
 $duplicates = [['id' => 1, 'quantidade' => 6], ['id' => '1', 'quantidade' => 6]];
@@ -277,11 +301,19 @@ $tests = [
         check(json_decode($final['html'], true) === ['status' => 'ok', 'redirect' => '/MrStock/vendas/cupom.php?venda_id=1'], 'Retorno de venda do caixa');
         $replay = $confirmation;
         $replay['session'] = $final['session'];
-        avisoMargem(checkoutMargem($replay));
+        $replay['state'] = $final['state'];
+        $duplicate = checkoutMargem($replay);
+        check($duplicate['status'] === 409 && json_decode($duplicate['html'], true) === [
+            'status' => 'margem_ja_confirmada', 'redirect' => '/MrStock/vendas/cupom.php?venda_id=1',
+        ], 'Confirmação repetida deve sinalizar a venda anterior');
+        check(!$duplicate['committed'] && $duplicate['state'] === $final['state'], 'Confirmação repetida alterou a venda');
     },
     'confirmacao_perde_validade_se_operador_preco_custo_pagamento_ou_quantidade_mudam' => static function (): void {
         $confirmation = avisoMargem(checkoutMargem());
-        foreach ([['operator' => 2], ['price' => 9.0], ['cost' => 5.0],
+        $outroOperador = ['operator' => 2] + $confirmation;
+        unset($outroOperador['post']['chave_envio']);
+        avisoMargem(checkoutMargem($outroOperador));
+        foreach ([['price' => 9.0], ['cost' => 5.0],
             ['post' => ['forma_pagamento' => 'DINHEIRO']], ['post' => ['desconto' => '8']],
             ['cart' => [['id' => 1, 'quantidade' => 2]], 'post' => ['desconto' => '13']]] as $change) {
             avisoMargem(checkoutMargem(array_replace_recursive($confirmation, $change)));
@@ -299,12 +331,14 @@ $tests = [
         rejected($blocked);
         check(json_decode($blocked['html'], true) === ['status' => 'erro', 'erro' => 'margem_negativa'], 'Bloqueio retornou conteúdo inesperado');
         $allowed = checkoutMargem(['role' => 'admin', 'config' => ['pdv_trava_margem' => 'nenhum']]);
-        check($allowed['committed'] && json_decode($allowed['html'], true) === ['status' => 'ok', 'redirect' => '/MrStock/vendas/nfce.php?msg=sucesso&venda_id=1'], 'Modo nenhum ou destino do admin mudou');
+        check($allowed['committed'] && json_decode($allowed['html'], true) === ['status' => 'ok', 'redirect' => '/MrStock/vendas/cupom.php?venda_id=1'], 'Modo nenhum ou destino do admin mudou');
     },
     'rollback_em_falha_de_gravacao_simulada' => static function (): void {
-        $r = sale(['fail_item' => true, 'cart' => [['id' => 1, 'quantidade' => 1]]]);
+        $r = sale(['json' => true, 'fail_item' => true, 'cart' => [['id' => 1, 'quantidade' => 1]]]);
         check(!$r['committed'] && $r['rollbacks'] === 1 && $r['state']['sales'] === [] && $r['state']['products'][1]['quantidade'] === 10, 'Rollback did not restore state');
-        check(str_contains($r['error_log'], 'simulated_item_failure'), 'Expected failure was not processed');
+        check($r['status'] === 500 && json_decode($r['html'], true) === ['status' => 'erro', 'erro' => 'processamento'], 'Falha não reportada no checkout');
+        check(str_contains($r['error_log'], 'Erro no processamento da venda MrStock')
+            && !str_contains($r['error_log'], 'simulated_item_failure'), 'A log deve omitir a exceção original');
     },
     'venda_rapida_preservada' => static function (): void {
         $r = sale(['post' => ['acao' => 'venda_rapida', 'produto_id' => 1, 'quantidade' => 2]]);

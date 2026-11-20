@@ -38,10 +38,14 @@ def requisitar(porta, caminho, cookie="", post=None, aceita_json=True):
         conn.close()
 
 
+def chave_pdv(html):
+    return re.search(r'name="chave_envio" value="([a-f0-9]{32})"', html).group(1)
+
+
 def preparar_app(pasta, porta, datadir):
     app = pasta / "app"
     for arquivo in (
-        "inc/auth.php", "inc/functions.php", "inc/header.php", "inc/footer.php", "inc/cookie_banner.php",
+        "inc/auth.php", "inc/functions.php", "inc/header.php", "inc/footer.php", "inc/cookie_banner.php", "inc/venda_envio.php",
         "vendas/functions.php", "vendas/pdv.php",
     ):
         destino = app / arquivo
@@ -86,6 +90,7 @@ def conferir_fluxo(porta, sql):
     status, _, html = requisitar(porta, "/vendas/pdv.php?erro=estoque&produto=" +
                                   urlencode({"": "<MARCADOR-FIXTURE>"}).split("=", 1)[1], cookie)
     assert status == 200 and "&lt;MARCADOR-FIXTURE&gt;" in html and "<MARCADOR-FIXTURE>" not in html
+    payload["chave_envio"] = chave_pdv(html)
     catalogo = json.loads(re.search(r"^const catalogoProdutos = (.+);$", html, re.M).group(1))
     assert len(catalogo) == 1 and "preco_compra" not in catalogo[0] and float(catalogo[0]["preco"]) == 10
     status, _, _ = requisitar(porta, rota, cookie, {**payload, "csrf_token": ""})
@@ -117,13 +122,18 @@ def conferir_fluxo(porta, sql):
     assert status == 200 and json.loads(mensagem) == {"status": "ok", "redirect": "/vendas/cupom.php?venda_id=1"}
     assert sql(estado) == depois
     assert sql("SELECT COUNT(*) FROM logs WHERE acao='MARGEM_CONFIRMADA_PDV' AND descricao LIKE '%24.00%20.00%';") == "1"
-    pedir_aviso({**payload, "confirmacao_margem": novo_token})
+    status, _, repeticao = requisitar(porta, rota, cookie, {**payload, "confirmacao_margem": novo_token})
+    assert status == 409 and json.loads(repeticao) == {
+        "status": "margem_ja_confirmada", "redirect": "/vendas/cupom.php?venda_id=1",
+    }
     assert sql(estado) == depois
     print("PDV: catálogo sem custo, texto escapado, CSRF e bloqueio sem gravação.")
     print("Margem: aviso sem baixa, custo alterado exige novo aceite, confirmação baixa produto e lote uma vez.")
     print("Auditoria gravada, redirecionamento ao cupom e repetição sem efeito comercial.")
     sql("UPDATE produtos SET preco_venda=1.20, preco_compra=1.10 WHERE id=1;")
-    venda_sem_margem_negativa = {**payload, "cart_data": '[{"id":1,"quantidade":1}]', "desconto": "0.10"}
+    _, _, outra_tela = requisitar(porta, "/vendas/pdv.php", cookie)
+    venda_sem_margem_negativa = {**payload, "cart_data": '[{"id":1,"quantidade":1}]', "desconto": "0.10",
+                                "chave_envio": chave_pdv(outra_tela)}
     status, _, resposta = requisitar(porta, rota, cookie, venda_sem_margem_negativa)
     assert status == 200 and json.loads(resposta)["status"] == "ok", "Igualdade em centavos pediu confirmação."
     assert sql("SELECT total FROM vendas WHERE id=2;") == "1.10"
@@ -136,6 +146,7 @@ def main():
     tabelas = re.findall(r"^CREATE TABLE IF NOT EXISTS `\w+` \(.*?^\) ENGINE=InnoDB[^;]*;",
                          ddl, re.M | re.S)
     assert len(tabelas) == 15
+    migration = (WORKSPACE / "database/migrations/001_vendas_chave_envio.sql").read_text(encoding="utf-8")
     with tempfile.TemporaryDirectory(prefix="mrstock-margem-") as temporario:
         pasta = Path(temporario)
         datadir = pasta / "data"
@@ -159,6 +170,7 @@ def main():
                 "CREATE DATABASE pdv_margem; USE pdv_margem; SET FOREIGN_KEY_CHECKS=0;\n"
                 + "\n".join(tabelas)
                 + "\nSET FOREIGN_KEY_CHECKS=1;"
+                + "\n" + migration + "\n"
                 + "INSERT INTO usuarios (id,username,password,perfil) VALUES (1,'caixa_fixture','sem-login','caixa');"
                 + "INSERT INTO produtos (id,nome,quantidade,preco_venda,preco_compra) VALUES (1,'Caneta fictícia',10,10,11);"
                 + "INSERT INTO lotes (id,produto_id,numero_lote,data_validade,quantidade)"
