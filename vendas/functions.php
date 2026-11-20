@@ -261,7 +261,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
                 $pdvTravaMargem = get_app_config($pdo, 'pdv_trava_margem', 'aviso');
-                $margemNegativa = round($totalLiquido, 2) < round($custoTotal, 2);
+                $totalLiquidoCentavos = (int)round($totalLiquido * 100);
+                $custoTotalCentavos = (int)round($custoTotal * 100);
+                $margemNegativa = $totalLiquidoCentavos < $custoTotalCentavos;
                 if ($pdvTravaMargem === 'bloquear' && $margemNegativa) {
                     if ($pdo->inTransaction()) { $pdo->rollBack(); }
                     $erroPdv('margem_negativa');
