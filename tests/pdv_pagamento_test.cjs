@@ -126,6 +126,17 @@ const tests = [
         assert.strictEqual(s.requests[2].body, s.requests[1].body);
         assert.deepEqual(s.destinations, ['/cupom']);
     }],
+    ['sessão recusada mantém finalização bloqueada e libera os controles do modal', async () => {
+        const s = setup();
+        s.context.abrirModalPagamento();
+        s.context.definirCedula(50);
+        s.outcomes.push({ status: 403 });
+        await s.context.confirmarVendaFinal();
+        assert.equal(s.element('modal_forma_pagamento').disabled, false);
+        assert.equal(s.element('modal_valor_recebido').disabled, false);
+        assert.equal(s.element('btnConfirmarVendaModal').disabled, true);
+        assert.match(s.element('pdvFeedbackCheckout').textContent, /sessão inválida/i);
+    }],
 ];
 async function run() {
     let failed = 0;

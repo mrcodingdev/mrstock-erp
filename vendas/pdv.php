@@ -1081,7 +1081,7 @@ async function confirmarVendaFinal() {
         atualizarFeedbackCheckout('Resultado indisponível. Use Reenviar esta venda para recuperar a confirmação sem duplicar o lançamento.');
     } finally {
         checkoutEmAndamento = false;
-        bloquearControlesPagamento(checkoutReenvio !== null || checkoutBloqueado);
+        bloquearControlesPagamento(checkoutReenvio !== null);
         if (checkoutReenvio) {
             btn.textContent = 'Reenviar esta venda';
             btn.disabled = false;
