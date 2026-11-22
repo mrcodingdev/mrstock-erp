@@ -4,6 +4,10 @@ Options -Indexes
 # Unifica o domínio público antes de avaliar a sessão no PHP.
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    # Protege arquivos de trabalho e preserva o manual vinculado no ERP.
+    RewriteRule ^(?:database|tests|\.git|\.github|\.codex|\.agents|\.env(?:\.[^/]+)?|AGENTS\.md)(?:/|$) - [F,NC]
+    RewriteRule ^docs(?:$|/(?!MRSTOCK_MANUAL_DO_USUARIO_v2\.2\.0_FINAL\.pdf$)) - [F,NC]
+
     RewriteCond %{HTTP_HOST} ^www\.mrstock\.com\.br(?::[0-9]+)?$ [NC]
     RewriteRule ^ https://mrstock.com.br%{REQUEST_URI} [R=308,L,NE]
 </IfModule>
@@ -22,6 +26,13 @@ ErrorDocument 404 /404.php
     Order Allow,Deny
     Allow from all
 </Files>
+
+# O manual continua disponível por link e pede para ficar fora da busca.
+<IfModule mod_headers.c>
+    <Files "MRSTOCK_MANUAL_DO_USUARIO_v2.2.0_FINAL.pdf">
+        Header always set X-Robots-Tag "noindex"
+    </Files>
+</IfModule>
 
 # Headers de Seguranca Defensivos (SecurityHeaders A+ Compliance)
 <IfModule mod_headers.c>

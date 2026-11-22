@@ -3,6 +3,7 @@ Disallow: /categorias/
 Disallow: /clientes/
 Disallow: /compras/
 Disallow: /docs/
+Allow: /docs/MRSTOCK_MANUAL_DO_USUARIO_v2.2.0_FINAL.pdf$
 Disallow: /fornecedores/
 Disallow: /inc/
 Disallow: /lotes/
