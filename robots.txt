@@ -2,6 +2,7 @@ User-agent: *
 Disallow: /categorias/
 Disallow: /clientes/
 Disallow: /compras/
+Disallow: /docs/
 Disallow: /fornecedores/
 Disallow: /inc/
 Disallow: /lotes/
@@ -20,3 +21,5 @@ Allow: /termos.php
 Allow: /404.php
 Allow: /assets/
 Allow: /robots.txt
+
+Sitemap: https://mrstock.com.br/sitemap.xml

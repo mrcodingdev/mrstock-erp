@@ -93,15 +93,16 @@ if ($recebeuLogin) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MrStock ERP - Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades e PDV Ágil para Papelaria Real.">
+    <meta name="description" content="Entre com sua conta para acessar o MrStock ERP.">
     <title>MrStock ERP - Login</title>
     
     <!-- Metadados OpenGraph & Tema Institucional -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="MrStock ERP - Login | Papelaria Real">
-    <meta property="og:description" content="Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades PEPS/FIFO e PDV Ágil para Papelaria Real.">
+    <meta property="og:title" content="MrStock ERP para papelarias">
+    <meta property="og:description" content="Registre compras, acompanhe lotes e vencimentos e dê baixa no estoque a cada venda. Conheça a demonstração para papelarias.">
     <meta property="og:url" content="https://mrstock.com.br/">
-    <meta property="og:image" content="https://mrstock.com.br/assets/img/mrstock_og.png">
+    <meta property="og:image" content="https://mrstock.com.br/landing/assets/landing/mrstock-r15-social.jpg">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:locale" content="pt_BR">
@@ -110,7 +111,7 @@ if ($recebeuLogin) {
     <link href="<?= BASE_URL ?>/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/inter.css">
-    <link rel="icon" href="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" type="image/x-icon">
+    <link rel="icon" href="<?= BASE_URL ?>/assets/img/mrstock-favicon.png" sizes="96x96" type="image/png">
     <style>
         :root {
             --brand-primary: #1a4231;
@@ -448,41 +449,6 @@ if ($recebeuLogin) {
         }
     </style>
 
-    <!-- Dados Estruturados Schema.org (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@graph": [
-            {
-                "@type": "SoftwareApplication",
-                "name": "MrStock ERP",
-                "operatingSystem": "Web, Windows, Linux",
-                "applicationCategory": "BusinessApplication",
-                "description": "Sistema Integrado de Gestão Comercial, Controle de Estoque com Validades PEPS/FIFO e PDV Ágil para a Papelaria Real.",
-                "softwareVersion": "2.2.0",
-                "offers": {
-                    "@type": "Offer",
-                    "price": "0",
-                    "priceCurrency": "BRL"
-                }
-            },
-            {
-                "@type": "LocalBusiness",
-                "name": "Papelaria Real Ltda",
-                "description": "Papelaria, materiais escolares e de escritório em Sorocaba/SP.",
-                "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": "Rua XV de Novembro, 250 - Centro",
-                    "addressLocality": "Sorocaba",
-                    "addressRegion": "SP",
-                    "addressCountry": "BR"
-                },
-                "telephone": "+5515996441796",
-                "email": "contato@mrstock.com.br"
-            }
-        ]
-    }
-    </script>
 </head>
 <body class="mrstock-login-page">
 

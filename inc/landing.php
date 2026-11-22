@@ -1,10 +1,9 @@
 <?php
 
-function servir_landing(string $arquivo): never
+function servir_landing(string $arquivo, bool $indexavel = false): never
 {
     $caminho = ROOT_PATH . '/landing/' . $arquivo;
     header('Cache-Control: private, no-store');
-    header('X-Robots-Tag: noindex');
 
     if (!is_readable($caminho)) {
         http_response_code(503);
@@ -12,6 +11,9 @@ function servir_landing(string $arquivo): never
         exit('A apresentação do MrStock está temporariamente indisponível.');
     }
 
+    if ($indexavel) {
+        header_remove('X-Robots-Tag');
+    }
     header('Content-Type: text/html; charset=UTF-8');
     readfile($caminho);
     exit;

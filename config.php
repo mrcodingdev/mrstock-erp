@@ -133,6 +133,7 @@ if (session_status() === PHP_SESSION_NONE && (!$entradaPublica || $retomarSessao
 
 // 5. Injeção de Cabeçalhos HTTP de Segurança (CWE-693 & CWE-1021)
 if (!headers_sent()) {
+    header('X-Robots-Tag: noindex');
     header("X-Frame-Options: SAMEORIGIN");
     header("X-Content-Type-Options: nosniff");
     header("Referrer-Policy: strict-origin-when-cross-origin");

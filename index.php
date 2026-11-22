@@ -15,4 +15,11 @@ if ($destino !== null) {
     exit;
 }
 
-servir_landing('inicio.html');
+$caminho = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+if (is_string($caminho) && str_ends_with($caminho, '/index.php')) {
+    header('Cache-Control: private, no-store');
+    header('Location: ' . BASE_URL . '/', true, 301);
+    exit;
+}
+
+servir_landing('inicio.html', indexavel: true);
