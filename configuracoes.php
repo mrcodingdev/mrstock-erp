@@ -22,6 +22,7 @@ if (isset($_GET['acao']) && $_GET['acao'] === 'exportar_backup_sql') {
         exit;
     }
 
+    $backupTimeZone = $pdo->quote((string)$pdo->query('SELECT @@SESSION.time_zone')->fetchColumn());
     $filename = 'mrstock_backup_' . date('Ymd_His') . '.sql';
     header('Content-Type: application/sql; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -35,7 +36,10 @@ if (isset($_GET['acao']) && $_GET['acao'] === 'exportar_backup_sql') {
     echo "-- Gerado por: " . $userName . " (" . $userRole . ")\n";
     echo "-- ============================================================================\n\n";
     echo "-- Transação Atômica: START TRANSACTION WITH CONSISTENT SNAPSHOT\n\n";
-    echo "SET FOREIGN_KEY_CHECKS=0;\nSET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\nSET NAMES utf8mb4;\n\n";
+    echo "SET @mrstock_backup_previous_time_zone = @@SESSION.time_zone;\n";
+    echo "SET SESSION time_zone = {$backupTimeZone};\n";
+    echo "SET @mrstock_backup_previous_fk_checks = @@SESSION.foreign_key_checks;\n";
+    echo "SET SESSION FOREIGN_KEY_CHECKS=0;\nSET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\nSET NAMES utf8mb4;\n\n";
 
     $pdo->exec("START TRANSACTION WITH CONSISTENT SNAPSHOT;");
     $tabelas = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
@@ -70,7 +74,8 @@ if (isset($_GET['acao']) && $_GET['acao'] === 'exportar_backup_sql') {
     }
 
     $pdo->exec("COMMIT;");
-    echo "SET FOREIGN_KEY_CHECKS=1;\n";
+    echo "SET SESSION FOREIGN_KEY_CHECKS = @mrstock_backup_previous_fk_checks;\n";
+    echo "SET SESSION time_zone = @mrstock_backup_previous_time_zone;\n";
     exit;
 }
 

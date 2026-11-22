@@ -33,7 +33,7 @@ if (!function_exists('garantir_tabela_rate_limit')) {
                 data_tentativa DATETIME NOT NULL,
                 INDEX idx_ip_data (ip_usuario, data_tentativa),
                 INDEX idx_user_data (username, data_tentativa)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
             $pdo->exec($sql);
             $verificado = true;
         } catch (Throwable $e) {
