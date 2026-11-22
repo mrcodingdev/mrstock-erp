@@ -1,6 +1,13 @@
 # MrStock ERP - Hardening de Producao Apache (Hostinger / cPanel)
 Options -Indexes
 
+# Unifica o domínio público antes de avaliar a sessão no PHP.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_HOST} ^www\.mrstock\.com\.br(?::[0-9]+)?$ [NC]
+    RewriteRule ^ https://mrstock.com.br%{REQUEST_URI} [R=308,L,NE]
+</IfModule>
+
 # Pagina 404 Customizada Institucional
 ErrorDocument 404 /404.php
 

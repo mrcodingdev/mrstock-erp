@@ -1,0 +1,123 @@
+.detail-body { padding-top: clamp(26px, 4.2vw, 60px); }
+
+.detail-back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    gap: 9px;
+    margin-bottom: clamp(18px, 2.6vw, 34px);
+    color: #1b402c;
+    font-size: .86rem;
+    font-weight: 750;
+    text-decoration: none;
+}
+.detail-back:hover { color: #2d6f48; }
+.has-motion .detail-back i { transition: transform .28s var(--ease-out); }
+@media (hover: hover) {
+    .has-motion .detail-back:hover i { transform: translateX(-3px); }
+}
+
+.detail-step + .detail-step {
+    margin-top: clamp(38px, 4vw, 64px);
+    padding-top: clamp(38px, 4vw, 64px);
+    border-top: 1px solid #dbe3d7;
+}
+.detail-step .demo-copy p { margin-top: 16px; }
+.detail-step .demo-photo .zoom { display: none; }
+.detail-step .detail-capture-portrait { width: 100%; max-width: 27rem; justify-self: center; }
+
+.detail-carousel-copy { display: grid; }
+.detail-carousel-copy p { grid-area: 1 / 1; }
+.detail-carousel-copy p[aria-hidden="true"] { visibility: hidden; }
+
+.detail-carousel-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 21px;
+}
+.detail-carousel-nav button {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    border: 1px solid #cedbce;
+    border-radius: 7px;
+    background: #fff;
+    color: #1b402c;
+    font: 750 .84rem/1 var(--mr-sans);
+    cursor: pointer;
+}
+.detail-carousel-nav button:hover { border-color: #7c9c81; background: #edf3e8; }
+.detail-carousel-nav button[aria-pressed="true"] { border-color: #1b402c; background: #1b402c; color: #fff; }
+.detail-carousel-views { min-width: 0; touch-action: pan-y pinch-zoom; }
+.detail-carousel-views .demo-photo { aspect-ratio: 3 / 2; background: #e6ebe9; }
+.detail-carousel-views .demo-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+
+@media (prefers-reduced-motion: no-preference) {
+    .has-motion [data-carousel-view]:not([hidden]) .demo-photo {
+        animation: detail-capture-in .28s var(--ease-out) both;
+    }
+    @keyframes detail-capture-in {
+        from { opacity: .78; transform: translateY(4px); }
+        to { opacity: 1; transform: none; }
+    }
+}
+
+@media (min-width: 50.001rem) {
+    [data-detail-carousel] .demo-scene-body { grid-template-columns: minmax(0, .74fr) minmax(0, 1.26fr); }
+    .detail-step:nth-child(even) .demo-scene-body {
+        grid-template-columns: minmax(0, 1.17fr) minmax(0, .83fr);
+    }
+    .detail-step:nth-child(even) .demo-copy { grid-column: 2; grid-row: 1; }
+    .detail-step:nth-child(even) .demo-scene-body > :is(.demo-capture, .detail-carousel-views) { grid-column: 1; grid-row: 1; }
+}
+
+@media (min-width: 38.001rem) {
+    .detail-photo-crop { aspect-ratio: var(--desktop-crop-ratio); }
+    .detail-photo-crop img {
+        position: absolute;
+        width: var(--desktop-crop-image-width);
+        left: var(--desktop-crop-image-left);
+        top: var(--desktop-crop-image-top);
+    }
+}
+
+.detail-related {
+    margin-top: clamp(40px, 5.8vw, 80px);
+    padding-top: clamp(32px, 4.4vw, 62px);
+    border-top: 1px solid #dbe3d7;
+}
+.detail-related > h2 {
+    margin: 0 0 clamp(20px, 3vw, 34px);
+    color: #17281e;
+    font: 400 clamp(2.03rem, 3.6vw, 3.55rem)/1.02 var(--mr-serif);
+    letter-spacing: -.035em;
+    text-align: center;
+}
+.detail-related .feature-grid {
+    max-width: 810px;
+    margin-inline: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 38rem) {
+    .detail-carousel-views .demo-photo { aspect-ratio: 5 / 4; }
+    .detail-slide-crop {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: min(100%, calc(100% * var(--carousel-crop-scale)));
+        aspect-ratio: var(--crop-ratio);
+        overflow: hidden;
+        transform: translate(-50%, -50%);
+    }
+    .detail-carousel-views .detail-slide-crop img {
+        inset: var(--crop-image-top) auto auto var(--crop-image-left);
+        width: var(--crop-image-width);
+        height: auto;
+    }
+    .detail-related .feature-grid { grid-template-columns: minmax(0, 1fr); }
+}

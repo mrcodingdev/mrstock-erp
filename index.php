@@ -1,17 +1,18 @@
 <?php
-/**
- * MrStock ERP - Redirecionador Principal
- */
-// Caminho absoluto para config (inicializa headers de segurança e sessão segura)
-require_once __DIR__ . '/config.php';
 
-if (isset($_SESSION['user_id'])) {
-    if (($_SESSION['user_perfil'] ?? '') === 'caixa') {
-        header("Location: " . BASE_URL . "/vendas/pdv.php");
-    } else {
-        header("Location: " . BASE_URL . "/dashboard.php");
-    }
-} else {
-    header("Location: " . BASE_URL . "/login.php");
+define('MRSTOCK_PUBLIC_ENTRY', 'inicio');
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/inc/landing.php';
+
+$destino = destino_sessao_landing();
+if (session_status() === PHP_SESSION_ACTIVE) {
+    session_write_close();
 }
-exit;
+
+if ($destino !== null) {
+    header('Cache-Control: private, no-store');
+    header('Location: ' . BASE_URL . $destino, true, 302);
+    exit;
+}
+
+servir_landing('inicio.html');

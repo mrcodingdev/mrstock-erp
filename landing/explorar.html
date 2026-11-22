@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f8f8f0">
+<title>Funcionalidades | MrStock ERP</title>
+<link rel="icon" href="./landing/assets/img/mr_stock_logo_branca.ico?v=r15" type="image/x-icon">
+<link rel="stylesheet" href="./landing/css/all.min.css?v=r15">
+<link rel="stylesheet" href="./landing/assets/landing/navbar.css?v=r15">
+<link rel="stylesheet" href="./landing/assets/landing/botoes.css?v=r15">
+<link rel="stylesheet" href="./landing/assets/landing/cartoes.css?v=r15">
+<link rel="stylesheet" href="./landing/assets/landing/encerramento.css?v=r15">
+<link rel="stylesheet" href="./landing/assets/landing/paginas-publicas.css?v=r15">
+<link rel="stylesheet" href="./landing/assets/landing/demonstracao.css?v=r15">
+<link rel="stylesheet" href="./landing/assets/landing/galeria.css?v=r15">
+<link rel="stylesheet" href="./landing/assets/landing/fichas.css?v=r15">
+<link rel="stylesheet" href="./landing/assets/landing/explorar.css?v=r15">
+<script src="./landing/assets/landing/explorar.js?v=r15" defer></script>
+<script src="./landing/assets/landing/inicio.js?v=r15" defer></script>
+<script src="./landing/assets/landing/demonstracao.js?v=r15" defer></script>
+<script src="./landing/assets/landing/galeria.js?v=r15" defer></script>
+</head>
+<body class="public-navigation">
+<section id="mrstock-public-map" aria-label="Apresentação do MrStock ERP">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <header class="site-header">
+        <div class="wrap header-row">
+            <a class="brand" href="./" aria-label="MrStock ERP, início">
+                <span class="brand-icon"><img src="./landing/assets/img/mr_stock_logo_branca.ico?v=r15" width="25" height="25" alt=""></span>
+                    <span>MrStock<span class="brand-suffix"> ERP</span></span>
+            </a>
+            <nav class="site-nav" aria-label="Navegação principal">
+                <a href="./" data-go="inicio">Início</a>
+                <a href="./explorar.php?pagina=funcionalidades" data-go="funcionalidades">Funcionalidades</a>
+                <a href="./explorar.php?pagina=solucoes" data-go="solucoes">Soluções</a>
+                <a href="./explorar.php?pagina=demonstracao" data-go="demonstracao">Demonstração</a>
+                <a href="./explorar.php?pagina=contato" data-go="contato">Contato</a>
+            </nav>
+            <a class="button button-small nav-access" href="./explorar.php?pagina=acesso">Acessar o sistema <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+    </header>
+  <main id="conteudo" class="mr-content" tabindex="-1">
+    <noscript>
+      <section class="catalog-hero" aria-labelledby="titulo-sem-js">
+        <h1 id="titulo-sem-js">Conheça o MrStock ERP</h1>
+        <p>Compras, estoque com validade e vendas no balcão em um só sistema.</p>
+        <p>A apresentação interativa precisa de JavaScript. Você pode <a href="./">voltar ao início</a> ou <a href="./login.php">entrar no MrStock</a>.</p>
+      </section>
+    </noscript>
+  </main>
+  <footer class="mr-footer">
+    <span>MrStock ERP · Projeto de TCC da ETEC Fernando Prestes</span>
+    <a class="mr-text-button cursor-interaction" data-go="contato" href="./explorar.php?pagina=contato">Falar com a equipe <span aria-hidden="true">↗</span></a>
+  </footer>
+  <p class="mr-status" role="status"></p>
+</section>
+
+<template id="galeria-publica">
+  <dialog id="galeria" class="gallery" aria-labelledby="galeria-legenda">
+    <form method="dialog" class="gallery-controls">
+      <button type="button" class="button button-small" id="alternar-zoom"><span>Ampliar</span> <i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+      <button class="button button-small" autofocus>Fechar <i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </form>
+    <figure>
+      <div class="gallery-viewport" tabindex="0" role="region" aria-label="Captura do sistema"><img alt=""></div>
+      <figcaption id="galeria-legenda"></figcaption>
+    </figure>
+  </dialog>
+</template>
+
+<template id="encerramento-publico">
+  <section class="home-closing" aria-labelledby="titulo-contato">
+      <div class="wrap">
+          <div class="home-closing-panel">
+              <h2 id="titulo-contato">Quer ver o MrStock no balcão?</h2>
+              <p>Converse com a equipe sobre uma demonstração do ERP.</p>
+              <a class="button" href="./explorar.php?pagina=contato">Falar com a equipe <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+      </div>
+  </section>
+  <footer class="site-footer">
+      <div class="wrap">
+          <div class="footer-columns">
+              <div>
+                  <a class="brand" href="./" aria-label="MrStock ERP, início">
+                      <span class="brand-icon"><img src="./landing/assets/img/mr_stock_logo_branca.ico?v=r15" width="25" height="25" alt=""></span>
+                  <span>MrStock<span class="brand-suffix"> ERP</span></span>
+                  </a>
+                  <p>Projeto de TCC da ETEC Fernando Prestes, inspirado na rotina da Papelaria Real.</p>
+              </div>
+              <nav class="home-footer-nav" aria-label="Páginas do produto">
+                  <h2>Explore</h2>
+                  <a href="./explorar.php?pagina=funcionalidades">Funcionalidades</a>
+                  <a href="./explorar.php?pagina=solucoes">Soluções</a>
+                  <a href="./explorar.php?pagina=demonstracao">Demonstração</a>
+              </nav>
+              <div>
+                  <h2>Contato</h2>
+                  <ul class="footer-contact" role="list">
+                      <li><a href="https://wa.me/5515996441796"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp</a></li>
+                      <li><a href="tel:+5515996441796"><i class="fa-solid fa-phone" aria-hidden="true"></i> (15) 99644-1796</a></li>
+                      <li><a href="mailto:contato@mrstock.com.br"><i class="fa-solid fa-envelope" aria-hidden="true"></i> contato@mrstock.com.br</a></li>
+                  </ul>
+              </div>
+          </div>
+          <div class="footer-bottom">
+              <p>MrStock ERP © 2026</p>
+              <nav aria-label="Informações legais">
+                  <a href="./termos.php">Termos de Uso</a>
+                  <a href="./privacidade.php">Política de Privacidade</a>
+              </nav>
+          </div>
+      </div>
+  </footer>
+  <a class="contact-float" href="https://wa.me/5515996441796?text=Ol%C3%A1%21%20Vi%20a%20apresenta%C3%A7%C3%A3o%20do%20MrStock%20e%20gostaria%20de%20conhecer%20melhor%20o%20projeto." aria-label="Falar com a equipe do MrStock pelo WhatsApp">
+      <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+  </a>
+</template>
+
+
+</body>
+</html>

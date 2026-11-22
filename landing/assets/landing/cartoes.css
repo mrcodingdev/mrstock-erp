@@ -1,0 +1,95 @@
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(10px, 1.5vw, 19px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.feature-grid > li { min-width: 0; display: flex; }
+
+.feature-icon {
+    display: grid;
+    width: 41px;
+    height: 41px;
+    flex: 0 0 41px;
+    place-items: center;
+    border-radius: 11px;
+    background: #e6efe2;
+    color: #2b6948;
+    font-size: .97rem;
+}
+
+.feature-card {
+    display: flex;
+    width: 100%;
+    min-height: 194px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    padding: clamp(16px, 2vw, 26px);
+    border: 1px solid #d8e1d5;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 3px 11px -9px #17342631;
+    text-decoration: none;
+}
+
+.feature-card .feature-icon { margin-bottom: 7px; }
+.feature-card :is(h2, h3) {
+    margin: 0;
+    color: #17281e;
+    font: 750 1rem/1.35 var(--body, var(--mr-sans));
+    letter-spacing: -.016em;
+    text-wrap: wrap;
+}
+.feature-card p {
+    margin: 0;
+    padding-top: 6px;
+    color: #45564b;
+    font-size: .88rem;
+    line-height: 1.6;
+}
+.feature-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: auto;
+    padding-top: 10px;
+    color: #1b402c;
+    font-size: .82rem;
+    font-weight: 750;
+    line-height: 1.6;
+}
+
+.feature-grid > li:hover .feature-card,
+.feature-card:focus-visible {
+    border-color: #7e9f86;
+    box-shadow: 0 7px 12px -7px #1b402c38, 0 18px 28px -13px #1b402c47;
+}
+
+.has-motion [data-home-reveal] > .home-reveal-body {
+    opacity: var(--home-reveal, 1);
+    transform: translateY(calc((1 - var(--home-reveal, 1)) * 19px));
+}
+.has-motion [data-home-reveal]:focus-within > .home-reveal-body { opacity: 1; transform: none; }
+
+@media (hover: hover) {
+    .has-motion .feature-card {
+        /* A elevação se soma ao transform da revelação no Início. */
+        transition: translate .34s var(--ease-out), box-shadow .34s var(--ease-out), border-color .24s ease;
+    }
+    .has-motion .feature-link i { transition: transform .34s var(--ease-out); }
+    .has-motion .feature-grid > li:hover .feature-card { translate: 0 -5px; }
+    .has-motion .feature-grid > li:hover .feature-link i { transform: translateX(4px); }
+}
+
+@media (max-width: 48rem) {
+    .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 25rem) {
+    .feature-grid { grid-template-columns: minmax(0, 1fr); }
+    .feature-card { min-height: 156px; }
+}

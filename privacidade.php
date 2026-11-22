@@ -224,9 +224,15 @@ if ($isLoggedIn) {
                             <td><strong>Armazenamento Local (LocalStorage)</strong></td>
                             <td>Memorizar a preferência de visualização do menu lateral (expandido ou recolhido) sem oscilação visual.</td>
                         </tr>
+                        <tr>
+                            <td><strong><code>mrstock.landing.motion</code></strong></td>
+                            <td><strong>Armazenamento Local (LocalStorage)</strong></td>
+                            <td>Guardar no navegador a preferência de animações da apresentação pública.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
+            <p class="small text-muted">Os links para WhatsApp abrem um serviço externo.</p>
             <p class="small mb-0 text-muted">
                 O sistema <strong>não utiliza cookies de rastreamento de anúncios, pixels espiões ou scripts analíticos invasivos de terceiros</strong>.
             </p>

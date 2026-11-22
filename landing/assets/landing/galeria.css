@@ -1,0 +1,39 @@
+.gallery { width: min(1120px, calc(100% - 24px)); max-height: calc(100% - 24px); padding: 14px; border: 1px solid var(--border, #ccd7c9); border-radius: 14px; color: var(--ink, #17281e); background: var(--white, #fff); }
+.gallery::backdrop { background: rgb(10 25 16 / .84); }
+.gallery-controls { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 10px; }
+.gallery-controls .button-small { min-height: 44px; }
+.gallery-viewport { max-height: min(70vh, 720px); overflow: auto; background: var(--green-pale, #e6ecdf); }
+.gallery-viewport:focus-visible { outline: 3px solid #28764b; outline-offset: -3px; }
+.gallery img { width: 100%; max-height: min(70vh, 720px); object-fit: contain; }
+.gallery.zoomed img { width: 1440px; max-width: none; max-height: none; }
+body:has(.gallery[open]) { overflow: hidden; }
+
+@supports (transition-behavior: allow-discrete) and (overlay: auto) {
+    .has-motion .gallery {
+        --gallery-motion: 180ms;
+        --gallery-ease: cubic-bezier(.22, 1, .36, 1);
+        opacity: 0;
+        transform: translateY(6px) scale(.985);
+        transition:
+            opacity var(--gallery-motion) var(--gallery-ease),
+            transform var(--gallery-motion) var(--gallery-ease),
+            display var(--gallery-motion) allow-discrete,
+            overlay var(--gallery-motion) allow-discrete;
+    }
+    .has-motion .gallery[open] { opacity: 1; transform: none; }
+    .has-motion .gallery::backdrop {
+        opacity: 0;
+        transition:
+            opacity var(--gallery-motion) var(--gallery-ease),
+            display var(--gallery-motion) allow-discrete,
+            overlay var(--gallery-motion) allow-discrete;
+    }
+    .has-motion .gallery[open]::backdrop { opacity: 1; }
+    @starting-style {
+        .has-motion .gallery[open] { opacity: 0; transform: translateY(6px) scale(.985); }
+        .has-motion .gallery[open]::backdrop { opacity: 0; }
+    }
+}
+
+.gallery figure { margin: 0; }
+.gallery img { display: block; max-width: 100%; }

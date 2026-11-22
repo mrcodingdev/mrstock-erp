@@ -107,7 +107,11 @@ if (function_exists('header_remove')) {
 }
 
 // 4. Configuração de Segurança dos Cookies de Sessão (CWE-1004 & CWE-1275)
-if (session_status() === PHP_SESSION_NONE) {
+$entradaPublica = defined('MRSTOCK_PUBLIC_ENTRY');
+$cookieSessao = $_COOKIE[session_name()] ?? null;
+$retomarSessao = $entradaPublica && MRSTOCK_PUBLIC_ENTRY === 'inicio'
+    && is_string($cookieSessao) && $cookieSessao !== '';
+if (session_status() === PHP_SESSION_NONE && (!$entradaPublica || $retomarSessao)) {
     $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') 
             || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443)
             || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
@@ -147,5 +151,7 @@ if (!headers_sent()) {
     header("Content-Security-Policy: " . $csp);
 }
 
-// 6. Carrega as funções utilitárias e de segurança globalmente
-require_once ROOT_PATH . '/inc/functions.php';
+// O bootstrap completo carrega os utilitários do ERP, que iniciam a sessão.
+if (!$entradaPublica) {
+    require_once ROOT_PATH . '/inc/functions.php';
+}

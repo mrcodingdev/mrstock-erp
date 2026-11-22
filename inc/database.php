@@ -19,6 +19,10 @@ try {
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     $pdo->exec("SET time_zone = '{$dbTimezone}'");
 } catch (PDOException $e) {
+    if (defined('MRSTOCK_PUBLIC_ENTRY')) {
+        throw $e;
+    }
+
     error_log("Erro de Conexão com o Banco: " . $e->getMessage());
     $protocolo = 'ERR-' . strtoupper(substr(md5(uniqid((string)mt_rand(), true)), 0, 8));
     http_response_code(503);

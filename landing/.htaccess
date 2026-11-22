@@ -1,0 +1,3 @@
+<FilesMatch "^(inicio|explorar)\.html$">
+    Require all denied
+</FilesMatch>

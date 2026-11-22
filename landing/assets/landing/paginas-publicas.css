@@ -1,0 +1,90 @@
+#mrstock-public-map[data-public-page] {
+    --catalog-gutter: clamp(20px, 5vw, 76px);
+    --catalog-width: 1220px;
+    background: #fcfcf7;
+}
+
+#mrstock-public-map[data-public-page] .mr-footer {
+    padding-inline: max(var(--catalog-gutter), calc((100% - var(--catalog-width)) / 2));
+}
+
+.catalog-hero {
+    --grid-cell: clamp(32px, 3vw, 46px);
+    padding: clamp(58px, 6.8vw, 102px) var(--catalog-gutter) clamp(58px, 7.4vw, 108px);
+    border-bottom: 1px solid #dbe3d7;
+    text-align: center;
+    background-color: #f9faf4;
+    background-image:
+        linear-gradient(180deg, transparent 28%, #f9faf4 100%),
+        linear-gradient(rgb(43 105 72 / .075) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(43 105 72 / .075) 1px, transparent 1px),
+        radial-gradient(ellipse 62% 116% at 50% -9%, #d5e9d3 10%, #edf4e5 57%, transparent);
+    background-position: center, center top, center top, center;
+    background-size: auto, var(--grid-cell) var(--grid-cell), var(--grid-cell) var(--grid-cell), auto;
+}
+
+#mrstock-public-map .catalog-hero h1 {
+    font: 400 clamp(2.65rem, 5.9vw, 5.25rem)/1.01 var(--mr-serif);
+    letter-spacing: -.036em;
+    text-wrap: balance;
+}
+
+#mrstock-public-map .catalog-hero p {
+    max-width: 45ch;
+    margin: 13px auto 0;
+    color: var(--mr-text);
+    font-size: clamp(.98rem, 1.4vw, 1.12rem);
+    text-wrap: balance;
+}
+
+.catalog-grid, .public-wrap {
+    width: min(var(--catalog-width), calc(100% - 2 * var(--catalog-gutter)));
+    margin-inline: auto;
+}
+
+.catalog-grid {
+    padding-block-start: clamp(28px, 5vw, 72px);
+}
+
+.contact-card p { overflow-wrap: anywhere; }
+
+#mrstock-public-map[data-page="acesso"] {
+    display: flex;
+    flex-direction: column;
+}
+[data-page="acesso"] .mr-content { flex: 1; }
+[data-page="acesso"] .catalog-hero {
+    padding-block: clamp(44px, 5.6vw, 82px);
+}
+
+.access-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 2vw, 24px);
+    max-width: 920px;
+    padding-block: clamp(24px, 4vw, 54px) clamp(36px, 5vw, 68px);
+}
+.access-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: clamp(20px, 3vw, 36px);
+    border: 1px solid #d8e1d5;
+    border-radius: 13px;
+    background: #fff;
+}
+.access-card-primary { background: #edf3e7; }
+.access-card h2 {
+    color: #17281e;
+    font: 400 clamp(1.75rem, 3vw, 2.35rem)/1.1 var(--mr-serif);
+    letter-spacing: -.025em;
+}
+.access-card p { color: #45564b; font-size: .94rem; }
+.access-card > a { min-height: 44px; margin-top: auto; }
+.access-card .feature-link { padding-block: 7px; text-decoration: none; }
+.access-card .feature-link:hover { color: #2d6f48; }
+
+@media (max-width: 43rem) {
+    .access-options { grid-template-columns: minmax(0, 1fr); }
+}

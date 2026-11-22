@@ -1,0 +1,79 @@
+.button {
+    display: inline-flex;
+    min-height: 50px;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 11px 21px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: #1b402c;
+    color: #fff;
+    font: 700 .93rem/1.25 var(--body, var(--mr-sans));
+    text-decoration: none;
+    cursor: pointer;
+}
+.button:hover { background: #102c1e; }
+.button-small { min-height: 43px; padding: 8px 13px; font-size: .84rem; }
+.nav-access { flex-shrink: 0; white-space: nowrap; }
+.nav-access:focus-visible { outline: 3px solid #2b7650; outline-offset: 4px; }
+
+@media (max-width: 25rem) {
+    .button.nav-access { font-size: .75rem; padding-inline: 8px; gap: 5px; }
+}
+
+.motion-toggle:not([hidden]) {
+    display: block;
+    min-height: 44px;
+    margin: 4px auto -16px;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #1b402c;
+    cursor: pointer;
+    font: 700 .82rem/1.4 var(--body, var(--mr-sans));
+}
+.motion-toggle:hover { color: #102c1e; background: rgb(27 64 44 / .07); }
+
+:is(.button, .zoom, .home-expand, .mr-action:not(.mr-wa), .mr-steps button[aria-pressed="true"]) {
+    box-shadow: 0 2px 5px rgb(13 33 23 / .17);
+}
+
+@media (hover: hover) {
+    :is(.button, .zoom, .home-expand, .mr-action:not(.mr-wa), .mr-steps button[aria-pressed="true"]):hover {
+        box-shadow:
+            0 4px 7px rgb(13 33 23 / .22),
+            0 10px 18px -4px rgb(var(--public-action-shadow, 38 93 60) / .46);
+    }
+
+    .has-motion :is(.button, .zoom, .home-expand, .mr-action:not(.mr-wa), .mr-steps button[aria-pressed="true"]) {
+        transition: translate .28s var(--ease-out, ease-out),
+                    box-shadow .28s var(--ease-out, ease-out),
+                    background-color .22s ease;
+    }
+
+    .has-motion :is(.button, .mr-action:not(.mr-wa), .mr-steps button[aria-pressed="true"]) {
+        position: relative;
+    }
+
+    /* O limite inferior continua clicável durante a elevação de 2 px. */
+    .has-motion :is(.button, .zoom, .home-expand, .mr-action:not(.mr-wa), .mr-steps button[aria-pressed="true"])::after {
+        position: absolute;
+        inset: 0 0 -3px;
+        content: "";
+    }
+
+    .has-motion :is(.button, .zoom, .home-expand, .mr-action:not(.mr-wa), .mr-steps button[aria-pressed="true"]):hover {
+        translate: 0 -2px;
+    }
+
+    .has-motion :is(.button, .zoom, .home-expand, .mr-action:not(.mr-wa), .mr-steps button[aria-pressed="true"]):active {
+        translate: 0 0;
+    }
+
+    .has-motion :is(.home-closing .button, .nav-access) .fa-arrow-right { transition: transform .32s var(--ease-out); }
+    .has-motion :is(.home-page .button, .home-closing .button, .nav-access):hover .fa-arrow-right { transform: translateX(3px); }
+    .has-motion .mr-action .mr-action-arrow { transition: transform .32s var(--ease-out, ease-out); }
+    .has-motion .mr-action:hover .mr-action-arrow { transform: translateX(3px); }
+}
