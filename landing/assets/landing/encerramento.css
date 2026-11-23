@@ -45,8 +45,9 @@
     text-decoration: none;
     white-space: nowrap;
 }
-.brand-icon { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 9px; background: #1b402c; }
+.brand-icon { display: grid; width: 36px; height: 36px; place-items: center; }
 .brand-icon img { display: block; }
+.site-header .brand-icon img { filter: brightness(0) opacity(.82); }
 .brand-suffix { font-size: .69em; font-weight: 700; }
 
 .site-footer { padding: clamp(30px, 4vw, 54px) 0 20px; background: #14291f; color: #cbd5e1; }
@@ -54,7 +55,7 @@
 .site-footer .brand, .site-footer h2 { color: #fff; }
 .site-footer a:hover { color: #c5efcf; }
 .site-footer a:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
-.site-footer .brand-icon { width: 29px; height: 29px; border-radius: 6px; }
+.site-footer .brand-icon { width: 29px; height: 29px; }
 .site-footer .brand-icon img { width: 22px; height: 22px; }
 .site-footer h2 { margin: 0; font: 700 1rem/1.4 var(--body, var(--mr-sans)); letter-spacing: 0; }
 .footer-columns {

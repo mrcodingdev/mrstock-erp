@@ -217,13 +217,14 @@ if ($recebeuLogin) {
             font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 9px;
             position: absolute;
             top: 40px;
             left: 45px;
             letter-spacing: -0.5px;
         }
-        .left-logo i { font-size: 1.8rem; color: var(--brand-accent); }
+        .left-logo img { display: block; flex: 0 0 auto; }
+        .left-logo small { font-size: .69em; font-weight: 700; }
         
         .left-content { 
             z-index: 2; 
@@ -466,7 +467,8 @@ if ($recebeuLogin) {
         <!-- Lado Esquerdo -->
         <div class="login-left">
             <div class="left-logo">
-                <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="Logo MrStock" width="32" height="32" style="height:32px; width:32px; margin-right:5px; margin-bottom: 4px;"> MrStock
+                <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="" width="32" height="32">
+                <span>MrStock <small>ERP</small></span>
             </div>
             <div class="left-content">
                 <h1>Olá,<br>bem-vindo!</h1>
