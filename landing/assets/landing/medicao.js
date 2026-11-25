@@ -111,7 +111,9 @@
     function desativarMedicao() {
         window['ga-disable-' + id] = true;
         for (const nome of ['_ga', '_ga_' + id.slice(2)]) {
-            document.cookie = nome + '=; Max-Age=0; Path=/; Secure; SameSite=Lax';
+            const expirado = nome + '=; Max-Age=0; Path=/; Secure; SameSite=Lax';
+            document.cookie = expirado;
+            document.cookie = expirado + '; Domain=' + location.hostname;
         }
     }
 
@@ -164,7 +166,8 @@
     new MutationObserver(mostrarControles).observe(document.body, { childList: true, subtree: true });
 
     if (escolha === 'sim') carregarMedicao();
-    else if (escolha !== 'nao') {
+    else if (escolha === 'nao') desativarMedicao();
+    else {
         escolha = null;
         document.body.classList.add('cookie-choice-pending');
         mostrarPainel();
