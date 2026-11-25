@@ -10,7 +10,7 @@
                             <img src="<?= BASE_URL ?>/assets/img/mr_stock_logo_branca.ico" alt="MrStock Logo" width="24" height="24" style="width: 24px; height: 24px; object-fit: contain;">
                             <span class="fw-bold text-white fs-6">MrStock ERP</span>
                         </div>
-                        <div style="color: #cbd5e1; font-size: 0.8125rem;">Papelaria Real • Sistema Integrado de Gestão &amp; PDV</div>
+                        <div style="color: #cbd5e1; font-size: 0.8125rem;">Equipe Mr. Coding • Sistema Integrado de Gestão &amp; PDV</div>
                     </div>
 
                     <!-- COLUNA 2: Mr. Coding (Compacta e Direta) -->
@@ -46,7 +46,7 @@
                 <div class="so-footer-gestaoclick__bottom mt-2 pt-2" style="border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.75rem; color: #cbd5e1;">
                     <div class="row g-2 align-items-center">
                         <div class="col-md-4 col-12 text-md-start text-center">
-                            <span>MrStock ERP © 2026 Papelaria Real</span>
+                            <span>MrStock ERP © 2026 Equipe Mr. Coding</span>
                         </div>
                         <div class="col-md-4 col-12 text-center">
                             <a href="<?= BASE_URL ?>/termos.php" class="text-decoration-none fw-semibold" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'">Termos de Uso</a><span class="mx-2 text-white-50">•</span><a href="<?= BASE_URL ?>/privacidade.php" class="text-decoration-none fw-semibold" style="color: #cbd5e1;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#cbd5e1'">Política de Privacidade</a>

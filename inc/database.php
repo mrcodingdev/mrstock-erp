@@ -154,7 +154,7 @@ try {
             <button onclick="window.location.reload();" class="btn-retry">Tentar Novamente</button>
         </div>
         <div class="footer-note">
-            MrStock ERP • Papelaria Real Ltda • Sorocaba/SP
+            MrStock ERP • Equipe Mr. Coding • Sorocaba/SP
         </div>
     </div>
 </body>

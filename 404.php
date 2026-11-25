@@ -131,7 +131,7 @@ if ($isLoggedIn) {
 
         <div class="mt-4 pt-3 border-top" style="border-color: #e2e8f0 !important;">
             <small style="color: #475569; font-size: 0.8125rem;">
-                MrStock ERP • Papelaria Real Ltda • ETEC Fernando Prestes
+                MrStock ERP • Equipe Mr. Coding • ETEC Fernando Prestes
             </small>
         </div>
     </div>

@@ -139,12 +139,14 @@ if (!headers_sent()) {
     header("Referrer-Policy: strict-origin-when-cross-origin");
     header("Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=()");
 
+    $tagAnalytics = $entradaPublica ? " https://www.googletagmanager.com" : '';
+    $endpointsAnalytics = $entradaPublica ? " https://*.google-analytics.com" : '';
     $csp = "default-src 'self'; "
-         . "script-src 'self' 'unsafe-inline'; "
+         . "script-src 'self' 'unsafe-inline'{$tagAnalytics}; "
          . "style-src 'self' 'unsafe-inline'; "
          . "font-src 'self' data:; "
-         . "img-src 'self' data:; "
-         . "connect-src 'self'; "
+         . "img-src 'self' data:{$tagAnalytics}{$endpointsAnalytics}; "
+         . "connect-src 'self'{$tagAnalytics}{$endpointsAnalytics}; "
          . "frame-ancestors 'self'; "
          . "base-uri 'self'; "
          . "form-action 'self';";
