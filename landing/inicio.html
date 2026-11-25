@@ -23,10 +23,27 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "MrStock ERP",
-        "alternateName": "MrStock",
-        "url": "https://mrstock.com.br/"
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": "https://mrstock.com.br/#website",
+                "name": "MrStock ERP",
+                "alternateName": "MrStock",
+                "url": "https://mrstock.com.br/"
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://mrstock.com.br/#webpage",
+                "url": "https://mrstock.com.br/",
+                "isPartOf": { "@id": "https://mrstock.com.br/#website" },
+                "primaryImageOfPage": {
+                    "@type": "ImageObject",
+                    "contentUrl": "https://mrstock.com.br/landing/assets/landing/mrstock-pdv-busca.jpg",
+                    "width": 960,
+                    "height": 960
+                }
+            }
+        ]
     }
     </script>
     <link rel="stylesheet" href="./landing/css/all.min.css?v=r15">
