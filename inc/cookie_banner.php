@@ -1,89 +1,33 @@
-<!-- Card Flutuante Compacto de Consentimento de Cookies LGPD (MrStock ERP) -->
-<style>
-@keyframes mrStockSlideInLeft {
-    0% { opacity: 0; transform: translateX(20px); }
-    100% { opacity: 1; transform: translateX(0); }
-}
-
-.mrstock-login-page {
-    flex-direction: column;
-    gap: 16px;
-}
-
-.mrstock-login-page > .login-card {
-    margin-block: 0;
-}
-
-.mrstock-cookie-banner {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 360px;
-    max-width: calc(100vw - 40px);
-}
-
-.mrstock-login-page > .mrstock-cookie-banner {
-    position: relative;
-    inset: auto;
-    max-width: 100%;
-}
-</style>
-<div id="mrstockCookieBanner" class="mrstock-cookie-banner" role="dialog" aria-live="polite" aria-label="Consentimento de Cookies LGPD" style="display: none; z-index: 1060; background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 1.25rem; color: #f1f5f9; font-family: 'Inter', sans-serif;">
-    <div class="d-flex align-items-start gap-2 mb-2">
-        <div style="background: rgba(40, 73, 54, 0.3); border: 1px solid rgba(106, 228, 155, 0.3); border-radius: 6px; padding: 6px 8px; color: #6ae49b; font-size: 1rem; flex-shrink: 0;">
-            <i class="fas fa-cookie-bite"></i>
-        </div>
-        <div>
-            <div class="fw-bold text-white" style="font-size: 0.9rem;">Privacidade &amp; Cookies</div>
-            <small class="text-white-50" style="font-size: 0.75rem;">Conformidade LGPD</small>
-        </div>
-    </div>
-    <p class="mb-3" style="font-size: 0.8125rem; color: #cbd5e1; line-height: 1.45;">
-        Utilizamos cookies técnicos essenciais para autenticação de operadores, integridade de sessão e ergonomia visual sob a LGPD.
-    </p>
-    <div class="d-flex justify-content-end align-items-center gap-2">
-        <a href="<?= BASE_URL ?>/privacidade.php#cookies" class="btn btn-secondary" style="background-color: #475569; border-color: #475569; color: #fff; font-weight: 500; font-size: 0.8125rem; padding: 6px 14px; border-radius: 6px;" aria-label="Gerenciar preferências e consultar a política de cookies">
-            Gerenciar
-        </a>
-        <button type="button" id="btnAcceptCookies" class="btn btn-success" style="background-color: #284936; border-color: #284936; color: #fff; font-weight: 600; font-size: 0.8125rem; padding: 6px 14px; border-radius: 6px;" aria-label="Aceitar cookies essenciais e fechar aviso">
-            Aceitar
-        </button>
-    </div>
-</div>
-
+<link rel="stylesheet" href="<?= BASE_URL ?>/css/cookies.css?v=1">
+<aside id="mrstockCookieBanner" class="cookie-preview session-cookie-banner" aria-labelledby="mrstock-cookie-title" hidden>
+    <header>
+        <span class="cookie-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 13.7a8.8 8.8 0 1 1-10.1-10.1 4.8 4.8 0 0 0 5.9 5.9 3.5 3.5 0 0 0 4.2 4.2Z"></path><path d="M7.6 10.1h.01m2.7 5.6h.01m5.1-.8h.01"></path></svg>
+        </span>
+        <h2 id="mrstock-cookie-title">Cookies e privacidade</h2>
+    </header>
+    <p>Usamos cookies essenciais para manter sua sessão e proteger o acesso ao sistema. Saiba mais na <a href="<?= BASE_URL ?>/privacidade.php#cookies">Política de Privacidade</a>.</p>
+    <button type="button" class="cookie-button">Entendi</button>
+</aside>
 <script>
-(function() {
-    function initCookieBanner() {
+(() => {
+    const aviso = document.getElementById('mrstockCookieBanner');
+    const chave = 'mrstock_cookie_consent';
+
+    try {
+        if (localStorage.getItem(chave)) return;
+    } catch {
+        // O aviso ainda pode ser dispensado nesta página.
+    }
+
+    aviso.hidden = false;
+    aviso.querySelector('button').addEventListener('click', () => {
+        aviso.hidden = true;
         try {
-            var consent = localStorage.getItem('mrstock_cookie_consent');
-            var banner = document.getElementById('mrstockCookieBanner');
-            var btn = document.getElementById('btnAcceptCookies');
-
-            if (!consent && banner) {
-                banner.style.display = 'block';
-                banner.style.animation = 'mrStockSlideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both';
-            }
-
-            if (btn && banner) {
-                btn.addEventListener('click', function() {
-                    localStorage.setItem('mrstock_cookie_consent', 'accepted');
-                    banner.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                    banner.style.opacity = '0';
-                    banner.style.transform = 'translateY(15px)';
-                    setTimeout(function() {
-                        banner.style.display = 'none';
-                    }, 300);
-                });
-            }
-        } catch (e) {
-            console.warn('LocalStorage indisponível para controle de cookies:', e);
+            localStorage.setItem(chave, 'accepted');
+        } catch {
+            // O navegador não permitiu guardar a dispensa.
         }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCookieBanner);
-    } else {
-        initCookieBanner();
-    }
+    });
 })();
 </script>
