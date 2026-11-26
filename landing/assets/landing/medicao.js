@@ -114,7 +114,7 @@
         if (!restaurarFoco) return;
         const destino = escolha === null ? reabrir
             : origemDoFoco?.matches(controle) ? origemDoFoco
-                : document.querySelector('.contact-float, .login-card input');
+                : document.querySelector('.contact-float, #username:not(:disabled)');
         destino?.focus();
     }
 
