@@ -1,4 +1,7 @@
 (() => {
+    const script = document.currentScript;
+    const medirNestaPagina = script.hasAttribute('data-medir-visitas');
+    const raiz = new URL(script.dataset.raiz || './', document.baseURI);
     const id = 'G-T2P9BHGJRM';
     const chave = 'mrstock_analytics';
     const controle = '[data-preferencias-medicao]';
@@ -11,7 +14,7 @@
     }
 
     function carregarMedicao() {
-        if (carregada || location.hostname !== 'mrstock.com.br') return;
+        if (!medirNestaPagina || carregada || location.hostname !== 'mrstock.com.br') return;
         carregada = true;
         window['ga-disable-' + id] = false;
         window.dataLayer = window.dataLayer || [];
@@ -55,7 +58,7 @@
                     <svg aria-hidden="true" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
                 </button>
             </header>
-            <p>O navegador guarda suas preferências. Com sua permissão, usamos o Google Analytics para medir visitas. Consulte a <a href="./privacidade.php#cookies">Política de Privacidade</a> e os <a href="./termos.php">Termos de Uso</a>.</p>
+            <p>O navegador guarda suas preferências. Com sua permissão, usamos o Google Analytics para medir visitas às páginas de apresentação. Consulte a <a data-documento="privacidade.php#cookies">Política de Privacidade</a> e os <a data-documento="termos.php">Termos de Uso</a>.</p>
             <div class="cookie-actions">
                 <button type="button" class="cookie-button cookie-expand" aria-expanded="false" aria-controls="cookie-options">
                     Personalizar <svg aria-hidden="true" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
@@ -69,7 +72,7 @@
                     <span class="cookie-required">Sempre ativos</span>
                 </div>
                 <label class="cookie-option">
-                    <span><strong>Medição de visitas</strong><span>Envia métricas ao Google Analytics.</span></span>
+                    <span><strong>Medição de visitas</strong><span>Mede visitas às páginas de apresentação.</span></span>
                     <span class="cookie-check"><input type="checkbox" id="cookie-analytics" aria-label="Medição de visitas"></span>
                 </label>
                 <div class="cookie-save"><button type="button" class="cookie-button">Salvar preferências</button></div>
@@ -79,6 +82,13 @@
 
     const painel = document.querySelector('.cookie-preview');
     const reabrir = document.querySelector('.cookie-open');
+    if (!medirNestaPagina) {
+        painel.classList.add('session-cookie-banner');
+        reabrir.classList.add('session-cookie-banner');
+    }
+    painel.querySelectorAll('[data-documento]').forEach(link => {
+        link.href = new URL(link.dataset.documento, raiz);
+    });
     const personalizar = painel.querySelector('.cookie-expand');
     const opcoes = painel.querySelector('#cookie-options');
     const analytics = painel.querySelector('#cookie-analytics');
@@ -104,7 +114,7 @@
         if (!restaurarFoco) return;
         const destino = escolha === null ? reabrir
             : origemDoFoco?.matches(controle) ? origemDoFoco
-                : document.querySelector('.contact-float');
+                : document.querySelector('.contact-float, .login-card input');
         destino?.focus();
     }
 
@@ -152,9 +162,18 @@
     });
     window.addEventListener('storage', evento => {
         if (evento.storageArea !== localStorage || (evento.key !== chave && evento.key !== null)) return;
-        if (evento.newValue !== escolha) {
-            if (evento.newValue !== 'sim' && carregada) desativarMedicao();
+        if (evento.newValue === escolha) return;
+        if (evento.newValue !== 'sim' && carregada) {
+            desativarMedicao();
             location.reload();
+            return;
+        }
+        escolha = ['sim', 'nao'].includes(evento.newValue) ? evento.newValue : null;
+        document.body.classList.toggle('cookie-choice-pending', escolha === null);
+        if (escolha === null) mostrarPainel();
+        else {
+            fecharPainel(false);
+            if (escolha === 'sim') carregarMedicao();
         }
     });
 

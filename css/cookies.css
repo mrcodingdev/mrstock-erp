@@ -121,7 +121,6 @@
 }
 
 .session-cookie-banner { z-index: 1020; }
-.session-cookie-banner .cookie-button { width: 100%; }
 .mrstock-login-page > .session-cookie-banner { z-index: 2; }
 
 @media (max-width: 1760px) {

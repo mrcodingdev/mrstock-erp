@@ -123,11 +123,6 @@ require __DIR__ . '/inc/documento_legal_inicio.php';
                     <td>Guardar no navegador a preferência de animações da apresentação pública.</td>
                 </tr>
                 <tr>
-                    <td><strong><code>mrstock_cookie_consent</code></strong></td>
-                    <td><strong>Armazenamento local (LocalStorage)</strong></td>
-                    <td>Lembrar que o aviso sobre cookies essenciais foi dispensado neste navegador.</td>
-                </tr>
-                <tr>
                     <td><strong><code>mrstock_analytics</code></strong></td>
                     <td><strong>Armazenamento local (LocalStorage)</strong></td>
                     <td>Lembrar se você permitiu ou recusou a medição de visitas.</td>
@@ -135,7 +130,7 @@ require __DIR__ . '/inc/documento_legal_inicio.php';
             </tbody>
         </table>
     </div>
-    <p>A medição é opcional. No painel <strong>Cookies e privacidade</strong>, escolha <strong>Permitir</strong>, <strong>Recusar</strong> ou <strong>Personalizar</strong>. O Google Analytics só é carregado na apresentação se você permitir a medição. Use <strong>Preferências de medição</strong> no rodapé para alterar a escolha. O aviso sobre cookies essenciais, exibido no login e em outras páginas do sistema, informa sobre a sessão. O botão <strong>Entendi</strong> fecha esse aviso.</p>
+    <p>A medição é opcional. No painel <strong>Cookies e privacidade</strong>, escolha <strong>Permitir</strong>, <strong>Recusar</strong> ou <strong>Personalizar</strong>. O Google Analytics só é carregado na apresentação se você permitir a medição. Use <strong>Preferências de medição</strong> no rodapé da apresentação ou <button type="button" class="btn btn-sm btn-link p-0 align-baseline" data-preferencias-medicao hidden>altere suas preferências aqui</button>. A mesma escolha vale em todo o site.</p>
     <p>Você pode apagar essas preferências nas configurações do navegador. Apagar o cookie de sessão encerra o acesso no navegador.</p>
 </section>
 
